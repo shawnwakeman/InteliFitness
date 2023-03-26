@@ -8,140 +8,100 @@
 import SwiftUI
 
 struct ContentView: View {
-    let gridItems = [
-        GridItem(.fixed(100.0), spacing: 10.0, alignment: .top),
-        GridItem(.fixed(250.0), spacing: 30.0, alignment: .center),
-        GridItem(.fixed(150.0), spacing: 10.0, alignment: .bottomTrailing),
-    ]
-
     var body: some View {
-        ScrollView{
+        ScrollView(.vertical){
             ZStack(){
-                RoundedRectangle(cornerRadius: 10)
+                
+                RoundedRectangle(cornerRadius: 7)
                     .stroke(Color.black, lineWidth: 2.5)
                     .background(Color.clear)
                 
-
-
+                
+               
+                
                 VStack(alignment: .leading, spacing: 0){
-                    
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.black, lineWidth: 2.5)
-                        .aspectRatio(7/1, contentMode: .fit)
-                    
-
-                    HStack {
-                        VStack{
-                            Text("1")
-                                .font(.system(size: 36))
-                            Text("2")
-                                .font(.system(size: 36))
-                            Text("3")
-                                .font(.system(size: 36))
-                            Text("4")
-                                .font(.system(size: 36))
-                                
-                        }.padding(.leading, 11.0)
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 7)
+                            .stroke(Color.black, lineWidth: 2.5)
+                            .aspectRatio(7/1, contentMode: .fill)
                         
-                        VStack{
-                            Text("135 lb x 10")
-                                .font(.system(size: 20))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-
-                        }.padding(.leading)
-                        
-                        VStack{
-                            Text("123")
-                                .font(.system(size: 25))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-
-                                
-                        }.padding(.leading)
-                        
-                        VStack{
-                            Text("12....")
-                                .font(.system(size: 25))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
- 
-                        }.padding(.leading)
-                        VStack{
-                            Text("12.")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-                            Text("12")
-                                .font(.system(size: 36))
-
-                        }.padding(.leading)
-                        
-                        
+                        HStack{
+                            Text("Set").offset(CGSize(width: 5, height: 0))
+                            Spacer()
+                            Text("Previous").offset(CGSize(width: 10, height: 0))
+                            Spacer()
+                            Text("Lbs").offset(CGSize(width: 15, height: 0))
+                            Spacer()
+                            Text("Reps").offset(CGSize(width: 7, height: 0))
+                            Spacer()
+                        }.padding(.all)
                     }
-                   
+
                     
+                  
+                    
+                    row(setNumber: 1, prevouisSet: "135 lb x 61", setWeight: 23, SetReps: 121)
+                    Divider()
+                        .frame(height: 2.5)
+                        .overlay(.black)
+                    row(setNumber: 1, prevouisSet: "135 lb x 6", setWeight: 123, SetReps: 12)
+                    Divider()
+                        .frame(height: 2.5)
+                        .overlay(.black)
+
+                    row(setNumber: 1, prevouisSet: "135 lb x 6", setWeight: 123, SetReps: 12)
+                    Divider()
+                        .frame(height: 2.5)
+                        .overlay(.black)
+                    
+                    row(setNumber: 1, prevouisSet: "135 lb x 16", setWeight: 123, SetReps: 12)
                     
                 }
-            }
-            .padding(.all)
-            
+            } .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
         }
     }
 }
 
-struct Container: Shape {
-    func path(in rect: CGRect) -> Path {
-        // Create a rectangular path that matches the size of your container
-        Path(rect)
-    }
-}
 
-struct exersiseContainer: View {
 
+struct row: View{
+    var setNumber: Int
+    var prevouisSet: String
+    var setWeight: Int
+    var SetReps: Int
     var body: some View{
-        let shape = RoundedRectangle(cornerRadius: 19)
-        ZStack {
-            shape.foregroundColor(Color(red: 0.052, green: 0.067, blue: 0.088))
-            shape.strokeBorder(lineWidth: 2.5).foregroundColor(Color(red: 0.154, green: 0.169, blue: 0.194))
+        let verticalBorderRect = Rectangle().frame(maxWidth: 2.5, maxHeight: .infinity)
+        HStack(spacing: 0){
+            Text(String(setNumber))
+                .padding()
+                .frame(width: 60, height: 40)
+                .background(.clear)
+            verticalBorderRect
+            Text(prevouisSet)
+                .padding()
+                .frame(width: 140, height: 40)
+                .background(.clear)
+            verticalBorderRect
+            Text(String(setWeight))
+                .padding()
+                .frame(width: 75, height: 40)
+                .background(.clear)
+            verticalBorderRect
+
+            Text(String(SetReps))
+                .padding()
+                .frame(width: 75, height: 40)
+                .background(.clear)
+
+            verticalBorderRect
+            Image(systemName: "checkmark")
+                .padding()
+                .frame(maxWidth: 40, maxHeight: 40)
+                .background(.clear)
         }
-
-
-
         
     }
 }
-
-struct header: View {
-
-   
-    var body: some View{
-        let shape = Rectangle()
-        ZStack {
-            shape.foregroundColor(Color(red: 1, green: 0.067, blue: 0.088))
-            shape.strokeBorder(lineWidth: 2.5).foregroundColor(Color(red: 0.154, green: 0.169, blue: 0.194))
-        }
-    }
-}
-
-
-
-
-
 
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
@@ -164,12 +124,26 @@ struct RoundedCorner: Shape {
 
 
 
-
-
-
-
-
-
+//
+//
+//    HStack {
+//        Text("This is a short string.")
+//            .padding()
+//            .frame(maxHeight: .infinity)
+//            .background(.red)
+//
+//        Text("This is a very long string with lots and lots of text that will definitely run across multiple lines because it's just so long.")
+//            .padding()
+//            .frame(maxHeight: .infinity)
+//            .background(.green)
+//    }
+//    .fixedSize(horizontal: false, vertical: true)
+//    .frame(maxHeight: 200)
+//
+//}
+//
+//
+//
 
 
 

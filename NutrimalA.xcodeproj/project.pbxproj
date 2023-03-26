@@ -11,6 +11,7 @@
 		D0370E2429CF84DD005682D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* ContentView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
+		D0D6674E29D09DF300F2C1E9 /* Gotham-Font 2 in Resources */ = {isa = PBXBuildFile; fileRef = D0D6674D29D09DF200F2C1E9 /* Gotham-Font 2 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,8 @@
 		D0370E2329CF84DD005682D8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D0D6674D29D09DF200F2C1E9 /* Gotham-Font 2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Gotham-Font 2"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +54,10 @@
 		D0370E2029CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXGroup;
 			children = (
+				D0D6674C29D09ADB00F2C1E9 /* Info.plist */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
 				D0370E2329CF84DD005682D8 /* ContentView.swift */,
+				D0D6674D29D09DF200F2C1E9 /* Gotham-Font 2 */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
 			);
@@ -127,6 +132,7 @@
 			files = (
 				D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */,
 				D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */,
+				D0D6674E29D09DF300F2C1E9 /* Gotham-Font 2 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +275,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NutrimalA/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NutrimalA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -297,6 +304,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NutrimalA/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NutrimalA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

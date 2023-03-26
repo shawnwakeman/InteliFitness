@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+        
+
+        
         ScrollView(.vertical){
             ZStack(){
                 
@@ -27,6 +30,7 @@ struct ContentView: View {
                         
                         HStack{
                             Text("Set").offset(CGSize(width: 5, height: 0))
+                                //.font(.custom(<#T##name: String##String#>, size: <#T##CGFloat#>))
                             Spacer()
                             Text("Previous").offset(CGSize(width: 10, height: 0))
                             Spacer()

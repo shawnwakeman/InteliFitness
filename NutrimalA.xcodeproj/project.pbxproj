@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */; };
-		D0370E2429CF84DD005682D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* ContentView.swift */; };
+		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,7 +16,7 @@
 /* Begin PBXFileReference section */
 		D0370E1E29CF84DD005682D8 /* NutrimalA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutrimalA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrimalAApp.swift; sourceTree = "<group>"; };
-		D0370E2329CF84DD005682D8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -54,7 +54,7 @@
 			children = (
 				D0D6674C29D09ADB00F2C1E9 /* Info.plist */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
-				D0370E2329CF84DD005682D8 /* ContentView.swift */,
+				D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
 			);
@@ -139,7 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0370E2429CF84DD005682D8 /* ContentView.swift in Sources */,
+				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

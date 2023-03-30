@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D00087D029D4F00200A8A2C5 /* SpaceGrotesk-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */; };
+		D00087D129D4F00400A8A2C5 /* SpaceGrotesk-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CA29D4EFEC00A8A2C5 /* SpaceGrotesk-Regular.ttf */; };
+		D00087D229D4F00600A8A2C5 /* SpaceGrotesk-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CB29D4EFEC00A8A2C5 /* SpaceGrotesk-SemiBold.ttf */; };
+		D00087D329D4F00900A8A2C5 /* SpaceGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */; };
+		D00087D429D4F00C00A8A2C5 /* SpaceGrotesk-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CD29D4EFEC00A8A2C5 /* SpaceGrotesk-Bold.ttf */; };
+		D00087E029D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */; };
+		D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */; };
+		D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */; };
 		D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */; };
 		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
@@ -14,12 +22,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Light.ttf"; sourceTree = "<group>"; };
+		D00087CA29D4EFEC00A8A2C5 /* SpaceGrotesk-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Regular.ttf"; sourceTree = "<group>"; };
+		D00087CB29D4EFEC00A8A2C5 /* SpaceGrotesk-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-SemiBold.ttf"; sourceTree = "<group>"; };
+		D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Medium.ttf"; sourceTree = "<group>"; };
+		D00087CD29D4EFEC00A8A2C5 /* SpaceGrotesk-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Bold.ttf"; sourceTree = "<group>"; };
+		D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-VariableFont_wght.ttf"; sourceTree = "<group>"; };
+		D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogModel.swift; sourceTree = "<group>"; };
+		D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
 		D0370E1E29CF84DD005682D8 /* NutrimalA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutrimalA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrimalAApp.swift; sourceTree = "<group>"; };
 		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,9 +49,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D00087C829D4EFEC00A8A2C5 /* static */ = {
+			isa = PBXGroup;
+			children = (
+				D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */,
+				D00087CA29D4EFEC00A8A2C5 /* SpaceGrotesk-Regular.ttf */,
+				D00087CB29D4EFEC00A8A2C5 /* SpaceGrotesk-SemiBold.ttf */,
+				D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */,
+				D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */,
+				D00087CD29D4EFEC00A8A2C5 /* SpaceGrotesk-Bold.ttf */,
+			);
+			path = static;
+			sourceTree = "<group>";
+		};
 		D0370E1529CF84DD005682D8 = {
 			isa = PBXGroup;
 			children = (
+				D0D6674C29D09ADB00F2C1E9 /* Info.plist */,
+				D00087C829D4EFEC00A8A2C5 /* static */,
 				D0370E2029CF84DD005682D8 /* NutrimalA */,
 				D0370E1F29CF84DD005682D8 /* Products */,
 			);
@@ -52,9 +83,10 @@
 		D0370E2029CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXGroup;
 			children = (
-				D0D6674C29D09ADB00F2C1E9 /* Info.plist */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
 				D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */,
+				D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */,
+				D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
 			);
@@ -128,7 +160,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */,
+				D00087D129D4F00400A8A2C5 /* SpaceGrotesk-Regular.ttf in Resources */,
+				D00087D429D4F00C00A8A2C5 /* SpaceGrotesk-Bold.ttf in Resources */,
+				D00087D029D4F00200A8A2C5 /* SpaceGrotesk-Light.ttf in Resources */,
+				D00087E029D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf in Resources */,
+				D00087D329D4F00900A8A2C5 /* SpaceGrotesk-Medium.ttf in Resources */,
 				D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */,
+				D00087D229D4F00600A8A2C5 /* SpaceGrotesk-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +177,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */,
+				D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */,
 				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
 			);

@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
-var borderWeight: CGFloat = 1.7
+let borderWeight: CGFloat = 1.7
+
 struct WorkoutLogView: View {
+    static let borderWeight: CGFloat = 1.7
+    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @State var progressValue: Float = 0.5
-
-
     var body: some View {
         
         ScrollView(.vertical){
@@ -25,9 +26,9 @@ struct WorkoutLogView: View {
                 LogModuleHeader()
                 CoreLogModule()
                 FullWidthButton()
+            
                 
-                
-                
+
                 
             }
             
@@ -188,6 +189,40 @@ struct FullWidthButton: View{
     }
     
 }
+
+
+
+
+
+struct addSetButton: View {
+    var body: some View{
+        Button {print("Button pressed")}
+        
+        label: {
+            ZStack{
+                RoundedRectangle(cornerRadius: 4)
+                    .foregroundColor(Color("ClearBlueBorder"))
+                
+
+                TextHelvetica(content: "add set", size: 20)
+                    .foregroundColor(Color(.white))
+            }
+//            .onTapGesture {
+//                <#code#>
+//            }
+            
+            
+        }.frame(maxWidth: 100, maxHeight: 28)
+    }
+}
+
+
+
+
+
+
+
+
 struct LogModuleHeader: View{
     var body: some View{
         
@@ -201,18 +236,7 @@ struct LogModuleHeader: View{
 
             Spacer()
             
-            
-            Button {print("Button pressed")}
-            
-            label: {
-                ZStack{
-                    RoundedRectangle(cornerRadius: 4)
-                        .foregroundColor(Color("LinkBlue"))
-
-                    TextHelvetica(content: "add set", size: 20)
-                        .foregroundColor(Color(.white))
-                }
-            }.frame(maxWidth: 100, maxHeight: 28)
+            addSetButton()
             
             ZStack{
                 Image("dataIcon")
@@ -271,7 +295,7 @@ struct TextHelvetica: View{
     var size: CGFloat
     var body: some View
     {
-        Text(content).font(.custom("HelveticaNeue-Medium", size: size)).multilineTextAlignment(.center)
+        Text(content).font(.custom("SpaceGrotesk-Medium", size: size)).multilineTextAlignment(.center)
     }
 }
 
@@ -283,7 +307,7 @@ struct WorkoutSetRowView: View{
     var SetReps: Int
     @State private var givenName: String = ""
     @State private var familyName: String = ""
-
+    var colosr: Color = Color("WhiteFontOne")
     var body: some View{
 
         HStack(spacing: 0){
@@ -308,52 +332,19 @@ struct WorkoutSetRowView: View{
    
 
 
-//            ZStack {
-//
-//                if familyName.isEmpty {
-//                    Text("13")
-//                        .foregroundColor(Color("GrayFontOne"))
-//                        .font(.custom("HelveticaNeue-Medium", size: 21))
-//
-//                }
-//
-//                TextField("", text: $familyName)
-//                    .font(.custom("HelveticaNeue-Medium", size: 21))
-//                    .foregroundColor(Color("WhiteFontOne"))
-//            }
-//            .frame(width: 70, height: 40)
-//            .background(Color("DDB"))
-//
-////
-//
-
-//                if givenName.isEmpty {
-//                    Text("")
-//                        .foregroundColor(Color("GrayFontOne"))
-//                        .font(.custom("HelveticaNeue-Medium", size: 21))
-//
-//                }
             
-//
-            ZStack{
-                
-                TextField("123", text: $givenName)
-                    .font(.custom("HelveticaNeue-Medium", size: 21))
-                    
-                    .foregroundColor(Color(red: 0.2713462753, green: 0.2713462753, blue: 0.2713462753))
-                    .blendMode(.darken)
-                    
-                    .multilineTextAlignment(.center)
-                    .frame(width: 70, height: 40)
-                    .background(.clear)
-                    .colorInvert()
-                    .accentColor(.orange)
-                 
-                    
-            }.background(Color("DDB"))
+         
+            TextField("", text: $givenName, prompt: Text("123").foregroundColor(Color("GrayFontTwo")))
+                .font(.custom("SpaceGrotesk-Medium", size: 21))
+                .foregroundColor(Color("WhiteFontOne"))
+                .frame(width: 70, height: 40)
+                .background(.clear)
+                .multilineTextAlignment(.center)
+                .background(Color("DDB"))
+//                .keyboardType(.numberPad)
                 
 
-//
+
 //
 //
             
@@ -365,22 +356,16 @@ struct WorkoutSetRowView: View{
                 
 
                
-                ZStack{
-                    
-                    TextField("12", text: $givenName)
-                        .font(.custom("HelveticaNeue-Medium", size: 21))
-                        
-                        .foregroundColor(Color(red: 0.2713462753, green: 0.2713462753, blue: 0.2713462753))
-                        .blendMode(.darken)
-                        
-                        .multilineTextAlignment(.center)
-                        .frame(width: 25, height: 40)
-                        .background(.clear)
-                        .colorInvert()
-                        .accentColor(.orange)
-                     
-                        
-                }.background(Color("DDB"))
+                TextField("", text: $familyName, prompt: Text("13").foregroundColor(Color("GrayFontTwo")))
+                    .font(.custom("SpaceGrotesk-Medium", size: 21))
+                    .foregroundColor(Color("WhiteFontOne"))
+                    .frame(width: 40, height: 40)
+                    .background(.clear)
+                    .multilineTextAlignment(.center)
+                    .background(Color("DDB"))
+//                    .keyboardType(.numberPad)
+
+
                     
                     
                 ZStack{
@@ -402,7 +387,8 @@ struct WorkoutSetRowView: View{
                     TextHelvetica(content: "10", size: 13)
                         .foregroundColor(Color.white)
                         
-                }
+                }.padding(.leading, -8)
+                    .padding(.trailing, 5)
 
                     
             }.frame(width: 80, height: 40)
@@ -567,6 +553,7 @@ struct RoundedCorner: Shape {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutLogView()
+        let workoutLogViewModel = WorkoutLogViewModel()
+        WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
     }
 }

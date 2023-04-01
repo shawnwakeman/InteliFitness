@@ -30,4 +30,8 @@ class WorkoutLogViewModel: ObservableObject {
     func addEmptySet(moduleID: Int){
         workoutLogModel.addEmptySet(moduleID: moduleID)
     }
+    
+    func addEmptyWorkoutModule() {
+        workoutLogModel.addEmptyWorkoutModule()
+    }
 }

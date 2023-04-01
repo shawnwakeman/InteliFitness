@@ -10,11 +10,11 @@ let borderWeight: CGFloat = 1.7
 
 struct WorkoutLogView: View {
     static let borderWeight: CGFloat = 1.7
-    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
+    @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @State var progressValue: Float = 0.5
     
     var body: some View {
-        
+        let _ = print(workoutLogViewModel.exersiseModules)
         ScrollView(.vertical){
             
             
@@ -23,11 +23,18 @@ struct WorkoutLogView: View {
             
             
             VStack(spacing: -20){
-                ForEach(workoutLogViewModel.exersiseModules){
-                    workoutModule in
-                    ExersiseLogModule(viewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
+                if workoutLogViewModel.exersiseModules.count > 0 {
+                    let _ = print(workoutLogViewModel.exersiseModules.count)
+                    ForEach(workoutLogViewModel.exersiseModules){
+                        workoutModule in
+                        ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
+                    }
                 }
-                let _ = print(workoutLogViewModel.exersiseModules[0].setRows)
+
+                FullWidthButton().onTapGesture {
+                    workoutLogViewModel.addEmptyWorkoutModule()
+                }
+                
 
                 
 
@@ -51,12 +58,15 @@ struct WorkoutLogView: View {
     
 }
 struct ExersiseLogModule: View {
-    var viewModel: WorkoutLogViewModel
+    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
+
     var parentModuleID: Int
     var body: some View {
-        LogModuleHeader(viewModel: viewModel, parentModuleID: parentModuleID)
-        CoreLogModule(viewModel: viewModel, ModuleID: parentModuleID)
-    
+      
+        LogModuleHeader(viewModel: workoutLogViewModel, parentModuleID: parentModuleID).onTapGesture {
+            workoutLogViewModel.addEmptySet(moduleID: 0)
+        }
+        CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
     }
 }
 struct DropDownHeaderView: View {
@@ -206,7 +216,7 @@ struct FullWidthButton: View{
 
 struct addSetButton: View {
     var parentModuleID: Int
-    var viewModel: WorkoutLogViewModel
+    @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View{
         Button {viewModel.addEmptySet(moduleID: parentModuleID)}
         
@@ -234,7 +244,7 @@ struct addSetButton: View {
 
 
 struct LogModuleHeader: View{
-    var viewModel: WorkoutLogViewModel
+    @ObservedObject var viewModel: WorkoutLogViewModel
     var parentModuleID: Int
     var body: some View{
         
@@ -280,7 +290,7 @@ struct LogModuleHeader: View{
 }
 
 struct CoreLogModule: View {
-    var viewModel: WorkoutLogViewModel
+    @ObservedObject var viewModel: WorkoutLogViewModel
     var ModuleID: Int
     var body: some View{
         ZStack(){
@@ -315,10 +325,11 @@ struct TextHelvetica: View{
 
 
 struct WorkoutSetRowView: View{
+    @ObservedObject var viewModel: WorkoutLogViewModel
     var setNumber: Int
     var previousSet: String
-    var setWeight: Float
-    var SetReps: Int
+    var setWeightPlaceHolder: String
+    var SetRepsPlaceholder: String
     @State private var givenName: String = ""
     @State private var familyName: String = ""
     var colosr: Color = Color("WhiteFontOne")
@@ -348,7 +359,7 @@ struct WorkoutSetRowView: View{
 
             
          
-            TextField("", text: $givenName, prompt: Text("123").foregroundColor(Color("GrayFontTwo")))
+            TextField("", text: $givenName, prompt: Text(setWeightPlaceHolder).foregroundColor(Color("GrayFontTwo")))
                 .font(.custom("SpaceGrotesk-Medium", size: 21))
                 .foregroundColor(Color("WhiteFontOne"))
                 .frame(width: 70, height: 40)
@@ -370,7 +381,7 @@ struct WorkoutSetRowView: View{
                 
 
                
-                TextField("", text: $familyName, prompt: Text("13").foregroundColor(Color("GrayFontTwo")))
+                TextField("", text: $familyName, prompt: Text(SetRepsPlaceholder).foregroundColor(Color("GrayFontTwo")))
                     .font(.custom("SpaceGrotesk-Medium", size: 21))
                     .foregroundColor(Color("WhiteFontOne"))
                     .frame(width: 40, height: 40)
@@ -442,14 +453,15 @@ struct SuperTextField: View {
 }
 
 struct ContentGrid: View {
-    var viewModel: WorkoutLogViewModel
+    @ObservedObject var viewModel: WorkoutLogViewModel
     var ModuleID: Int
     var body: some View{
-        let module = viewModel.exersiseModules[0]
+        
+        let module = viewModel.exersiseModules[ModuleID]
         
         ForEach(module.setRows){
             row in
-            WorkoutSetRowView(setNumber: row.setIndex, previousSet: row.previousSet, setWeight: row.weight, SetReps: row.reps)
+            WorkoutSetRowView(viewModel: viewModel ,setNumber: row.setIndex, previousSet: row.previousSet, setWeightPlaceHolder: row.weightPlacholder, SetRepsPlaceholder: row.repsPlacholder)
             
 
             Divider()

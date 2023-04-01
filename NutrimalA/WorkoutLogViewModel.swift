@@ -16,11 +16,18 @@ class WorkoutLogViewModel: ObservableObject {
     
     @Published var workoutLogModel = createWorkoutLogModel()
     
+    var exersiseModules: Array<WorkoutLogModel.ExersiseLogModule> {
+        return workoutLogModel.exersiseModules
+    }
+    
+    
+    
+
     
     
     // MARK: - Intent(s)
     
-    func addEmptySet(workoutModule: WorkoutLogModel.ExersiseLogModule){
-        
+    func addEmptySet(moduleID: Int){
+        workoutLogModel.addEmptySet(moduleID: moduleID)
     }
 }

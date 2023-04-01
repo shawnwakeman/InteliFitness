@@ -12,6 +12,7 @@ struct WorkoutLogView: View {
     static let borderWeight: CGFloat = 1.7
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @State var progressValue: Float = 0.5
+    
     var body: some View {
         
         ScrollView(.vertical){
@@ -22,11 +23,12 @@ struct WorkoutLogView: View {
             
             
             VStack(spacing: -20){
-                
-                LogModuleHeader()
-                CoreLogModule()
-                FullWidthButton()
-            
+                ForEach(workoutLogViewModel.exersiseModules){
+                    workoutModule in
+                    ExersiseLogModule(viewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
+                }
+                let _ = print(workoutLogViewModel.exersiseModules[0].setRows)
+
                 
 
                 
@@ -48,7 +50,15 @@ struct WorkoutLogView: View {
 //    }
     
 }
-
+struct ExersiseLogModule: View {
+    var viewModel: WorkoutLogViewModel
+    var parentModuleID: Int
+    var body: some View {
+        LogModuleHeader(viewModel: viewModel, parentModuleID: parentModuleID)
+        CoreLogModule(viewModel: viewModel, ModuleID: parentModuleID)
+    
+    }
+}
 struct DropDownHeaderView: View {
     var body: some View {
         ZStack{
@@ -195,8 +205,10 @@ struct FullWidthButton: View{
 
 
 struct addSetButton: View {
+    var parentModuleID: Int
+    var viewModel: WorkoutLogViewModel
     var body: some View{
-        Button {print("Button pressed")}
+        Button {viewModel.addEmptySet(moduleID: parentModuleID)}
         
         label: {
             ZStack{
@@ -207,9 +219,7 @@ struct addSetButton: View {
                 TextHelvetica(content: "add set", size: 20)
                     .foregroundColor(Color(.white))
             }
-//            .onTapGesture {
-//                <#code#>
-//            }
+
             
             
         }.frame(maxWidth: 100, maxHeight: 28)
@@ -224,6 +234,8 @@ struct addSetButton: View {
 
 
 struct LogModuleHeader: View{
+    var viewModel: WorkoutLogViewModel
+    var parentModuleID: Int
     var body: some View{
         
         HStack{
@@ -236,7 +248,7 @@ struct LogModuleHeader: View{
 
             Spacer()
             
-            addSetButton()
+            addSetButton(parentModuleID: parentModuleID, viewModel: viewModel)
             
             ZStack{
                 Image("dataIcon")
@@ -268,6 +280,8 @@ struct LogModuleHeader: View{
 }
 
 struct CoreLogModule: View {
+    var viewModel: WorkoutLogViewModel
+    var ModuleID: Int
     var body: some View{
         ZStack(){
             
@@ -281,7 +295,7 @@ struct CoreLogModule: View {
             
             VStack(alignment: .leading, spacing: 0){
                 Header()
-                ContentGrid()
+                ContentGrid(viewModel: viewModel, ModuleID: ModuleID)
                 
             }
             
@@ -303,7 +317,7 @@ struct TextHelvetica: View{
 struct WorkoutSetRowView: View{
     var setNumber: Int
     var previousSet: String
-    var setWeight: Int
+    var setWeight: Float
     var SetReps: Int
     @State private var givenName: String = ""
     @State private var familyName: String = ""
@@ -428,25 +442,23 @@ struct SuperTextField: View {
 }
 
 struct ContentGrid: View {
+    var viewModel: WorkoutLogViewModel
+    var ModuleID: Int
     var body: some View{
-        WorkoutSetRowView(setNumber: 1, previousSet: "135 lb x 62", setWeight: 23, SetReps: 10)
-        Divider()
+        let module = viewModel.exersiseModules[0]
+        
+        ForEach(module.setRows){
+            row in
+            WorkoutSetRowView(setNumber: row.setIndex, previousSet: row.previousSet, setWeight: row.weight, SetReps: row.reps)
             
-            .frame(height: borderWeight)
-            .overlay(Color("BorderGray"))
-            
-        WorkoutSetRowView(setNumber: 2, previousSet: "135 lb x 6", setWeight: 123, SetReps: 6)
-        Divider()
-            .frame(height: borderWeight)
-            .overlay(Color("BorderGray"))
 
+            Divider()
+                
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+
+        }
         
-        WorkoutSetRowView(setNumber: 3, previousSet: "135 lb x 62", setWeight: 123, SetReps: 12)
-        Divider()
-            .frame(height: borderWeight)
-            .overlay(Color("BorderGray"))
-        
-        WorkoutSetRowView(setNumber: 4, previousSet: "135 lb x 16", setWeight: 123, SetReps: 12)
     }
 }
 
@@ -538,8 +550,6 @@ struct RoundedCorner: Shape {
     }
     
 }
-
-
 
 
 

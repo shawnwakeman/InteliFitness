@@ -12,13 +12,22 @@ struct WorkoutLogModel {
     var exersiseModules: Array<ExersiseLogModule> = []
     
     init() {
-       
+        exersiseModules.append(ExersiseLogModule(exersiseName: "shawn", id: 0))
+        exersiseModules[0].setRows.append(ExersiseSetRow(setIndex: 1, previousSet: "sad", weight: 123, reps: 12, setCompleted: false, rowSelected: false, repMetric: 2, id: 1))
+    }
+    
+    mutating func addEmptySet(moduleID: Int){
+        exersiseModules[0].setRows.append(ExersiseSetRow(setIndex: 1, previousSet: "sad", weight: 123, reps: 12, setCompleted: false, rowSelected: false, repMetric: 2, id: 1))
+    }
+    
+    func addEmptySetHelper(lastRowID: Int) -> ExersiseSetRow {
+        return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "", weight: 0, reps: 0, setCompleted: false, rowSelected: false, repMetric: 0, id: (lastRowID + 1))
     }
 
-    struct ExersiseLogModule {
+    struct ExersiseLogModule: Identifiable {
         var exersiseName: String
-        var setRows: Array<ExersiseSetRows> = []
-        
+        var setRows: Array<ExersiseSetRow> = []
+        var id: Int
         mutating func addEmptyView(workoutModule: ExersiseLogModule){
          
         }
@@ -26,7 +35,7 @@ struct WorkoutLogModel {
 
     }
 
-    struct ExersiseSetRows: Identifiable {
+    struct ExersiseSetRow: Identifiable {
         var setIndex: Int
         var previousSet: String
         var weight: Float
@@ -36,6 +45,9 @@ struct WorkoutLogModel {
         var repMetric: Int
         
         let id: Int
+        
+
+
     }
     
     

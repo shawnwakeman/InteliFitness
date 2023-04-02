@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+
+
 let borderWeight: CGFloat = 1.7
 
 class HapticManager {
@@ -24,17 +26,23 @@ class HapticManager {
     
 }
 
+
+
+
 struct WorkoutLogView: View {
     static let borderWeight: CGFloat = 1.7
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @State var progressValue: Float = 0.5
+    @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
-        
+
+
+    
         ScrollView(.vertical){
             
             
-            DropDownHeaderView()
+            DropDownHeaderView(viewModel: workoutLogViewModel)
             
             
             
@@ -52,14 +60,25 @@ struct WorkoutLogView: View {
                     
                 }
                 
-                Home(viewModel: workoutLogViewModel)
-                
+
 
                 
             }
             
             
         }.background(Color("DBblack"))
+            .onChange(of: scenePhase) { newScenePhase in
+                switch newScenePhase {
+                case .active:
+                    workoutLogViewModel.updateTimeToCurrent()
+                case .inactive:
+                    print("App is inactive")
+                case .background:
+                    workoutLogViewModel.saveBackgroundTime()
+                @unknown default:
+                    fatalError("Unknown scene phase")
+                }
+            }
         
     }
     
@@ -89,68 +108,35 @@ struct WorkoutLogView: View {
 //
 //}
 
-struct Home : View {
+struct WorkoutTimer : View {
     @ObservedObject var viewModel: WorkoutLogViewModel
-
-    
+    var fontSize: CGFloat
     var body: some View{
         ZStack{
-            
-            
-          
-            
-            VStack{
+        
+
+            let hours = viewModel.workoutTime.timeElapsed / 3600
+            let minutes = (viewModel.workoutTime.timeElapsed / 60) - (hours * 60)
+            let seconds = viewModel.workoutTime.timeElapsed % 60
+
+
+            if hours < 1 {
+                TextHelvetica(content: "\(minutes):\(String(format: "%02d", seconds))", size: fontSize)
                 
-          
-                    
-
-
-                    
-                    
-                let minutes = viewModel.workoutTime.timeElapsed / 60
-                let seconds = viewModel.workoutTime.timeElapsed % 60
-                let _ = print(viewModel.workoutTime.timeElapsed)
-                Text("\(minutes):\(String(format: "%02d", seconds))")
-                    .font(.system(size: 65))
-                    .fontWeight(.bold)
-                        
-               
-                   
-            
-                
-                HStack(spacing: 20){
-                    
-                    Button(action: {
-                        print(viewModel.workoutTime.timeRunning)
-                        viewModel.toggleTime()
-                        print(viewModel.workoutTime.timeRunning)
-                        
-                    }) {
-                        
-                        HStack(spacing: 15){
-   
-                            
-                            Text(viewModel.workoutTime.timeRunning ? "Pause" : "Play")
-                                .foregroundColor(.white)
-                        }
-                        .padding(.vertical)
-                        .frame(width: (UIScreen.main.bounds.width / 2) - 55)
-                        .background(Color.red)
-                        .clipShape(Capsule())
-                        .shadow(radius: 6)
-                    }
-                    
-
-                }
-                .padding(.top, 55)
             }
+            else{
+                TextHelvetica(content: "\(String(hours)):\(String(format: "%02d", minutes)):\(String(format: "%02d", seconds))", size: fontSize)
+              
+            }
+                    
+           
             
         }
         
         .onReceive(viewModel.workoutTime.time) { (_) in
             
             if viewModel.workoutTime.timeRunning{
-                print(viewModel.workoutTime.timeElapsed)
+             
     
                 
                 viewModel.addToTime()
@@ -178,6 +164,7 @@ struct ExersiseLogModule: View {
     }
 }
 struct DropDownHeaderView: View {
+    @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View {
         ZStack{
             
@@ -231,6 +218,7 @@ struct DropDownHeaderView: View {
                             .foregroundColor(Color("LinkBlue"))
                             .imageScale(.large)
                             .bold()
+                    
                         TextHelvetica(content: "1:23", size: 20)
                             .foregroundColor(Color("WhiteFontOne"))
                     }
@@ -260,10 +248,10 @@ struct DropDownHeaderView: View {
                 
             }
             .padding(.all, 21.0)
-            
-            TextHelvetica(content: "0:12", size: 20)
+            WorkoutTimer(viewModel: viewModel, fontSize: 20)
                 .padding(.bottom, 17.0)
                 .foregroundColor(Color("GrayFontOne"))
+
         }.offset(x:0, y: -19)
     }
 }

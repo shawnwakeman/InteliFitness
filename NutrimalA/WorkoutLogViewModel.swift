@@ -50,5 +50,12 @@ class WorkoutLogViewModel: ObservableObject {
     func addToTime(){
         workoutLogModel.addToTime()
     }
+    
+    func saveBackgroundTime(){
+        workoutLogModel.saveBackgroundTime()
+    }
+    func updateTimeToCurrent(){
+        workoutLogModel.updateTimeToCurrent()
+    }
         
 }

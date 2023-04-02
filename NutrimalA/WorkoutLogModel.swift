@@ -1,6 +1,11 @@
 import Foundation
 
 struct WorkoutLogModel {
+    
+    private(set) var exersiseModules: [ExersiseLogModule] = []
+    var workoutTime: WorkoutTime = WorkoutTime()
+    
+    
     struct ExersiseLogModule: Identifiable {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
@@ -24,11 +29,10 @@ struct WorkoutLogModel {
         var timeRunning: Bool = true
         var timeElapsed: Int = 0
         var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        var backgroundTime: Date = Date()
     }
     
-    private(set) var exersiseModules: [ExersiseLogModule] = []
-    var workoutTime: WorkoutTime = WorkoutTime()
-    
+
     init() {
         exersiseModules.append(ExersiseLogModule(exersiseName: "Back Squat", setRows: [ExersiseSetRow(setIndex: 1, previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "99", setCompleted: false, rowSelected: false, repMetric: 7, id: 0)], id: 0))
     }
@@ -53,7 +57,38 @@ struct WorkoutLogModel {
     
     mutating func addToTime() {
         workoutTime.timeElapsed += 1
+
+
+        
     }
+    
+    mutating func saveBackgroundTime() {
+        
+        workoutTime.backgroundTime = Date()
+        
+    }
+    mutating func updateTimeToCurrent() {
+
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
+
+        let currentDate = Date()
+        let otherDate = workoutTime.backgroundTime // Creates a date one hour after the current date
+
+//        let currentDateString = dateFormatter.string(from: currentDate)
+//        let otherDateString = dateFormatter.string(from: otherDate)
+//
+//        print("Current date and time: \(currentDateString)")
+//        print("Other date and time: \(otherDateString)")
+
+        let timeDifference = currentDate.timeIntervalSince(otherDate)
+        workoutTime.timeElapsed += Int(timeDifference)
+//        print("The time difference between the current date and the other date is \(timeDifference) seconds.")
+        
+    }
+
     
     private func addEmptySetHelper(lastRowID: Int) -> ExersiseSetRow {
         return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "", setCompleted: false, rowSelected: false, repMetric: 2, id: (lastRowID))

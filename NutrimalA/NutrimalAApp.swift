@@ -12,7 +12,7 @@ struct NutrimalAApp: App {
     private let workoutLogView = WorkoutLogViewModel()
     var body: some Scene {
         WindowGroup {
-            WorkoutLogView(workoutLogViewModel: workoutLogView)
+            WorkoutLogView()
         }
     }
 }

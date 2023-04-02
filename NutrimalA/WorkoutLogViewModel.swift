@@ -20,6 +20,11 @@ class WorkoutLogViewModel: ObservableObject {
         return workoutLogModel.exersiseModules
     }
     
+    var workoutTime: WorkoutLogModel.WorkoutTime {
+        return workoutLogModel.workoutTime
+    
+    }
+    
     
     
 
@@ -38,4 +43,12 @@ class WorkoutLogViewModel: ObservableObject {
     func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {
         workoutLogModel.toggleCompletedSet(ExersiseModuleID: ExersiseModuleID, RowID: RowID)
     }
+    
+    func toggleTime(){
+        workoutLogModel.toggleTime()
+    }
+    func addToTime(){
+        workoutLogModel.addToTime()
+    }
+        
 }

@@ -8,6 +8,22 @@
 import SwiftUI
 let borderWeight: CGFloat = 1.7
 
+class HapticManager {
+    static let instance = HapticManager()
+    
+    func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
+        let genorator = UINotificationFeedbackGenerator()
+        genorator.notificationOccurred(type)
+    }
+        
+    func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let genorator = UIImpactFeedbackGenerator(style: style)
+        genorator.impactOccurred()
+    }
+        
+    
+}
+
 struct WorkoutLogView: View {
     static let borderWeight: CGFloat = 1.7
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
@@ -33,9 +49,10 @@ struct WorkoutLogView: View {
                 
                 FullWidthButton().padding(.top, -40.0).onTapGesture {
                     workoutLogViewModel.addEmptyWorkoutModule()
+                    
                 }
                 
-
+                Home(viewModel: workoutLogViewModel)
                 
 
                 
@@ -57,6 +74,97 @@ struct WorkoutLogView: View {
 //    }
     
 }
+
+//struct SoundTester: View{
+//    var body: some View{
+//        Button("1") {HapticManager.instance.notification(type: .success)}
+//        Button("2") {HapticManager.instance.notification(type: .warning)}
+//        Button("3") {HapticManager.instance.notification(type: .error)}
+//        Button("4") {HapticManager.instance.impact(style: .heavy)}
+//        Button("5") {HapticManager.instance.impact(style: .light)}
+//        Button("6") {HapticManager.instance.impact(style: .medium)}
+//        Button("7") {HapticManager.instance.impact(style: .rigid)}
+//        Button("8") {HapticManager.instance.impact(style: .soft)}
+//    }
+//
+//}
+
+struct Home : View {
+    @ObservedObject var viewModel: WorkoutLogViewModel
+
+    
+    var body: some View{
+        ZStack{
+            
+            
+          
+            
+            VStack{
+                
+          
+                    
+
+
+                    
+                    
+                let minutes = viewModel.workoutTime.timeElapsed / 60
+                let seconds = viewModel.workoutTime.timeElapsed % 60
+                let _ = print(viewModel.workoutTime.timeElapsed)
+                Text("\(minutes):\(String(format: "%02d", seconds))")
+                    .font(.system(size: 65))
+                    .fontWeight(.bold)
+                        
+               
+                   
+            
+                
+                HStack(spacing: 20){
+                    
+                    Button(action: {
+                        print(viewModel.workoutTime.timeRunning)
+                        viewModel.toggleTime()
+                        print(viewModel.workoutTime.timeRunning)
+                        
+                    }) {
+                        
+                        HStack(spacing: 15){
+   
+                            
+                            Text(viewModel.workoutTime.timeRunning ? "Pause" : "Play")
+                                .foregroundColor(.white)
+                        }
+                        .padding(.vertical)
+                        .frame(width: (UIScreen.main.bounds.width / 2) - 55)
+                        .background(Color.red)
+                        .clipShape(Capsule())
+                        .shadow(radius: 6)
+                    }
+                    
+
+                }
+                .padding(.top, 55)
+            }
+            
+        }
+        
+        .onReceive(viewModel.workoutTime.time) { (_) in
+            
+            if viewModel.workoutTime.timeRunning{
+                print(viewModel.workoutTime.timeElapsed)
+    
+                
+                viewModel.addToTime()
+                    
+     
+            }
+                    
+               
+
+        }
+            
+    }
+}
+
 struct ExersiseLogModule: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
 
@@ -375,7 +483,7 @@ struct WorkoutSetRowView: View{
             
          
             
-            TextField("", text: $givenName, prompt: Text(rowObject.weightPlacholder).foregroundColor(Color("GrayFontTwo")))
+            TextField("", text: $givenName, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
                .font(.custom("SpaceGrotesk-Medium", size: 21))
                .foregroundColor(Color("WhiteFontOne"))
                .frame(width: 70, height: 40)
@@ -397,7 +505,7 @@ struct WorkoutSetRowView: View{
                 
 
                
-                TextField("", text: $familyName, prompt: Text(rowObject.repsPlacholder).foregroundColor(Color("GrayFontTwo")))
+                TextField("", text: $familyName, prompt: Text(rowObject.repsPlaceholder).foregroundColor(Color("GrayFontTwo")))
                         .font(.custom("SpaceGrotesk-Medium", size: 21))
                         .foregroundColor(Color("WhiteFontOne"))
                         .frame(minWidth: 40, minHeight: 40)
@@ -409,7 +517,7 @@ struct WorkoutSetRowView: View{
 
 
                     
-                if !rowObject.repsPlacholder.isEmpty {
+                if !rowObject.repsPlaceholder.isEmpty {
                     ZStack{
                         
                         ZStack{
@@ -462,6 +570,8 @@ struct WorkoutSetRowView: View{
                 }
                 .onTapGesture {
                     viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                    HapticManager.instance.impact(style: .heavy)
+                    
                 }
                 .frame(width: 40, height: 40)
             }

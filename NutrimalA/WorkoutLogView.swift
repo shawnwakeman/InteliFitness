@@ -14,7 +14,7 @@ struct WorkoutLogView: View {
     @State var progressValue: Float = 0.5
     
     var body: some View {
-        let _ = print(workoutLogViewModel.exersiseModules)
+        
         ScrollView(.vertical){
             
             
@@ -22,16 +22,16 @@ struct WorkoutLogView: View {
             
             
             
-            VStack(spacing: -20){
+            VStack(spacing: 20){
                 if workoutLogViewModel.exersiseModules.count > 0 {
-                    let _ = print(workoutLogViewModel.exersiseModules.count)
+                    
                     ForEach(workoutLogViewModel.exersiseModules){
                         workoutModule in
                         ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
                     }
                 }
-
-                FullWidthButton().onTapGesture {
+                
+                FullWidthButton().padding(.top, -40.0).onTapGesture {
                     workoutLogViewModel.addEmptyWorkoutModule()
                 }
                 
@@ -62,11 +62,11 @@ struct ExersiseLogModule: View {
 
     var parentModuleID: Int
     var body: some View {
-      
-        LogModuleHeader(viewModel: workoutLogViewModel, parentModuleID: parentModuleID).onTapGesture {
-            workoutLogViewModel.addEmptySet(moduleID: 0)
+        VStack(spacing: -20){
+            LogModuleHeader(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+            CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
         }
-        CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
+
     }
 }
 struct DropDownHeaderView: View {
@@ -252,13 +252,15 @@ struct LogModuleHeader: View{
             
             Button {print("Button pressed")}
             label: {
-                TextHelvetica(content: "Back Squat", size: 28)
+                TextHelvetica(content: viewModel.exersiseModules[parentModuleID].exersiseName, size: 28)
                     .foregroundColor(Color("LinkBlue"))
             }
 
             Spacer()
             
-            addSetButton(parentModuleID: parentModuleID, viewModel: viewModel)
+            addSetButton(parentModuleID: parentModuleID, viewModel: viewModel).onTapGesture {
+                viewModel.addEmptySet(moduleID: 0)
+            }
             
             ZStack{
                 Image("dataIcon")
@@ -286,6 +288,7 @@ struct LogModuleHeader: View{
         }
         .padding(/*@START_MENU_TOKEN@*/[.top, .leading, .trailing]/*@END_MENU_TOKEN@*/)
         .padding(.bottom, 9)
+        
     }
 }
 
@@ -326,29 +329,41 @@ struct TextHelvetica: View{
 
 struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
-    var setNumber: Int
-    var previousSet: String
-    var setWeightPlaceHolder: String
-    var SetRepsPlaceholder: String
+    var rowObject: WorkoutLogModel.ExersiseSetRow
+    var moduleID: Int
     @State private var givenName: String = ""
     @State private var familyName: String = ""
-    var colosr: Color = Color("WhiteFontOne")
+
     var body: some View{
 
+        
         HStack(spacing: 0){
-            TextHelvetica(content: String(setNumber), size: 21)
-                .padding()
-                .frame(width: 55, height: 40)
-                .foregroundColor(Color("LinkBlue"))
-                .background(.clear)
-            Divider()
-                .frame(width: borderWeight)
-                .overlay(Color("BorderGray"))
-           
-            TextHelvetica(content: previousSet, size: 21)
-                .frame(width: 145, height: 40)
-                .foregroundColor(Color("GrayFontOne"))
-                .background(.clear)
+            TextHelvetica(content: String(rowObject.setIndex), size: 21)
+                       .padding()
+                       .frame(width: 55, height: 40)
+                       .foregroundColor(Color("LinkBlue"))
+                       .background(.clear)
+                   Divider()
+                       .frame(width: borderWeight)
+                       .overlay(Color("BorderGray"))
+            
+            
+            
+            if rowObject.previousSet == "0" {
+                Capsule()
+                    .padding(.horizontal, 50.0)
+                    .padding(.vertical, 18)
+                    .frame(width: 145, height: 40)
+                    .foregroundColor(Color("GrayFontOne"))
+            }
+            else
+            {
+                TextHelvetica(content: rowObject.previousSet, size: 21)
+                                .frame(width: 145, height: 40)
+                                .foregroundColor(Color("GrayFontOne"))
+                                .background(.clear)
+            }
+
             Divider()
                 .frame(width: borderWeight)
                 .overlay(Color("BorderGray"))
@@ -359,13 +374,14 @@ struct WorkoutSetRowView: View{
 
             
          
-            TextField("", text: $givenName, prompt: Text(setWeightPlaceHolder).foregroundColor(Color("GrayFontTwo")))
-                .font(.custom("SpaceGrotesk-Medium", size: 21))
-                .foregroundColor(Color("WhiteFontOne"))
-                .frame(width: 70, height: 40)
-                .background(.clear)
-                .multilineTextAlignment(.center)
-                .background(Color("DDB"))
+            
+            TextField("", text: $givenName, prompt: Text(rowObject.weightPlacholder).foregroundColor(Color("GrayFontTwo")))
+               .font(.custom("SpaceGrotesk-Medium", size: 21))
+               .foregroundColor(Color("WhiteFontOne"))
+               .frame(width: 70, height: 40)
+               .background(.clear)
+               .multilineTextAlignment(.center)
+               .background(Color("DDB"))
 //                .keyboardType(.numberPad)
                 
 
@@ -381,39 +397,42 @@ struct WorkoutSetRowView: View{
                 
 
                
-                TextField("", text: $familyName, prompt: Text(SetRepsPlaceholder).foregroundColor(Color("GrayFontTwo")))
-                    .font(.custom("SpaceGrotesk-Medium", size: 21))
-                    .foregroundColor(Color("WhiteFontOne"))
-                    .frame(width: 40, height: 40)
-                    .background(.clear)
-                    .multilineTextAlignment(.center)
-                    .background(Color("DDB"))
+                TextField("", text: $familyName, prompt: Text(rowObject.repsPlacholder).foregroundColor(Color("GrayFontTwo")))
+                        .font(.custom("SpaceGrotesk-Medium", size: 21))
+                        .foregroundColor(Color("WhiteFontOne"))
+                        .frame(minWidth: 40, minHeight: 40)
+                        .background(.clear)
+                        .multilineTextAlignment(.center)
+                        .background(Color("DDB"))
+
 //                    .keyboardType(.numberPad)
 
 
                     
-                    
-                ZStack{
-                    
+                if !rowObject.repsPlacholder.isEmpty {
                     ZStack{
-                        Capsule()
-                            .padding(.vertical, 9.0)
-                            .foregroundColor(Color("MainGray"))
-                            .frame(width: 30)
                         
-                        Capsule()
-                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
-                            .padding(.vertical, 9.0)
+                        ZStack{
+                            Capsule()
+                                .padding(.vertical, 9.0)
+                                .foregroundColor(Color("MainGray"))
+                                .frame(width: 30)
                             
-                            
-                            .frame(width: 30)
-                    }
-                    
-                    TextHelvetica(content: "10", size: 13)
-                        .foregroundColor(Color.white)
+                            Capsule()
+                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
+                                .padding(.vertical, 9.0)
+                                
+                                
+                                .frame(width: 30)
+                        }
                         
-                }.padding(.leading, -8)
-                    .padding(.trailing, 5)
+                        TextHelvetica(content: String(rowObject.repMetric), size: 13)
+                            .foregroundColor(Color.white)
+                            
+                    }.padding(.leading, -8)
+                        .padding(.trailing, 5)
+                }
+               
 
                     
             }.frame(width: 80, height: 40)
@@ -424,18 +443,36 @@ struct WorkoutSetRowView: View{
                 .frame(width: borderWeight)
                 .overlay(Color("BorderGray"))
             
-
             
-            Image("checkMark")
-                .resizable()
-                .padding(9.0)
-                .aspectRatio(40/37, contentMode: .fit)
-                .background(.clear)
+            
+            ZStack {
+
+                
+                Image("checkMark")
+                    .resizable()
+                    .padding(9.0)
+                    .opacity(rowObject.setCompleted ? 100.0: 0.0)
+                    .aspectRatio(40/37, contentMode: .fit)
+                
+                ZStack{
+                    
+                    Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
+                    
+                    
+                }
+                .onTapGesture {
+                    viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                }
+                .frame(width: 40, height: 40)
+            }
+
+
                 
         }
-        
     }
+        
 }
+
 
 struct SuperTextField: View {
     
@@ -454,6 +491,7 @@ struct SuperTextField: View {
 
 struct ContentGrid: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
+    
     var ModuleID: Int
     var body: some View{
         
@@ -461,13 +499,21 @@ struct ContentGrid: View {
         
         ForEach(module.setRows){
             row in
-            WorkoutSetRowView(viewModel: viewModel ,setNumber: row.setIndex, previousSet: row.previousSet, setWeightPlaceHolder: row.weightPlacholder, SetRepsPlaceholder: row.repsPlacholder)
+            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID)
+            
+            
+      
+            if (row.id != module.setRows.indices.last){
+                Divider()
+                    
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+            }
             
 
-            Divider()
                 
-                .frame(height: borderWeight)
-                .overlay(Color("BorderGray"))
+
+
 
         }
         

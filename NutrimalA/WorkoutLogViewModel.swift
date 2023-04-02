@@ -34,4 +34,8 @@ class WorkoutLogViewModel: ObservableObject {
     func addEmptyWorkoutModule() {
         workoutLogModel.addEmptyWorkoutModule()
     }
+    
+    func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {
+        workoutLogModel.toggleCompletedSet(ExersiseModuleID: ExersiseModuleID, RowID: RowID)
+    }
 }

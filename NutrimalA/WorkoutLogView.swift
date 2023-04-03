@@ -429,7 +429,8 @@ struct WorkoutSetRowView: View{
     var moduleID: Int
     @State private var givenName: String = ""
     @State private var familyName: String = ""
-
+    @FocusState private var showKeyboard: Bool
+    @FocusState private var isTextFieldFocused: Bool
     var body: some View{
 
         
@@ -472,13 +473,109 @@ struct WorkoutSetRowView: View{
          
             
             TextField("", text: $givenName, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
-               .font(.custom("SpaceGrotesk-Medium", size: 21))
-               .foregroundColor(Color("WhiteFontOne"))
-               .frame(width: 70, height: 40)
-               .background(.clear)
-               .multilineTextAlignment(.center)
-               .background(Color("DDB"))
-//                .keyboardType(.numberPad)
+                .inputView {
+                    
+                    HStack {
+                        Button(action: {
+                            givenName = ""
+                        }, label: {
+                            Text("clear")
+                        })
+                        Button(action: {
+                            givenName = ""
+                        }, label: {
+                            Text("clalc")
+                        })
+                        Button(action: {
+                            givenName = ""
+                        }, label: {
+                            Text("next")
+                        })
+                    }.padding(.all)
+                    ZStack {
+
+                        VStack {
+                            HStack{
+                                Button("1") {
+                                    givenName.append("1")
+                                }
+                                Button("2") {
+                                    givenName.append("2")
+                                }
+                                Button("3") {
+                                    givenName.append("3")
+                                }
+                            }
+                            
+                            HStack{
+                                Button("4") {
+                                    givenName.append("4")
+                                }
+                                Button("5") {
+                                    givenName.append("5")
+                                }
+                                Button("6") {
+                                    givenName.append("6")
+                                }
+                            }
+                            
+                            
+                            HStack{
+                                Button("7") {
+                                    givenName.append("7")
+                                }
+                                Button("8") {
+                                    givenName.append("8")
+                                }
+                                Button("9") {
+                                    givenName.append("9")
+                                }
+                            }
+                                
+                            HStack{
+                                Button(".") {
+                                    givenName.append(".")
+                                }
+                                Button("0") {
+                                    givenName.append("0")
+                                }
+                                Button(action: {
+                                    if !givenName.isEmpty {
+                                        givenName.removeLast()
+                                    }
+                                }, label: {
+                                    Image(systemName: "delete.backward")
+                                })
+                                
+                            }
+                        }
+
+                        
+//
+//                        VStack {
+//                            Button("CloseKeyboard") {
+//                                showKeyboard = false
+//                            }
+//                            Text(givenName)
+//                            Button("Add") {
+//                                givenName = "123"
+//                            }
+//                        }
+
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 300)
+                }
+
+                
+                .focused($showKeyboard)
+                .font(.custom("SpaceGrotesk-Medium", size: 21))
+                .foregroundColor(Color("WhiteFontOne"))
+                .frame(width: 70, height: 40)
+                .background(.clear)
+                .multilineTextAlignment(.center)
+                .background(Color("DDB"))
+                .keyboardType(.numberPad)
                 
 
 

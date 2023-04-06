@@ -66,19 +66,24 @@ struct WorkoutLogView: View {
             }
             
             
-        }.background(Color("DBblack"))
-            .onChange(of: scenePhase) { newScenePhase in
-                switch newScenePhase {
-                case .active:
-                    workoutLogViewModel.updateTimeToCurrent()
-                case .inactive:
-                    print("App is inactive")
-                case .background:
-                    workoutLogViewModel.saveBackgroundTime()
-                @unknown default:
-                    fatalError("Unknown scene phase")
-                }
+        }
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    
+        }
+        .background(Color("DBblack"))
+        .onChange(of: scenePhase) { newScenePhase in
+            switch newScenePhase {
+            case .active:
+                workoutLogViewModel.updateTimeToCurrent()
+            case .inactive:
+                print("App is inactive")
+            case .background:
+                workoutLogViewModel.saveBackgroundTime()
+            @unknown default:
+                fatalError("Unknown scene phase")
             }
+        }
         
     }
     
@@ -429,8 +434,9 @@ struct WorkoutSetRowView: View{
     var moduleID: Int
     @State private var givenName: String = ""
     @State private var familyName: String = ""
-    @FocusState private var showKeyboard: Bool
-    @FocusState private var isTextFieldFocused: Bool
+
+    
+    
     var body: some View{
 
         
@@ -473,264 +479,15 @@ struct WorkoutSetRowView: View{
          
             
             TextField("", text: $givenName, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
-                .inputView(for: <#T##UITextField#>, content: <#T##() -> View#>) {
-                    Rectangle()
-                        .fill(Color("BorderGray"))
-                        .frame(height: borderWeight)
-                        .offset(y: 10)
-                        .zIndex(1)
-                     
-                    VStack(spacing: 0) {
-                        HStack(spacing: 0){
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                TextHelvetica(content: "1", size: 21)
-                                
-                                
-                            }
-
-                            
-                 
-                            
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                TextHelvetica(content: "1", size: 21)
-                                
-                                
-                            }
-
-                            
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                TextHelvetica(content: "1", size: 21)
-                                
-                                
-                            }.frame(minWidth: 120, minHeight: 65)
-
-                      
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                TextHelvetica(content: "1", size: 21)
-                                
-                                
-                            }.frame(minWidth: 140, minHeight: 65)
-
-
-                        }
-                        .frame(maxWidth: .infinity)
-                        .background(Color("MainGray"))
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                        HStack(spacing: 0){
-                            TextHelvetica(content: String(rowObject.setIndex), size: 21)
-                                .padding()
-                                
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: String(rowObject.setIndex), size: 21)
-                                .padding()
-                                
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: String(rowObject.setIndex), size: 21)
-                                .padding()
-                                
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-
-                        }
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                        HStack(spacing: 0){
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                                
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                                
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                               
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-
-                        }
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                        HStack(spacing: 0){
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                          
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                                
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                             
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-
-                        }
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                        HStack(spacing: 0){
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                           
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                   
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-                            
-                            TextHelvetica(content: "1", size: 21)
-                                .padding()
-                       
-                                .foregroundColor(Color("LinkBlue"))
-                                .background(.clear)
-                            Divider()
-                                .frame(width: borderWeight)
-                                .overlay(Color("BorderGray"))
-
-                        }
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                            .ignoresSafeArea()
-                            .zIndex(1)
-                        
-
-                            
-    //
-    //                        VStack {
-    //                            Button("CloseKeyboard") {
-    //                                showKeyboard = false
-    //                            }
-    //                            Text(givenName)
-    //                            Button("Add") {
-    //                                givenName = "123"
-    //                            }
-                            
-
-                      
-                        
-                  
-                    }
- 
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 300)
-                    .ignoresSafeArea()
-                    .background{
-                        Rectangle()
-                            .fill(Color("DBblack"))
-                            .ignoresSafeArea()
-                            .shadow(color: Color.black.opacity(0.25), radius: 5, x: 0, y: -9)
-                            
-                    }
-                    
-                    
-                    
-                }
-
-                
-                .focused($showKeyboard)
+                .keyboardType(.decimalPad)
+                .autocorrectionDisabled(true)
                 .font(.custom("SpaceGrotesk-Medium", size: 21))
                 .foregroundColor(Color("WhiteFontOne"))
                 .frame(width: 70, height: 40)
                 .background(.clear)
                 .multilineTextAlignment(.center)
                 .background(Color("DDB"))
+ 
                 
 
 
@@ -746,12 +503,16 @@ struct WorkoutSetRowView: View{
 
                
                 TextField("", text: $familyName, prompt: Text(rowObject.repsPlaceholder).foregroundColor(Color("GrayFontTwo")))
+                        .keyboardType(.numberPad)
+                        .autocorrectionDisabled(true)
                         .font(.custom("SpaceGrotesk-Medium", size: 21))
                         .foregroundColor(Color("WhiteFontOne"))
                         .frame(minWidth: 40, minHeight: 40)
                         .background(.clear)
                         .multilineTextAlignment(.center)
                         .background(Color("DDB"))
+
+                    
 
 //                    .keyboardType(.numberPad)
 
@@ -958,9 +719,6 @@ struct RoundedCorner: Shape {
     }
     
 }
-
-
-
 
 
 

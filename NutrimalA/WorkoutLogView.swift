@@ -418,7 +418,7 @@ struct TextHelvetica: View{
     var size: CGFloat
     var body: some View
     {
-        Text(content).font(.custom("SpaceGrotesk-Medium", size: size)).multilineTextAlignment(.center)
+        Text(content).font(.custom("SpaceGrotesk-Medium", size: size))
     }
 }
 
@@ -473,98 +473,254 @@ struct WorkoutSetRowView: View{
          
             
             TextField("", text: $givenName, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
-                .inputView {
-                    
-                    HStack {
-                        Button(action: {
-                            givenName = ""
-                        }, label: {
-                            Text("clear")
-                        })
-                        Button(action: {
-                            givenName = ""
-                        }, label: {
-                            Text("clalc")
-                        })
-                        Button(action: {
-                            givenName = ""
-                        }, label: {
-                            Text("next")
-                        })
-                    }.padding(.all)
-                    ZStack {
+                .inputView(for: <#T##UITextField#>, content: <#T##() -> View#>) {
+                    Rectangle()
+                        .fill(Color("BorderGray"))
+                        .frame(height: borderWeight)
+                        .offset(y: 10)
+                        .zIndex(1)
+                     
+                    VStack(spacing: 0) {
+                        HStack(spacing: 0){
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(Color("BlueOverlay"))
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                
+                                RoundedRectangle(cornerRadius: 5)
+                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                TextHelvetica(content: "1", size: 21)
+                                
+                                
+                            }
 
-                        VStack {
-                            HStack{
-                                Button("1") {
-                                    givenName.append("1")
-                                }
-                                Button("2") {
-                                    givenName.append("2")
-                                }
-                                Button("3") {
-                                    givenName.append("3")
-                                }
-                            }
                             
-                            HStack{
-                                Button("4") {
-                                    givenName.append("4")
-                                }
-                                Button("5") {
-                                    givenName.append("5")
-                                }
-                                Button("6") {
-                                    givenName.append("6")
-                                }
-                            }
+                 
                             
-                            
-                            HStack{
-                                Button("7") {
-                                    givenName.append("7")
-                                }
-                                Button("8") {
-                                    givenName.append("8")
-                                }
-                                Button("9") {
-                                    givenName.append("9")
-                                }
-                            }
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(Color("BlueOverlay"))
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
                                 
-                            HStack{
-                                Button(".") {
-                                    givenName.append(".")
-                                }
-                                Button("0") {
-                                    givenName.append("0")
-                                }
-                                Button(action: {
-                                    if !givenName.isEmpty {
-                                        givenName.removeLast()
-                                    }
-                                }, label: {
-                                    Image(systemName: "delete.backward")
-                                })
+                                RoundedRectangle(cornerRadius: 5)
+                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                TextHelvetica(content: "1", size: 21)
+                                
                                 
                             }
+
+                            
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(Color("BlueOverlay"))
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                
+                                RoundedRectangle(cornerRadius: 5)
+                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                TextHelvetica(content: "1", size: 21)
+                                
+                                
+                            }.frame(minWidth: 120, minHeight: 65)
+
+                      
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(Color("BlueOverlay"))
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                
+                                RoundedRectangle(cornerRadius: 5)
+                                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 12)
+                                TextHelvetica(content: "1", size: 21)
+                                
+                                
+                            }.frame(minWidth: 140, minHeight: 65)
+
+
                         }
-
+                        .frame(maxWidth: .infinity)
+                        .background(Color("MainGray"))
                         
-//
-//                        VStack {
-//                            Button("CloseKeyboard") {
-//                                showKeyboard = false
-//                            }
-//                            Text(givenName)
-//                            Button("Add") {
-//                                givenName = "123"
-//                            }
-//                        }
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                        HStack(spacing: 0){
+                            TextHelvetica(content: String(rowObject.setIndex), size: 21)
+                                .padding()
+                                
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: String(rowObject.setIndex), size: 21)
+                                .padding()
+                                
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: String(rowObject.setIndex), size: 21)
+                                .padding()
+                                
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
 
+                        }
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                        HStack(spacing: 0){
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                                
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                                
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                               
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+
+                        }
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                        HStack(spacing: 0){
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                          
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                                
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                             
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+
+                        }
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                        HStack(spacing: 0){
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                           
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                   
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            TextHelvetica(content: "1", size: 21)
+                                .padding()
+                       
+                                .foregroundColor(Color("LinkBlue"))
+                                .background(.clear)
+                            Divider()
+                                .frame(width: borderWeight)
+                                .overlay(Color("BorderGray"))
+
+                        }
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                            .ignoresSafeArea()
+                            .zIndex(1)
+                        
+
+                            
+    //
+    //                        VStack {
+    //                            Button("CloseKeyboard") {
+    //                                showKeyboard = false
+    //                            }
+    //                            Text(givenName)
+    //                            Button("Add") {
+    //                                givenName = "123"
+    //                            }
+                            
+
+                      
+                        
+                  
                     }
+ 
                     .frame(maxWidth: .infinity)
                     .frame(height: 300)
+                    .ignoresSafeArea()
+                    .background{
+                        Rectangle()
+                            .fill(Color("DBblack"))
+                            .ignoresSafeArea()
+                            .shadow(color: Color.black.opacity(0.25), radius: 5, x: 0, y: -9)
+                            
+                    }
+                    
+                    
+                    
                 }
 
                 
@@ -575,7 +731,6 @@ struct WorkoutSetRowView: View{
                 .background(.clear)
                 .multilineTextAlignment(.center)
                 .background(Color("DDB"))
-                .keyboardType(.numberPad)
                 
 
 

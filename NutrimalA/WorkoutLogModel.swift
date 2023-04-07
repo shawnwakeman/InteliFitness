@@ -4,7 +4,13 @@ struct WorkoutLogModel {
     
     private(set) var exersiseModules: [ExersiseLogModule] = []
     var workoutTime: WorkoutTime = WorkoutTime()
+    var popUpRPE = PopUpRPE(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     
+    struct PopUpRPE {
+        var RPEpopUpState = false
+        var popUpRowIndex: Int
+        var popUpExersiseModuleIndex: Int
+    }
     
     struct ExersiseLogModule: Identifiable {
         var exersiseName: String
@@ -21,7 +27,7 @@ struct WorkoutLogModel {
         var repsPlaceholder: String
         var setCompleted: Bool
         var rowSelected: Bool
-        var repMetric: Int
+        var repMetric: Float
         let id: Int
     }
     
@@ -60,6 +66,18 @@ struct WorkoutLogModel {
 
 
         
+    }
+    
+    mutating func setPopUpState(state: Bool) {
+        popUpRPE.RPEpopUpState = state
+
+    }
+    mutating func setRepMetric (exersiseModuleID: Int, RowID: Int, RPE: Float) {
+        exersiseModules[exersiseModuleID].setRows[RowID].repMetric = RPE
+    }
+    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int) {
+        popUpRPE.popUpExersiseModuleIndex = exersiseModuleID
+        popUpRPE.popUpRowIndex = RowID
     }
     
     mutating func saveBackgroundTime() {

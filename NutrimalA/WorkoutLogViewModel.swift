@@ -25,6 +25,11 @@ class WorkoutLogViewModel: ObservableObject {
     
     }
     
+    var RPEPopUp: WorkoutLogModel.PopUpRPE {
+        return workoutLogModel.popUpRPE
+    
+    }
+    
     
     
 
@@ -56,6 +61,15 @@ class WorkoutLogViewModel: ObservableObject {
     }
     func updateTimeToCurrent(){
         workoutLogModel.updateTimeToCurrent()
+    }
+    func setPopUpState(state: Bool) {
+        workoutLogModel.setPopUpState(state: state)
+    }
+    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int) {
+        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID)
+    }
+    func setRepMetric(exersiseModuleID : Int, RowID: Int, RPE: Float) {
+        workoutLogModel.setRepMetric(exersiseModuleID: exersiseModuleID, RowID: RowID, RPE: RPE)
     }
         
 }

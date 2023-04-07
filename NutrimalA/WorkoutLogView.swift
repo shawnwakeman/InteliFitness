@@ -36,40 +36,49 @@ struct WorkoutLogView: View {
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
-
-
-    
-        ScrollView(.vertical){
-            
-            
-            DropDownHeaderView(viewModel: workoutLogViewModel)
-            
-            
-            
-            VStack(spacing: 20){
-                if workoutLogViewModel.exersiseModules.count > 0 {
-                    
-                    ForEach(workoutLogViewModel.exersiseModules){
-                        workoutModule in
-                        ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
+        
+        
+        ZStack {
+            ScrollView(.vertical){
+                
+                
+                DropDownHeaderView(viewModel: workoutLogViewModel)
+                
+                
+                
+                VStack(spacing: 20){
+                    if workoutLogViewModel.exersiseModules.count > 0 {
+                        
+                        ForEach(workoutLogViewModel.exersiseModules){
+                            workoutModule in
+                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
+                        }
                     }
-                }
-                
-                FullWidthButton().padding(.top, -40.0).onTapGesture {
-                    workoutLogViewModel.addEmptyWorkoutModule()
+                    
+                    FullWidthButton().padding(.top, -40.0).onTapGesture {
+                        workoutLogViewModel.addEmptyWorkoutModule()
+                        
+                    }
+                    
+                    
+                    
                     
                 }
                 
-
-
                 
             }
-            
+            if workoutLogViewModel.RPEPopUp.RPEpopUpState{
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                                   .edgesIgnoringSafeArea(.all)
+
+                PopupView(viewModel: workoutLogViewModel)
+                    .shadow(radius: 10)
+            }
             
         }
         .onTapGesture {
+
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    
         }
         .background(Color("DBblack"))
         .onChange(of: scenePhase) { newScenePhase in
@@ -86,6 +95,20 @@ struct WorkoutLogView: View {
         }
         
     }
+}
+    
+struct VisualEffectView: UIViewRepresentable {
+    let effect: UIVisualEffect?
+    
+    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView {
+        UIVisualEffectView()
+    }
+    
+    func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) {
+        uiView.effect = effect
+    }
+}
+
     
 //    init() {
 //        for famliyName in UIFont.familyNames {
@@ -97,7 +120,7 @@ struct WorkoutLogView: View {
 //        }
 //    }
     
-}
+
 
 //struct SoundTester: View{
 //    var body: some View{
@@ -427,6 +450,175 @@ struct TextHelvetica: View{
     }
 }
 
+struct PopupView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    @State private var isToggled = false
+    var body: some View {
+        // Add a blur effect to the background
+
+        VStack {
+            HStack {
+                Button { viewModel.setPopUpState(state: false)}
+                label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .foregroundColor(Color("MainGray"))
+                        Image(systemName: "xmark")
+                            .bold()
+                    }
+                    
+                        
+                }.frame(maxWidth: 50)
+                Spacer()
+                TextHelvetica(content: "RPE", size: 25)
+                    .foregroundColor(Color("WhiteFontOne"))
+                Spacer()
+                Button {print("Button pressed")}
+                label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .foregroundColor(Color("MainGray"))
+                        TextHelvetica(content: "?", size: 23)
+                    
+                    }
+                }.frame(maxWidth: 50)
+
+                
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            
+            HStack(spacing: 20) {
+                
+
+
+                
+
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 5); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "5", size: 18)
+                
+                }
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 6); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "6", size: 18)
+                }
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 7); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "7", size: 18)
+                }
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 7.5); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "7.5", size: 18)
+                }
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 8); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "8", size: 18)
+                }
+     
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 8.5); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "8.5", size: 18)
+                }
+     
+                    
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 9); viewModel.setPopUpState(state: false)}) {
+                    TextHelvetica(content: "9", size: 18)
+                }
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 9.5); viewModel.setPopUpState(state: false)}) {
+                    
+                    TextHelvetica(content: "9.5", size: 18)
+                }
+                
+                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 10); viewModel.setPopUpState(state: false)}) {
+                    
+                    TextHelvetica(content: "10", size: 18)
+                }
+                
+
+                
+
+            
+            
+            }
+            
+            .padding(.horizontal, 25)
+            .padding(.vertical, 10)
+            .background(Color("DDB"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            .padding()
+            
+            
+            HStack {
+                HStack() {
+                
+                    TextHelvetica(content: "Target", size: 19)
+                        .foregroundColor(Color("GrayFontOne"))
+                    Divider()
+                        .frame(width: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    TextHelvetica(content: "10.5", size: 18)
+                        .foregroundColor(Color("GrayFontOne"))
+                    
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(Color("DDB"))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                
+                .padding()
+                
+                HStack {
+                    TextHelvetica(content: "Show RPE", size: 15)
+                        .foregroundColor(Color("GrayFontOne"))
+                    
+                    Toggle("", isOn: $isToggled)
+                        .toggleStyle(SwitchToggleStyle(tint: .blue))
+                        .padding(.trailing,5)
+                        
+                    
+                    
+                    
+                }
+                
+                .padding(.horizontal)
+                .padding(.vertical, 7)
+                .background(Color("DDB"))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                .padding()
+                
+
+            }
+            
+        }
+        .frame(maxWidth: 400, maxHeight: 220)
+        .background(Color("DBblack"))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+        .padding()
+
+
+            
+    }
+}
 
 struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
@@ -434,7 +626,7 @@ struct WorkoutSetRowView: View{
     var moduleID: Int
     @State private var givenName: String = ""
     @State private var familyName: String = ""
-
+    @State private var RPEpopUpDisplayed = false
     
     
     var body: some View{
@@ -535,10 +727,15 @@ struct WorkoutSetRowView: View{
                                 .frame(width: 30)
                         }
                         
-                        TextHelvetica(content: String(rowObject.repMetric), size: 13)
+                        TextHelvetica(content: String(rowObject.repMetric.clean), size: 13)
                             .foregroundColor(Color.white)
                             
-                    }.padding(.leading, -8)
+                    }
+                    .onTapGesture {
+                        viewModel.setPopUpState(state: true)
+                        viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id)
+                    }
+                    .padding(.leading, -8)
                         .padding(.trailing, 5)
                 }
                
@@ -720,7 +917,11 @@ struct RoundedCorner: Shape {
     
 }
 
-
+extension Float {
+    var clean: String {
+       return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
+}
 
 
 

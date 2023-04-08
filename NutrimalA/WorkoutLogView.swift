@@ -15,7 +15,8 @@ let borderWeight: CGFloat = 1.7
 struct WorkoutLogView: View {
     static let borderWeight: CGFloat = 1.7
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
-    @State var progressValue: Float = 0.5
+    @State private var progressValue: Float = 0.5
+    @State private var blocked = false
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
@@ -34,7 +35,7 @@ struct WorkoutLogView: View {
                         
                         ForEach(workoutLogViewModel.exersiseModules){
                             workoutModule in
-                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, parentModuleID: workoutModule.id)
+                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: workoutModule.id)
                         }
                     }
                     
@@ -60,9 +61,14 @@ struct WorkoutLogView: View {
             
         }
         .onTapGesture {
-            print(workoutLogViewModel.hidingPopUps)
-            workoutLogViewModel.hidPopUps()
-            
+            withAnimation(.spring())
+            {
+                for key in workoutLogViewModel.popUpStates.keys {
+                    workoutLogViewModel.popUpStates[key] = false
+                }
+               
+            }
+
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .background(Color("DBblack"))
@@ -166,11 +172,11 @@ struct WorkoutTimer : View {
 
 struct ExersiseLogModule: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
-
+    @Binding var blocked: Bool
     var parentModuleID: Int
     var body: some View {
         VStack(spacing: -20){
-            LogModuleHeader(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+            LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
             CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
         }
 
@@ -354,6 +360,7 @@ struct addSetButton: View {
 
 struct LogModuleHeader: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
+    @Binding var blocked: Bool
     var parentModuleID: Int
     var body: some View{
         
@@ -376,7 +383,7 @@ struct LogModuleHeader: View{
                     .resizable()
                     .frame(width: 39.4, height: 28)
                 
-//                DataMetricsMenuView(viewModel: viewModel)
+                DataMetricsPopUp(viewModel: viewModel)
             }
 
             ZStack{

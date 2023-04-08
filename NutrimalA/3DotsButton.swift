@@ -8,20 +8,22 @@
 import SwiftUI
 
 struct DotsMenuView: View {
-    @State private var isPresented = false
     @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View {
-        if viewModel.hidingPopUps == false {
-            VStack {
-                
 
-                
+            VStack {
                 Button(action: {
-                    
 
                     withAnimation(.spring())
                     {
-                        self.isPresented.toggle()
+                        for key in viewModel.popUpStates.keys {
+                            if key != "3DotsPopUp" {
+                                viewModel.popUpStates[key] = false
+                            }
+
+                        }
+                        viewModel.popUpStates["3DotsPopUp"]?.toggle()
+                        
                     }}) {
                         
                           RoundedRectangle(cornerRadius: 3)
@@ -34,43 +36,32 @@ struct DotsMenuView: View {
                 
             }
             .overlay(
-                    GeometryReader { geometry in
+                GeometryReader { geometry in
     //                    let frame = geometry.frame(in: .global)
+                    VStack {
+                        Spacer()
                         VStack {
-                            Spacer()
-                            VStack {
-                                Text("3")
-                                    .font(.headline)
-                                    .padding()
-                                Divider()
-                                Button("Dismiss") {
-                                    self.isPresented = false
-                                }
-                                .padding(.bottom)
+                            Text("3")
+                                .font(.headline)
+                                .padding()
+                            Divider()
+                            Button("Dismiss") {
+                                viewModel.popUpStates["3DotsPopUp"]? = false
                             }
-                            .frame(width: (UIScreen.main.bounds.width - 30))
-                            
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
-                            .position(CGPoint(x: -159, y: self.isPresented ? UIScreen.main.bounds.height : UIScreen.main.bounds.height - 500))
-
-                            
+                            .padding(.bottom)
                         }
-               
-                    }
-            )
-            .onChange(of: viewModel.hidingPopUps) { blockingPopUps in
-                if blockingPopUps == true {
-                    withAnimation(.spring()) {
-                        self.isPresented = false
-                    }
-                    viewModel.setPopUpState(state: false)
+                        .frame(width: (UIScreen.main.bounds.width - 30))
+                        
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .position(CGPoint(x: -159, y: viewModel.popUpStates["3DotsPopUp"]! ? UIScreen.main.bounds.height - 500 : UIScreen.main.bounds.height))
+                        // not safe
 
+                        
+                    }
+           
                 }
-                
-            }
-        }
-        
+            )
     }
 }

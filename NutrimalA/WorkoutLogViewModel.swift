@@ -16,6 +16,12 @@ class WorkoutLogViewModel: ObservableObject {
     
     @Published var workoutLogModel = createWorkoutLogModel()
     
+    @Published var hidingPopUps = false
+    
+    @Published var popUpStates = ["3DotsPopUp": false, "DataMetricsPopUp": false, "key3": true]
+    
+    
+
     var exersiseModules: Array<WorkoutLogModel.ExersiseLogModule> {
         return workoutLogModel.exersiseModules
     }
@@ -25,10 +31,7 @@ class WorkoutLogViewModel: ObservableObject {
     
     }
     
-    var hidingPopUps: Bool {
-        return workoutLogModel.hidingPopUps
-    
-    }
+
     
     
     
@@ -75,10 +78,6 @@ class WorkoutLogViewModel: ObservableObject {
     }
     func setRepMetric(exersiseModuleID : Int, RowID: Int, RPE: Float) {
         workoutLogModel.setRepMetric(exersiseModuleID: exersiseModuleID, RowID: RowID, RPE: RPE)
-    }
-    
-    func hidPopUps(toggle: Bool) {
-        workoutLogModel.hidPopUps(toggle: toggle)
     }
         
 }

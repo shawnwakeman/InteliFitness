@@ -7,58 +7,63 @@
 
 import SwiftUI
 
-struct DataMetricsMenuView: View {
-    @State private var isPresented = false
+struct DataMetricsPopUp: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View {
-        VStack {
-      
-            
-            Button(action: {
-                withAnimation(.spring())
-                {
-                    self.isPresented.toggle()
-                }}) {
-                    
-                      RoundedRectangle(cornerRadius: 3)
-                      
-                          .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                          .frame(width: 39.4, height: 28)
-                      
-            
-            }
-            
-        }
-        .overlay(
-            GeometryReader { geometry in
-                let frame = geometry.frame(in: .global)
-                VStack {
-                    Spacer()
-                    VStack {
-                        Text(frame.debugDescription)
-                            .font(.headline)
-                            .padding()
-                        Divider()
-                        Button("Dismiss") {
-                            self.isPresented = false
-                        }
-                        .padding(.bottom)
-                    }
-                    .frame(width: (UIScreen.main.bounds.width - 30))
-                    
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
-                    .position(CGPoint(x: -110, y: self.isPresented ? UIScreen.main.bounds.height : UIScreen.main.bounds.height - 500))
 
+            VStack {
+                Button(action: {
+
+                    withAnimation(.spring())
+                    {
+                        for key in viewModel.popUpStates.keys {
+                            if key != "DataMetricsPopUp" {
+                                viewModel.popUpStates[key] = false
+                            }
+
+                        }
+                        viewModel.popUpStates["DataMetricsPopUp"]?.toggle()
+
+                    }
                     
+                    }) {
+                        
+                          RoundedRectangle(cornerRadius: 3)
+                          
+                              .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                              .frame(width: 39.4, height: 28)
+                          
+                
                 }
-       
+                
             }
-        ).onChange(of: viewModel.hidingPopUps) { blockingPopUps in
-            if blockingPopUps == true {
-                self.isPresented = false
-            }
-        }
+            .overlay(
+                GeometryReader { geometry in
+    //                    let frame = geometry.frame(in: .global)
+                    VStack {
+                        Spacer()
+                        VStack {
+                            Text("3")
+                                .font(.headline)
+                                .padding()
+                            Divider()
+                            Button("Dismiss") {
+                                viewModel.popUpStates["DataMetricsPopUp"]? = false
+                            }
+                            .padding(.bottom)
+                        }
+                        .frame(width: (UIScreen.main.bounds.width - 30))
+                        
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .position(CGPoint(x: -159, y: viewModel.popUpStates["DataMetricsPopUp"]! ? UIScreen.main.bounds.height - 500 : UIScreen.main.bounds.height))
+                        // not safe
+
+                        
+                    }
+           
+                }
+            )
     }
 }

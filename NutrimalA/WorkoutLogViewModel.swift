@@ -25,14 +25,19 @@ class WorkoutLogViewModel: ObservableObject {
     
     }
     
+    var hidingPopUps: Bool {
+        return workoutLogModel.hidingPopUps
+    
+    }
+    
+    
+    
     var RPEPopUp: WorkoutLogModel.PopUpRPE {
         return workoutLogModel.popUpRPE
     
     }
     
     
-    
-
     
     
     // MARK: - Intent(s)
@@ -70,6 +75,10 @@ class WorkoutLogViewModel: ObservableObject {
     }
     func setRepMetric(exersiseModuleID : Int, RowID: Int, RPE: Float) {
         workoutLogModel.setRepMetric(exersiseModuleID: exersiseModuleID, RowID: RowID, RPE: RPE)
+    }
+    
+    func hidPopUps(toggle: Bool) {
+        workoutLogModel.hidPopUps(toggle: toggle)
     }
         
 }

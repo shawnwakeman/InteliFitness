@@ -10,23 +10,6 @@ import SwiftUI
 
 let borderWeight: CGFloat = 1.7
 
-class HapticManager {
-    static let instance = HapticManager()
-    
-    func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
-        let genorator = UINotificationFeedbackGenerator()
-        genorator.notificationOccurred(type)
-    }
-        
-    func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let genorator = UIImpactFeedbackGenerator(style: style)
-        genorator.impactOccurred()
-    }
-        
-    
-}
-
-
 
 
 struct WorkoutLogView: View {
@@ -77,7 +60,9 @@ struct WorkoutLogView: View {
             
         }
         .onTapGesture {
-
+            print(workoutLogViewModel.hidingPopUps)
+            workoutLogViewModel.hidPopUps()
+            
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .background(Color("DBblack"))
@@ -391,9 +376,7 @@ struct LogModuleHeader: View{
                     .resizable()
                     .frame(width: 39.4, height: 28)
                 
-                RoundedRectangle(cornerRadius: 3)
-                    .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                    .frame(width: 39.4, height: 28)
+//                DataMetricsMenuView(viewModel: viewModel)
             }
 
             ZStack{
@@ -401,11 +384,10 @@ struct LogModuleHeader: View{
                 Image("meatBalls")
                     .resizable()
                     .frame(width: 39.4, height: 28)
-                RoundedRectangle(cornerRadius: 3)
-                
-                    .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                    .frame(width: 39.4, height: 28)
+                DotsMenuView(viewModel: viewModel)
             }
+//    
+
 
                 
             
@@ -620,166 +602,7 @@ struct PopupView: View {
     }
 }
 
-struct WorkoutSetRowView: View{
-    @ObservedObject var viewModel: WorkoutLogViewModel
-    var rowObject: WorkoutLogModel.ExersiseSetRow
-    var moduleID: Int
-    @State private var givenName: String = ""
-    @State private var familyName: String = ""
-    @State private var RPEpopUpDisplayed = false
-    
-    
-    var body: some View{
 
-        
-        HStack(spacing: 0){
-            TextHelvetica(content: String(rowObject.setIndex), size: 21)
-                       .padding()
-                       .frame(width: 55, height: 40)
-                       .foregroundColor(Color("LinkBlue"))
-                       .background(.clear)
-                   Divider()
-                       .frame(width: borderWeight)
-                       .overlay(Color("BorderGray"))
-            
-            
-            
-            if rowObject.previousSet == "0" {
-                Capsule()
-                    .padding(.horizontal, 50.0)
-                    .padding(.vertical, 18)
-                    .frame(width: 145, height: 40)
-                    .foregroundColor(Color("GrayFontOne"))
-            }
-            else
-            {
-                TextHelvetica(content: rowObject.previousSet, size: 21)
-                                .frame(width: 145, height: 40)
-                                .foregroundColor(Color("GrayFontOne"))
-                                .background(.clear)
-            }
-
-            Divider()
-                .frame(width: borderWeight)
-                .overlay(Color("BorderGray"))
-            
-            
-   
-
-
-            
-         
-            
-            TextField("", text: $givenName, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
-                .keyboardType(.decimalPad)
-                .autocorrectionDisabled(true)
-                .font(.custom("SpaceGrotesk-Medium", size: 21))
-                .foregroundColor(Color("WhiteFontOne"))
-                .frame(width: 70, height: 40)
-                .background(.clear)
-                .multilineTextAlignment(.center)
-                .background(Color("DDB"))
- 
-                
-
-
-//
-//
-            
-            Divider()
-                .frame(width: borderWeight)
-                .overlay(Color("BorderGray"))
-            
-            HStack{
-                
-
-               
-                TextField("", text: $familyName, prompt: Text(rowObject.repsPlaceholder).foregroundColor(Color("GrayFontTwo")))
-                        .keyboardType(.numberPad)
-                        .autocorrectionDisabled(true)
-                        .font(.custom("SpaceGrotesk-Medium", size: 21))
-                        .foregroundColor(Color("WhiteFontOne"))
-                        .frame(minWidth: 40, minHeight: 40)
-                        .background(.clear)
-                        .multilineTextAlignment(.center)
-                        .background(Color("DDB"))
-
-                    
-
-//                    .keyboardType(.numberPad)
-
-
-                    
-                if !rowObject.repsPlaceholder.isEmpty {
-                    ZStack{
-                        
-                        ZStack{
-                            Capsule()
-                                .padding(.vertical, 9.0)
-                                .foregroundColor(Color("MainGray"))
-                                .frame(width: 30)
-                            
-                            Capsule()
-                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
-                                .padding(.vertical, 9.0)
-                                
-                                
-                                .frame(width: 30)
-                        }
-                        
-                        TextHelvetica(content: String(rowObject.repMetric.clean), size: 13)
-                            .foregroundColor(Color.white)
-                            
-                    }
-                    .onTapGesture {
-                        viewModel.setPopUpState(state: true)
-                        viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id)
-                    }
-                    .padding(.leading, -8)
-                        .padding(.trailing, 5)
-                }
-               
-
-                    
-            }.frame(width: 80, height: 40)
-            .background(Color("DDB"))
-
-
-            Divider()
-                .frame(width: borderWeight)
-                .overlay(Color("BorderGray"))
-            
-            
-            
-            ZStack {
-
-                
-                Image("checkMark")
-                    .resizable()
-                    .padding(9.0)
-                    .opacity(rowObject.setCompleted ? 100.0: 0.0)
-                    .aspectRatio(40/37, contentMode: .fit)
-                
-                ZStack{
-                    
-                    Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
-                    
-                    
-                }
-                .onTapGesture {
-                    viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
-                    HapticManager.instance.impact(style: .heavy)
-                    
-                }
-                .frame(width: 40, height: 40)
-            }
-
-
-                
-        }
-    }
-        
-}
 
 
 struct SuperTextField: View {
@@ -876,25 +699,20 @@ struct Header: View {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+struct DividerView: View {
+    var isHorizontal: Bool
+    var body: some View {
+        if isHorizontal {
+            Divider()
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+        } else {
+            Divider()
+                .frame(width: borderWeight)
+                .overlay(Color("BorderGray"))
+        }
+    }
+}
 
 
 

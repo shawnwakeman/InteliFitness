@@ -5,6 +5,8 @@ struct WorkoutLogModel {
     private(set) var exersiseModules: [ExersiseLogModule] = []
     var workoutTime: WorkoutTime = WorkoutTime()
     var popUpRPE = PopUpRPE(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
+    var hidingPopUps = false
+    
     
     struct PopUpRPE {
         var RPEpopUpState = false
@@ -27,7 +29,7 @@ struct WorkoutLogModel {
         var repsPlaceholder: String
         var setCompleted: Bool
         var rowSelected: Bool
-        var repMetric: Float
+        var repMetric: Float?
         let id: Int
     }
     
@@ -66,6 +68,10 @@ struct WorkoutLogModel {
 
 
         
+    }
+    
+    mutating func hidPopUps(toggle: Bool) {
+        hidingPopUps = toggle
     }
     
     mutating func setPopUpState(state: Bool) {
@@ -109,6 +115,6 @@ struct WorkoutLogModel {
 
     
     private func addEmptySetHelper(lastRowID: Int) -> ExersiseSetRow {
-        return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "", setCompleted: false, rowSelected: false, repMetric: 2, id: (lastRowID))
+        return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "", setCompleted: false, rowSelected: false, id: (lastRowID))
     }
 }

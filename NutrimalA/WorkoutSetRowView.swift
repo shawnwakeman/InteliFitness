@@ -28,19 +28,23 @@ struct WorkoutSetRowView: View{
             
             lbsTextFieldView(rowObject: rowObject)
             
-            DividerView(isHorizontal: false)
+
             
             HStack{
 
                 repTextFieldView(rowObject: rowObject)
                 repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
                 
+                
             }
             .frame(width: 80, height: 40)
             .background(Color("DDB"))
-            
+            Divider()
+                .frame(width: borderWeight)
+                .overlay(Color("BorderGray"))
 
-            DividerView(isHorizontal: false)
+            
+                
             
             checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
             
@@ -107,7 +111,9 @@ struct WorkoutSetRowView: View{
                 .multilineTextAlignment(.center)
                 .background(Color("DDB"))
 
-                
+            Divider()
+                .frame(width: borderWeight)
+                .overlay(Color("BorderGray"))
             
             
         }
@@ -139,7 +145,7 @@ struct WorkoutSetRowView: View{
         @ObservedObject var viewModel: WorkoutLogViewModel
         var moduleID: Int
         var body: some View {
-            if let row = rowObject.repMetric {
+            if rowObject.repMetric != 0 {
                 ZStack{
                     
                     ZStack{
@@ -148,21 +154,26 @@ struct WorkoutSetRowView: View{
                             .foregroundColor(Color("MainGray"))
                             .frame(width: 30)
                         
-                        Capsule()
-                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
-                            .padding(.vertical, 9.0)
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
+                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
+                            }}, label: {
+                                Capsule()
+                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                    .padding(.vertical, 9.0)
+                                .frame(width: 30)})
                         
-                        
-                            .frame(width: 30)
                     }
                     
-                    TextHelvetica(content: String(row.clean), size: 13)
+                    TextHelvetica(content: String(rowObject.repMetric.clean), size: 13)
                         .foregroundColor(Color.white)
                     
                 }
                 .onTapGesture {
-                    viewModel.setPopUpState(state: true)
-                    viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id)
+                    
+                    
+                    
                 }
                 .padding(.leading, -8)
                 .padding(.trailing, 5)
@@ -176,12 +187,16 @@ struct WorkoutSetRowView: View{
                             .foregroundColor(Color("MainGray"))
                             .frame(width: 30)
                         
-                        Capsule()
-                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
-                            .padding(.vertical, 9.0)
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
+                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
+                            }}, label: {
+                                Capsule()
+                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                    .padding(.vertical, 9.0)
+                                .frame(width: 30)})
                         
-                        
-                            .frame(width: 30)
                     }
                     
                     TextHelvetica(content: "", size: 13)
@@ -190,14 +205,15 @@ struct WorkoutSetRowView: View{
                 }
                 .onTapGesture {
                     
-                    viewModel.setPopUpState(state: true)
-                    viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id)
+                    
+                    
                 }
                 .padding(.leading, -8)
                 .padding(.trailing, 5)
             }
         }
     }
+
         
     struct checkBoxView: View {
         var rowObject: WorkoutLogModel.ExersiseSetRow

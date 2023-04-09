@@ -51,17 +51,32 @@ struct WorkoutLogView: View {
                 
                 
             }
-            if workoutLogViewModel.RPEPopUp.RPEpopUpState{
-                VisualEffectView(effect: UIBlurEffect(style: .dark))
-                                   .edgesIgnoringSafeArea(.all)
+            
+            
+            VisualEffectView(effect: UIBlurEffect(style: .dark))
+                .edgesIgnoringSafeArea(.all)
+                .opacity(workoutLogViewModel.workoutLogModel.popUps[0].RPEpopUpState ? 1 : 0)
+         
 
-                PopupView(viewModel: workoutLogViewModel)
+            PopupView(viewModel: workoutLogViewModel)
+                .shadow(radius: 10)
+                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height - 230 : UIScreen.main.bounds.height + 100)
+            if workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState == true {
+                DotsMenuView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
             }
-            
+
+//
+//            DataMetricsPopUp(viewModel: workoutLogViewModel)
+//
         }
         .onTapGesture {
-            withAnimation(.spring())
+            withAnimation(.spring()) {
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+            }
+
+            withAnimation(.spring(response: 0))
             {
                 for key in workoutLogViewModel.popUpStates.keys {
                     workoutLogViewModel.popUpStates[key] = false
@@ -383,7 +398,7 @@ struct LogModuleHeader: View{
                     .resizable()
                     .frame(width: 39.4, height: 28)
                 
-                DataMetricsPopUp(viewModel: viewModel)
+                
             }
 
             ZStack{
@@ -391,7 +406,19 @@ struct LogModuleHeader: View{
                 Image("meatBalls")
                     .resizable()
                     .frame(width: 39.4, height: 28)
-                DotsMenuView(viewModel: viewModel)
+                
+                
+
+                Button(action: {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
+                        viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu")
+                    }}, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                              .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                              .frame(width: 39.4, height: 28)})
+                                          
+
             }
 //    
 
@@ -443,29 +470,14 @@ struct PopupView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var isToggled = false
+    @State private var selectedRPE = 0.0
+
     var body: some View {
         // Add a blur effect to the background
-
+        
         VStack {
             HStack {
-                Button { viewModel.setPopUpState(state: false)}
-                label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 4)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                            .foregroundColor(Color("MainGray"))
-                        Image(systemName: "xmark")
-                            .bold()
-                    }
-                    
-                        
-                }.frame(maxWidth: 50)
-                Spacer()
-                TextHelvetica(content: "RPE", size: 25)
-                    .foregroundColor(Color("WhiteFontOne"))
-                Spacer()
+                
                 Button {print("Button pressed")}
                 label: {
                     ZStack {
@@ -475,128 +487,419 @@ struct PopupView: View {
                                     .stroke(Color("BorderGray"), lineWidth: borderWeight))
                             .foregroundColor(Color("MainGray"))
                         TextHelvetica(content: "?", size: 23)
+                            .bold()
+                            .foregroundColor(Color("LinkBlue"))
                     
                     }
+                }.frame(width: 60, height: 40)
+              
+                
+                
+                Spacer()
+                TextHelvetica(content: "RPE", size: 25)
+                    .foregroundColor(Color("WhiteFontOne"))
+                Spacer()
+                
+                
+                
+                Button {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: false, popUpId: "popUpRPE")
+                    }
+                    if selectedRPE != 0 {
+                        let popUp = viewModel.getPopUp(popUpId: "popUpRPE")
+                        viewModel.setRepMetric(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, RPE: Float(selectedRPE))
+                        
+                    } else {
+                        let popUp = viewModel.getPopUp(popUpId: "popUpRPE")
+                        viewModel.setRepMetric(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, RPE: 0)
+                    }
+                    
+
+                    
+                }
+                
+                label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .foregroundColor(Color("MainGray"))
+                        if selectedRPE == 0 {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .bold()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 17, height: 17)
+                                .foregroundColor(Color("LinkBlue"))
+                                
+                        } else {
+                            Image("checkMark")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 17, height: 17)
+                                  
+                        }
+                        
+
+                    }
+                    .offset(x: -8)
+                    .frame(width: 60, height: 40)
+                    
+                        
                 }.frame(maxWidth: 50)
+                
 
                 
             }
+            
+            .position(x: 185, y: 25)
             .padding(.horizontal)
             .padding(.vertical, 10)
-            
-            HStack(spacing: 20) {
-                
-
-
-                
-
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 5); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "5", size: 18)
-                
-                }
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 6); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "6", size: 18)
-                }
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 7); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "7", size: 18)
-                }
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 7.5); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "7.5", size: 18)
-                }
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 8); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "8", size: 18)
-                }
-     
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 8.5); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "8.5", size: 18)
-                }
-     
-                    
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 9); viewModel.setPopUpState(state: false)}) {
-                    TextHelvetica(content: "9", size: 18)
-                }
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 9.5); viewModel.setPopUpState(state: false)}) {
-                    
-                    TextHelvetica(content: "9.5", size: 18)
-                }
-                
-                Button(action: {viewModel.setRepMetric(exersiseModuleID: viewModel.RPEPopUp.popUpExersiseModuleIndex, RowID: viewModel.RPEPopUp.popUpRowIndex, RPE: 10); viewModel.setPopUpState(state: false)}) {
-                    
-                    TextHelvetica(content: "10", size: 18)
-                }
-                
-
-                
-
-            
-            
-            }
-            
-            .padding(.horizontal, 25)
-            .padding(.vertical, 10)
-            .background(Color("DDB"))
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
-            .padding()
-            
-            
             HStack {
-                HStack() {
-                
-                    TextHelvetica(content: "Target", size: 19)
-                        .foregroundColor(Color("GrayFontOne"))
-                    Divider()
-                        .frame(width: borderWeight)
-                        .overlay(Color("BorderGray"))
-                    TextHelvetica(content: "10.5", size: 18)
-                        .foregroundColor(Color("GrayFontOne"))
-                    
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 10)
-                .background(Color("DDB"))
-                .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                
-                .padding()
-                
-                HStack {
-                    TextHelvetica(content: "Show RPE", size: 15)
-                        .foregroundColor(Color("GrayFontOne"))
-                    
-                    Toggle("", isOn: $isToggled)
-                        .toggleStyle(SwitchToggleStyle(tint: .blue))
-                        .padding(.trailing,5)
+                switch selectedRPE {
+                case 0 :
+                    VStack {
+                        TextHelvetica(content: "RPE is a way to measure the difficulty of a set.", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+                        TextHelvetica(content: "Tap a number to select an RPE value", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
                         
+                    }
+                    .multilineTextAlignment(.center)
                     
+                case 6:
+                    TextHelvetica(content: "You could do 4 more reps before failure.", size: 16)
+                        .offset(y: -10)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                case 6.5:
+                    VStack {
+                        TextHelvetica(content: "You could do 3-4 more reps", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+                        TextHelvetica(content: "before reaching failure.", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+                    }
+                    .multilineTextAlignment(.center)
+
+                case 7:
+                    TextHelvetica(content: "You could comfortably preform 3 more reps before failure.", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                case 7.5:
+                    TextHelvetica(content: "You could preform 2-3 more reps before reaching failure.", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                case 8:
+                    TextHelvetica(content: "You could comfortably preform 2 more reps before failure.", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                case 8.5:
+                    TextHelvetica(content: "You could preform 1-2 more reps before reaching failure.", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                case 9:
+                    TextHelvetica(content: "You could comfortably preform 1 more rep", size: 16)
+                        .offset(y: -10)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
                     
+                case 9.5:
+                    TextHelvetica(content: "You could possibly do one more rep before reaching failure", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                case 10:
+                    TextHelvetica(content: "Maximun effort. No more reps possible.", size: 16)
+                        .offset(y: -10)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                default:
+
+                    TextHelvetica(content: "could not find rpe", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
                     
                 }
-                
-                .padding(.horizontal)
-                .padding(.vertical, 7)
-                .background(Color("DDB"))
-                .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                .padding()
-                
-
             }
+            VStack(spacing: 0) {
+                
+                HStack(spacing: 0) {
+                    
+                    
+                    
+                    
+                    Button(action: {
+                        if selectedRPE == 6 { selectedRPE = 0}
+                        else { selectedRPE = 6 }}) {
+                            
+                        if selectedRPE == 6 {
+                            TextHelvetica(content: "6", size: 18)
+                            
+                                .frame(width: 42, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "6", size: 18)
+                        
+                            .frame(width: 42, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                 
+                            
+                    Button(action: {
+                        if selectedRPE == 6.5 { selectedRPE = 0}
+                        else { selectedRPE = 6.5 }}) {
+                            
+                        if selectedRPE == 6.5 {
+                            TextHelvetica(content: "6.5", size: 18)
+                            
+                                .frame(width: 41, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "6.5", size: 18)
+                        
+                            .frame(width: 41, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                    
+                    Button(action: {
+                        if selectedRPE == 7 { selectedRPE = 0}
+                        else { selectedRPE = 7 }}) {
+                            
+                        if selectedRPE == 7 {
+                            TextHelvetica(content: "7", size: 18)
+                            
+                                .frame(width: 40, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "7", size: 18)
+                        
+                            .frame(width: 40, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                    Button(action: {
+                        if selectedRPE == 7.5 { selectedRPE = 0}
+                        else { selectedRPE = 7.5 }}) {
+                            
+                        if selectedRPE == 7.5 {
+                            TextHelvetica(content: "7.5", size: 18)
+                            
+                                .frame(width: 40, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "7.5", size: 18)
+                        
+                            .frame(width: 40, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                    
+                    Button(action: {
+                        if selectedRPE == 8 { selectedRPE = 0}
+                        else { selectedRPE = 8 }}) {
+                            
+                        if selectedRPE == 8 {
+                            TextHelvetica(content: "8", size: 18)
+                            
+                                .frame(width: 40, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "8", size: 18)
+                        
+                            .frame(width: 40, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                    
+                    Button(action: {
+                        if selectedRPE == 8.5 { selectedRPE = 0}
+                        else { selectedRPE = 8.5 }}) {
+                            
+                        if selectedRPE == 8.5 {
+                            TextHelvetica(content: "8.5", size: 18)
+                            
+                                .frame(width: 40, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "8.5", size: 18)
+                        
+                            .frame(width: 40, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                    Button(action: {
+                        if selectedRPE == 9 { selectedRPE = 0}
+                        else { selectedRPE = 9 }}) {
+                            
+                        if selectedRPE == 9 {
+                            TextHelvetica(content: "9", size: 18)
+                            
+                                .frame(width: 40, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "9", size: 18)
+                        
+                            .frame(width: 40, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                    Button(action: {
+                        if selectedRPE == 9.5 { selectedRPE = 0}
+                        else { selectedRPE = 9.5 }}) {
+                            
+                        if selectedRPE == 9.5 {
+                            TextHelvetica(content: "9.5", size: 18)
+                            
+                                .frame(width: 41, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "9.5", size: 18)
+                        
+                            .frame(width: 41, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+                    
+                    Button(action: {
+                        if selectedRPE == 10 { selectedRPE = 0}
+                        else { selectedRPE = 10 }}) {
+                            
+                        if selectedRPE == 10 {
+                            TextHelvetica(content: "10", size: 18)
+                            
+                                .frame(width: 42, height: 55)
+                                .background(Color("WhiteFontOne"))
+                                .border(Color("BorderGray"), width: borderWeight - 0.5)
+                            
+                        } else {
+                        TextHelvetica(content: "10", size: 18)
+                        
+                            .frame(width: 42, height: 55)
+                            .background(Color("MainGray"))
+                            .border(Color("BorderGray"), width: borderWeight - 0.5)
+                        
+                        }
+             
+                    }
+
+                
+                }
+                
+                .background(Color("DDB"))
+            
+                
+                
+                Divider()
+                    
+                    .frame(height: borderWeight-0.8)
+         
+                    .overlay(Color("BorderGray"))
+
+
+                HStack {
+                    HStack {
+                        TextHelvetica(content: "Target", size: 19)
+                                .foregroundColor(Color("GrayFontOne"))
+                            Divider()
+                            .frame(width: borderWeight, height: 20)
+                            .overlay(Color("BorderGray"))
+ 
+                            TextHelvetica(content: "10.5", size: 18)
+                                .foregroundColor(Color("GrayFontOne"))
+                              
+        
+                    }
+                    .padding(.trailing, 5)
+                    .padding(.all, 10)
+                   
+                    Divider()
+                        
+                        .frame(width: borderWeight, height: 51)
+             
+                        .overlay(Color("BorderGray"))
+                        .offset(x: 7)
+                    
+                    HStack(spacing: 0) {
+                        TextHelvetica(content: "Show RPE", size: 18)
+                            .foregroundColor(Color("GrayFontOne"))
+                            .padding(.trailing, 9)
+                        Divider()
+                        .frame(width: borderWeight, height: 20)
+                            .overlay(Color("BorderGray"))
+                        
+                        Toggle("", isOn: $isToggled)
+                            .frame(maxWidth: 52)
+                            .toggleStyle(SwitchToggleStyle(tint: .blue))
+                     
+                        
+                    }
+                    .offset(x: 10)
+                    .padding(.leading, 10)
+                    .padding(.vertical, 10)
+
+                }
+                
+            }
+         
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            .padding(.all)
+
             
         }
-        .frame(maxWidth: 400, maxHeight: 220)
+        .frame(maxWidth: 400, maxHeight: 270)
         .background(Color("DBblack"))
         .cornerRadius(10)
         .overlay(
@@ -708,15 +1011,16 @@ struct Header: View {
 
 struct DividerView: View {
     var isHorizontal: Bool
+    var dividerColor = "BorderGray"
     var body: some View {
         if isHorizontal {
             Divider()
                 .frame(height: borderWeight)
-                .overlay(Color("BorderGray"))
+                .overlay(Color("dividerColor"))
         } else {
             Divider()
                 .frame(width: borderWeight)
-                .overlay(Color("BorderGray"))
+                .overlay(Color("dividerColor"))
         }
     }
 }

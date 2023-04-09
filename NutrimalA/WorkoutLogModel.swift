@@ -4,14 +4,16 @@ struct WorkoutLogModel {
     
     private(set) var exersiseModules: [ExersiseLogModule] = []
     var workoutTime: WorkoutTime = WorkoutTime()
-    var popUpRPE = PopUpRPE(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
+    var popUps = [PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpRPE"), PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpDotsMenu")]
+//    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     var hidingPopUps = false
     
     
-    struct PopUpRPE {
+    struct PopUpData: Identifiable {
         var RPEpopUpState = false
         var popUpRowIndex: Int
         var popUpExersiseModuleIndex: Int
+        var id: String
     }
     
     struct ExersiseLogModule: Identifiable {
@@ -29,7 +31,7 @@ struct WorkoutLogModel {
         var repsPlaceholder: String
         var setCompleted: Bool
         var rowSelected: Bool
-        var repMetric: Float?
+        var repMetric: Float
         let id: Int
     }
     
@@ -46,7 +48,7 @@ struct WorkoutLogModel {
     
 
     init() {
-        exersiseModules.append(ExersiseLogModule(exersiseName: "Back Squat", setRows: [ExersiseSetRow(setIndex: 1, previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "99", setCompleted: false, rowSelected: false, repMetric: 7, id: 0), ExersiseSetRow(setIndex: 2, previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "99", setCompleted: false, rowSelected: false, repMetric: 7, id: 1)], id: 0))
+        exersiseModules.append(ExersiseLogModule(exersiseName: "Back Squat", setRows: [ExersiseSetRow(setIndex: 1, previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "99", setCompleted: false, rowSelected: false, repMetric: 7, id: 0), ExersiseSetRow(setIndex: 2, previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "99", setCompleted: false, rowSelected: false, repMetric: 07, id: 1)], id: 0))
     }
     
     mutating func addEmptySet(moduleID: Int) {
@@ -78,16 +80,22 @@ struct WorkoutLogModel {
         hidingPopUps = toggle
     }
     
-    mutating func setPopUpState(state: Bool) {
-        popUpRPE.RPEpopUpState = state
+    mutating func setPopUpState(state: Bool, popUpId: String) {
+        if let popUpIndex = popUps.firstIndex(where: {$0.id == popUpId}) {
+            popUps[popUpIndex].RPEpopUpState = state
 
+        }
     }
     mutating func setRepMetric (exersiseModuleID: Int, RowID: Int, RPE: Float) {
         exersiseModules[exersiseModuleID].setRows[RowID].repMetric = RPE
     }
-    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int) {
-        popUpRPE.popUpExersiseModuleIndex = exersiseModuleID
-        popUpRPE.popUpRowIndex = RowID
+    
+    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int, popUpId: String) {
+        if let popUpIndex = popUps.firstIndex(where: {$0.id == popUpId}) {
+            popUps[popUpIndex].popUpExersiseModuleIndex = exersiseModuleID
+            popUps[popUpIndex].popUpRowIndex = RowID
+        }
+
     }
     
     mutating func saveBackgroundTime() {
@@ -119,6 +127,6 @@ struct WorkoutLogModel {
 
     
     private func addEmptySetHelper(lastRowID: Int) -> ExersiseSetRow {
-        return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "", setCompleted: false, rowSelected: false, id: (lastRowID))
+        return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "", setCompleted: false, rowSelected: false, repMetric: 0, id: (lastRowID))
     }
 }

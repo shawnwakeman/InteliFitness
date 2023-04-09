@@ -32,14 +32,21 @@ class WorkoutLogViewModel: ObservableObject {
     }
     
 
+
     
-    
-    
-    var RPEPopUp: WorkoutLogModel.PopUpRPE {
-        return workoutLogModel.popUpRPE
-    
+    func getPopUp(popUpId: String) -> WorkoutLogModel.PopUpData {
+        
+        if let popUpIndex = workoutLogModel.popUps.firstIndex(where: {$0.id == popUpId}) {
+            return workoutLogModel.popUps[popUpIndex]
+        }
+        else {
+            print("did not find pop up")
+            return workoutLogModel.popUps[0] // needs to be fixed
+        }
+
     }
     
+
     
     
     
@@ -70,11 +77,11 @@ class WorkoutLogViewModel: ObservableObject {
     func updateTimeToCurrent(){
         workoutLogModel.updateTimeToCurrent()
     }
-    func setPopUpState(state: Bool) {
-        workoutLogModel.setPopUpState(state: state)
+    func setPopUpState(state: Bool, popUpId: String) {
+        workoutLogModel.setPopUpState(state: state, popUpId: popUpId)
     }
-    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int) {
-        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID)
+    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int, popUpId: String) {
+        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID, popUpId: popUpId)
     }
     func setRepMetric(exersiseModuleID : Int, RowID: Int, RPE: Float) {
         workoutLogModel.setRepMetric(exersiseModuleID: exersiseModuleID, RowID: RowID, RPE: RPE)

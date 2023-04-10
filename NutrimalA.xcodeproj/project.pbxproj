@@ -19,6 +19,7 @@
 		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
+		D09965D629E2663C00B30954 /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09965D529E2663C00B30954 /* DropDownMenu.swift */; };
 		D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD966529E0CF75000B6711 /* HapticManager.swift */; };
 		D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */; };
 		D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */; };
@@ -39,6 +40,7 @@
 		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D09965D529E2663C00B30954 /* DropDownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		D0AD966529E0CF75000B6711 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowView.swift; sourceTree = "<group>"; };
 		D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DotsButton.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 		D0370E2029CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXGroup;
 			children = (
+				D09965D529E2663C00B30954 /* DropDownMenu.swift */,
 				D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */,
 				D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
@@ -191,6 +194,7 @@
 			files = (
 				D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */,
 				D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */,
+				D09965D629E2663C00B30954 /* DropDownMenu.swift in Sources */,
 				D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */,
 				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,

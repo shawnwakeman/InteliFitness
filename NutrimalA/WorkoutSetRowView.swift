@@ -158,6 +158,7 @@ struct WorkoutSetRowView: View{
                             withAnimation(.spring()) {
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             }}, label: {
                                 Capsule()
                                     .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)

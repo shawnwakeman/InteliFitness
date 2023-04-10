@@ -18,14 +18,13 @@ struct DotsMenuView: View {
             HStack {
 
                 
-                let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
-                let name = viewModel.exersiseModules[index].exersiseName
+
                 TextHelvetica(content: "Exersise Options", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
                     withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: false, popUpId: "popUpRPE")
+                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }
                 }
                 label: {
@@ -40,7 +39,7 @@ struct DotsMenuView: View {
                     }
                     
                         
-                }.frame(maxWidth: 50, maxHeight: 35)
+                }.frame(width: 50, height: 30)
                 
             }
             .padding(.horizontal)
@@ -53,102 +52,99 @@ struct DotsMenuView: View {
             
             VStack {
                 HStack{
-                    Divider()
-                    
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
+
                     Image(systemName: "note.text")
                         .foregroundColor(Color("LinkBlue"))
                         .imageScale(.large)
                         .bold()
+                        .multilineTextAlignment(.leading)
                 
-                    TextHelvetica(content: "Add notes", size: 20)
+                    TextHelvetica(content: "Add notes", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
-                }.padding(.horizontal)
-                
+                }
+                .padding(.horizontal)
+                .frame(maxHeight: 22)
                 Divider()
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 
                 HStack{
-                    Divider()
-                    
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
+
                     Image(systemName: "arrow.triangle.2.circlepath")
                         .foregroundColor(Color("LinkBlue"))
                         .imageScale(.large)
                         .bold()
+                        .multilineTextAlignment(.leading)
                 
-                    TextHelvetica(content: "Replace exersise", size: 20)
+                    TextHelvetica(content: "Replace exersise", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
-                }.padding(.horizontal)
+                }
+                .padding(.horizontal)
+                .frame(maxHeight: 22)
                 
                 Divider()
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 
                 HStack{
-                    Divider()
                     
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
                     Image(systemName: "clock")
                         .foregroundColor(Color("LinkBlue"))
                         .imageScale(.large)
                         .bold()
                 
-                    TextHelvetica(content: "Set exersise rest time", size: 20)
+                    TextHelvetica(content: "Set exersise rest time", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     Spacer()
-                }.padding(.horizontal)
+                }
+                .padding(.horizontal)
+                .frame(maxHeight: 22)
                 
                 Divider()
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
-                
                 HStack{
-                    Divider()
-                    
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
-                    TextHelvetica(content: "RPE", size: 20)
-                        .foregroundColor(Color("LinkBlue"))
-                
-                    TextHelvetica(content: "Enable/Disable RPE", size: 20)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    Spacer()
-                }.padding(.horizontal)
-                
-                
-                
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                
-                
-                HStack{
-                    Divider()
-                    
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
+                   
                     Image(systemName: "scalemass.fill")
                         .foregroundColor(Color("LinkBlue"))
                         .imageScale(.large)
                         .bold()
                 
-                    TextHelvetica(content: "Weight Unit", size: 20)
+                    TextHelvetica(content: "Weight Unit", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     Spacer()
-                    TextHelvetica(content: "Weight Unit", size: 20)
-                        .foregroundColor(Color("WhiteFontOne"))
+
                     
-                }.padding(.horizontal)
+                }
+                .padding(.horizontal)
+                .frame(maxHeight: 22)
+                
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                
+                HStack{
+                   
+                    TextHelvetica(content: "RPE", size: 20)
+                        .foregroundColor(Color("LinkBlue"))
+                
+                    TextHelvetica(content: "Enable/Disable RPE", size: 18)
+                        .foregroundColor(Color("WhiteFontOne"))
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .frame(maxHeight: 22)
+                
+                
+
+                
+                
+                
+                
                 
                 Divider()
                 
@@ -160,22 +156,21 @@ struct DotsMenuView: View {
             }
             
             HStack{
-                Divider()
                 
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
                 Image(systemName: "xmark")
                     .foregroundColor(Color("LinkBlue"))
                     .imageScale(.large)
                     .bold()
             
-                TextHelvetica(content: "Remove Exersise", size: 20)
+                TextHelvetica(content: "Remove Exersise", size: 18)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
-                TextHelvetica(content: "Weight Unit", size: 20)
-                    .foregroundColor(Color("WhiteFontOne"))
+
                 
-            }.padding(.all)
+            }
+            .offset(y: -5)
+            .padding(.horizontal)
+            .frame(maxHeight: 30)
             
            
             

@@ -1,13 +1,13 @@
 //
-//  3DotsButton.swift
+//  DropDownMenu.swift
 //  NutrimalA
 //
-//  Created by Shawn Wakeman on 4/7/23.
+//  Created by Shawn Wakeman on 4/8/23.
 //
 
 import SwiftUI
 
-struct DataMetricsPopUp: View {
+struct DropDownMenu: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var isToggled = false
@@ -19,12 +19,12 @@ struct DataMetricsPopUp: View {
 
                 
 
-                TextHelvetica(content: "Exersise Metrics", size: 27)
+                TextHelvetica(content: "Exersise Options", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
                     withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
+                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }
                 }
                 label: {
@@ -53,16 +53,16 @@ struct DataMetricsPopUp: View {
             VStack {
                 HStack{
 
-
+                    Image(systemName: "note.text")
+                        .foregroundColor(Color("LinkBlue"))
+                        .imageScale(.large)
+                        .bold()
+                        .multilineTextAlignment(.leading)
                 
-                    TextHelvetica(content: "Total Volume", size: 18)
+                    TextHelvetica(content: "Add notes", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
-                    
-                    TextHelvetica(content: "1203", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
                 }
                 .padding(.horizontal)
                 .frame(maxHeight: 22)
@@ -72,13 +72,16 @@ struct DataMetricsPopUp: View {
                 
                 HStack{
 
-                    TextHelvetica(content: "Total Reps", size: 18)
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .foregroundColor(Color("LinkBlue"))
+                        .imageScale(.large)
+                        .bold()
+                        .multilineTextAlignment(.leading)
+                
+                    TextHelvetica(content: "Replace exersise", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
-                    
-                    TextHelvetica(content: "123", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
                 }
                 .padding(.horizontal)
                 .frame(maxHeight: 22)
@@ -89,13 +92,14 @@ struct DataMetricsPopUp: View {
                 
                 HStack{
                     
-                    TextHelvetica(content: "Weight/Set", size: 18)
+                    Image(systemName: "clock")
+                        .foregroundColor(Color("LinkBlue"))
+                        .imageScale(.large)
+                        .bold()
+                
+                    TextHelvetica(content: "Set exersise rest time", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
-                    
                     Spacer()
-                    
-                    TextHelvetica(content: "123.4", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
                 }
                 .padding(.horizontal)
                 .frame(maxHeight: 22)
@@ -105,13 +109,14 @@ struct DataMetricsPopUp: View {
                     .overlay(Color("BorderGray"))
                 HStack{
                    
-                    TextHelvetica(content: "Reps/Set", size: 18)
+                    Image(systemName: "scalemass.fill")
+                        .foregroundColor(Color("LinkBlue"))
+                        .imageScale(.large)
+                        .bold()
+                
+                    TextHelvetica(content: "Weight Unit", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
-                    
                     Spacer()
-                    
-                    TextHelvetica(content: "12.4", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
 
                     
                 }
@@ -124,13 +129,12 @@ struct DataMetricsPopUp: View {
                 
                 HStack{
                    
-                    TextHelvetica(content: "PR Sets", size: 18)
+                    TextHelvetica(content: "RPE", size: 20)
+                        .foregroundColor(Color("LinkBlue"))
+                
+                    TextHelvetica(content: "Enable/Disable RPE", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
-                    
                     Spacer()
-                    
-                    TextHelvetica(content: "3/8", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
                 }
                 .padding(.horizontal)
                 .frame(maxHeight: 22)
@@ -151,7 +155,23 @@ struct DataMetricsPopUp: View {
 
             }
             
-          
+            HStack{
+                
+                Image(systemName: "xmark")
+                    .foregroundColor(Color("LinkBlue"))
+                    .imageScale(.large)
+                    .bold()
+            
+                TextHelvetica(content: "Remove Exersise", size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+                Spacer()
+
+                
+            }
+            .offset(y: -5)
+            .padding(.horizontal)
+            .frame(maxHeight: 30)
+            
            
             
         }
@@ -167,5 +187,4 @@ struct DataMetricsPopUp: View {
             
     }
 }
-
 

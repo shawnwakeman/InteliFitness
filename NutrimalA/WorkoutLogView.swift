@@ -55,25 +55,39 @@ struct WorkoutLogView: View {
             
             VisualEffectView(effect: UIBlurEffect(style: .dark))
                 .edgesIgnoringSafeArea(.all)
-                .opacity(workoutLogViewModel.workoutLogModel.popUps[0].RPEpopUpState ? 1 : 0)
+                .opacity(workoutLogViewModel.workoutLogModel.popUps[0].RPEpopUpState ? 1 : 0) // need optim
          
 
             PopupView(viewModel: workoutLogViewModel)
                 .shadow(radius: 10)
                 .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height - 230 : UIScreen.main.bounds.height + 100)
-            if workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState == true {
-                DotsMenuView(viewModel: workoutLogViewModel)
-                    .shadow(radius: 10)
-            }
+            
+            VisualEffectView(effect: UIBlurEffect(style: .dark))
+                .edgesIgnoringSafeArea(.all)
+                .opacity(workoutLogViewModel.workoutLogModel.popUps[1].RPEpopUpState ? 1 : 0) // need optim
 
-//
-//            DataMetricsPopUp(viewModel: workoutLogViewModel)
-//
+            DotsMenuView(viewModel: workoutLogViewModel)
+                .shadow(radius: 10)
+                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? UIScreen.main.bounds.height - 245 : UIScreen.main.bounds.height + 150)
+
+            VisualEffectView(effect: UIBlurEffect(style: .dark))
+                .edgesIgnoringSafeArea(.all)
+                .opacity(workoutLogViewModel.workoutLogModel.popUps[2].RPEpopUpState ? 1 : 0)
+           
+            DataMetricsPopUp(viewModel: workoutLogViewModel)
+                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? UIScreen.main.bounds.height - 245 : UIScreen.main.bounds.height + 150)
+            
+//            if workoutLogViewModel.getPopUp(popUpId: "dropDownMenu").RPEpopUpState == false {
+//                DropDownMenu(viewModel: workoutLogViewModel)
+//            }
+
+
         }
         .onTapGesture {
             withAnimation(.spring()) {
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
             }
 
             withAnimation(.spring(response: 0))
@@ -397,7 +411,14 @@ struct LogModuleHeader: View{
                 Image("dataIcon")
                     .resizable()
                     .frame(width: 39.4, height: 28)
-                
+                Button(action: {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
+                        viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics")
+                    }}, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                              .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                              .frame(width: 39.4, height: 28)})
                 
             }
 
@@ -544,7 +565,7 @@ struct PopupView: View {
                         
 
                     }
-                    .offset(x: -8)
+                    .offset(x: -10)
                     .frame(width: 60, height: 40)
                     
                         

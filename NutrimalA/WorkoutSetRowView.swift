@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Combine
 struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
@@ -83,7 +83,7 @@ struct WorkoutSetRowView: View{
             else
             {
                 TextHelvetica(content: rowObject.previousSet, size: 21)
-                                .frame(width: 145, height: 40)
+                                .frame(width: 140, height: 40)
                                 .foregroundColor(Color("GrayFontOne"))
                                 .background(.clear)
             }
@@ -106,10 +106,33 @@ struct WorkoutSetRowView: View{
                 .autocorrectionDisabled(true)
                 .font(.custom("SpaceGrotesk-Medium", size: 21))
                 .foregroundColor(Color("WhiteFontOne"))
-                .frame(width: 70, height: 40)
+                .frame(width: 75, height: 40)
                 .background(.clear)
                 .multilineTextAlignment(.center)
                 .background(Color("DDB"))
+                .onReceive(Just(lbsTextField)) { newValue in
+                    var filtered = newValue.filter { "0123456789.".contains($0) }
+                        if filtered.filter({$0 == "."}).count > 1 {
+                            // If the filtered string contains more than one decimal point, remove all but the first one.
+                            let firstDecimalPointIndex = filtered.firstIndex(of: ".")!
+                            filtered = filtered.prefix(upTo: firstDecimalPointIndex) + filtered.suffix(from: filtered.index(after: firstDecimalPointIndex)).filter({$0 != "."})
+                        } else if filtered.contains(".") {
+                            // If the filtered string contains a single decimal point, ensure that it appears only once.
+                            let parts = filtered.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
+                            filtered = String(parts[0].prefix(3)) + "." + String(parts[1].prefix(2))
+                        } else {
+                            // If the filtered string does not contain a decimal point, limit it to a maximum of 3 characters.
+                            filtered = String(filtered.prefix(3))
+                        }
+                        if let number = Float(filtered), number > 999.99 {
+                            // If the filtered string can be converted to a Float and is greater than 999.9, set it to "999.9".
+                            filtered = "999.99"
+                        }
+                        lbsTextField = filtered
+                }
+                .onTapGesture {
+                    HapticManager.instance.impact(style: .rigid)
+                }
 
             Divider()
                 .frame(width: borderWeight)
@@ -133,9 +156,17 @@ struct WorkoutSetRowView: View{
                     .background(.clear)
                     .multilineTextAlignment(.center)
                     .background(Color("DDB"))
-
-
-            
+                    .onReceive(Just(repsTextField)) { newValue in
+                        var filtered = newValue.filter { "0123456789".contains($0) }
+                        if filtered.count > 2 {
+                            // If the filtered string contains more than two digits, limit it to the first two.
+                            filtered = String(filtered.prefix(2))
+                        }
+                        repsTextField = filtered
+                    }
+                    .onTapGesture {
+                        HapticManager.instance.impact(style: .rigid)
+                    }
             
         }
     }
@@ -156,9 +187,11 @@ struct WorkoutSetRowView: View{
                         
                         Button(action: {
                             withAnimation(.spring()) {
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
-                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+
                             }}, label: {
                                 Capsule()
                                     .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
@@ -169,11 +202,6 @@ struct WorkoutSetRowView: View{
                     
                     TextHelvetica(content: String(rowObject.repMetric.clean), size: 13)
                         .foregroundColor(Color.white)
-                    
-                }
-                .onTapGesture {
-                    
-                    
                     
                 }
                 .padding(.leading, -8)
@@ -190,6 +218,8 @@ struct WorkoutSetRowView: View{
                         
                         Button(action: {
                             withAnimation(.spring()) {
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
                             }}, label: {
@@ -223,13 +253,13 @@ struct WorkoutSetRowView: View{
         var body: some View {
             ZStack {
 
-                
                 Image("checkMark")
                     .resizable()
                     .padding(9.0)
                     .opacity(rowObject.setCompleted ? 100.0: 0.0)
                     .aspectRatio(40/37, contentMode: .fit)
                 
+
                 ZStack{
                     
                     Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
@@ -237,7 +267,10 @@ struct WorkoutSetRowView: View{
                     
                 }
                 .onTapGesture {
+    
                     viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+   
+
                     HapticManager.instance.impact(style: .heavy)
                     
                 }

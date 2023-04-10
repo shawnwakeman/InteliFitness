@@ -40,6 +40,7 @@ struct WorkoutLogView: View {
                     }
                     
                     FullWidthButton().padding(.top, -40.0).onTapGesture {
+                        HapticManager.instance.impact(style: .rigid)
                         workoutLogViewModel.addEmptyWorkoutModule()
                         
                     }
@@ -100,7 +101,15 @@ struct WorkoutLogView: View {
 
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-        .background(Color("DBblack"))
+        .background(
+            LinearGradient(
+            gradient: Gradient(colors: [
+                Color(red: 15/255, green: 18/255, blue: 23/255),
+                Color(red: 15/255, green: 18/255, blue: 29/255)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        ))
         .onChange(of: scenePhase) { newScenePhase in
             switch newScenePhase {
             case .active:
@@ -225,7 +234,7 @@ struct DropDownHeaderView: View {
                     .padding(.vertical, -4.0)
                     .padding(.horizontal, -1)
                     .frame(height: 40)
-                    .shadow(color: .black, radius: 10, x: 0, y: 0)
+                    .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 0)
                 RoundedRectangle(cornerRadius: 18)
                     .stroke(Color("BorderGray"), lineWidth: borderWeight)
                     .padding(.vertical, -4.0)
@@ -362,7 +371,10 @@ struct addSetButton: View {
     var parentModuleID: Int
     @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View{
-        Button {viewModel.addEmptySet(moduleID: parentModuleID)}
+        Button {
+            HapticManager.instance.impact(style: .rigid)
+            viewModel.addEmptySet(moduleID: parentModuleID)
+        }
         
         label: {
             ZStack{
@@ -403,15 +415,15 @@ struct LogModuleHeader: View{
 
             Spacer()
             
-            addSetButton(parentModuleID: parentModuleID, viewModel: viewModel).onTapGesture {
-                viewModel.addEmptySet(moduleID: 0)
-            }
+            addSetButton(parentModuleID: parentModuleID, viewModel: viewModel)
             
             ZStack{
                 Image("dataIcon")
                     .resizable()
                     .frame(width: 39.4, height: 28)
                 Button(action: {
+                    HapticManager.instance.impact(style: .rigid)
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
                         viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics")
@@ -432,6 +444,8 @@ struct LogModuleHeader: View{
 
                 Button(action: {
                     withAnimation(.spring()) {
+                        HapticManager.instance.impact(style: .rigid)
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
                         viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu")
                     }}, label: {
@@ -499,7 +513,7 @@ struct PopupView: View {
         VStack {
             HStack {
                 
-                Button {print("Button pressed")}
+                Button {HapticManager.instance.impact(style: .rigid)}
                 label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 4)
@@ -524,6 +538,7 @@ struct PopupView: View {
                 
                 
                 Button {
+                    HapticManager.instance.impact(style: .rigid)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpRPE")
                     }
@@ -648,211 +663,33 @@ struct PopupView: View {
                 HStack(spacing: 0) {
                     
                     
-                    
-                    
-                    Button(action: {
-                        if selectedRPE == 6 { selectedRPE = 0}
-                        else { selectedRPE = 6 }}) {
-                            
-                        if selectedRPE == 6 {
-                            TextHelvetica(content: "6", size: 18)
-                            
-                                .frame(width: 42, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "6", size: 18)
-                        
-                            .frame(width: 42, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
+                    ForEach(13..<21) { index in
+                        let displayRPE = Float(index) / 2
+                        Button(action: {
+                     
+                            HapticManager.instance.impact(style: .rigid)
+                     
+                            if Float(selectedRPE) == displayRPE { selectedRPE = 0}
+                            else { selectedRPE = Double(displayRPE) }}) {
+                                
+                                if Float(selectedRPE) == displayRPE {
+                                    TextHelvetica(content: String(displayRPE.clean), size: 18)
+                                    
+                                        .frame(width: 46, height: 55)
+                                        .background(Color("WhiteFontOne"))
+                                        .border(Color("BorderGray"), width: borderWeight - 0.5)
+                                    
+                                } else {
+                                TextHelvetica(content: String(displayRPE.clean), size: 18)
+                                
+                                    .frame(width: 46, height: 55)
+                                    .background(Color("MainGray"))
+                                    .border(Color("BorderGray"), width: borderWeight - 0.5)
+                                
+                                }
                         }
-             
-                    }
 
-                 
-                            
-                    Button(action: {
-                        if selectedRPE == 6.5 { selectedRPE = 0}
-                        else { selectedRPE = 6.5 }}) {
-                            
-                        if selectedRPE == 6.5 {
-                            TextHelvetica(content: "6.5", size: 18)
-                            
-                                .frame(width: 41, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "6.5", size: 18)
-                        
-                            .frame(width: 41, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
                     }
-
-                    
-                    Button(action: {
-                        if selectedRPE == 7 { selectedRPE = 0}
-                        else { selectedRPE = 7 }}) {
-                            
-                        if selectedRPE == 7 {
-                            TextHelvetica(content: "7", size: 18)
-                            
-                                .frame(width: 40, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "7", size: 18)
-                        
-                            .frame(width: 40, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-
-                    Button(action: {
-                        if selectedRPE == 7.5 { selectedRPE = 0}
-                        else { selectedRPE = 7.5 }}) {
-                            
-                        if selectedRPE == 7.5 {
-                            TextHelvetica(content: "7.5", size: 18)
-                            
-                                .frame(width: 40, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "7.5", size: 18)
-                        
-                            .frame(width: 40, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-
-                    
-                    Button(action: {
-                        if selectedRPE == 8 { selectedRPE = 0}
-                        else { selectedRPE = 8 }}) {
-                            
-                        if selectedRPE == 8 {
-                            TextHelvetica(content: "8", size: 18)
-                            
-                                .frame(width: 40, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "8", size: 18)
-                        
-                            .frame(width: 40, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-
-                    
-                    Button(action: {
-                        if selectedRPE == 8.5 { selectedRPE = 0}
-                        else { selectedRPE = 8.5 }}) {
-                            
-                        if selectedRPE == 8.5 {
-                            TextHelvetica(content: "8.5", size: 18)
-                            
-                                .frame(width: 40, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "8.5", size: 18)
-                        
-                            .frame(width: 40, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-
-                    Button(action: {
-                        if selectedRPE == 9 { selectedRPE = 0}
-                        else { selectedRPE = 9 }}) {
-                            
-                        if selectedRPE == 9 {
-                            TextHelvetica(content: "9", size: 18)
-                            
-                                .frame(width: 40, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "9", size: 18)
-                        
-                            .frame(width: 40, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-
-                    Button(action: {
-                        if selectedRPE == 9.5 { selectedRPE = 0}
-                        else { selectedRPE = 9.5 }}) {
-                            
-                        if selectedRPE == 9.5 {
-                            TextHelvetica(content: "9.5", size: 18)
-                            
-                                .frame(width: 41, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "9.5", size: 18)
-                        
-                            .frame(width: 41, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-                    
-                    Button(action: {
-                        if selectedRPE == 10 { selectedRPE = 0}
-                        else { selectedRPE = 10 }}) {
-                            
-                        if selectedRPE == 10 {
-                            TextHelvetica(content: "10", size: 18)
-                            
-                                .frame(width: 42, height: 55)
-                                .background(Color("WhiteFontOne"))
-                                .border(Color("BorderGray"), width: borderWeight - 0.5)
-                            
-                        } else {
-                        TextHelvetica(content: "10", size: 18)
-                        
-                            .frame(width: 42, height: 55)
-                            .background(Color("MainGray"))
-                            .border(Color("BorderGray"), width: borderWeight - 0.5)
-                        
-                        }
-             
-                    }
-
                 
                 }
                 

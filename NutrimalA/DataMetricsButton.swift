@@ -17,12 +17,14 @@ struct DataMetricsPopUp: View {
         VStack {
             HStack {
 
-                
 
                 TextHelvetica(content: "Exersise Metrics", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
+                
                 Spacer()
+                
                 Button {
+                    HapticManager.instance.impact(style: .rigid)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
                     }
@@ -51,103 +53,11 @@ struct DataMetricsPopUp: View {
                 .overlay(Color("BorderGray"))
             
             VStack {
-                HStack{
-
-
-                
-                    TextHelvetica(content: "Total Volume", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    Spacer()
-                    
-                    TextHelvetica(content: "1203", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                HStack{
-
-                    TextHelvetica(content: "Total Reps", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    Spacer()
-                    
-                    TextHelvetica(content: "123", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
-                
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                HStack{
-                    
-                    TextHelvetica(content: "Weight/Set", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    Spacer()
-                    
-                    TextHelvetica(content: "123.4", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
-                
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                HStack{
-                   
-                    TextHelvetica(content: "Reps/Set", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    Spacer()
-                    
-                    TextHelvetica(content: "12.4", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-
-                    
-                }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
-                
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                HStack{
-                   
-                    TextHelvetica(content: "PR Sets", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    Spacer()
-                    
-                    TextHelvetica(content: "3/8", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
-                
-                
-
-                
-                
-                
-                
-                
-                Divider()
-                
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-
+                DisplayRow(metric: "Total Volume", value: "1203")
+                DisplayRow(metric: "Total Reps", value: "120")
+                DisplayRow(metric: "Weight/Set", value: "142.2")
+                DisplayRow(metric: "Reps/Set", value: "12.2")
+                DisplayRow(metric: "PR Sets", value: "3/8")
 
             }
             
@@ -166,6 +76,31 @@ struct DataMetricsPopUp: View {
 
             
     }
+    
+    struct DisplayRow: View {
+        var metric: String
+        var value: String
+        var body: some View {
+            HStack{
+               
+                TextHelvetica(content: metric, size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+                
+                Spacer()
+                
+                TextHelvetica(content: value, size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+            }
+            .padding(.horizontal)
+            .frame(maxHeight: 22)
+            
+            Divider()
+            
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+        }
+    }
+
 }
 
 

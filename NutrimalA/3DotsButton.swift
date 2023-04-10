@@ -23,6 +23,7 @@ struct DotsMenuView: View {
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
+                    HapticManager.instance.impact(style: .rigid)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }

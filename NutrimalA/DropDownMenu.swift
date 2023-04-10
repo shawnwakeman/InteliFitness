@@ -23,6 +23,7 @@ struct DropDownMenu: View {
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
+
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }

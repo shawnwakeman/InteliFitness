@@ -17,6 +17,7 @@ struct WorkoutLogView: View {
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @State private var progressValue: Float = 0.5
     @State private var blocked = false
+    @State private var showSheet = false
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
@@ -26,24 +27,34 @@ struct WorkoutLogView: View {
             ScrollView(.vertical){
                 
                 
-                DropDownHeaderView(viewModel: workoutLogViewModel)
-                
-                
-                
+                VStack {
+                    Rectangle()
+                        .foregroundColor(.clear)
+                        
+                }
+                .frame(height: 100)
+        
+
+                Spacer()
+          
                 VStack(spacing: 20){
                     if workoutLogViewModel.exersiseModules.count > 0 {
                         
-                        ForEach(workoutLogViewModel.exersiseModules){
-                            workoutModule in
-                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: workoutModule.id)
+                        ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
+
+                            if workoutModule.isRemoved == false {
+                                ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: workoutModule.id) // icky code
+                                
+                            }
                         }
                     }
                     
                     FullWidthButton().padding(.top, -40.0).onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
                         workoutLogViewModel.addEmptyWorkoutModule()
-                        
+                        showSheet = true
                     }
+                   
                     
                     
                     
@@ -78,12 +89,30 @@ struct WorkoutLogView: View {
             DataMetricsPopUp(viewModel: workoutLogViewModel)
                 .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? UIScreen.main.bounds.height - 245 : UIScreen.main.bounds.height + 150)
             
-//            if workoutLogViewModel.getPopUp(popUpId: "dropDownMenu").RPEpopUpState == false {
-//                DropDownMenu(viewModel: workoutLogViewModel)
-//            }
+            VisualEffectView(effect: UIBlurEffect(style: .dark))
+                .edgesIgnoringSafeArea(.all)
+                .opacity(workoutLogViewModel.workoutLogModel.popUps[3].RPEpopUpState ? 0 : 1)
 
+            DropDownMenuView(viewModel: workoutLogViewModel)
+                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? 0 : 520)
 
+            Rectangle().position(x: UIScreen.main.bounds.width/2, y: 0)
+                .frame(maxHeight: 120)
+                .foregroundColor(.white)
+
+                .opacity(0.01)
+                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? 70 : 585)
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        if workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState == true {
+                            workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
+                        } else {
+                            workoutLogViewModel.setPopUpState(state: true, popUpId: "DropDownMenu")
+                        }
+                    }
+                }
         }
+        
         .onTapGesture {
             withAnimation(.spring()) {
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
@@ -215,6 +244,10 @@ struct ExersiseLogModule: View {
     var body: some View {
         VStack(spacing: -20){
             LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
+            if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
+                NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+                
+            }
             CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
         }
 
@@ -348,7 +381,7 @@ struct FullWidthButton: View{
                     .aspectRatio(7/1, contentMode: .fill)
                 
                 RoundedRectangle(cornerRadius: 5)
-                    .strokeBorder(Color("BlueOverlayBorder"), lineWidth: borderWeight)
+                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
 
                     .padding(.all)
                     .aspectRatio(7/1, contentMode: .fill)
@@ -467,6 +500,55 @@ struct LogModuleHeader: View{
     }
 }
 
+struct NotesModule: View{
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    @State private var notes = ""
+    var parentModuleID: Int
+    var body: some View{
+        HStack {
+
+            ZStack {
+
+                    
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                Image(systemName: "note.text")
+                    .foregroundColor(Color("LinkBlue"))
+                    .imageScale(.large)
+                    .bold()
+                    .multilineTextAlignment(.leading)
+              
+                    
+                    
+            }
+            .frame(maxWidth: 40, maxHeight: 40)
+
+            .padding(.leading)
+
+                
+                
+         
+            TextField("", text: $notes, prompt: Text("Enter notes about your workout here. Your notes will be be displayed every time you do this exercise.").foregroundColor(Color("GrayFontTwo")), axis: .vertical)
+                .lineLimit(3...5)
+                .padding(.all, 5)
+                .font(.custom("SpaceGrotesk-Medium", size: 16))
+                .foregroundColor(Color("WhiteFontOne"))
+
+                
+
+
+            
+        }
+        .background(Color("DDB"))
+        .cornerRadius(6)
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight)
+        )
+        .padding(.vertical,3)
+        .padding(.all)
+    }
+}
 struct CoreLogModule: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var ModuleID: Int
@@ -737,7 +819,7 @@ struct PopupView: View {
                         
                         Toggle("", isOn: $isToggled)
                             .frame(maxWidth: 52)
-                            .toggleStyle(SwitchToggleStyle(tint: .blue))
+                            .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
                      
                         
                     }

@@ -10,7 +10,9 @@ import SwiftUI
 struct DotsMenuView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: WorkoutLogViewModel
-    @State private var isToggled = false
+
+    @State private var vibrateOnRing = true
+    @State var notesdisplay = false
     var body: some View {
         // Add a blur effect to the background
         
@@ -18,7 +20,7 @@ struct DotsMenuView: View {
             HStack {
 
                 
-
+                
                 TextHelvetica(content: "Exersise Options", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
@@ -27,6 +29,7 @@ struct DotsMenuView: View {
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }
+
                 }
                 label: {
                     ZStack {
@@ -52,77 +55,135 @@ struct DotsMenuView: View {
                 .overlay(Color("BorderGray"))
             
             VStack {
+               
                 HStack{
-
+                    
                     Image(systemName: "note.text")
                         .foregroundColor(Color("LinkBlue"))
                         .imageScale(.large)
                         .bold()
                         .multilineTextAlignment(.leading)
-                
-                    TextHelvetica(content: "Add notes", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
                     
+                    TextHelvetica(content: "Display Exersise Notes", size: 18)
+                        .foregroundColor(Color("WhiteFontOne"))
                     Spacer()
+                    
+                    Toggle(isOn: $notesdisplay) {
+                        Text("Vibrate on Ring")
+                        
+                    }.onChange(of: notesdisplay) { newValue in
+                        // Call your function here
+                        let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+                        viewModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: index)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                            }
+                        }
+                    }
+                    .labelsHidden()
+                    .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
+                    
                 }
                 .padding(.horizontal)
                 .frame(maxHeight: 22)
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                HStack{
+                    
 
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                        .foregroundColor(Color("LinkBlue"))
-                        .imageScale(.large)
-                        .bold()
-                        .multilineTextAlignment(.leading)
-                
-                    TextHelvetica(content: "Replace exersise", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    Spacer()
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                                
+                Button {
+                    print("das")
                 }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Replace exersise", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "Back Squat", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                }
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                Button {
+                    print("das")
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "clock")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Set exersise rest time", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "2:00", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                }
+             
                 
                 Divider()
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 
-                HStack{
-                    
-                    Image(systemName: "clock")
-                        .foregroundColor(Color("LinkBlue"))
-                        .imageScale(.large)
-                        .bold()
-                
-                    TextHelvetica(content: "Set exersise rest time", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    Spacer()
+                Button {
+                    print("das")
                 }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
-                
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                HStack{
-                   
-                    Image(systemName: "scalemass.fill")
-                        .foregroundColor(Color("LinkBlue"))
-                        .imageScale(.large)
-                        .bold()
-                
-                    TextHelvetica(content: "Weight Unit", size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    Spacer()
-
-                    
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "scalemass")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Weight Unit", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "Lbs", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
                 }
-                .padding(.horizontal)
-                .frame(maxHeight: 22)
+               
                 
                 Divider()
                     .frame(height: borderWeight)
@@ -136,6 +197,22 @@ struct DotsMenuView: View {
                     TextHelvetica(content: "Enable/Disable RPE", size: 18)
                         .foregroundColor(Color("WhiteFontOne"))
                     Spacer()
+                    
+                    Toggle(isOn: $vibrateOnRing) {
+                        Text("Vibrate on Ring")
+
+                    }.onChange(of: vibrateOnRing) { newValue in
+                        // Call your function here
+                        let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+                        viewModel.setExersiseModuleRPEDisplayStatus(exersiseID: index, state: newValue)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                            }
+                        }
+                    }
+                    .labelsHidden()
+                    .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
                 }
                 .padding(.horizontal)
                 .frame(maxHeight: 22)
@@ -155,24 +232,36 @@ struct DotsMenuView: View {
 
 
             }
-            
-            HStack{
+            Button {
+//                popUpDotsMenu
+                HapticManager.instance.impact(style: .rigid)
+                let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+  
+                viewModel.setRemoved(exersiseID: index)
+                withAnimation(.spring()) {
+                    viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                }
+            }
+            label: {
+                HStack{
+                    
+                    Image(systemName: "xmark")
+                        .foregroundColor(Color("MainRed"))
+                        .imageScale(.large)
+                        .bold()
                 
-                Image(systemName: "xmark")
-                    .foregroundColor(Color("LinkBlue"))
-                    .imageScale(.large)
-                    .bold()
-            
-                TextHelvetica(content: "Remove Exersise", size: 18)
-                    .foregroundColor(Color("WhiteFontOne"))
-                Spacer()
+                    TextHelvetica(content: "Remove Exersise", size: 18)
+                        .foregroundColor(Color("WhiteFontOne"))
+                    Spacer()
 
+                    
+                }
+                .offset(y: -5)
+                .padding(.horizontal)
+                .frame(maxHeight: 30)
                 
             }
-            .offset(y: -5)
-            .padding(.horizontal)
-            .frame(maxHeight: 30)
-            
+         
            
             
         }
@@ -187,5 +276,7 @@ struct DotsMenuView: View {
 
             
     }
+    
+
 }
 

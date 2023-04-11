@@ -33,7 +33,10 @@ struct WorkoutSetRowView: View{
             HStack{
 
                 repTextFieldView(rowObject: rowObject)
-                repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
+                if viewModel.exersiseModules[moduleID].displayingRPE == true {
+                    repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
+                }
+            
                 
                 
             }
@@ -49,6 +52,7 @@ struct WorkoutSetRowView: View{
             checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
             
         }
+        
     }
     
     
@@ -253,12 +257,14 @@ struct WorkoutSetRowView: View{
         var body: some View {
             ZStack {
 
-                Image("checkMark")
+                Image(systemName: "checkmark")
                     .resizable()
                     .padding(9.0)
-                    .opacity(rowObject.setCompleted ? 100.0: 0.0)
+                    .bold()
+                    .foregroundColor(rowObject.setCompleted ? Color("LinkBlue") : Color("GrayFontOne"))
                     .aspectRatio(40/37, contentMode: .fit)
-                
+                    .scaleEffect(rowObject.setCompleted ? 1 : 0.8)
+              
 
                 ZStack{
                     
@@ -268,7 +274,10 @@ struct WorkoutSetRowView: View{
                 }
                 .onTapGesture {
     
-                    viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                    }
+
    
 
                     HapticManager.instance.impact(style: .heavy)

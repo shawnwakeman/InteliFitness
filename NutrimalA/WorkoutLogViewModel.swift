@@ -60,6 +60,19 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.addEmptyWorkoutModule()
     }
     
+    func setRemoved(exersiseID: Int) {
+        workoutLogModel.setRemoved(exersiseID: exersiseID)
+    }
+    func setExersiseModuleRPEDisplayStatus(exersiseID: Int, state: Bool) {
+        workoutLogModel.setExersiseModuleRPEDisplayStatus(exersiseID: exersiseID, state: state)
+    }
+    
+    func toggleExersiseModuleNotesDisplayStatus(exersiseID: Int) {
+        workoutLogModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: exersiseID)
+    }
+    func removeExersiseModule(exersiseID: Int) {
+        workoutLogModel.removeExersiseModule(exersiseID: exersiseID)
+    }
     func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {
         workoutLogModel.toggleCompletedSet(ExersiseModuleID: ExersiseModuleID, RowID: RowID)
     }

@@ -17,7 +17,6 @@ struct WorkoutLogView: View {
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @State private var progressValue: Float = 0.5
     @State private var blocked = false
-    @State private var showSheet = false
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
@@ -27,12 +26,7 @@ struct WorkoutLogView: View {
             ScrollView(.vertical){
                 
                 
-                VStack {
-                    Rectangle()
-                        .foregroundColor(.clear)
-                        
-                }
-                .frame(height: 100)
+
         
 
                 Spacer()
@@ -43,16 +37,16 @@ struct WorkoutLogView: View {
                         ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
 
                             if workoutModule.isRemoved == false {
-                                ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: workoutModule.id) // icky code
+                                ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: workoutModule.id) // icky code - mem leaks
                                 
                             }
                         }
                     }
                     
-                    FullWidthButton().padding(.top, -40.0).onTapGesture {
+                    FullWidthButton().padding(.top, -25.0).onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
                         workoutLogViewModel.addEmptyWorkoutModule()
-                        showSheet = true
+
                     }
                    
                     
@@ -68,30 +62,33 @@ struct WorkoutLogView: View {
             VisualEffectView(effect: UIBlurEffect(style: .dark))
                 .edgesIgnoringSafeArea(.all)
                 .opacity(workoutLogViewModel.workoutLogModel.popUps[0].RPEpopUpState ? 1 : 0) // need optim
-         
+
 
             PopupView(viewModel: workoutLogViewModel)
                 .shadow(radius: 10)
                 .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height - 230 : UIScreen.main.bounds.height + 100)
-            
+
             VisualEffectView(effect: UIBlurEffect(style: .dark))
                 .edgesIgnoringSafeArea(.all)
                 .opacity(workoutLogViewModel.workoutLogModel.popUps[1].RPEpopUpState ? 1 : 0) // need optim
 
             DotsMenuView(viewModel: workoutLogViewModel)
                 .shadow(radius: 10)
-                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? UIScreen.main.bounds.height - 245 : UIScreen.main.bounds.height + 150)
+
+                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? getScreenBounds().height * 0.73 : getScreenBounds().height * 1.2)
 
             VisualEffectView(effect: UIBlurEffect(style: .dark))
                 .edgesIgnoringSafeArea(.all)
                 .opacity(workoutLogViewModel.workoutLogModel.popUps[2].RPEpopUpState ? 1 : 0)
-           
+
             DataMetricsPopUp(viewModel: workoutLogViewModel)
-                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? UIScreen.main.bounds.height - 245 : UIScreen.main.bounds.height + 150)
-            
+                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.2)
+
             VisualEffectView(effect: UIBlurEffect(style: .dark))
                 .edgesIgnoringSafeArea(.all)
                 .opacity(workoutLogViewModel.workoutLogModel.popUps[3].RPEpopUpState ? 0 : 1)
+            
+
 
             DropDownMenuView(viewModel: workoutLogViewModel)
                 .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? 0 : 520)
@@ -100,7 +97,7 @@ struct WorkoutLogView: View {
                 .frame(maxHeight: 120)
                 .foregroundColor(.white)
 
-                .opacity(0.01)
+                .opacity(0.00001)
                 .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? 70 : 585)
                 .onTapGesture {
                     withAnimation(.spring()) {
@@ -242,10 +239,10 @@ struct ExersiseLogModule: View {
     @Binding var blocked: Bool
     var parentModuleID: Int
     var body: some View {
-        VStack(spacing: -20){
+        VStack(spacing: -4){
             LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
             if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
-                NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+                
                 
             }
             CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
@@ -377,13 +374,15 @@ struct FullWidthButton: View{
                 
                 RoundedRectangle(cornerRadius: 5)
                     .foregroundColor(Color("BlueOverlay"))
-                    .padding(.all)
+                    .padding(.vertical)
+                    .padding(.horizontal, 10)
                     .aspectRatio(7/1, contentMode: .fill)
                 
                 RoundedRectangle(cornerRadius: 5)
                     .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
 
-                    .padding(.all)
+                    .padding(.vertical)
+                    .padding(.horizontal, 10)
                     .aspectRatio(7/1, contentMode: .fill)
                 
             }
@@ -391,7 +390,8 @@ struct FullWidthButton: View{
 
             TextHelvetica(content: "add exersise", size: 20)
                 .foregroundColor(Color(.white))
-        }.padding(.top,-2)
+        }
+
     }
     
 }
@@ -494,7 +494,7 @@ struct LogModuleHeader: View{
                 
             
         }
-        .padding(/*@START_MENU_TOKEN@*/[.top, .leading, .trailing]/*@END_MENU_TOKEN@*/)
+        .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/, 12)
         .padding(.bottom, 9)
         
     }
@@ -553,7 +553,8 @@ struct CoreLogModule: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var ModuleID: Int
     var body: some View{
-        ZStack(){
+      
+        ZStack{
             
             RoundedRectangle(cornerRadius: 7)
                 .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -570,7 +571,7 @@ struct CoreLogModule: View {
             }
             
         }
-        .padding(.all)
+        .frame(width: getScreenBounds().width * 0.9)
     }
 }
 
@@ -579,7 +580,7 @@ struct TextHelvetica: View{
     var size: CGFloat
     var body: some View
     {
-        Text(content).font(.custom("SpaceGrotesk-Medium", size: size))
+        Text(content).font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (size * 0.0025)))
     }
 }
 
@@ -671,35 +672,28 @@ struct PopupView: View {
 
                 
             }
+            .padding(.top, -8)
             
-            .position(x: 185, y: 25)
             .padding(.horizontal)
             .padding(.vertical, 10)
             HStack {
                 switch selectedRPE {
                 case 0 :
-                    VStack {
-                        TextHelvetica(content: "RPE is a way to measure the difficulty of a set.", size: 16)
-                            .foregroundColor(Color("GrayFontOne"))
-                        TextHelvetica(content: "Tap a number to select an RPE value", size: 16)
-                            .foregroundColor(Color("GrayFontOne"))
-                        
-                    }
-                    .multilineTextAlignment(.center)
-                    
+                  
+                    TextHelvetica(content: "RPE is a way to measure the difficulty of a set. Tap a number to select an RPE value", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
                 case 6:
                     TextHelvetica(content: "You could do 4 more reps before failure.", size: 16)
                         .offset(y: -10)
                         .foregroundColor(Color("GrayFontOne"))
                         .multilineTextAlignment(.center)
                 case 6.5:
-                    VStack {
-                        TextHelvetica(content: "You could do 3-4 more reps", size: 16)
-                            .foregroundColor(Color("GrayFontOne"))
-                        TextHelvetica(content: "before reaching failure.", size: 16)
-                            .foregroundColor(Color("GrayFontOne"))
-                    }
-                    .multilineTextAlignment(.center)
+                  
+                    TextHelvetica(content: "You could do 3-4 more reps before reaching failure.", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+    
 
                 case 7:
                     TextHelvetica(content: "You could comfortably preform 3 more reps before failure.", size: 16)
@@ -718,10 +712,11 @@ struct PopupView: View {
                         .foregroundColor(Color("GrayFontOne"))
                         .multilineTextAlignment(.center)
                 case 9:
-                    TextHelvetica(content: "You could comfortably preform 1 more rep", size: 16)
-                        .offset(y: -10)
+                    TextHelvetica(content: "You could comfortably preform 1 more rep before reaching failure.", size: 16)
+               
                         .foregroundColor(Color("GrayFontOne"))
                         .multilineTextAlignment(.center)
+             
                     
                 case 9.5:
                     TextHelvetica(content: "You could possibly do one more rep before reaching failure", size: 16)
@@ -729,9 +724,10 @@ struct PopupView: View {
                         .multilineTextAlignment(.center)
                 case 10:
                     TextHelvetica(content: "Maximun effort. No more reps possible.", size: 16)
-                        .offset(y: -10)
+
                         .foregroundColor(Color("GrayFontOne"))
                         .multilineTextAlignment(.center)
+                        .padding(.vertical, 13)
                 default:
 
                     TextHelvetica(content: "could not find rpe", size: 16)
@@ -740,6 +736,12 @@ struct PopupView: View {
                     
                 }
             }
+            .padding(.horizontal, 10)
+            .offset(y: 10)
+
+            Rectangle()
+                .frame(height: getScreenBounds().height * 0.02)
+                .foregroundColor(.clear)
             VStack(spacing: 0) {
                 
                 HStack(spacing: 0) {
@@ -757,14 +759,14 @@ struct PopupView: View {
                                 if Float(selectedRPE) == displayRPE {
                                     TextHelvetica(content: String(displayRPE.clean), size: 18)
                                     
-                                        .frame(width: 46, height: 55)
+                                        .frame(width: getScreenBounds().width * 0.11, height: getScreenBounds().height * 0.07)
                                         .background(Color("WhiteFontOne"))
                                         .border(Color("BorderGray"), width: borderWeight - 0.5)
                                     
                                 } else {
                                 TextHelvetica(content: String(displayRPE.clean), size: 18)
                                 
-                                    .frame(width: 46, height: 55)
+                                        .frame(width: getScreenBounds().width * 0.11, height: getScreenBounds().height * 0.07)
                                     .background(Color("MainGray"))
                                     .border(Color("BorderGray"), width: borderWeight - 0.5)
                                 
@@ -774,6 +776,7 @@ struct PopupView: View {
                     }
                 
                 }
+                
                 
                 .background(Color("DDB"))
             
@@ -823,29 +826,31 @@ struct PopupView: View {
                      
                         
                     }
-                    .offset(x: 10)
+                    .offset(x: 2)
                     .padding(.leading, 10)
                     .padding(.vertical, 10)
 
                 }
                 
             }
-         
+     
+            .frame(width: getScreenBounds().width * 0.88, height: getScreenBounds().height * 0.12)
             .background(Color("DBblack"))
             .cornerRadius(10)
             .overlay(RoundedRectangle(cornerRadius: 10)
                 .stroke(Color("BorderGray"), lineWidth: borderWeight))
-            .padding(.all)
+
 
             
         }
-        .frame(maxWidth: 400, maxHeight: 270)
+        .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.33)
+
         .background(Color("DBblack"))
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color("BorderGray"), lineWidth: borderWeight))
-        .padding()
+
 
 
             
@@ -994,12 +999,19 @@ extension Float {
 
 
 
-
+extension View{
+   func getScreenBounds() -> CGRect{
+   return UIScreen.main.bounds
+   }
+}
 
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let workoutLogViewModel = WorkoutLogViewModel()
         WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
+            .previewDevice("iPhone 14")
+        WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
+            .previewDevice("iPhone 14 Pro Max")
     }
 }

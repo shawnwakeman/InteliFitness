@@ -68,7 +68,7 @@ struct DropDownMenuView: View {
                                     .foregroundColor(Color("MainGray"))
                                 
                                 TextHelvetica(content: "Pause", size: 16)
-                                    .foregroundColor(Color("WhiteFontOne"))
+                                
                             }
                         }
                             

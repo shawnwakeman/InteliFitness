@@ -65,13 +65,13 @@ struct DataMetricsPopUp: View {
            
             
         }
-        .frame(maxWidth: 400)
+        .frame(maxWidth: getScreenBounds().width * 0.95)
         .background(Color("DBblack"))
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color("BorderGray"), lineWidth: borderWeight))
-        .padding()
+
 
 
             

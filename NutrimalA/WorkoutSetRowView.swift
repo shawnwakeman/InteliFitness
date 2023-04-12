@@ -28,7 +28,10 @@ struct WorkoutSetRowView: View{
             
             lbsTextFieldView(rowObject: rowObject)
             
-
+            Divider()
+                .frame(width: borderWeight)
+                .overlay(Color("BorderGray"))
+                .zIndex(1)
             
             HStack{
 
@@ -40,7 +43,8 @@ struct WorkoutSetRowView: View{
                 
                 
             }
-            .frame(width: 80, height: 40)
+            .frame(width: getScreenBounds().width * 0.2, height: getScreenBounds().height * 0.045)
+
             .background(Color("DDB"))
             Divider()
                 .frame(width: borderWeight)
@@ -64,7 +68,7 @@ struct WorkoutSetRowView: View{
         var body: some View {
             TextHelvetica(content: String(rowObject.setIndex), size: 21)
                        .padding()
-                       .frame(width: 55, height: 40)
+                       .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
                        .foregroundColor(Color("LinkBlue"))
                        .background(.clear)
                    Divider()
@@ -77,20 +81,21 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         
         var body: some View {
-            if rowObject.previousSet == "0" {
-                Capsule()
-                    .padding(.horizontal, 50.0)
-                    .padding(.vertical, 18)
-                    .frame(width: 145, height: 40)
-                    .foregroundColor(Color("GrayFontOne"))
+            Group {
+                if rowObject.previousSet == "0" {
+                    Capsule()
+                        .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.005)
+                        .foregroundColor(Color("GrayFontOne"))
+                }
+                else
+                {
+                    TextHelvetica(content: rowObject.previousSet, size: 21)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                    .background(.clear)
+                }
             }
-            else
-            {
-                TextHelvetica(content: rowObject.previousSet, size: 21)
-                                .frame(width: 140, height: 40)
-                                .foregroundColor(Color("GrayFontOne"))
-                                .background(.clear)
-            }
+            .frame(width: getScreenBounds().width * 0.31, height: getScreenBounds().height * 0.03)
+
 
             Divider()
                 .frame(width: borderWeight)
@@ -110,7 +115,7 @@ struct WorkoutSetRowView: View{
                 .autocorrectionDisabled(true)
                 .font(.custom("SpaceGrotesk-Medium", size: 21))
                 .foregroundColor(Color("WhiteFontOne"))
-                .frame(width: 75, height: 40)
+                .frame(width: getScreenBounds().width * 0.18, height: getScreenBounds().height * 0.045)
                 .background(.clear)
                 .multilineTextAlignment(.center)
                 .background(Color("DDB"))
@@ -138,9 +143,7 @@ struct WorkoutSetRowView: View{
                     HapticManager.instance.impact(style: .rigid)
                 }
 
-            Divider()
-                .frame(width: borderWeight)
-                .overlay(Color("BorderGray"))
+
             
             
         }
@@ -156,7 +159,7 @@ struct WorkoutSetRowView: View{
                     .autocorrectionDisabled(true)
                     .font(.custom("SpaceGrotesk-Medium", size: 21))
                     .foregroundColor(Color("WhiteFontOne"))
-                    .frame(minWidth: 40, minHeight: 40)
+                    .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
                     .background(.clear)
                     .multilineTextAlignment(.center)
                     .background(Color("DDB"))
@@ -187,7 +190,7 @@ struct WorkoutSetRowView: View{
                         Capsule()
                             .padding(.vertical, 9.0)
                             .foregroundColor(Color("MainGray"))
-                            .frame(width: 30)
+                            .frame(width: getScreenBounds().width * 0.08)
                         
                         Button(action: {
                             withAnimation(.spring()) {
@@ -198,9 +201,9 @@ struct WorkoutSetRowView: View{
 
                             }}, label: {
                                 Capsule()
-                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
                                     .padding(.vertical, 9.0)
-                                .frame(width: 30)})
+                                .frame(width: getScreenBounds().width * 0.08)})
                         
                     }
                     
@@ -218,7 +221,7 @@ struct WorkoutSetRowView: View{
                         Capsule()
                             .padding(.vertical, 9.0)
                             .foregroundColor(Color("MainGray"))
-                            .frame(width: 30)
+                            .frame(width: getScreenBounds().width * 0.08)
                         
                         Button(action: {
                             withAnimation(.spring()) {
@@ -228,9 +231,9 @@ struct WorkoutSetRowView: View{
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
                             }}, label: {
                                 Capsule()
-                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
                                     .padding(.vertical, 9.0)
-                                .frame(width: 30)})
+                                .frame(width: getScreenBounds().width * 0.08)})
                         
                     }
                     
@@ -261,9 +264,9 @@ struct WorkoutSetRowView: View{
                     .resizable()
                     .padding(9.0)
                     .bold()
-                    .foregroundColor(rowObject.setCompleted ? Color("LinkBlue") : Color("GrayFontOne"))
+                    .foregroundColor(rowObject.setCompleted ? Color(.systemGreen) : Color("GrayFontOne"))
                     .aspectRatio(40/37, contentMode: .fit)
-                    .scaleEffect(rowObject.setCompleted ? 1 : 0.8)
+                    .scaleEffect(rowObject.setCompleted ? 0.9 : 0.7)
               
 
                 ZStack{
@@ -283,7 +286,7 @@ struct WorkoutSetRowView: View{
                     HapticManager.instance.impact(style: .heavy)
                     
                 }
-                .frame(width: 40, height: 40)
+                .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
             }
 
 

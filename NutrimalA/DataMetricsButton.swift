@@ -15,6 +15,8 @@ struct DataMetricsPopUp: View {
         // Add a blur effect to the background
         
         VStack {
+            
+             
             HStack {
 
 
@@ -100,6 +102,8 @@ struct DataMetricsPopUp: View {
                 .overlay(Color("BorderGray"))
         }
     }
+    
+
 
 }
 

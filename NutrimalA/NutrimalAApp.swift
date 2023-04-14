@@ -13,6 +13,7 @@ struct NutrimalAApp: App {
     var body: some Scene {
         WindowGroup {
             WorkoutLogView()
+                .border(Color.blue, width: 2) // Add the border m
         }
     }
 }

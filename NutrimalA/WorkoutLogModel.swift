@@ -1,16 +1,34 @@
 import Foundation
-
+import SwiftUI
 struct WorkoutLogModel {
     
     private(set) var exersiseModules: [ExersiseLogModule] = []
     var workoutTime: WorkoutTime = WorkoutTime()
+    var restTime : WorkoutTime = WorkoutTime(timeElapsed: 0, timePreset: 120)
     var popUps = [PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpRPE"), PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpDotsMenu"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpDataMetrics"),
-                  PopUpData(RPEpopUpState: true, popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "DropDownMenu")]
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "DropDownMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "SetTimeSubMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "SetUnitSubMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "ExersisesPopUp")]
 //    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
+    
+    
+    var lastRowChangedID: Int = 0
+    var lastModuleChangedID: Int = 0
     var hidingPopUps = false
     
+    mutating func setLastModule(index: Int) {
+        lastModuleChangedID = index
+    }
     
+    mutating func setLastRow(index: Int) {
+        lastRowChangedID = index
+    }
+    
+    mutating func setRowCompletionStatus(exersiseID: Int, RowID: Int, state: Bool) {
+        exersiseModules[exersiseID].setRows[RowID].setCompleted = state
+    }
     struct PopUpData: Identifiable {
         var RPEpopUpState = false
         var popUpRowIndex: Int
@@ -29,15 +47,21 @@ struct WorkoutLogModel {
     
     struct ExersiseSetRow: Identifiable {
         var setIndex: Int
-        var previousSet: String
-        var weight: Float
-        var reps: Int
-        var weightPlaceholder: String
-        var repsPlaceholder: String
-        var setCompleted: Bool
-        var rowSelected: Bool
-        var repMetric: Float
+        var previousSet: String = "0"
+        var weight: Float = 0
+        var reps: Int = 0
+        var weightPlaceholder: String = ""
+        var repsPlaceholder: String = ""
+        var setCompleted: Bool = false
+        var rowSelected: Bool = false
+        var repMetric: Float = 0
+        var prevouslyChecked: Bool = false
         let id: Int
+        
+    }
+    
+    private func addEmptySetHelper(lastRowID: Int) -> ExersiseSetRow {
+        return ExersiseSetRow(setIndex: (lastRowID + 1), id: (lastRowID))
     }
     
     struct WorkoutTime {
@@ -45,6 +69,7 @@ struct WorkoutLogModel {
         var timeElapsed: Int = 0
         var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         var backgroundTime: Date = Date()
+        var timePreset: Int = 0
     }
     
     struct PopUpStates {
@@ -58,7 +83,15 @@ struct WorkoutLogModel {
     
     mutating func addEmptySet(moduleID: Int) {
         let lastRowIndex = exersiseModules[moduleID].setRows.count
+
+            
         exersiseModules[moduleID].setRows.append(addEmptySetHelper(lastRowID: lastRowIndex))
+
+
+    }
+    
+    mutating func setPrevouslyChecked(exersiseModuleID : Int, RowID: Int, state: Bool) {
+        exersiseModules[exersiseModuleID].setRows[RowID].prevouslyChecked  = state
     }
     
     mutating func addEmptyWorkoutModule() {
@@ -73,9 +106,26 @@ struct WorkoutLogModel {
     mutating func toggleTime() {
         workoutTime.timeRunning.toggle()
     }
-    
-    mutating func addToTime() {
-        workoutTime.timeElapsed += 1
+    mutating func setRepValue(exersiseModuleID : Int, RowID: Int, value: Int) {
+        exersiseModules[exersiseModuleID].setRows[RowID].reps = value
+    }
+    mutating func setWeightValue(exersiseModuleID : Int, RowID: Int, value: Float) {
+        exersiseModules[exersiseModuleID].setRows[RowID].weight = value
+    }
+    mutating func addToTime(step: Int) {
+        workoutTime.timeElapsed += step
+
+
+        
+    }
+    mutating func setRestTime(time: Int) {
+        restTime.timeElapsed = time
+
+
+        
+    }
+    mutating func restAddToTime(step: Int) {
+        restTime.timeElapsed += step
 
 
         
@@ -149,7 +199,5 @@ struct WorkoutLogModel {
     }
 
     
-    private func addEmptySetHelper(lastRowID: Int) -> ExersiseSetRow {
-        return ExersiseSetRow(setIndex: (lastRowID + 1), previousSet: "0", weight: 0, reps: 0, weightPlaceholder: "", repsPlaceholder: "", setCompleted: false, rowSelected: false, repMetric: 0, id: (lastRowID))
-    }
+
 }

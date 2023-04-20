@@ -12,6 +12,9 @@ import SwiftUI
 struct AddExersisesPopUp: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var search: String = ""
+
+
+    
     var body: some View {
         
         ZStack {
@@ -104,10 +107,12 @@ struct AddExersisesPopUp: View {
                     VStack {
                         Header()
                         let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
+  
                         ForEach(alphabet, id: \.self) { letter in
                             ExerciseGroup(viewModel: viewModel, letter: letter)
-                      
                         }
+                
+                   
                         
                     }
                 }
@@ -141,6 +146,7 @@ struct AddExersisesPopUp: View {
         @ObservedObject var viewModel: WorkoutLogViewModel
         var letter: String
         var borderColor = Color("BorderGray")
+        
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 
@@ -158,7 +164,7 @@ struct AddExersisesPopUp: View {
                                 return false
                             }
                         }) { workoutModule in
-                            ExersiseRow(viewModel: viewModel, exersiseName: workoutModule.exerciseName, exersiseCatagory: workoutModule.exersiseCatagory[0], exersiseID: workoutModule.id)
+                            ExersiseRow(viewModel: viewModel, exersiseName: workoutModule.exerciseName, exersiseCatagory: workoutModule.exerciseCategory[0], exerciseEquipment: workoutModule.exerciseEquipment, exersiseID: workoutModule.id)
                            
                             Divider()
                                 .frame(height: borderWeight)
@@ -186,6 +192,7 @@ struct AddExersisesPopUp: View {
         @ObservedObject var viewModel: WorkoutLogViewModel
         var exersiseName: String
         var exersiseCatagory: String
+        var exerciseEquipment: String
         var exersiseID: Int
 
         var body: some View {
@@ -206,8 +213,17 @@ struct AddExersisesPopUp: View {
                 //                        .resizable()
                 //                        .frame(width: getScreenBounds().width * 0.15, height: getScreenBounds().height * 0.05)
                 VStack(alignment: .leading) {
-                    TextHelvetica(content: exersiseName, size: 18)
-                        .foregroundColor(Color("WhiteFontOne"))
+                    HStack(spacing: 5) {
+                        TextHelvetica(content: exersiseName, size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        if exerciseEquipment != "" {
+                            TextHelvetica(content: "(" + exerciseEquipment + ")", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                        }
+        
+                        
+                    }
+                   
                     TextHelvetica(content: exersiseCatagory, size: 18)
                         .foregroundColor(Color("GrayFontTwo"))
                 }
@@ -432,7 +448,22 @@ struct DisplayOnOpenMenuViewModifier: ViewModifier {
     }
 }
  
- 
+extension Bundle {
+    func decode<T: Decodable>(_ file: String) -> T {
+        guard let url = self.url(forResource: file, withExtension: nil) else {
+            fatalError("Failed to locate \(file) in bundle.")
+        }
+        guard let data = try? Data(contentsOf: url) else {
+            fatalError("Failed to load \(file) from bundle.")
+        }
+        let decoder = JSONDecoder()
+        guard let result = try? decoder.decode(T.self, from: data) else {
+            fatalError("Failed to decode \(file) from bundle.")
+        }
+        return result
+    }
+}
+
 
 extension View {
     func displayOnMenuOpen(_ isOpened: Bool, offset: CGFloat) -> some View {

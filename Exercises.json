@@ -1,0 +1,67 @@
+[
+    {
+        "exerciseName": "Bench Press",
+        "exerciseCategory": ["Chest", "Triceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 0,
+        "selected": false
+    },
+    {
+        "exerciseName": "Squat",
+        "exerciseCategory": ["Quadriceps", "Hamstrings"],
+        "exerciseEquipment": "Barbell",
+        "id": 1,
+        "selected": false
+    },
+    {
+        "exerciseName": "Deadlift",
+        "exerciseCategory": ["Lower Back", "Hamstrings"],
+        "exerciseEquipment": "Barbell",
+        "id": 2,
+        "selected": false
+    },
+    {
+        "exerciseName": "Pull-up",
+        "exerciseCategory": ["Back", "Biceps"],
+        "exerciseEquipment": "",
+        "id": 3,
+        "selected": false
+    },
+    {
+        "exerciseName": "Military Press",
+        "exerciseCategory": ["Shoulders", "Triceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 4,
+        "selected": false
+    },
+    {
+        "exerciseName": "Lat Pulldown",
+        "exerciseCategory": ["Back", "Biceps"],
+        "exerciseEquipment": "Machine",
+        "id": 5,
+        "selected": false
+    },
+    {
+        "exerciseName": "Reverse Pec Deck",
+        "exerciseCategory": ["Shoulders", "Upper Back"],
+        "exerciseEquipment": "Machine",
+        "id": 6,
+        "selected": false
+    },
+
+    
+    {
+        "exerciseName": "Cable Curls",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Machine",
+        "id": 7,
+        "selected": false
+    },
+    {
+        "exerciseName": "Barbell Rows",
+        "exerciseCategory": ["Back", "Biceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 8,
+        "selected": false
+    }
+]

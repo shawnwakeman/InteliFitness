@@ -184,7 +184,7 @@ class WorkoutLogViewModel: ObservableObject {
         
     func addExercisesFromQueue() {
         exersiseQueue.forEach { exercise in
-            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exersiseEquipment)
+            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment)
         }
         clearToExersiseQueue()
     }

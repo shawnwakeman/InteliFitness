@@ -20,6 +20,7 @@
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
 		D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */; };
+		D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */; };
 		D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */; };
 		D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */; };
 		D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD966529E0CF75000B6711 /* HapticManager.swift */; };
@@ -43,6 +44,7 @@
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCompletedPopUp.swift; sourceTree = "<group>"; };
+		D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exercises.json; sourceTree = "<group>"; };
 		D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExersisesPopUp.swift; sourceTree = "<group>"; };
 		D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		D0AD966529E0CF75000B6711 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 		D0370E1529CF84DD005682D8 = {
 			isa = PBXGroup;
 			children = (
+				D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */,
 				D0D6674C29D09ADB00F2C1E9 /* Info.plist */,
 				D00087C829D4EFEC00A8A2C5 /* static */,
 				D0370E2029CF84DD005682D8 /* NutrimalA */,
@@ -180,6 +183,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */,
 				D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */,
 				D00087D129D4F00400A8A2C5 /* SpaceGrotesk-Regular.ttf in Resources */,
 				D00087D429D4F00C00A8A2C5 /* SpaceGrotesk-Bold.ttf in Resources */,

@@ -1,9 +1,10 @@
 import Foundation
 import SwiftUI
 struct WorkoutLogModel {
-    private(set) var exercises: [Exersise] = [Exersise(exerciseName: "Lat Pulldown", exersiseCatagory: ["Quads", "Triceps"], exersiseEquipment: "Barbell", id: 0), Exersise(exerciseName: "Pull Ups", exersiseCatagory: ["Quads"], exersiseEquipment: "Machine", id: 1), Exersise(exerciseName: "Barbell Rows", exersiseCatagory: ["Hamstrings", "Triceps"], exersiseEquipment: "Barbell", id: 2), Exersise(exerciseName: "Reverse Peck Deck", exersiseCatagory: ["Quad"], exersiseEquipment: "Machine", id: 3), Exersise(exerciseName: "Cable Curls", exersiseCatagory: ["Quad"], exersiseEquipment: "Machine", id: 4)]
+    private(set) var exercises: [Exersise] = Bundle.main.decode("Exercises.json")
     
     private(set) var exerciseQueue: [Exersise] = []
+    
     
     
     private(set) var exersiseModules: [ExersiseLogModule] = []
@@ -56,13 +57,14 @@ struct WorkoutLogModel {
 
     }
     
-    struct Exersise: Identifiable {
+    struct Exersise: Identifiable, Decodable {
         var exerciseName: String
-        var exersiseCatagory: [String]
-        var exersiseEquipment: String
+        var exerciseCategory: [String]
+        var exerciseEquipment: String
         let id: Int
         var selected: Bool = false
     }
+    
     
     
 

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+import AVFoundation
 let borderWeight: CGFloat = 1.7
 
 
@@ -19,6 +19,7 @@ struct WorkoutLogView: View {
     @State private var blocked = false
     @State private var exersiseNotes: String = ""
     @State private var newModuleOpacity = false
+
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
@@ -44,7 +45,7 @@ struct WorkoutLogView: View {
 
 
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.03)
+                        .frame(height: getScreenBounds().height * 0.1)
 
                         .foregroundColor(.clear)
 
@@ -64,26 +65,19 @@ struct WorkoutLogView: View {
 
                 Spacer()
           
-                VStack(spacing: 50){
+                VStack(spacing: 85){
                     if workoutLogViewModel.exersiseModules.count > 0 {
                         
                         ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
 
                             if workoutModule.isRemoved == false {
                                 ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: workoutModule.id)
-                                    // icky code - mem leaks
-//                                    .transition(.opacity) // Add an opacity transition
-//                                    .opacity(newModuleOpacity ? 1 : 0) // Set the opacity using the state property
-//                                    .onAppear {
-//                                        withAnimation {
-//                                            newModuleOpacity.toggle() // Set the final opacity to 1
-//                                        }
-//                                    }
+
                             }
                         }
                     }
                     
-                    FullWidthButton(viewModel: workoutLogViewModel).padding(.top, -55.0)
+                    FullWidthButton(viewModel: workoutLogViewModel).padding(.top, -90.0)
 
                     .padding(.bottom, 250)
 
@@ -96,70 +90,76 @@ struct WorkoutLogView: View {
                 }
                 
         
-            }.onTapGesture {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                if workoutLogViewModel.lastRowUsed != 100 {
-                    let workoutModule = workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed]
-                    let reps = workoutModule.setRows[workoutLogViewModel.lastRowUsed].reps
-                    let weight = workoutModule.setRows[workoutLogViewModel.lastRowUsed].weight//
-      
-                    if reps != 0 && weight != 0 {
-                        
-                        HapticManager.instance.impact(style: .heavy)
-                        
-                        withAnimation(.spring()) {
-                            workoutLogViewModel.toggleCompletedSet(ExersiseModuleID: workoutModule.id, RowID: workoutModule.setRows[workoutLogViewModel.lastRowUsed].id, customValue: true)
-                        }
-                       
-                        if workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed].setRows[workoutLogViewModel.lastRowUsed].prevouslyChecked == false {
-                            
-                            workoutLogViewModel.restAddToTime(step: 1, time: 120)
-                        }
-                        workoutLogViewModel.setPrevouslyChecked(exersiseModuleID: workoutLogViewModel.lastModuleUsed, RowID: workoutLogViewModel.lastRowUsed, state: true)
-                        workoutLogViewModel.setLastRow(index: 100)
-                        workoutLogViewModel.setLastModule(index: 100)
-                        
-                        
-                        
-                    }
-                }
             }
             
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//                if workoutLogViewModel.lastRowUsed != 100 {
+//                    let workoutModule = workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed]
+//                    let reps = workoutModule.setRows[workoutLogViewModel.lastRowUsed].reps
+//                    let weight = workoutModule.setRows[workoutLogViewModel.lastRowUsed].weight//
+      
+//                    if reps != 0 && weight != 0 {
+//                        
+//                        HapticManager.instance.impact(style: .heavy)
+//                        
+//                        withAnimation(.spring()) {
+//                            workoutLogViewModel.toggleCompletedSet(ExersiseModuleID: workoutModule.id, RowID: workoutModule.setRows[workoutLogViewModel.lastRowUsed].id, customValue: true)
+//                        }
+//                       
+//                        if workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed].setRows[workoutLogViewModel.lastRowUsed].prevouslyChecked == false {
+//                            
+//                            workoutLogViewModel.restAddToTime(step: 1, time: workoutLogViewModel.restTime.timePreset)
+//                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(workoutLogViewModel.restTime.timePreset))
+//                        }
+//                        workoutLogViewModel.setPrevouslyChecked(exersiseModuleID: workoutLogViewModel.lastModuleUsed, RowID: workoutLogViewModel.lastRowUsed, state: true)
+//                        workoutLogViewModel.setLastRow(index: 100)
+//                        workoutLogViewModel.setLastModule(index: 100)
+//                        
+//                        
+//                        
+//                  }
+//                }
+            }
+          
+            
+
+
+     
+            let popUps = workoutLogViewModel.workoutLogModel.popUps
+            let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState
+            
+
+            Rectangle()
+                .edgesIgnoringSafeArea(.all)
+                .foregroundColor(.black)
+                .opacity(displayStats ? 0.65 : 0)
             Group {
-                VisualEffectView(effect: UIBlurEffect(style: .dark))
-                    .edgesIgnoringSafeArea(.all)
-                    .opacity(workoutLogViewModel.workoutLogModel.popUps[0].RPEpopUpState ? 1 : 0) // need optim
 
-
+                TimerCompletedPopUp(viewModel: workoutLogViewModel)
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState ? 1 : 0)
+                    .allowsHitTesting(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState)
                 PopupView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
-                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height - 230 : UIScreen.main.bounds.height + 100)
+                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.72 : UIScreen.main.bounds.height * 1.5)
 
-                VisualEffectView(effect: UIBlurEffect(style: .dark))
-                    .edgesIgnoringSafeArea(.all)
-                    .opacity(workoutLogViewModel.workoutLogModel.popUps[1].RPEpopUpState ? 1 : 0) // need optim
+
 
                 DotsMenuView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
 
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 1.5)
 
-                VisualEffectView(effect: UIBlurEffect(style: .dark))
-                    .edgesIgnoringSafeArea(.all)
-                    .opacity(workoutLogViewModel.workoutLogModel.popUps[2].RPEpopUpState ? 1 : 0)
+
 
                 DataMetricsPopUp(viewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.2)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
 
             }
             
           
-            
-    
-            
-            VisualEffectView(effect: UIBlurEffect(style: .dark))
-                .edgesIgnoringSafeArea(.all)
-                .opacity(workoutLogViewModel.workoutLogModel.popUps[4].RPEpopUpState ? 1 : 0)
+
+
             
 
 
@@ -171,9 +171,6 @@ struct WorkoutLogView: View {
             
             
             
-            VisualEffectView(effect: UIBlurEffect(style: .dark))
-                .edgesIgnoringSafeArea(.all)
-                .opacity(workoutLogViewModel.workoutLogModel.popUps[5].RPEpopUpState ? 1 : 0)
             
 
 
@@ -183,55 +180,57 @@ struct WorkoutLogView: View {
                 .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 100 : 0)
             
             
-            
-            VisualEffectView(effect: UIBlurEffect(style: .dark))
-                .edgesIgnoringSafeArea(.all)
-                .opacity(workoutLogViewModel.workoutLogModel.popUps[3].RPEpopUpState ? 1 : 0)
-            
-            
+            Group {
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(workoutLogViewModel.workoutLogModel.popUps[3].RPEpopUpState ? 1 : 0)
+                
+                
+                DropDownMenuView(viewModel: workoutLogViewModel)
+                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.height * 0.039)
 
-            
-            DropDownMenuView(viewModel: workoutLogViewModel)
-                .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.height * 0.039)
+                Rectangle().position(x: UIScreen.main.bounds.width/2, y: 0)
+                    .frame(maxHeight: 120)
+                    .foregroundColor(.white)
 
-            Rectangle().position(x: UIScreen.main.bounds.width/2, y: 0)
-                .frame(maxHeight: 120)
-                .foregroundColor(.white)
-
-                .opacity(0.00001)
-                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 0.08)
-                .onTapGesture {
-                    print("das")
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    
-                  
-                    withAnimation(.spring()) {
-                        if workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState == true {
-                            workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
-                        } else {
-                            workoutLogViewModel.setPopUpState(state: true, popUpId: "DropDownMenu")
+                    .opacity(0.00001)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 0.08)
+                    .onTapGesture {
+                        print("das")
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        
+                      
+                        withAnimation(.spring()) {
+                            if workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState == true {
+                                workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
+                            } else {
+                                workoutLogViewModel.setPopUpState(state: true, popUpId: "DropDownMenu")
+                            }
                         }
                     }
-                }
+            }
+          
             Group {
-             
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
                     .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.workoutLogModel.popUps[6].RPEpopUpState ? 1 : 0)
                 AddExersisesPopUp(viewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.68 : getScreenBounds().height * 2)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.45 : getScreenBounds().height * 2) // shout be two
             }
          
           
         }
         .ignoresSafeArea(.keyboard)
-        
+       
         .onTapGesture {
+          
+ 
             withAnimation(.spring()) {
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerCompletedPopUP")
             }
 
             withAnimation(.spring(response: 0))
@@ -260,13 +259,30 @@ struct WorkoutLogView: View {
             case .inactive:
                 print("App is inactive")
             case .background:
+                print("ADs")
                 workoutLogViewModel.saveBackgroundTime()
             @unknown default:
                 fatalError("Unknown scene phase")
             }
         }
-        
+        .onAppear(perform: requestNotificationPermission)
     }
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permission: \(error)")
+                return
+            }
+
+            if granted {
+                print("Notification permission granted")
+            } else {
+                print("Notification permission denied")
+            }
+        }
+    }
+    
+
 }
     
 struct VisualEffectView: UIViewRepresentable {
@@ -352,8 +368,11 @@ struct ElapsedTime : View {
                
 
         }
+        
+
             
     }
+    
 }
 
 struct WorkoutTimer : View {
@@ -391,14 +410,19 @@ struct WorkoutTimer : View {
     
 
                 viewModel.restAddToTime(step: step)
-
-
-                    
-     
+ 
             }
-                    
-               
 
+        }
+        .onChange(of: viewModel.restTime.timeElapsed) { timeElapsed in
+            print(timeElapsed)
+            if timeElapsed == 0 {
+                withAnimation(.spring()) {
+                    viewModel.setPopUpState(state: true, popUpId: "TimerCompletedPopUP")
+                }
+                HapticManager.instance.notification(type: .success)
+            
+            }
         }
             
     }
@@ -409,7 +433,7 @@ struct ExersiseLogModule: View {
     @Binding var blocked: Bool
     var parentModuleID: Int
     var body: some View {
-        VStack(spacing: -4){
+        VStack(spacing: -2){
             LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
             if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
                 
@@ -449,7 +473,7 @@ struct DropDownHeaderView: View {
                 .offset(y:-950)
                 .foregroundColor(Color("MainGray"))
             
-//                )
+
                 
 
             
@@ -551,7 +575,10 @@ struct FullWidthButton: View{
             }
                 
             Button {
-                viewModel.setPopUpState(state: true, popUpId: "ExersisesPopUp")
+                withAnimation(.spring()) {
+                    viewModel.setPopUpState(state: true, popUpId: "ExersisesPopUp")
+                }
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
             label: {
                 ZStack{
@@ -625,78 +652,89 @@ struct LogModuleHeader: View{
     @Binding var blocked: Bool
     var parentModuleID: Int
     var body: some View{
-        
-        HStack{
-          
-
+      
+            
+            HStack(alignment: .bottom){
+              
                 
-                
+                    
+                    
 
 
-            Button {print("Button pressed")}
-            label: {
-                HStack {
-                    TextHelvetica(content: viewModel.exersiseModules[parentModuleID].exersiseName, size: 26)
+                Button {print("Button pressed")}
+                label: {
+                    HStack(alignment: .bottom, spacing: 6) {
+                        TextHelvetica(content: viewModel.exersiseModules[parentModuleID].exersiseName, size: 22)
+                            .foregroundColor(Color("LinkBlue"))
+                            .multilineTextAlignment(.leading)
+                        HStack(spacing: 0) {
+                            if viewModel.exersiseModules[parentModuleID].ExersiseEquipment != "" {
+                                TextHelvetica(content: "(", size: 22)
+                                TextHelvetica(content: viewModel.exersiseModules[parentModuleID].ExersiseEquipment, size: 22)
+                                    .offset(y: 1.7)
+                      
+                                TextHelvetica(content: ")", size: 22)
+                            }
+                            
+                        }
+                        
                         .foregroundColor(Color("LinkBlue"))
-                    Image(systemName: "dumbbell")
-                        .resizable()
-                        .foregroundColor(Color("LinkBlue"))
-                        .offset(y: 1)
-                        .frame(width: getScreenBounds().width * 0.06, height: getScreenBounds().height * 0.02)
+
+                    }
+     
                 }
- 
-            }
 
-            Spacer()
-            
-  
-            
-            ZStack{
-                Image("dataIcon")
-                    .resizable()
-                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
-                Button(action: {
-                    HapticManager.instance.impact(style: .rigid)
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
-                        viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics")
-                    }}, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                              .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                Spacer()
                 
-            }
-
-            ZStack{
+      
                 
-                Image("meatBalls")
-                    .resizable()
-                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
-                
-                
-
-                Button(action: {
-                    withAnimation(.spring()) {
+                ZStack{
+                    Image("dataIcon")
+                        .resizable()
+                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                    Button(action: {
                         HapticManager.instance.impact(style: .rigid)
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
-                        viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu")
-                    }}, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                              .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
-                                          
+                        withAnimation(.spring()) {
+                            viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics")
+                        }}, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                  .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                            .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                    
+                }
 
-            }
-//    
+                ZStack{
+                    
+                    Image("meatBalls")
+                        .resizable()
+                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                    
+                    
+
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            HapticManager.instance.impact(style: .rigid)
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                            viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu")
+                        }}, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                  .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                            .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                                              
+
+                }
+    //
 
 
+                    
                 
-            
-        }
-        .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/, 12)
-        .padding(.bottom, 9)
+            }
+            .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/, 12)
+            .padding(.bottom, 9)
+       
         
     }
 }
@@ -823,7 +861,6 @@ struct PopupView: View {
                 
                 
                 Button {
-                    HapticManager.instance.impact(style: .rigid)
                     let popUp = viewModel.getPopUp(popUpId: "popUpRPE")
     
                     withAnimation(.spring()) {
@@ -837,7 +874,8 @@ struct PopupView: View {
                    
                         viewModel.setRepMetric(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, RPE: 0)
                     }
-                    
+                    HapticManager.instance.impact(style: .rigid)
+
                     if viewModel.lastRowUsed != 100 {
                         let workoutModule = viewModel.exersiseModules[viewModel.lastModuleUsed]
                         let reps = workoutModule.setRows[viewModel.lastRowUsed].reps
@@ -854,8 +892,9 @@ struct PopupView: View {
                         }
                         
                         if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
-                            
-                            viewModel.restAddToTime(step: 1, time: 120)
+                          
+                            viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
                         }
                         viewModel.setPrevouslyChecked(exersiseModuleID: viewModel.lastModuleUsed, RowID: viewModel.lastRowUsed, state: true)
                         viewModel.setLastRow(index: 100)
@@ -1191,9 +1230,9 @@ struct Header: View {
             }
 
         }
-        Rectangle()
+        Divider()
             .frame(height: borderWeight)
-            .foregroundColor(Color("BorderGray"))
+            .overlay(Color("BorderGray"))
             
     }
 }
@@ -1252,12 +1291,39 @@ extension View{
    }
 }
 
+func scheduleNotification(title: String, body: String, interval: TimeInterval) {
+    let notificationCenter = UNUserNotificationCenter.current()
+    
+    notificationCenter.removeAllPendingNotificationRequests()
+    // Create the content of the notification
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+    content.sound = UNNotificationSound.defaultRingtone // should add custom sound later
 
+    // Create a trigger for the notification
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+
+    // Create a request with a unique identifier
+    let requestIdentifier = UUID().uuidString
+    let request = UNNotificationRequest(identifier: requestIdentifier, content: content, trigger: trigger)
+
+    // Add the request to the notification center
+    notificationCenter.add(request) { error in
+        if let error = error {
+            print("Error scheduling notification: \(error)")
+        } else {
+            print("Notification scheduled with identifier: \(requestIdentifier)")
+        }
+    }
+}
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let workoutLogViewModel = WorkoutLogViewModel()
         WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
             .previewDevice("iPhone 14")
+//        WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
+//            .previewDevice("iPhone 13 Pro Max")
         WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
             .previewDevice("iPhone 14 Pro Max")
     }

@@ -56,6 +56,7 @@ struct WorkoutSetRowView: View{
             checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
             
         }
+        .frame(height: getScreenBounds().height * 0.045)
         
     }
     
@@ -297,8 +298,10 @@ struct WorkoutSetRowView: View{
                         viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
                         
                         if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
-                            
-                            viewModel.restAddToTime(step: 1, time: 120)
+            
+
+                            viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
                         }
                         viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
                     }

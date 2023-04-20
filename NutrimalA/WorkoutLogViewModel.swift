@@ -19,10 +19,21 @@ class WorkoutLogViewModel: ObservableObject {
 
     @Published var popUpStates = ["3DotsPopUp": false, "DataMetricsPopUp": false, "key3": true]
     
-    
-
     var exersiseModules: Array<WorkoutLogModel.ExersiseLogModule> {
         return workoutLogModel.exersiseModules
+    }
+    
+    var exersiseQueue: Array<WorkoutLogModel.Exersise> {
+        return workoutLogModel.exerciseQueue
+    }
+    
+//    func itemExists(withId id: Int) -> Bool {
+//        return exersiseQueue.contains { $0.id == id }
+//    }
+//    
+
+    var exersises: Array<WorkoutLogModel.Exersise> {
+        return workoutLogModel.exercises
     }
     
     var workoutTime: WorkoutLogModel.WorkoutTime {
@@ -75,8 +86,8 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.addEmptySet(moduleID: moduleID)
     }
     
-    func addEmptyWorkoutModule() {
-        workoutLogModel.addEmptyWorkoutModule()
+    func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String) {
+        workoutLogModel.addEmptyWorkoutModule(exerciseName: exerciseName, exerciseID: exerciseID, ExersiseEquipment: ExersiseEquipment)
     }
     
     func setRemoved(exersiseID: Int) {
@@ -93,7 +104,9 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.removeExersiseModule(exersiseID: exersiseID)
     }
     
-
+    func setTimePreset(time: Int) {
+        workoutLogModel.setTimePreset(time: time)
+    }
     func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int, customValue: Bool? = nil) {
         if let customValue = customValue {
             // Use the custom value if it was provided
@@ -123,7 +136,9 @@ class WorkoutLogViewModel: ObservableObject {
     func addToTime(step: Int){
         workoutLogModel.addToTime(step: step)
     }
-   
+    func setSelectionState(ExersiseID: Int) {
+        workoutLogModel.setSelectionState(ExersiseID: ExersiseID)
+    }
     
     func saveBackgroundTime(){
         workoutLogModel.saveBackgroundTime()
@@ -131,6 +146,7 @@ class WorkoutLogViewModel: ObservableObject {
     func updateTimeToCurrent(){
         workoutLogModel.updateTimeToCurrent()
     }
+    
     func setPopUpState(state: Bool, popUpId: String) {
         workoutLogModel.setPopUpState(state: state, popUpId: popUpId)
     }
@@ -149,5 +165,33 @@ class WorkoutLogViewModel: ObservableObject {
     func setWeightValue(exersiseModuleID : Int, RowID: Int, value: Float) {
         workoutLogModel.setWeightValue(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
     }
+    
+    func addToExersiseQueue(ExersiseID: Int) {
+        workoutLogModel.addToExersiseQueue(exersiseID: ExersiseID)
+    }
+    
+    func removeExersiseFromQueue(ExersiseID: Int) {
+        workoutLogModel.removeExersiseFromQueue(exersiseID: ExersiseID)
+    }
+    
+    func clearToExersiseQueue() {
+        workoutLogModel.clearToExersiseQueue()
+    }
+    
+    func checkLetter(letter: String) -> Bool {
+        return workoutLogModel.checkLetter(letter: letter)
+    }
         
+    func addExercisesFromQueue() {
+        exersiseQueue.forEach { exercise in
+            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exersiseEquipment)
+        }
+        clearToExersiseQueue()
+    }
+    
+
+    
+
+    
+
 }

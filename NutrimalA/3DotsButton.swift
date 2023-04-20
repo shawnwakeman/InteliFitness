@@ -15,6 +15,7 @@ struct DotsMenuView: View {
     @State var notesdisplay = false
     @State private var showingRestTime = false
     @State private var showingUnitSet = false
+    @State private var yourMom = 120
     var body: some View {
         // Add a blur effect to the background
         VStack{
@@ -65,128 +66,12 @@ struct DotsMenuView: View {
                 
                 VStack {
                    
-                    HStack{
-                        
-                        Image(systemName: "note.text")
-                            .foregroundColor(Color("LinkBlue"))
-                            .imageScale(.large)
-                            .bold()
-                            .multilineTextAlignment(.leading)
-                        
-                        TextHelvetica(content: "Display Exersise Notes", size: 18)
-                            .foregroundColor(Color("WhiteFontOne"))
-                        Spacer()
-                        
-                        Toggle(isOn: $notesdisplay) {
-                            Text("Vibrate on Ring")
-                            
-                        }.onChange(of: notesdisplay) { newValue in
-                            // Call your function here
-                            let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
-                            viewModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: index)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                withAnimation(.spring()) {
-                                    viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                                }
-                            }
-                        }
-                        .labelsHidden()
-                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
-                        
-                    }
-                    .padding(.horizontal)
-                    .frame(maxHeight: 22)
+
                         
                     Group {
 
                                         
-                      
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                        Button {
-                            withAnimation(.spring()) {
-                                viewModel.setPopUpState(state: true, popUpId: "SetTimeSubMenu")
-                            }
-       
-                            withAnimation(.linear(duration: 0.9)){
-                           
-                                viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                            }
-
-
-                        }
-                        label: {
-                            HStack{
-                                
-                                Image(systemName: "clock")
-                                    .foregroundColor(Color("LinkBlue"))
-                                    .imageScale(.large)
-                                    .bold()
-                                    .multilineTextAlignment(.leading)
-                                
-                                TextHelvetica(content: "Set exersise rest time", size: 18)
-                                    .foregroundColor(Color("WhiteFontOne"))
-                                
-                                Spacer()
-                                TextHelvetica(content: "2:00", size: 17)
-                                    .foregroundColor(Color("GrayFontOne"))
-                                Image("sidwaysArrow")
-                                    .resizable()
-                                
-                                    .aspectRatio(24/48, contentMode: .fit)
-                                    .frame(maxHeight: 22)
-                            }
-                            .padding(.horizontal)
-                            .frame(maxHeight: 22)
-                        }
-                     
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                    }
-                 
-                    Button {
-                        withAnimation(.spring()) {
-                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
-                        }
-   
-                        withAnimation(.linear(duration: 0.9)){
-                       
-                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                        }
-
-                    }
-                    label: {
-                        HStack{
-                            
-                            Image(systemName: "scalemass")
-                                .foregroundColor(Color("LinkBlue"))
-                                .imageScale(.large)
-                                .bold()
-                                .multilineTextAlignment(.leading)
-                            
-                            TextHelvetica(content: "Weight Unit", size: 18)
-                                .foregroundColor(Color("WhiteFontOne"))
-                            
-                            Spacer()
-                            TextHelvetica(content: "Lbs", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
-                            Image("sidwaysArrow")
-                                .resizable()
-                            
-                                .aspectRatio(24/48, contentMode: .fit)
-                                .frame(maxHeight: 22)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxHeight: 22)
-                        
-                        
-                    }
-                    Divider()
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
+  
                     Button {
                         print("das")
                     }
@@ -255,8 +140,95 @@ struct DotsMenuView: View {
                         .padding(.horizontal)
                         .frame(maxHeight: 22)
                     }
-                   
-                    
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                        Button {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: true, popUpId: "SetTimeSubMenu")
+                            }
+       
+                            withAnimation(.spring()){
+                           
+                                viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                            }
+
+
+                        }
+                        label: {
+                            HStack{
+                                
+                                Image(systemName: "clock")
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .imageScale(.large)
+                                    .bold()
+                                    .multilineTextAlignment(.leading)
+                                
+                                TextHelvetica(content: "Set exersise rest time", size: 18)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                
+                                Spacer()
+
+                                
+                                let minutes = yourMom/60
+                                let seconds = yourMom % 60
+
+                                TextHelvetica(content: "\(String(Int(minutes))):\(String(format: "%02d", Int(seconds)))", size: 17)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                    .fontWeight(.bold)
+                                Image("sidwaysArrow")
+                                    .resizable()
+                                
+                                    .aspectRatio(24/48, contentMode: .fit)
+                                    .frame(maxHeight: 22)
+                            }
+                            .padding(.horizontal)
+                            .frame(maxHeight: 22)
+                        }
+                     
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                    }
+                 
+                    Button {
+                        withAnimation(.spring()) {
+                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+                        }
+   
+                        withAnimation(.spring()){
+                       
+                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                        }
+
+                    }
+                    label: {
+                        HStack{
+                            
+                            Image(systemName: "scalemass")
+                                .foregroundColor(Color("LinkBlue"))
+                                .imageScale(.large)
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Weight Unit", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+                            TextHelvetica(content: "Lbs", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                            Image("sidwaysArrow")
+                                .resizable()
+                            
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                        
+                        
+                    }
                     Divider()
                         .frame(height: borderWeight)
                         .overlay(Color("BorderGray"))
@@ -289,7 +261,41 @@ struct DotsMenuView: View {
                     .padding(.horizontal)
                     .frame(maxHeight: 22)
                     
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
                     
+                    HStack{
+                        
+                        Image(systemName: "note.text")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Display Exersise Notes", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+                        
+                        Toggle(isOn: $notesdisplay) {
+                            Text("Vibrate on Ring")
+                            
+                        }.onChange(of: notesdisplay) { newValue in
+                            // Call your function here
+                            let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+                            viewModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: index)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                withAnimation(.spring()) {
+                                    viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                                }
+                            }
+                        }
+                        .labelsHidden()
+                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
+                        
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
 
                     
                     
@@ -344,6 +350,12 @@ struct DotsMenuView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color("BorderGray"), lineWidth: borderWeight))
             .padding()
+
+            
+        }
+        .onChange(of: viewModel.restTime.timePreset) { newValue in
+            print("asd")
+            yourMom = newValue
         }
         .frame(height: getScreenBounds().height * 0.7)
         
@@ -381,7 +393,7 @@ struct restTimeSet: View {
                 
                      
                     viewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
-              
+                    viewModel.setTimePreset(time: Int(time))
                     HapticManager.instance.impact(style: .rigid)
 
 
@@ -434,7 +446,9 @@ struct restTimeSet: View {
             }.offset(y: -10)
 
         }
-        
+        .onAppear {
+            time = Double(viewModel.restTime.timePreset)
+        }
         .frame(height: getScreenBounds().height * 0.25)
         .background(Color("DBblack"))
         .cornerRadius(10)
@@ -448,7 +462,7 @@ struct restTimeSet: View {
 struct weightUnitSet: View {
     @State private var time: Double = 0
     @State private var isToggled = false
-    @State private var selectedRPE = 0
+    @State private var selectedRPE = 2
     @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View {
         VStack {

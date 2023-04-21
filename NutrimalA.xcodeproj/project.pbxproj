@@ -15,6 +15,10 @@
 		D00087E029D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */; };
 		D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */; };
 		D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */; };
+		D008F48129F1E7CD00B1C6EC /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48029F1E7CD00B1C6EC /* HomePageView.swift */; };
+		D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */; };
+		D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */; };
+		D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48629F2304700B1C6EC /* MyExercisesPage.swift */; };
 		D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */; };
 		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
@@ -38,6 +42,10 @@
 		D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogModel.swift; sourceTree = "<group>"; };
 		D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
+		D008F48029F1E7CD00B1C6EC /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
+		D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
+		D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomePageModel .swift"; sourceTree = "<group>"; };
+		D008F48629F2304700B1C6EC /* MyExercisesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExercisesPage.swift; sourceTree = "<group>"; };
 		D0370E1E29CF84DD005682D8 /* NutrimalA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutrimalA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrimalAApp.swift; sourceTree = "<group>"; };
 		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -78,6 +86,23 @@
 			path = static;
 			sourceTree = "<group>";
 		};
+		D008F47D29F1E65900B1C6EC /* WokroutLog */ = {
+			isa = PBXGroup;
+			children = (
+				D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */,
+				D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */,
+				D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */,
+				D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */,
+				D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */,
+				D0AD966529E0CF75000B6711 /* HapticManager.swift */,
+				D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */,
+				D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */,
+				D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */,
+				D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */,
+			);
+			path = WokroutLog;
+			sourceTree = "<group>";
+		};
 		D0370E1529CF84DD005682D8 = {
 			isa = PBXGroup;
 			children = (
@@ -100,17 +125,12 @@
 		D0370E2029CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXGroup;
 			children = (
-				D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */,
-				D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */,
-				D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */,
-				D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */,
-				D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */,
+				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
-				D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */,
-				D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */,
-				D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */,
-				D0AD966529E0CF75000B6711 /* HapticManager.swift */,
-				D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */,
+				D008F48029F1E7CD00B1C6EC /* HomePageView.swift */,
+				D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */,
+				D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */,
+				D008F47D29F1E65900B1C6EC /* WokroutLog */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
 			);
@@ -203,12 +223,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */,
+				D008F48129F1E7CD00B1C6EC /* HomePageView.swift in Sources */,
 				D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */,
 				D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */,
+				D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */,
 				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
+				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
 				D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */,
 				D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */,
+				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,
 				D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */,
 				D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */,
 				D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */,

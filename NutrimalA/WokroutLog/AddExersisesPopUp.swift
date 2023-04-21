@@ -145,7 +145,7 @@ struct AddExersisesPopUp: View {
     struct ExerciseGroup: View {
         @ObservedObject var viewModel: WorkoutLogViewModel
         var letter: String
-        var borderColor = Color("BorderGray")
+        var borderColor = Color("LinkBlue")
         
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
@@ -434,39 +434,6 @@ struct AddExersisesPopUp: View {
 }
 
 
-struct DisplayOnOpenMenuViewModifier: ViewModifier {
-    
-    let isOpened: Bool
-    let offset: CGFloat
-    
-    func body(content: Content) -> some View {
-        content
-            .shadow(color: .black.opacity(isOpened ? 0.1 : 0.0), radius: 10, x: 0, y: 5)
-            .offset(y: isOpened ? offset : 0)
-            .opacity(isOpened ? 100 : 0)
-            .animation(.spring(response: 0.5, dampingFraction: 0.5, blendDuration: 0.5), value: isOpened)
-    }
-}
+
  
-extension Bundle {
-    func decode<T: Decodable>(_ file: String) -> T {
-        guard let url = self.url(forResource: file, withExtension: nil) else {
-            fatalError("Failed to locate \(file) in bundle.")
-        }
-        guard let data = try? Data(contentsOf: url) else {
-            fatalError("Failed to load \(file) from bundle.")
-        }
-        let decoder = JSONDecoder()
-        guard let result = try? decoder.decode(T.self, from: data) else {
-            fatalError("Failed to decode \(file) from bundle.")
-        }
-        return result
-    }
-}
 
-
-extension View {
-    func displayOnMenuOpen(_ isOpened: Bool, offset: CGFloat) -> some View {
-        modifier(DisplayOnOpenMenuViewModifier(isOpened: isOpened, offset: offset))
-    }
-}

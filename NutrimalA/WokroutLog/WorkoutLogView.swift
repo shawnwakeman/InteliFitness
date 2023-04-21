@@ -14,6 +14,7 @@ let borderWeight: CGFloat = 1.7
 
 struct WorkoutLogView: View {
     static let borderWeight: CGFloat = 1.7
+    @ObservedObject var homePageVeiwModel: HomePageViewModel
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @State private var progressValue: Float = 0.5
     @State private var blocked = false
@@ -31,6 +32,7 @@ struct WorkoutLogView: View {
                     HStack {
                         TextHelvetica(content: "Lower Body", size: 42)
                             .foregroundColor(Color("WhiteFontOne"))
+                            .bold()
                         Spacer()
                     }
 
@@ -148,12 +150,12 @@ struct WorkoutLogView: View {
                 DotsMenuView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
 
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 1.5)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? getScreenBounds().height * 0.52 : getScreenBounds().height * 1.5)
 
 
 
                 DataMetricsPopUp(viewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.7 : getScreenBounds().height * 1.3)
 
             }
             
@@ -186,26 +188,29 @@ struct WorkoutLogView: View {
                     .opacity(workoutLogViewModel.workoutLogModel.popUps[3].RPEpopUpState ? 1 : 0)
                 
                 
-                DropDownMenuView(viewModel: workoutLogViewModel)
-                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.height * 0.039)
+                DropDownMenuView(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
+                    .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.24)
 
                 Rectangle().position(x: UIScreen.main.bounds.width/2, y: 0)
                     .frame(maxHeight: 120)
                     .foregroundColor(.white)
 
-                    .opacity(0.00001)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 0.08)
+                    .opacity(0.000001)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 0.02)
                     .onTapGesture {
                         print("das")
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         
                       
                         withAnimation(.spring()) {
-                            if workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState == true {
-                                workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
-                            } else {
-                                workoutLogViewModel.setPopUpState(state: true, popUpId: "DropDownMenu")
+                            if homePageVeiwModel.workoutLogModuleStatus == true {
+                                homePageVeiwModel.setWorkoutLogModuleStatus(state: false)
                             }
+                            else {
+                                homePageVeiwModel.setWorkoutLogModuleStatus(state: true)
+                            }
+                            
+                            
                         }
                     }
             }
@@ -214,8 +219,9 @@ struct WorkoutLogView: View {
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
                     .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.workoutLogModel.popUps[6].RPEpopUpState ? 1 : 0)
+                    .offset(y: getScreenBounds().height * -0.07)
                 AddExersisesPopUp(viewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.45 : getScreenBounds().height * 2) // shout be two
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
             }
          
           
@@ -1315,16 +1321,5 @@ func scheduleNotification(title: String, body: String, interval: TimeInterval) {
         } else {
             print("Notification scheduled with identifier: \(requestIdentifier)")
         }
-    }
-}
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let workoutLogViewModel = WorkoutLogViewModel()
-        WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
-            .previewDevice("iPhone 14")
-//        WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
-//            .previewDevice("iPhone 13 Pro Max")
-        WorkoutLogView(workoutLogViewModel: workoutLogViewModel)
-            .previewDevice("iPhone 14 Pro Max")
     }
 }

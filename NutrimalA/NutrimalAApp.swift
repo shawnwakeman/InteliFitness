@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct NutrimalAApp: App {
-    private let workoutLogView = WorkoutLogViewModel()
+
+
     var body: some Scene {
         WindowGroup {
-            WorkoutLogView()
+            HomePageView()
         }
     }
 }

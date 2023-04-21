@@ -10,171 +10,17 @@ import SwiftUI
 struct DropDownMenuView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: WorkoutLogViewModel
+    @ObservedObject var homePageViewModel: HomePageViewModel
     @State private var isToggled = false
     @State private var exersiseNotes: String = ""
     var body: some View {
         // Add a blur effect to the background
    
         VStack(spacing: borderWeight) {
-            
-            ZStack {
-                
-                Rectangle()
-                    .foregroundColor(Color("DBblack"))
-                
-                VStack {
-                    Button {
-                
-                    }
-                    label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 4)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                                .foregroundColor(Color("MainGray"))
-                            TextHelvetica(content: "Settings", size: 17)
-                                .foregroundColor(Color("WhiteFontOne"))
-                        }
-                        .frame(width: getScreenBounds().width * 0.92, height: getScreenBounds().height * 0.05)
-                      
-                    }
-
-                    HStack {
-                        
-                        Button {
-                        
-                            }
-                        label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 4)
-                            
-                                    .foregroundColor(Color("MainRed"))
-                                TextHelvetica(content: "Cancel", size: 16)
-                                    .foregroundColor(Color("WhiteFontOne"))
-                            }
-                        }
-                            
-                            
-                        Button {
-                        
-                            }
-                        label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 4)
-                                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                                    .foregroundColor(Color("MainGray"))
-                                
-                                TextHelvetica(content: "Pause", size: 16)
-                                
-                            }
-                        }
-                            
-                            
-                        Button {
-                        
-                            }
-                        label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .foregroundColor(Color("LinkBlue"))
-                                TextHelvetica(content: "Finish", size: 16)
-                                    .foregroundColor(Color("WhiteFontOne"))
-                            }
-                        }
-                    }
-                    .frame(width: getScreenBounds().width * 0.92, height: getScreenBounds().height * 0.05)                        .frame(width: getScreenBounds().width * 0.92, height: getScreenBounds().height * 0.05)
-                
-                    
-//                    HStack {
-//
-//
-//
-//
-//
-//
-//
-//
-//                        TextField("", text: $exersiseNotes, prompt: Text("Enter notes about your workout here. Your notes will be be displayed every time you do this exercise.").foregroundColor(Color("GrayFontTwo")), axis: .vertical)
-//                            .lineLimit(3...5)
-//                            .padding(.all, 5)
-//                            .font(.custom("SpaceGrotesk-Medium", size: 16))
-//                            .foregroundColor(Color("WhiteFontOne"))
-//
-//
-//
-//
-//
-//                    }
-//                    .background(Color("DDB"))
-//                    .cornerRadius(6)
-//                    .overlay(
-//                        RoundedRectangle(cornerRadius: 6)
-//                            .stroke(Color("BorderGray"), lineWidth: borderWeight)
-//                    )
-//                        .aspectRatio(7/1, contentMode: .fit)
-//                        .padding([.leading, .trailing])
-//                        .padding(.bottom, 5)
-                    HStack {
-                        TimerFullSize(viewModel: viewModel)
-                            .background(Color("DDB"))
-                            .cornerRadius(6)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                            )
-                        
-                        VStack {
-                          
-                            HStack {
-                                
-                                TextHelvetica(content: "Exersise Metrics", size: 19)
-                                    .foregroundColor(Color("WhiteFontOne"))
-                                    .padding([.leading,.top], 10)
-                                
-                                Spacer()
-                            }
-                            Divider()
-                            
-                                .frame(height: borderWeight)
-                                .overlay(Color("BorderGray"))
-                                .offset(y: -8)
-                            VStack(spacing: 4.5) {
-                                DisplayRow(metric: "Total Volume", value: "1203 lbs")
-                                DisplayRow(metric: "Total Reps", value: "120")
-                                DisplayRow(metric: "Weight/Set", value: "142.2 lbs")
-                                DisplayRow(metric: "Reps/Set", value: "12.2")
-                                DisplayRow(metric: "PR Sets", value: "3/8")
-                                    .padding(.bottom, 2)
-                            }
-                            .frame(height: getScreenBounds().height * 0.157)
-
-                        }
-                        .background(Color("DBblack"))
-                        .cornerRadius(6)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                        )
-
-             
-                            
-                          
-                           
-                            
-                
-                    }
-                    .frame(width: getScreenBounds().width * 0.92, height: getScreenBounds().height * 0.23)
-            
-                }
-                
-            }
 
                
             ZStack {
-                let RPEstate = viewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState
+           
                 Rectangle()
                     .foregroundColor(Color("MainGray"))
                 .aspectRatio(3.3, contentMode: .fit)
@@ -207,7 +53,7 @@ struct DropDownMenuView: View {
                         
                     }
                     .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.05)
-                    .offset(y: RPEstate ? getScreenBounds().height * 0 : getScreenBounds().height * 0.03)
+                    .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
                     .aspectRatio(2.5, contentMode: .fit)
                     .padding(.leading, 25)
                    
@@ -216,17 +62,41 @@ struct DropDownMenuView: View {
                         .foregroundColor(.clear)
                         .padding(.horizontal, 50)
                     
-                    ProgressBar()
-                        .aspectRatio(5, contentMode: .fit)
-                        .padding(.trailing,25)
-                        .offset(y: RPEstate ? getScreenBounds().height * 0 : getScreenBounds().height * 0.03)
+
+                    ZStack{
+                        
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundColor(Color("LinkBlue"))
+
+                            
+                        }
+                      
+                        
+                        
+                        
+                       TextHelvetica(content: "Finish", size: 19)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        
+                    }
+                    .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.05)
+                    .offset(x: getScreenBounds().width * -0.055, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
+                    .aspectRatio(2.5, contentMode: .fit)
+                    .padding(.leading, 25)
+                 
+
                  
                 }
+       
+            
                 ElapsedTime(viewModel: viewModel, step: 1, fontSize: 20)
    
                     .foregroundColor(Color("GrayFontOne"))
                     .padding(.horizontal, 50)
-                    .offset(y: RPEstate ? getScreenBounds().height * 0 : getScreenBounds().height * 0.03)
+                    .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
+       
+              
             }
             
             
@@ -234,14 +104,14 @@ struct DropDownMenuView: View {
             
 
 
-        .frame(height: getScreenBounds().height * 0.52)
+ 
 
         .background(Color("BorderGray"))
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-        .shadow(color: .black.opacity(0.6), radius: 10, x: 0, y: 5)
+                .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight))
+
         .position(x: UIScreen.main.bounds.width/2, y:200)
 //        .position(x: UIScreen.main.bounds.width/2, y:-80)
         

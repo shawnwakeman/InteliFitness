@@ -44,7 +44,7 @@ struct WorkoutLogModel {
         var id: String
     }
     
-    struct ExersiseLogModule: Identifiable {
+    struct ExersiseLogModule: Identifiable, Codable {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
         var isRemoved: Bool = false
@@ -68,7 +68,7 @@ struct WorkoutLogModel {
     
     
 
-    struct ExersiseSetRow: Identifiable {
+    struct ExersiseSetRow: Identifiable, Codable {
         var setIndex: Int
         var previousSet: String = "0"
         var weight: Float = 0
@@ -112,6 +112,7 @@ struct WorkoutLogModel {
         var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         var backgroundTime: Date = Date()
         var timePreset: Int = 0
+
     }
     
     struct PopUpStates {
@@ -182,6 +183,69 @@ struct WorkoutLogModel {
 
         
     }
+    
+    func saveExersiseModules() {
+        let defaults = UserDefaults.standard
+
+        do {
+            let encodedData = try JSONEncoder().encode(exersiseModules)
+            defaults.set(encodedData, forKey: "exersiseModules")
+            let time = try JSONEncoder().encode(Date())
+            defaults.set(time, forKey: "workoutTime")
+            
+            let elapsedTime = try JSONEncoder().encode(workoutTime.timeElapsed)
+            defaults.set(elapsedTime, forKey: "elapsedTime")
+            
+            let restTime = try JSONEncoder().encode(Date())
+            defaults.set(restTime, forKey: "restTime")
+
+        } catch {
+            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+        }
+    }
+
+    mutating func loadExersiseModules() {
+        let defaults = UserDefaults.standard
+
+        if let savedData = defaults.object(forKey: "exersiseModules") as? Data {
+            do {
+                exersiseModules = try JSONDecoder().decode([ExersiseLogModule].self, from: savedData)
+                
+            } catch {
+                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+            }
+        }
+        
+        if let savedData = defaults.object(forKey: "workoutTime") as? Data {
+            if let elapsedTime = defaults.object(forKey: "elapsedTime") as? Data {
+                do {
+                    let oldTime = try JSONDecoder().decode(Date.self, from: savedData)
+                    let timeDifference = Date().timeIntervalSince(oldTime)
+                    let elaptime = try JSONDecoder().decode(Int.self, from: elapsedTime)
+                    workoutTime.timeElapsed = Int(timeDifference) + elaptime
+                    print("loaded data")
+                    
+                } catch {
+                    print("Failed to decode workoutTime : \(error.localizedDescription)")
+                }
+            }
+
+        }
+        
+        if let savedData = defaults.object(forKey: "restTime") as? Data {
+            do {
+                let oldTime = try JSONDecoder().decode(Int.self, from: savedData)
+                restTime.timeElapsed = oldTime
+                print("loaded data")
+                
+            } catch {
+                print("Failed to decode rest time: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+    
     mutating func setRemoved(exersiseID: Int) {
         // Stop views from accessing data by updating their state
         
@@ -247,30 +311,4 @@ struct WorkoutLogModel {
         }
 
     }
-    
-    mutating func saveBackgroundTime() {
-        
-        workoutTime.backgroundTime = Date()
-        restTime.backgroundTime = Date()
-    }
-    mutating func updateTimeToCurrent() {
-
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-
-        let currentDate = Date()
-        let otherDate = workoutTime.backgroundTime // Creates a date one hour after the current date
-        let otherDate2 = restTime.backgroundTime
-
-
-        let timeDifference = currentDate.timeIntervalSince(otherDate)
-        let timeDifference2 = currentDate.timeIntervalSince(otherDate2)
-        workoutTime.timeElapsed += Int(timeDifference)
-        restTime.timeElapsed -= Int(timeDifference2)
-
-        
-    }
-
 }

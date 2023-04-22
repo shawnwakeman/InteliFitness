@@ -19,6 +19,7 @@ import SwiftUI
 
 struct MyExercisesPage: View {
     @ObservedObject var viewModel: HomePageViewModel
+    @Binding var asdh: Bool
     @State private var search: String = ""
 
 
@@ -32,7 +33,7 @@ struct MyExercisesPage: View {
 
 
                  
-                    Header()
+                    Header(asdh: $asdh)
                  
                     
 
@@ -185,15 +186,22 @@ struct MyExercisesPage: View {
     }
     struct Header: View {
         @State private var search: String = ""
+        @Binding var asdh: Bool
         var body: some View {
             VStack {
                 
                 
                 HStack {
-                    Image(systemName: "arrowshape.backward")
-                        .foregroundColor(Color("LinkBlue"))
-                        .scaleEffect(2)
-                        .offset(x: 10)
+                    Button {
+                        asdh.toggle()
+                    }
+                label: {
+                    
+                        Image(systemName: "arrowshape.backward")
+                            .foregroundColor(Color("LinkBlue"))
+                            .scaleEffect(2)
+                            .offset(x: 10)
+                }
                     Spacer()
                     TextHelvetica(content: "Exersises", size: 38)
                         .foregroundColor(Color("WhiteFontOne"))
@@ -220,7 +228,7 @@ struct MyExercisesPage: View {
                     
                 }
                 .frame(width: getScreenBounds().width * 0.94)
-                .padding(.bottom, -8)
+                .padding(.bottom, -4)
                 
                 ZStack {
                     TextField("", text: $search, prompt: Text("Search").foregroundColor(Color("GrayFontTwo")))

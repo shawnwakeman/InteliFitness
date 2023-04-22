@@ -18,7 +18,7 @@ struct HomePageView: View {
                         ZStack {
                             P1View(asdh: $asdh)
                                 .offset(x: asdh ? 0 : -geometry.size.width)
-                            P2View(asdh: asdh, viewModel: homePageViewModel)
+                            P2View(asdh: $asdh, viewModel: homePageViewModel)
                                 .offset(x: asdh ? geometry.size.width : 0)
                         }
                         .animation(.easeInOut(duration: 0.3))
@@ -83,7 +83,9 @@ struct P1View: View {
                                 
                                 
 
-                                Button(action: {}, label: {
+                                Button(action: {
+                                    
+                                }, label: {
                                         RoundedRectangle(cornerRadius: 3)
                                               .stroke(Color("BorderGray"), lineWidth: borderWeight)
                                         .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
@@ -240,9 +242,10 @@ struct P1View: View {
                                 .padding(.bottom, 5)
                                 .foregroundColor(Color("WhiteFontOne"))
                         }
-                        .onTapGesture {
-                            asdh.toggle()
-                        }
+                     
+                    }
+                    .onTapGesture {
+                        asdh.toggle()
                     }
                     ZStack {
                         RoundedRectangle(cornerRadius: 13)
@@ -276,10 +279,11 @@ struct P1View: View {
 
 
 struct P2View: View {
-    var asdh: Bool
+  
+    @Binding var asdh: Bool
     @ObservedObject var viewModel: HomePageViewModel
     var body: some View {
-        MyExercisesPage(viewModel: viewModel)
+        MyExercisesPage(viewModel: viewModel, asdh: $asdh)
     }
 }
 

@@ -190,15 +190,8 @@ struct WorkoutLogView: View {
                 
                 DropDownMenuView(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
                     .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.24)
-
-                Rectangle().position(x: UIScreen.main.bounds.width/2, y: 0)
-                    .frame(maxHeight: 120)
-                    .foregroundColor(.white)
-
-                    .opacity(0.000001)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "DropDownMenu").RPEpopUpState ? getScreenBounds().height * 0.55 : getScreenBounds().height * 0.02)
                     .onTapGesture {
-                        print("das")
+                        
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         
                       
@@ -213,6 +206,8 @@ struct WorkoutLogView: View {
                             
                         }
                     }
+
+
             }
           
             Group {
@@ -261,12 +256,18 @@ struct WorkoutLogView: View {
         .onChange(of: scenePhase) { newScenePhase in
             switch newScenePhase {
             case .active:
-                workoutLogViewModel.updateTimeToCurrent()
+  
+                workoutLogViewModel.loadExersiseModules()
+                homePageVeiwModel.loadHistory()
+
             case .inactive:
                 print("App is inactive")
             case .background:
-                print("ADs")
-                workoutLogViewModel.saveBackgroundTime()
+        
+                workoutLogViewModel.saveExersiseModules()
+             
+                homePageVeiwModel.saveExersiseHistory()
+        
             @unknown default:
                 fatalError("Unknown scene phase")
             }
@@ -421,7 +422,7 @@ struct WorkoutTimer : View {
 
         }
         .onChange(of: viewModel.restTime.timeElapsed) { timeElapsed in
-            print(timeElapsed)
+
             if timeElapsed == 0 {
                 withAnimation(.spring()) {
                     viewModel.setPopUpState(state: true, popUpId: "TimerCompletedPopUP")

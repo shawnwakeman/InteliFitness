@@ -73,7 +73,7 @@ struct DotsMenuView: View {
                                         
   
                     Button {
-                        print("das")
+                       
                     }
                     label: {
                         HStack{
@@ -354,7 +354,7 @@ struct DotsMenuView: View {
             
         }
         .onChange(of: viewModel.restTime.timePreset) { newValue in
-            print("asd")
+           
             yourMom = newValue
         }
         .frame(height: getScreenBounds().height * 0.7)

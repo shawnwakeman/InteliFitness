@@ -140,12 +140,7 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.setSelectionState(ExersiseID: ExersiseID)
     }
     
-    func saveBackgroundTime(){
-        workoutLogModel.saveBackgroundTime()
-    }
-    func updateTimeToCurrent(){
-        workoutLogModel.updateTimeToCurrent()
-    }
+
     
     func setPopUpState(state: Bool, popUpId: String) {
         workoutLogModel.setPopUpState(state: state, popUpId: popUpId)
@@ -189,7 +184,12 @@ class WorkoutLogViewModel: ObservableObject {
         clearToExersiseQueue()
     }
     
-
+    func saveExersiseModules() {
+        workoutLogModel.saveExersiseModules()
+    }
+    func loadExersiseModules() {
+        workoutLogModel.loadExersiseModules()
+    }
     
 
     

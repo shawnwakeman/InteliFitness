@@ -73,10 +73,15 @@ struct DropDownMenuView: View {
                         }
                       
                         
+                        Button {
+                            homePageViewModel.addToHistory(exersiseModules: viewModel.exersiseModules)
+                        }
+                    label: {
+                        TextHelvetica(content: "Finish", size: 19)
+                             .foregroundColor(Color("WhiteFontOne"))
+                    }
                         
-                        
-                       TextHelvetica(content: "Finish", size: 19)
-                            .foregroundColor(Color("WhiteFontOne"))
+                    
                         
                         
                     }

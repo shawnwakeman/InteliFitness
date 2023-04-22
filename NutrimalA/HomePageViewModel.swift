@@ -21,6 +21,11 @@ class HomePageViewModel: ObservableObject {
         return homePageModel.displayingWorkoutLogView
     }
     
+    var history: [[WorkoutLogModel.ExersiseLogModule]] {
+        return homePageModel.history
+    }
+    
+    
     var exersises: Array<HomePageModel.Exersise> {
         return homePageModel.exercises
     }
@@ -32,5 +37,22 @@ class HomePageViewModel: ObservableObject {
     func checkLetter(letter: String) -> Bool {
         return homePageModel.checkLetter(letter: letter)
     }
+    
+    func addToHistory(exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+        homePageModel.addToHistory(exersiseModules: exersiseModules)
+     
+    }
+    
+    func saveExersiseHistory() {
+        homePageModel.saveExersiseHistory()
 
+    }
+    
+    func loadHistory() {
+        homePageModel.loadHistory()
+
+    }
+
+
+    
 }

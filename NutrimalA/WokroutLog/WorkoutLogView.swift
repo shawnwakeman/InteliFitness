@@ -1306,13 +1306,14 @@ func scheduleNotification(title: String, body: String, interval: TimeInterval) {
     let content = UNMutableNotificationContent()
     content.title = title
     content.body = body
+
     content.sound = UNNotificationSound.defaultRingtone // should add custom sound later
 
     // Create a trigger for the notification
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
 
-    // Create a request with a unique identifier
-    let requestIdentifier = UUID().uuidString
+    // Use a constant identifier for the request
+    let requestIdentifier = "yourAppName.restTimeNotification"
     let request = UNNotificationRequest(identifier: requestIdentifier, content: content, trigger: trigger)
 
     // Add the request to the notification center
@@ -1324,3 +1325,5 @@ func scheduleNotification(title: String, body: String, interval: TimeInterval) {
         }
     }
 }
+
+ 

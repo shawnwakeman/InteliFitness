@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import ActivityKit
+import WidgetKit
+
 
 @main
 struct NutrimalAApp: App {
-
 
     var body: some Scene {
         WindowGroup {

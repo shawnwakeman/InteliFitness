@@ -21,6 +21,13 @@
 		D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48629F2304700B1C6EC /* MyExercisesPage.swift */; };
 		D008F48C29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */; };
 		D008F49029F36D9900B1C6EC /* dataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48F29F36D9900B1C6EC /* dataController.swift */; };
+		D008F4C629F42BDF00B1C6EC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D008F49729F42ACF00B1C6EC /* WidgetKit.framework */; };
+		D008F4C729F42BDF00B1C6EC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D008F49929F42ACF00B1C6EC /* SwiftUI.framework */; };
+		D008F4CA29F42BDF00B1C6EC /* workoutTimerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F4C929F42BDF00B1C6EC /* workoutTimerWidgetBundle.swift */; };
+		D008F4CE29F42BE000B1C6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D008F4CD29F42BE000B1C6EC /* Assets.xcassets */; };
+		D008F4D229F42BE000B1C6EC /* workoutTimerWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D008F4C529F42BDF00B1C6EC /* workoutTimerWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D008F4DA29F42FF900B1C6EC /* timerAtribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F4D929F42FF900B1C6EC /* timerAtribute.swift */; };
+		D008F4DB29F42FF900B1C6EC /* timerAtribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F4D929F42FF900B1C6EC /* timerAtribute.swift */; };
 		D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */; };
 		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
@@ -34,6 +41,30 @@
 		D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */; };
 		D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D008F4D029F42BE000B1C6EC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0370E1629CF84DD005682D8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D008F4C429F42BDF00B1C6EC;
+			remoteInfo = workoutTimerWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D008F4AB29F42AD100B1C6EC /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D008F4D229F42BE000B1C6EC /* workoutTimerWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Light.ttf"; sourceTree = "<group>"; };
@@ -50,6 +81,13 @@
 		D008F48629F2304700B1C6EC /* MyExercisesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExercisesPage.swift; sourceTree = "<group>"; };
 		D008F48B29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WokoutLogDataModel.xcdatamodel; sourceTree = "<group>"; };
 		D008F48F29F36D9900B1C6EC /* dataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataController.swift; sourceTree = "<group>"; };
+		D008F49729F42ACF00B1C6EC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		D008F49929F42ACF00B1C6EC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D008F4C529F42BDF00B1C6EC /* workoutTimerWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = workoutTimerWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D008F4C929F42BDF00B1C6EC /* workoutTimerWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = workoutTimerWidgetBundle.swift; sourceTree = "<group>"; };
+		D008F4CD29F42BE000B1C6EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D008F4CF29F42BE000B1C6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D008F4D929F42FF900B1C6EC /* timerAtribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timerAtribute.swift; sourceTree = "<group>"; };
 		D0370E1E29CF84DD005682D8 /* NutrimalA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutrimalA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrimalAApp.swift; sourceTree = "<group>"; };
 		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
@@ -67,6 +105,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D008F4C229F42BDF00B1C6EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D008F4C729F42BDF00B1C6EC /* SwiftUI.framework in Frameworks */,
+				D008F4C629F42BDF00B1C6EC /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0370E1B29CF84DD005682D8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -116,6 +163,25 @@
 			path = DataModelMain;
 			sourceTree = "<group>";
 		};
+		D008F49629F42ACF00B1C6EC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D008F49729F42ACF00B1C6EC /* WidgetKit.framework */,
+				D008F49929F42ACF00B1C6EC /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D008F4C829F42BDF00B1C6EC /* workoutTimerWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D008F4C929F42BDF00B1C6EC /* workoutTimerWidgetBundle.swift */,
+				D008F4CD29F42BE000B1C6EC /* Assets.xcassets */,
+				D008F4CF29F42BE000B1C6EC /* Info.plist */,
+			);
+			path = workoutTimerWidget;
+			sourceTree = "<group>";
+		};
 		D0370E1529CF84DD005682D8 = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +189,8 @@
 				D0D6674C29D09ADB00F2C1E9 /* Info.plist */,
 				D00087C829D4EFEC00A8A2C5 /* static */,
 				D0370E2029CF84DD005682D8 /* NutrimalA */,
+				D008F4C829F42BDF00B1C6EC /* workoutTimerWidget */,
+				D008F49629F42ACF00B1C6EC /* Frameworks */,
 				D0370E1F29CF84DD005682D8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				D0370E1E29CF84DD005682D8 /* NutrimalA.app */,
+				D008F4C529F42BDF00B1C6EC /* workoutTimerWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,6 +216,7 @@
 				D008F47D29F1E65900B1C6EC /* WokroutLog */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
+				D008F4D929F42FF900B1C6EC /* timerAtribute.swift */,
 			);
 			path = NutrimalA;
 			sourceTree = "<group>";
@@ -162,6 +232,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D008F4C429F42BDF00B1C6EC /* workoutTimerWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D008F4D329F42BE000B1C6EC /* Build configuration list for PBXNativeTarget "workoutTimerWidgetExtension" */;
+			buildPhases = (
+				D008F4C129F42BDF00B1C6EC /* Sources */,
+				D008F4C229F42BDF00B1C6EC /* Frameworks */,
+				D008F4C329F42BDF00B1C6EC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = workoutTimerWidgetExtension;
+			productName = workoutTimerWidgetExtension;
+			productReference = D008F4C529F42BDF00B1C6EC /* workoutTimerWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D0370E1D29CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D0370E2C29CF84DE005682D8 /* Build configuration list for PBXNativeTarget "NutrimalA" */;
@@ -169,10 +256,12 @@
 				D0370E1A29CF84DD005682D8 /* Sources */,
 				D0370E1B29CF84DD005682D8 /* Frameworks */,
 				D0370E1C29CF84DD005682D8 /* Resources */,
+				D008F4AB29F42AD100B1C6EC /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D008F4D129F42BE000B1C6EC /* PBXTargetDependency */,
 			);
 			name = NutrimalA;
 			productName = NutrimalA;
@@ -189,6 +278,9 @@
 				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					D008F4C429F42BDF00B1C6EC = {
+						CreatedOnToolsVersion = 14.2;
+					};
 					D0370E1D29CF84DD005682D8 = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -208,11 +300,20 @@
 			projectRoot = "";
 			targets = (
 				D0370E1D29CF84DD005682D8 /* NutrimalA */,
+				D008F4C429F42BDF00B1C6EC /* workoutTimerWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D008F4C329F42BDF00B1C6EC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D008F4CE29F42BE000B1C6EC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0370E1C29CF84DD005682D8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +333,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D008F4C129F42BDF00B1C6EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D008F4DB29F42FF900B1C6EC /* timerAtribute.swift in Sources */,
+				D008F4CA29F42BDF00B1C6EC /* workoutTimerWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0370E1A29CF84DD005682D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,6 +355,7 @@
 				D008F49029F36D9900B1C6EC /* dataController.swift in Sources */,
 				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
+				D008F4DA29F42FF900B1C6EC /* timerAtribute.swift in Sources */,
 				D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */,
 				D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */,
 				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,
@@ -258,7 +369,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D008F4D129F42BE000B1C6EC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D008F4C429F42BDF00B1C6EC /* workoutTimerWidgetExtension */;
+			targetProxy = D008F4D029F42BE000B1C6EC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		D008F4D429F42BE000B1C6EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BX5MBDUY2N;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = workoutTimerWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = workoutTimerWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NutrimalA.NutrimalA.workoutTimerWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D008F4D529F42BE000B1C6EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BX5MBDUY2N;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = workoutTimerWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = workoutTimerWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NutrimalA.NutrimalA.workoutTimerWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D0370E2A29CF84DE005682D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -376,6 +551,7 @@
 		D0370E2D29CF84DE005682D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -385,12 +561,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NutrimalA/Info.plist;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -407,6 +584,7 @@
 		D0370E2E29CF84DE005682D8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -416,12 +594,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NutrimalA/Info.plist;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -438,6 +617,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D008F4D329F42BE000B1C6EC /* Build configuration list for PBXNativeTarget "workoutTimerWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D008F4D429F42BE000B1C6EC /* Debug */,
+				D008F4D529F42BE000B1C6EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D0370E1929CF84DD005682D8 /* Build configuration list for PBXProject "NutrimalA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

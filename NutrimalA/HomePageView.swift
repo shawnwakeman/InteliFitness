@@ -244,9 +244,7 @@ struct P1View: View {
                         }
                      
                     }
-                    .onTapGesture {
-                        asdh.toggle()
-                    }
+                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 13)
                             .overlay(

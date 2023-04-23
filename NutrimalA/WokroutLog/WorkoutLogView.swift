@@ -81,7 +81,7 @@ struct WorkoutLogView: View {
                     
                     FullWidthButton(viewModel: workoutLogViewModel).padding(.top, -90.0)
 
-                    .padding(.bottom, 250)
+                    .padding(.bottom, 400)
 
          
                    
@@ -267,7 +267,7 @@ struct WorkoutLogView: View {
                 workoutLogViewModel.saveExersiseModules()
              
                 homePageVeiwModel.saveExersiseHistory()
-        
+  
             @unknown default:
                 fatalError("Unknown scene phase")
             }
@@ -442,6 +442,7 @@ struct ExersiseLogModule: View {
     var body: some View {
         VStack(spacing: -2){
             LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
+            
             if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
                 
                 NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)

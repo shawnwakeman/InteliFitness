@@ -23,69 +23,126 @@ struct MyExercisesPage: View {
     @State private var search: String = ""
 
 
+    struct ViewOffsetKey: PreferenceKey {
+        static var defaultValue: CGFloat = 0
+
+        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+            value = nextValue()
+        }
+    }
     
     var body: some View {
-        
-        ZStack {
-   
-            VStack(spacing: 0) {
-                VStack {
-
-
-                 
-                    Header(asdh: $asdh)
-                 
-                    
-
-         
-                    
-
-                
-                            
-                }
-                .padding(.horizontal)
-                .frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.18)
-                .background(Color("MainGray"))
-                
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                ScrollView(.vertical) {
-                    Rectangle()
-                        .frame(height: getScreenBounds().height * 0.025)
-                        .foregroundColor(.clear)
-                    VStack {
-                      
-                        let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
-  
-                        ForEach(alphabet, id: \.self) { letter in
-                            ExerciseGroup(viewModel: viewModel, letter: letter)
-                        }
-                
+        NavigationStack {
+          
+            ZStack {
+                Color("DBblack").ignoresSafeArea()
+      
+                ZStack {
                    
+                    
+                    ScrollView {
+               
                         
+                        LazyVStack {
+                            Rectangle()
+                                .frame(height: getScreenBounds().height * 0.2)
+                                .foregroundColor(.clear)
+                            let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
+      
+                            ForEach(alphabet, id: \.self) { letter in
+                                ExerciseGroup(viewModel: viewModel, letter: letter)
+                            }
+                        }
                     }
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.2)
-                        .foregroundColor(.clear)
-                }
-              
-            }
- 
-            .background(Color("DBblack"))
-      
-           
-//            HStack {
-//                ExersiseBodyPartButton()
-//                ExersiseBodyPartButton()
-//            }
-//            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
-     
-        }
-       
+                        .frame(height: getScreenBounds().height * 0.3)
+                        .position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.02)
+                        .foregroundColor(Color("MainGray"))
+                    Header(asdh: $asdh)
+                        
+                        .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.07)
 
-       
+
+                }
+                       
+
+                .navigationBarTitle("Exercises")
+                .toolbarBackground( Color("MainGray"), for: .navigationBar)
+                .navigationBarTitleDisplayMode(.automatic) // Use inline mode for the title
+                .navigationBarItems(
+                    leading: Button(action: {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
+                                  asdh.toggle()
+                              }
+                      }) {
+                        Image(systemName: "arrow.left")
+                    },
+                    trailing: Button(action: {
+                       
+                      }) {
+                        Image(systemName: "plus")
+                    }
+            )
+            }
+        }
+        
+//        ZStack {
+//
+//            VStack(spacing: 0) {
+//                VStack {
+//
+//
+//
+//                    Header(asdh: $asdh)
+//
+//
+//
+//
+//
+//
+//
+//
+//                }
+//                .padding(.horizontal)
+//                .frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.18)
+//                .background(Color("MainGray"))
+//
+//                Divider()
+//                    .frame(height: borderWeight)
+//                    .overlay(Color("BorderGray"))
+//
+//                ScrollView(.vertical) {
+//                    Rectangle()
+//                        .frame(height: getScreenBounds().height * 0.025)
+//                        .foregroundColor(.clear)
+//                    VStack {
+//
+//                        let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
+//
+//                        ForEach(alphabet, id: \.self) { letter in
+//                            ExerciseGroup(viewModel: viewModel, letter: letter)
+//                        }
+//
+//
+//
+//                    }
+//                    Rectangle()
+//                        .frame(height: getScreenBounds().height * 0.2)
+//                        .foregroundColor(.clear)
+//                }
+//
+//            }
+//
+//            .background(Color("DBblack"))
+//
+//
+////            HStack {
+////                ExersiseBodyPartButton()
+////                ExersiseBodyPartButton()
+////            }
+////            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
+//
+//        }
     }
     
     
@@ -189,47 +246,9 @@ struct MyExercisesPage: View {
         @Binding var asdh: Bool
         var body: some View {
             VStack {
-                
-                
-                HStack {
-                    Button {
-                        asdh.toggle()
-                    }
-                label: {
-                    
-                        Image(systemName: "arrowshape.backward")
-                            .foregroundColor(Color("LinkBlue"))
-                            .scaleEffect(2)
-                            .offset(x: 10)
-                }
-                    Spacer()
-                    TextHelvetica(content: "Exersises", size: 38)
-                        .foregroundColor(Color("WhiteFontOne"))
-                        .offset(x: 10)
-                    Spacer()
-                    
-                    Button {}
-                    label: {
-                        ZStack {
-                            
-                            
-                            Image(systemName: "plus")
-                                .resizable()
-      
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 27, height: 27)
-                                .foregroundColor(Color("LinkBlue"))
 
-                            
-                        }
-                    }.frame(width: 40, height: 40)
-                        
+
                     
-                    
-                }
-                .frame(width: getScreenBounds().width * 0.94)
-                .padding(.bottom, -4)
-                
                 ZStack {
                     TextField("", text: $search, prompt: Text("Search").foregroundColor(Color("GrayFontTwo")))
                     // not right font also probably wrong on other things.
@@ -279,9 +298,13 @@ struct MyExercisesPage: View {
                         RoundedRectangle(cornerRadius: 6)
                             .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                 }
+             
                 .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
                 
-            }.frame(height: getScreenBounds().height * 0.31)
+            }.frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.12)
+                .offset(y: -5)
+                .background(Color("MainGray"))
+
             
         }
     }
@@ -395,3 +418,4 @@ extension View {
         modifier(DisplayOnOpenMenuViewModifier(isOpened: isOpened, offset: offset))
     }
 }
+

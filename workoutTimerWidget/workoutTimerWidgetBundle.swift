@@ -36,6 +36,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                                     .foregroundColor(.white.opacity(0.5))
                                 Image(systemName: "ellipsis")
                                     .foregroundColor(.white.opacity(0.5))
+                                
                                 Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
                                     .bold()
                                     .font(.caption)
@@ -60,6 +61,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                         Spacer()
                     }
                 }.padding(5)
+
                 Text("You've already paid: \(context.attributes.totalAmount) + $9.9 Delivery Fee 💸")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -127,6 +129,7 @@ struct PizzaDeliveryActivityWidget: Widget {
             .keylineTint(.accentColor)
         }
     }
+       
 }
 
 struct PizzaAdActivityWidget: Widget {

@@ -74,7 +74,11 @@ struct DropDownMenuView: View {
                       
                         
                         Button {
-                            homePageViewModel.addToHistory(exersiseModules: viewModel.exersiseModules)
+    
+                            homePageViewModel.addToHistory(workoutName: "Insert Workout Name", exersiseModules: viewModel.exersiseModules)
+                           
+                         
+                           
                         }
                     label: {
                         TextHelvetica(content: "Finish", size: 19)
@@ -85,7 +89,7 @@ struct DropDownMenuView: View {
                         
                         
                     }
-                    .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.05)
+                    .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.048)
                     .offset(x: getScreenBounds().width * -0.055, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
                     .aspectRatio(2.5, contentMode: .fit)
                     .padding(.leading, 25)

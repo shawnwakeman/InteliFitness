@@ -36,6 +36,7 @@
 		D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */; };
 		D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */; };
 		D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */; };
+		D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B44229F45E5F001898BA /* HistoryPage.swift */; };
 		D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD966529E0CF75000B6711 /* HapticManager.swift */; };
 		D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */; };
 		D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */; };
@@ -97,6 +98,7 @@
 		D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exercises.json; sourceTree = "<group>"; };
 		D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExersisesPopUp.swift; sourceTree = "<group>"; };
 		D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
+		D0A8B44229F45E5F001898BA /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		D0AD966529E0CF75000B6711 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowView.swift; sourceTree = "<group>"; };
 		D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DotsButton.swift; sourceTree = "<group>"; };
@@ -207,9 +209,10 @@
 		D0370E2029CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXGroup;
 			children = (
-				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
 				D008F48929F364E800B1C6EC /* DataModelMain */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
+				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
+				D0A8B44229F45E5F001898BA /* HistoryPage.swift */,
 				D008F48029F1E7CD00B1C6EC /* HomePageView.swift */,
 				D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */,
 				D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */,
@@ -362,6 +365,7 @@
 				D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */,
 				D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */,
 				D008F48C29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld in Sources */,
+				D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */,
 				D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */,
 				D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */,
 			);

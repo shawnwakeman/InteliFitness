@@ -213,6 +213,7 @@ struct WorkoutSetRowView: View{
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
                                 viewModel.setLastRow(index: rowObject.id)
                                 viewModel.setLastModule(index: moduleID)
+                   
 
                             }}, label: {
                                 Capsule()

@@ -6,37 +6,90 @@
 //
 
 import SwiftUI
+import ActivityKit
+
+enum PageToLoad {
+    case history
+    case myExercises
+}
 
 struct HomePageView: View {
     @State private var displayingWorkoutTHing = false
     @StateObject var homePageViewModel = HomePageViewModel()
     @Environment(\.presentationMode) private var presentationMode
-    @State private var asdh = true
+    @State private var asdh = false
+    @State private var loadedPage: PageToLoad = .history
     var body: some View {
         ZStack {
+
             GeometryReader { geometry in
                         ZStack {
-                            P1View(asdh: $asdh)
+                            P1View(loadedPage: $loadedPage, asdh: $asdh)
                                 .offset(x: asdh ? 0 : -geometry.size.width)
-                            P2View(asdh: $asdh, viewModel: homePageViewModel)
+                            P2View(asdh: $asdh, viewModel: homePageViewModel, pageToSave: loadedPage)
                                 .offset(x: asdh ? geometry.size.width : 0)
+                            
                         }
-                        .animation(.easeInOut(duration: 0.3))
+ 
 
                     }
 
          
-//
+
             WorkoutLogView(homePageVeiwModel: homePageViewModel)
                 .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * 1.49)
                 .ignoresSafeArea()
+        }
+    }
+    
+   
+    
+}
+
+// MARK: - Functions
+func startDeliveryPizza() {
+    
+    let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
+
+    let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15))
+                                              
+    do {
+        let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
+            attributes: pizzaDeliveryAttributes,
+            contentState: initialContentState,
+            pushType: nil)
+        print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
+    } catch (let error) {
+        print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
+    }
+}
+func updateDeliveryPizza() {
+    Task {
+        let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
+        
+        for activity in Activity<PizzaDeliveryAttributes>.activities{
+            await activity.update(using: updatedDeliveryStatus)
+        }
+    }
+}
+func stopDeliveryPizza() {
+    Task {
+        for activity in Activity<PizzaDeliveryAttributes>.activities{
+            await activity.end(dismissalPolicy: .immediate)
+        }
+    }
+}
+func showAllDeliveries() {
+    Task {
+        for activity in Activity<PizzaDeliveryAttributes>.activities {
+            print("Pizza delivery details: \(activity.id) -> \(activity.attributes)")
         }
     }
 }
 
 
 struct P1View: View {
-
+    @Binding var loadedPage: PageToLoad
     @Binding var asdh: Bool
     var body: some View {
         VStack(spacing: -3) {
@@ -222,6 +275,14 @@ struct P1View: View {
                                 .padding(.leading, -30)
                                 .foregroundColor(Color("WhiteFontOne"))
                         }
+         
+                    }
+                    .onTapGesture {
+       
+                        loadedPage = .history
+                        withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
+                                  asdh.toggle()
+                              }
                     }
                    
                     ZStack {
@@ -232,17 +293,22 @@ struct P1View: View {
                             .foregroundColor(Color("MainGray"))
                         VStack(alignment: .leading) {
                             Spacer()
-                            TextHelvetica(content: "My", size: 20)
-                                .padding(.leading, -10)
-                                .foregroundColor(Color("WhiteFontOne"))
-                            TextHelvetica(content: "Exercizes", size: 20)
+
+                            TextHelvetica(content: "Exercises", size: 20)
               
     
                                 .padding(.leading, -10)
                                 .padding(.bottom, 5)
                                 .foregroundColor(Color("WhiteFontOne"))
                         }
+
                      
+                    }
+                    .onTapGesture {
+                        loadedPage = .myExercises
+                        withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
+                                  asdh.toggle()
+                              }
                     }
                     
                     ZStack {
@@ -280,13 +346,26 @@ struct P2View: View {
   
     @Binding var asdh: Bool
     @ObservedObject var viewModel: HomePageViewModel
+    var pageToSave: PageToLoad
     var body: some View {
-        MyExercisesPage(viewModel: viewModel, asdh: $asdh)
+        
+        switch pageToSave {
+            case .history:
+                HistoryPage(viewModel: viewModel, asdh: $asdh)
+                // Load the history page
+            case .myExercises:
+
+                MyExercisesPage(viewModel: viewModel, asdh: $asdh)
+                // Load the my exercises page
+        }
     }
 }
 
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePageView()
+            .previewDevice("iPhone 14")
+        HomePageView()
+            .previewDevice("iPhone 14 Pro Max")
     }
 }

@@ -5,7 +5,16 @@ struct HomePageModel {
     
     private(set) var exercises: [Exersise] = Bundle.main.decode("Exercises.json")
     
-    private(set) var history: [[WorkoutLogModel.ExersiseLogModule]] = []
+    private(set) var history: [Workout] = []
+    
+    
+    struct Workout: Identifiable, Codable {
+        let id: UUID
+        let WorkoutName: String
+        let notes: String = ""
+        var exercises: [WorkoutLogModel.ExersiseLogModule]
+    }
+
     
     struct Exersise: Identifiable, Decodable {
         var exerciseName: String
@@ -32,10 +41,17 @@ struct HomePageModel {
     }
     
 
-    mutating func addToHistory(exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+    mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
 
-        history.append(exersiseModules)
+        history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: exersiseModules))
     }
+    
+    mutating func deleteFromHistory(workoutID: UUID) {
+        if let index = history.firstIndex(where: { $0.id == workoutID }) {
+            history.remove(at: index)
+        }
+    }
+
     
     func saveExersiseHistory() {
         let defaults = UserDefaults.standard
@@ -55,7 +71,7 @@ struct HomePageModel {
 
         if let savedData = defaults.object(forKey: "history") as? Data {
             do {
-                history = try JSONDecoder().decode([[WorkoutLogModel.ExersiseLogModule]].self, from: savedData)
+                history = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
             } catch {
                 print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }

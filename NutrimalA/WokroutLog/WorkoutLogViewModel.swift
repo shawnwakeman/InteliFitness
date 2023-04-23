@@ -82,6 +82,10 @@ class WorkoutLogViewModel: ObservableObject {
     
     // MARK: - Intent(s)
     
+    func clearExerciseModules() {
+        workoutLogModel.clearExerciseModules()
+    }
+    
     func addEmptySet(moduleID: Int){
         workoutLogModel.addEmptySet(moduleID: moduleID)
     }

@@ -196,6 +196,10 @@ struct WorkoutLogModel {
             let elapsedTime = try JSONEncoder().encode(workoutTime.timeElapsed)
             defaults.set(elapsedTime, forKey: "elapsedTime")
             
+  
+            defaults.set(elapsedTime, forKey: "elapsedRestTime")
+            
+            
             let restTime = try JSONEncoder().encode(Date())
             defaults.set(restTime, forKey: "restTime")
 
@@ -223,6 +227,7 @@ struct WorkoutLogModel {
                     let timeDifference = Date().timeIntervalSince(oldTime)
                     let elaptime = try JSONDecoder().decode(Int.self, from: elapsedTime)
                     workoutTime.timeElapsed = Int(timeDifference) + elaptime
+           
                     print("loaded data")
                     
                 } catch {
@@ -233,14 +238,19 @@ struct WorkoutLogModel {
         }
         
         if let savedData = defaults.object(forKey: "restTime") as? Data {
+    
             do {
-                let oldTime = try JSONDecoder().decode(Int.self, from: savedData)
-                restTime.timeElapsed = oldTime
+                let oldTime = try JSONDecoder().decode(Date.self, from: savedData)
+                let timeDifference = Date().timeIntervalSince(oldTime)
+
+                restTime.timeElapsed -= Int(timeDifference)
+                
                 print("loaded data")
                 
             } catch {
                 print("Failed to decode rest time: \(error.localizedDescription)")
             }
+         
         }
     }
 
@@ -253,7 +263,9 @@ struct WorkoutLogModel {
        
     }
     
-    
+    mutating func clearExerciseModules() {
+        exersiseModules = []
+    }
     mutating func addToExersiseQueue(exersiseID: Int) {
         exerciseQueue.append(exercises[exersiseID])
     }

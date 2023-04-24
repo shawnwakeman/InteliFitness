@@ -67,7 +67,7 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         
         var body: some View {
-            TextHelvetica(content: String(rowObject.setIndex), size: 18)
+            TextHelvetica(content: String(rowObject.setIndex), size: 20)
                        .padding()
                        .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
                        .foregroundColor(Color("LinkBlue"))
@@ -123,23 +123,30 @@ struct WorkoutSetRowView: View{
                 .background(Color("DDB"))
                 .onReceive(Just(lbsTextField)) { newValue in
                     var filtered = newValue.filter { "0123456789.".contains($0) }
-                        if filtered.filter({$0 == "."}).count > 1 {
-                            // If the filtered string contains more than one decimal point, remove all but the first one.
-                            let firstDecimalPointIndex = filtered.firstIndex(of: ".")!
-                            filtered = filtered.prefix(upTo: firstDecimalPointIndex) + filtered.suffix(from: filtered.index(after: firstDecimalPointIndex)).filter({$0 != "."})
-                        } else if filtered.contains(".") {
-                            // If the filtered string contains a single decimal point, ensure that it appears only once.
-                            let parts = filtered.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
-                            filtered = String(parts[0].prefix(3)) + "." + String(parts[1].prefix(2))
-                        } else {
-                            // If the filtered string does not contain a decimal point, limit it to a maximum of 3 characters.
-                            filtered = String(filtered.prefix(3))
-                        }
-                        if let number = Float(filtered), number > 999.99 {
-                            // If the filtered string can be converted to a Float and is greater than 999.9, set it to "999.9".
-                            filtered = "999.99"
-                        }
-                        lbsTextField = filtered
+                    if filtered.filter({$0 == "."}).count > 1 {
+                        let firstDecimalPointIndex = filtered.firstIndex(of: ".")!
+                        filtered = filtered.prefix(upTo: firstDecimalPointIndex) + filtered.suffix(from: filtered.index(after: firstDecimalPointIndex)).filter({$0 != "."})
+                    } else if filtered.contains(".") {
+                        let parts = filtered.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
+                        filtered = String(parts[0].prefix(3)) + "." + String(parts[1].prefix(2))
+                    } else {
+                        filtered = String(filtered.prefix(3))
+                    }
+                    
+                    if let number = Float(filtered), number > 999.99 {
+                        filtered = "999.99"
+                    }
+                    
+                    // Prevent users from entering a lone period
+                    if filtered == "." {
+                        filtered = ""
+                    }
+                    
+                    lbsTextField = filtered
+                }
+
+                .onTapGesture {
+                    lbsTextField = ""
                 }
 
 
@@ -180,7 +187,9 @@ struct WorkoutSetRowView: View{
           
                     }
                        
-             
+                    .onTapGesture {
+                        repsTextField = ""
+                    }
 
                     .onChange(of: repsTextField) { newValue in
                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
@@ -294,22 +303,28 @@ struct WorkoutSetRowView: View{
                     
                 }
                 .onTapGesture {
-    
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
-                        
-                        if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
-            
-
-                            viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
-                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                    if rowObject.reps != 0 && rowObject.weight != 0 {
+                        withAnimation(.easeInOut(duration: 0.1)) {
+                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                            
+                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+                                
+                                
+                                viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                            }
+                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+                            
+                            
+                            
                         }
-                        viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+                        HapticManager.instance.impact(style: .heavy)
+                    }
+                    else {
+                        let _ = print("asdasdasdasd")
                     }
 
-   
-
-                    HapticManager.instance.impact(style: .heavy)
+                    
                     
                 }
                 .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)

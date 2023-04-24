@@ -31,6 +31,33 @@ struct MyExercisesPage: View {
         }
     }
     
+    
+    init(viewModel: HomePageViewModel, asdh: Binding<Bool>) {
+        
+        
+        UINavigationBar.appearance().barTintColor = .clear
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().barTintColor = UIColor(Color("MainGray"))
+           
+        // Set font color for NavigationBarTitle with displayMode = .inline
+        UINavigationBar.appearance().titleTextAttributes = [
+            .font : UIFont(name: "SpaceGrotesk-Bold", size: 20)!,
+            .foregroundColor: UIColor(Color("WhiteFontOne"))
+        ]
+
+        // Set font color for NavigationBarTitle with Large Font
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            .font : UIFont(name: "SpaceGrotesk-Bold", size: 40)!,
+            .foregroundColor: UIColor(Color("WhiteFontOne")) // Replace UIColor.red with your desired color
+        ]
+       
+        
+        self.viewModel = viewModel
+        self._asdh = asdh
+        
+       
+    }
+    
     var body: some View {
         NavigationStack {
           
@@ -38,7 +65,27 @@ struct MyExercisesPage: View {
                 Color("DBblack").ignoresSafeArea()
       
                 ZStack {
-                   
+                    Text("")
+          
+
+                                  .navigationBarTitle(Text("Exercises").font(.subheadline), displayMode: .inline)
+                         
+                                  .navigationBarItems(
+                                                      leading: Button(action: {
+                                                          withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
+                                                                    asdh.toggle()
+                                                                }
+                                                        }) {
+                                                          Image(systemName: "arrow.left")
+                                                      },
+                                                      trailing: NavigationLink(destination: CalendarView()) {
+                                                          Text("New")
+                                                            
+                                                            
+                                                             
+                                                              
+                                                      }
+                                              )
                     
                     ScrollView {
                
@@ -52,6 +99,9 @@ struct MyExercisesPage: View {
                             ForEach(alphabet, id: \.self) { letter in
                                 ExerciseGroup(viewModel: viewModel, letter: letter)
                             }
+                            Rectangle()
+                                .frame(height: getScreenBounds().height * 0.2)
+                                .foregroundColor(.clear)
                         }
                     }
                     Rectangle()
@@ -66,23 +116,6 @@ struct MyExercisesPage: View {
                 }
                        
 
-                .navigationBarTitle("Exercises")
-                .toolbarBackground( Color("MainGray"), for: .navigationBar)
-                .navigationBarTitleDisplayMode(.automatic) // Use inline mode for the title
-                .navigationBarItems(
-                    leading: Button(action: {
-                        withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
-                                  asdh.toggle()
-                              }
-                      }) {
-                        Image(systemName: "arrow.left")
-                    },
-                    trailing: Button(action: {
-                       
-                      }) {
-                        Image(systemName: "plus")
-                    }
-            )
             }
         }
         
@@ -185,7 +218,7 @@ struct MyExercisesPage: View {
                     .cornerRadius(10)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(borderColor, lineWidth: borderWeight))
+                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                     .padding(.horizontal)
                     
                     Rectangle()

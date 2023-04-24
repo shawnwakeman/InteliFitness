@@ -177,7 +177,7 @@ struct AddExersisesPopUp: View {
                     .cornerRadius(10)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(borderColor, lineWidth: borderWeight))
+                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                     .padding(.horizontal)
                     
                     Rectangle()

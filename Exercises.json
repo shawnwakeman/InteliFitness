@@ -7,7 +7,7 @@
         "selected": false
     },
     {
-        "exerciseName": "Squat",
+        "exerciseName": "Back Squat",
         "exerciseCategory": ["Quadriceps", "Hamstrings"],
         "exerciseEquipment": "Barbell",
         "id": 1,
@@ -62,6 +62,34 @@
         "exerciseCategory": ["Back", "Biceps"],
         "exerciseEquipment": "Barbell",
         "id": 8,
+        "selected": false
+    },
+    {
+        "exerciseName": "Pec Deck",
+        "exerciseCategory": ["Chest", "Shoulders"],
+        "exerciseEquipment": "Machine",
+        "id": 9,
+        "selected": false
+    },
+    {
+        "exerciseName": "Dips",
+        "exerciseCategory": ["Triceps", "Chest"],
+        "exerciseEquipment": "",
+        "id": 10,
+        "selected": false
+    },
+    {
+        "exerciseName": "Tricep Pushdowns",
+        "exerciseCategory": ["Triceps", "Chest"],
+        "exerciseEquipment": "Machine",
+        "id": 11,
+        "selected": false
+    },
+    {
+        "exerciseName": "Incline Press",
+        "exerciseCategory": ["Chest", "Triceps", "Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 12,
         "selected": false
     }
 ]

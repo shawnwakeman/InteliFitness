@@ -76,7 +76,7 @@ struct DropDownMenuView: View {
                         Button {
     
                             homePageViewModel.addToHistory(workoutName: "Insert Workout Name", exersiseModules: viewModel.exersiseModules)
-                           
+                            viewModel.setWorkoutTime(time: 0)
                          
                            
                         }
@@ -119,7 +119,7 @@ struct DropDownMenuView: View {
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight))
+                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
 
         .position(x: UIScreen.main.bounds.width/2, y:200)
 //        .position(x: UIScreen.main.bounds.width/2, y:-80)

@@ -108,8 +108,8 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.removeExersiseModule(exersiseID: exersiseID)
     }
     
-    func setTimePreset(time: Int) {
-        workoutLogModel.setTimePreset(time: time)
+    func setWorkoutTime(time: Int) {
+        workoutLogModel.setWorkoutTime(time: time)
     }
     func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int, customValue: Bool? = nil) {
         if let customValue = customValue {

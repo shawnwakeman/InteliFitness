@@ -17,8 +17,8 @@ struct HomePageView: View {
     @State private var displayingWorkoutTHing = false
     @StateObject var homePageViewModel = HomePageViewModel()
     @Environment(\.presentationMode) private var presentationMode
-    @State private var asdh = false
-    @State private var loadedPage: PageToLoad = .history
+    @State private var asdh = true
+    @State private var loadedPage: PageToLoad = .myExercises
     var body: some View {
         ZStack {
 

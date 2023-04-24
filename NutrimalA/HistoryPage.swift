@@ -28,46 +28,83 @@ struct HistoryPage: View {
     @Binding var asdh: Bool
     @State private var search: String = ""
     @State private var showTitle = true
+    @State private var rectanglePosition: CGFloat = .zero
     private let scrollId = "scrollId"
     
     init(viewModel: HomePageViewModel, asdh: Binding<Bool>) {
         
-        UINavigationBar.appearance().titleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
+        
+        UINavigationBar.appearance().barTintColor = .clear
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().barTintColor = UIColor(Color("MainGray"))
+           
+        // Set font color for NavigationBarTitle with displayMode = .inline
+        UINavigationBar.appearance().titleTextAttributes = [
+            .font : UIFont(name: "SpaceGrotesk-Bold", size: 20)!,
+            .foregroundColor: UIColor(Color("WhiteFontOne"))
+        ]
+
+        // Set font color for NavigationBarTitle with Large Font
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            .font : UIFont(name: "SpaceGrotesk-Bold", size: 40)!,
+            .foregroundColor: UIColor(Color("WhiteFontOne")) // Replace UIColor.red with your desired color
+        ]
+       
         
         self.viewModel = viewModel
         self._asdh = asdh
         
        
     }
+    
+    func updateRectanglePosition(proxy: GeometryProxy) {
+        let minY = proxy.frame(in: .global).minY
+        let pinnedPosition = getScreenBounds().height * 0.3
+        
+        if minY < pinnedPosition {
+            rectanglePosition = minY
+        } else {
+            rectanglePosition = pinnedPosition
+        }
+    }
     var body: some View {
         NavigationStack {
           
             ZStack {
-                Text("").navigationBarTitle(Text("Dashboard").font(.subheadline), displayMode: .automatic)                .navigationBarItems(
-                    leading: Button(action: {
-                        withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
-                                  asdh.toggle()
-                              }
-                      }) {
-                        Image(systemName: "arrow.left")
-                    },
-                    trailing: NavigationLink(destination: CalendarView()) {
-                        Text("Calendar")
-                          
-                          
-                           
-                            
-                    }
-            )
+                Text("Hello World!")
+      
+
+                    .navigationBarTitle(Text("History").font(.subheadline), displayMode: .inline)
+                
+                              .navigationBarItems(
+                                                  leading: Button(action: {
+                                                      withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
+                                                                asdh.toggle()
+                                                            }
+                                                    }) {
+                                                      Image(systemName: "arrow.left")
+                                                  },
+                                                  trailing: NavigationLink(destination: CalendarView()) {
+                                                      Text("Calendar")
+                                                        
+                                                        
+                                                         
+                                                          
+                                                  }
+                                          )
                 Color("DBblack").ignoresSafeArea()
       
        
-                   
                     
                 ScrollView {
-           
+        
                     
                     LazyVStack {
+                        
+                        Rectangle()
+                            .frame(height: getScreenBounds().height * 0.06)
+                            .foregroundColor(.clear)
+                    
                         
                         ForEach(viewModel.history) { workout in
                          
@@ -76,12 +113,13 @@ struct HistoryPage: View {
                                 
                                 
                                 
-                                VStack {
+                                VStack(spacing: 0) {
                                     HStack(alignment: .top) {
                                         VStack(alignment: .leading) {
-                                            TextHelvetica(content: workout.WorkoutName, size: 25)
+                                            TextHelvetica(content: workout.WorkoutName, size: 27)
                                                 .foregroundColor(Color("WhiteFontOne"))
-                                            TextHelvetica(content: "Tuesdat Feb 12", size: 10)
+                                            TextHelvetica(content: "Tuesday Feb 12", size: 17)
+                                                .foregroundColor(Color("GrayFontOne"))
                                         }
                                         Spacer()
                                         
@@ -102,20 +140,39 @@ struct HistoryPage: View {
                                                                       
 
                                         }
+                                        .offset(y: 3)
                                         
                                     }
-                                    .background(.red)
+                                  
+                                    .padding(.all, 12)
+                                    .background(Color("MainGray"))
+                                    
+                                    Rectangle()
+                                        .frame(height: getScreenBounds().height * 0.006)
+                                        .foregroundColor(Color("MainGray"))
                                     Divider()
                                         
                                         .frame(height: borderWeight)
                                         .overlay(Color("BorderGray"))
+                                    
                                     HStack {
-                                        TextHelvetica(content: "1 h 30 m", size: 12)
-                                        TextHelvetica(content: "1000 lbs", size: 12)
-                                        TextHelvetica(content: "14 sets", size: 12)
-                                        TextHelvetica(content: "5 PRs", size: 12)
+                                        TextHelvetica(content: "1 h 30 m", size: 16)
+                                            .foregroundColor(Color("GrayFontOne"))
+                                        Spacer()
+                                        TextHelvetica(content: "1000 lbs", size: 16)
+                                            .foregroundColor(Color("GrayFontOne"))
+                                        Spacer()
+                                        TextHelvetica(content: "14 sets", size: 16)
+                                            .foregroundColor(Color("GrayFontOne"))
+                                        Spacer()
+                                        TextHelvetica(content: "5 PRs", size: 16)
+                                            .foregroundColor(Color("GrayFontOne"))
                                                       
                                     }
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 7)
+                                    .background(Color("MainGray"))
+                                    
                                     Divider()
                                         
                                         .frame(height: borderWeight)
@@ -123,60 +180,104 @@ struct HistoryPage: View {
                                     
                                     VStack {
                                         HStack {
-                                            TextHelvetica(content: "Exercise", size: 20)
-                                            TextHelvetica(content: "Best Set", size: 20)
+                                            TextHelvetica(content: "Exercise", size: 22)
+                                                .foregroundColor(Color("WhiteFontOne"))
+                                            Spacer()
+                                            TextHelvetica(content: "Best Set", size: 22)
+                                                .foregroundColor(Color("WhiteFontOne"))
+                                                .offset(x: -10)
+                                            Spacer()
                                         }
+                                        .padding(.top, 15)
+                                        .padding(.bottom, -20)
+                                        .padding(.leading, 20)
                                         
                                         HStack {
-                                            VStack {
+                                            VStack(alignment: .leading) {
                                                 ForEach(workout.exercises) {exercise in
                                                     if exercise.isRemoved == false {
-                                                        Text("\(exercise.setRows.count) x \(exercise.exersiseName)")
-                                                            .padding(.trailing)
-                                                    }
-                                                }
-                                            }
-                                            VStack {
-                                                ForEach(workout.exercises) {exercise in
-                                                    if exercise.isRemoved == false {
-                                                        let rows = exercise.setRows
-                                                        let bestRow = calculateBestSet(rows: rows)
                                                         HStack {
-                                                            Text("\(bestRow!.reps) x \(bestRow!.weight.clean)")
-                                                            
-                                                            if bestRow!.repMetric != 0 {
-                                                                Text("@ \(bestRow!.repMetric.clean)")
+                                                            HStack {
+                                                                TextHelvetica(content: "\(exercise.setRows.count) x \(exercise.exersiseName)", size: 16)
+                                                                    .foregroundColor(Color("GrayFontOne"))
+                                                                    .lineLimit(1)
+                                                                 
+                                                                    .padding(.leading, 10)
+                                                                Spacer()
+                                                            }.frame(width: getScreenBounds().width * 0.4)
+                                                           
+                                                                    
+                                                            let rows = exercise.setRows
+                                                            let bestRow = calculateBestSet(rows: rows)
+                                                    
+                                                            HStack(spacing: 0){
+                                                                TextHelvetica(content: "\(bestRow!.reps) x \(bestRow!.weight.clean)", size: 16)
+                                                          
+                                                                    .foregroundColor(Color("GrayFontOne"))
+                                                                if bestRow!.repMetric != 0 {
+                                                                    TextHelvetica(content: " @ \(bestRow!.repMetric.clean)", size: 16)
+                                                                        .foregroundColor(Color("GrayFontOne"))
+                                                                }
                                                             }
                                                             Spacer()
                                                         }
+                                                     
+                                                        
+                                                      if (exercise.id != workout.exercises.indices.last){
+                                                          Divider()
+                                                              
+                                                              .frame(height: borderWeight)
+                                                              .overlay(Color("BorderGray"))
+                                                      }
+                                                              
+
                                                        
+                                                            
                                                     }
                                                 }
                                             }
+                                            .padding(.vertical, 15)
+                                           
+                                      
                                           
                                         }
-                                        .cornerRadius(2)
+                                        
+                                        .cornerRadius(10)
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 2)
-                                                .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight))
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                                        .padding(.vertical, 20)
+                                        .padding(.horizontal, 15)
+                                        
                                        
                                     }
                                   
                                 }
                                
-                                .background(Color("BorderGray"))
-                                .cornerRadius(2)
+                                .background(Color("DBblack"))
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight))
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
 
                                 .padding(.vertical)
                                 .padding(.horizontal, 18)
                                             
                   
                         }
+                        
+                        Rectangle()
+                            .frame(height: getScreenBounds().height * 0.2)
+                            .foregroundColor(.clear)
                     }
                 }
+                
+                
+                 Rectangle()
+                     .frame(height: getScreenBounds().height * 0.3)
+                     .position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.15)
+                     .foregroundColor(Color("MainGray"))
+                
                
 
 
@@ -184,7 +285,7 @@ struct HistoryPage: View {
                        
 
           
-                .toolbarBackground( Color("MainGray"), for: .navigationBar)
+
            // Use inline mode for the title
 
             }

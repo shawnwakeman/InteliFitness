@@ -393,7 +393,7 @@ struct restTimeSet: View {
                 
                      
                     viewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
-                    viewModel.setTimePreset(time: Int(time))
+                   
                     HapticManager.instance.impact(style: .rigid)
 
 

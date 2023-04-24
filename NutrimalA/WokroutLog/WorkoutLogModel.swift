@@ -31,9 +31,9 @@ struct WorkoutLogModel {
     mutating func setLastRow(index: Int) {
         lastRowChangedID = index
     }
-//    init() {
-//   
-//    }
+    init() {
+        
+    }
     mutating func setRowCompletionStatus(exersiseID: Int, RowID: Int, state: Bool) {
         exersiseModules[exersiseID].setRows[RowID].setCompleted = state
     }
@@ -171,8 +171,8 @@ struct WorkoutLogModel {
         
     }
     
-    mutating func setTimePreset(time: Int) {
-        restTime.timePreset = time
+    mutating func setWorkoutTime(time: Int) {
+        workoutTime.timeElapsed = time
     }
     mutating func restAddToTime(step: Int) {
   

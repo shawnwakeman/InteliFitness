@@ -20,6 +20,7 @@ struct WorkoutLogView: View {
     @State private var blocked = false
     @State private var exersiseNotes: String = ""
     @State private var newModuleOpacity = false
+    @State private var workoutName: String = "Workout Name"
 
     @Environment(\.scenePhase) private var scenePhase
     
@@ -30,15 +31,18 @@ struct WorkoutLogView: View {
             ScrollView(.vertical){
                 VStack(spacing: 0) {
                     HStack {
-                        TextHelvetica(content: "Lower Body", size: 42)
+                        TextField("", text: $workoutName)
+                            .font(.custom("SpaceGrotesk-Medium", size: 42))
                             .foregroundColor(Color("WhiteFontOne"))
                             .bold()
+                            .multilineTextAlignment(.leading)
                         Spacer()
                     }
 
  
-                    
-                    
+                  
+                
+                     
 
                     TextField("", text: $exersiseNotes, prompt: Text("Notes").foregroundColor(Color("GrayFontTwo")), axis: .vertical)
                         .lineLimit(1...5)
@@ -80,6 +84,7 @@ struct WorkoutLogView: View {
                     }
                     
                     FullWidthButton(viewModel: workoutLogViewModel).padding(.top, -90.0)
+                    
 
                     .padding(.bottom, 400)
 
@@ -584,7 +589,9 @@ struct FullWidthButton: View{
                 
             Button {
                 withAnimation(.spring()) {
+                    HapticManager.instance.impact(style: .rigid)
                     viewModel.setPopUpState(state: true, popUpId: "ExersisesPopUp")
+                    
                 }
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
@@ -895,18 +902,18 @@ struct PopupView: View {
                             
                             
                             viewModel.toggleCompletedSet(ExersiseModuleID: workoutModule.id, RowID: workoutModule.setRows[viewModel.lastRowUsed].id, customValue: true)
-
+                            if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
+                              
+                                viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                            }
+                            viewModel.setPrevouslyChecked(exersiseModuleID: viewModel.lastModuleUsed, RowID: viewModel.lastRowUsed, state: true)
+                            viewModel.setLastRow(index: 100)
+                            viewModel.setLastModule(index: 100)
                             
                         }
                         
-                        if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
-                          
-                            viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
-                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
-                        }
-                        viewModel.setPrevouslyChecked(exersiseModuleID: viewModel.lastModuleUsed, RowID: viewModel.lastRowUsed, state: true)
-                        viewModel.setLastRow(index: 100)
-                        viewModel.setLastModule(index: 100)
+                       
                         
                       
                     }
@@ -1197,22 +1204,23 @@ struct Header: View {
                     Spacer()
                     TextHelvetica(content: "Set", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
-                        .offset(x: 2)
+                        .offset(x: -2)
                     Spacer()
               
                     TextHelvetica(content: "Previous", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
+                        .offset(x: -5)
                     Spacer()
                     
                     TextHelvetica(content: "Lbs", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
-                        .offset(x:5)
+                    
                     Spacer()
 
                     TextHelvetica(content: "Reps", size: 20)
                         .padding(.trailing)
                         .foregroundColor(Color("WhiteFontOne"))
-                        .offset(x:7)
+                      
                     Button {
                         HapticManager.instance.impact(style: .rigid)
               

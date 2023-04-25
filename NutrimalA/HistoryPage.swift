@@ -223,14 +223,15 @@ struct HistoryPage: View {
                                                             Spacer()
                                                         }
                                                      
-                                                        
-                                                      if (exercise.id != workout.exercises.indices.last){
-                                                          Divider()
-                                                              
-                                                              .frame(height: borderWeight)
-                                                              .overlay(Color("BorderGray"))
-                                                      }
-                                                              
+                                                        if let index = workout.exercises.firstIndex(where: { $0.id == exercise.id }) {
+                                                            if (index != workout.exercises.indices.last){
+                                                                Divider()
+                                                                    
+                                                                    .frame(height: borderWeight)
+                                                                    .overlay(Color("BorderGray"))
+                                                            }
+                                                        }
+                                                      
 
                                                        
                                                             

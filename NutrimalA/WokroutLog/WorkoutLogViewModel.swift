@@ -129,7 +129,8 @@ class WorkoutLogViewModel: ObservableObject {
     func setWorkoutTime(time: Int) {
         workoutLogModel.setWorkoutTime(time: time)
     }
-    func toggleCompletedSet(ExersiseModuleID: UUID, RowID: Int, customValue: Bool? = nil) {
+    func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int, customValue: Bool? = nil) {
+
         if let customValue = customValue {
             // Use the custom value if it was provided
             workoutLogModel.setRowCompletionStatus(exersiseID: ExersiseModuleID, RowID: RowID, state: customValue)
@@ -139,6 +140,16 @@ class WorkoutLogViewModel: ObservableObject {
         }
         
     }
+    
+    func getUUIDindex(index : UUID) -> Int {
+           if let index = exersiseModules.firstIndex(where: { $0.id == index }) {
+               return index
+           }
+           else {
+               print("get UUID index error")
+               return 0
+           }
+       }
     
     func restAddToTime(step: Int, time: Int? = nil) {
         if let time = time {
@@ -150,16 +161,6 @@ class WorkoutLogViewModel: ObservableObject {
             workoutLogModel.restAddToTime(step: step)
         }
         
-    }
-    
-    func getUUIDindex(index : UUID) -> Int {
-        if let index = exersiseModules.firstIndex(where: { $0.id == index }) {
-            return index
-        }
-        else {
-            print("get UUID index error")
-            return 0
-        }
     }
     
     func toggleTime(){

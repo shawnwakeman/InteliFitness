@@ -14,10 +14,42 @@
             filePath = "NutrimalA/WokroutLog/WorkoutLogModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
             landmarkName = "removeExersiseModule(exersiseID:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CBA73ADE-7BFA-4B8F-9B81-1C0D3F6EAE2F - b5febba3b5de360b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NutrimalA.WorkoutLogModel.removeExersiseModule(exersiseID: Swift.Int) -&gt; ()"
+                  moduleName = "NutrimalA"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sw/Desktop/Code/NutrimalA/NutrimalA/WokroutLog/WorkoutLogModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "298"
+                  endingLineNumber = "298"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "CBA73ADE-7BFA-4B8F-9B81-1C0D3F6EAE2F - b5febba3b5de360b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NutrimalA.WorkoutLogModel.removeExersiseModule(exersiseID: Swift.Int) -&gt; ()"
+                  moduleName = "NutrimalA"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sw/Desktop/Code/NutrimalA/NutrimalA/WokroutLog/WorkoutLogModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "298"
+                  endingLineNumber = "298"
+                  offsetFromSymbolStart = "116">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

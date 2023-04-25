@@ -36,11 +36,8 @@ struct WorkoutLogModel {
     init() {
         
     }
-    mutating func setRowCompletionStatus(exersiseID: UUID, RowID: Int, state: Bool) {
-        if let index = exersiseModules.firstIndex(where: { $0.id == exersiseID }) {
-            exersiseModules[index].setRows[RowID].setCompleted = state
-        }
-      
+    mutating func setRowCompletionStatus(exersiseID: Int, RowID: Int, state: Bool) {
+        exersiseModules[exersiseID].setRows[RowID].setCompleted = state
     }
     struct PopUpData: Identifiable {
         var RPEpopUpState = false
@@ -52,7 +49,6 @@ struct WorkoutLogModel {
     struct ExersiseLogModule: Identifiable, Codable {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
-        var isRemoved: Bool = false
         let id: UUID
         var displayingRPE: Bool = true
         var displayingNotes: Bool = false
@@ -141,15 +137,12 @@ struct WorkoutLogModel {
     }
     
     mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String) {
-      
+        let index = exersiseModules.count
         exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment))
     }
     
-    mutating func toggleCompletedSet(ExersiseModuleID: UUID, RowID: Int) {
-        if let index = exersiseModules.firstIndex(where: { $0.id == ExersiseModuleID }) {
-            exersiseModules[index].setRows[RowID].setCompleted.toggle()
-        }
-
+    mutating func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {
+        exersiseModules[ExersiseModuleID].setRows[RowID].setCompleted.toggle()
     }
     
     mutating func toggleTime() {
@@ -306,9 +299,8 @@ struct WorkoutLogModel {
     }
     
     mutating func reorderExercises(from source: IndexSet, to destination: Int) {
-            exersiseModules.move(fromOffsets: source, toOffset: destination)
+        exersiseModules.move(fromOffsets: source, toOffset: destination)
     }
-    
     
     mutating func setExersiseModuleRPEDisplayStatus(exersiseID: Int, state: Bool) {
         exersiseModules[exersiseID].displayingRPE = state

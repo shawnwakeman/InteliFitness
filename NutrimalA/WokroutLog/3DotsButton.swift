@@ -315,7 +315,7 @@ struct DotsMenuView: View {
                     HapticManager.instance.impact(style: .rigid)
                     let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
       
-                    viewModel.setRemoved(exersiseID: index)
+                    viewModel.removeExersiseModule(exersiseID: index)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }

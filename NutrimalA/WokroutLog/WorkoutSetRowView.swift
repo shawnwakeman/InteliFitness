@@ -10,7 +10,7 @@ import Combine
 struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
-    var moduleID: UUID
+    var moduleID: Int
     @State private var lbsTextField: String = ""
     @State private var familyName: String = ""
     @State private var RPEpopUpDisplayed = false
@@ -25,39 +25,35 @@ struct WorkoutSetRowView: View{
             setIndexView(rowObject: rowObject)
             
             previousSetView(rowObject: rowObject)
-          
+            
             lbsTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
             
-                Divider()
-                    .frame(width: borderWeight)
-                    .overlay(Color("BorderGray"))
-                    .zIndex(1)
-                
-                HStack{
+            Divider()
+                .frame(width: borderWeight)
+                .overlay(Color("BorderGray"))
+                .zIndex(1)
+            
+            HStack{
 
-                    repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
-                    
-                    let exerciseID = viewModel.getUUIDindex(index: moduleID)
-                    if viewModel.exersiseModules[exerciseID].displayingRPE == true {
-                        repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: exerciseID)
-                    }
-                
-                    
-                    
+                repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+                if viewModel.exersiseModules[moduleID].displayingRPE == true {
+                    repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
                 }
-                .frame(width: getScreenBounds().width * 0.2, height: getScreenBounds().height * 0.045)
+            
+                
+                
+            }
+            .frame(width: getScreenBounds().width * 0.2, height: getScreenBounds().height * 0.045)
 
-                .background(Color("DDB"))
-                Divider()
-                    .frame(width: borderWeight)
-                    .overlay(Color("BorderGray"))
+            .background(Color("DDB"))
+            Divider()
+                .frame(width: borderWeight)
+                .overlay(Color("BorderGray"))
 
-           
-                checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
             
                 
             
-            
+            checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
             
         }
         .frame(height: getScreenBounds().height * 0.045)
@@ -112,11 +108,10 @@ struct WorkoutSetRowView: View{
     
     struct lbsTextFieldView: View {
         var rowObject: WorkoutLogModel.ExersiseSetRow
-        var moduleID: UUID
+        var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
         @State private var lbsTextField: String = ""
         var body: some View {
-            let exerciseID = viewModel.getUUIDindex(index: moduleID)
             TextField("", text: $lbsTextField, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
                 .keyboardType(.decimalPad)
                 .autocorrectionDisabled(true)
@@ -156,8 +151,8 @@ struct WorkoutSetRowView: View{
 
 
                 .onChange(of: lbsTextField) { newValue in
-                    viewModel.setWeightValue(exersiseModuleID: exerciseID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
-                    viewModel.setLastModule(index: exerciseID)
+                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+                    viewModel.setLastModule(index: moduleID)
                     viewModel.setLastRow(index: rowObject.id)
                 }
             
@@ -167,11 +162,10 @@ struct WorkoutSetRowView: View{
     
     struct repTextFieldView: View {
         var rowObject: WorkoutLogModel.ExersiseSetRow
-        var moduleID: UUID
+        var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
         @State private var repsTextField: String = ""
         var body: some View {
-            let exerciseID = viewModel.getUUIDindex(index: moduleID)
             TextField("", text: $repsTextField, prompt: Text(rowObject.repsPlaceholder).foregroundColor(Color("GrayFontTwo")))
                     .keyboardType(.numberPad)
                     .autocorrectionDisabled(true)
@@ -198,8 +192,8 @@ struct WorkoutSetRowView: View{
                     }
 
                     .onChange(of: repsTextField) { newValue in
-                        viewModel.setRepValue(exersiseModuleID: exerciseID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
-                        viewModel.setLastModule(index: exerciseID)
+                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+                        viewModel.setLastModule(index: moduleID)
                         viewModel.setLastRow(index: rowObject.id)
                     }
             
@@ -288,7 +282,7 @@ struct WorkoutSetRowView: View{
         
     struct checkBoxView: View {
         var rowObject: WorkoutLogModel.ExersiseSetRow
-        var moduleID: UUID
+        var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
         var body: some View {
             ZStack {
@@ -309,21 +303,17 @@ struct WorkoutSetRowView: View{
                     
                 }
                 .onTapGesture {
-                    let exerciseID = viewModel.getUUIDindex(index: moduleID)
                     if rowObject.reps != 0 && rowObject.weight != 0 {
                         withAnimation(.easeInOut(duration: 0.1)) {
                             viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
-                          
-                                if viewModel.exersiseModules[exerciseID].setRows[rowObject.id].prevouslyChecked == false {
-                                    
-                                    
-                                    viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
-                                    scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
-                                }
-                                viewModel.setPrevouslyChecked(exersiseModuleID: exerciseID, RowID: rowObject.id, state: true)
-                           
+                            
+                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
                                 
-                       
+                                
+                                viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                            }
+                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
                             
                             
                             
@@ -346,9 +336,6 @@ struct WorkoutSetRowView: View{
         }
     }
 }
-
-
-
 
 
 

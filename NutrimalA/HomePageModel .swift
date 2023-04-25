@@ -42,7 +42,7 @@ struct HomePageModel {
     
 
     mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
-
+        // needs to be cleaned
         history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: exersiseModules))
     }
     

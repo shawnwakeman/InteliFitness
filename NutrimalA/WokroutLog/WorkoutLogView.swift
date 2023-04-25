@@ -26,6 +26,7 @@ struct WorkoutLogView: View {
     @Environment(\.scenePhase) private var scenePhase
     
 
+
     var body: some View {
      
         
@@ -35,7 +36,7 @@ struct WorkoutLogView: View {
                     HStack {
                     
                         TextField("", text: $workoutName, prompt: Text("Workout Name").foregroundColor(Color("WhiteFontOne")))
-                            .font(.custom("SpaceGrotesk-Medium", size: 35))
+                            .font(.custom("SpaceGrotesk-Medium", size: 40))
                             .foregroundColor(Color("WhiteFontOne"))
                             .bold()
                             .multilineTextAlignment(.leading)
@@ -96,17 +97,19 @@ struct WorkoutLogView: View {
                 Spacer()
           
                 VStack(spacing: 85){
-                    if workoutLogViewModel.exersiseModules.count > 0 {
+                 
                         
-                        ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
+                    ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
 
-                          
+                        if workoutModule.isLast == false {
                             let exerciseID = workoutLogViewModel.getUUIDindex(index: workoutModule.id)
-                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: exerciseID)
+                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id)
 
-                           
                         }
+                 
+                       
                     }
+                   
                     
                     FullWidthButton(viewModel: workoutLogViewModel).padding(.top, -90.0)
                     
@@ -472,13 +475,14 @@ struct ExersiseLogModule: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @Binding var blocked: Bool
     var parentModuleID: Int
-    
+    var moduleUUID: UUID
     var body: some View {
         VStack(spacing: -2){
-            LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
+    
+            LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID, moduleUUID: moduleUUID)
             
             if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
-                
+
                 NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
             }
             CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
@@ -695,9 +699,10 @@ struct LogModuleHeader: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     @Binding var blocked: Bool
     var parentModuleID: Int
+    var moduleUUID: UUID
     var body: some View{
       
-            
+        if viewModel.exersiseModules.count > 0 {
             HStack(alignment: .bottom){
               
                 
@@ -741,7 +746,7 @@ struct LogModuleHeader: View{
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         withAnimation(.spring()) {
                             viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics")
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics", UUIDid: moduleUUID)
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
                                   .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -762,7 +767,7 @@ struct LogModuleHeader: View{
                             HapticManager.instance.impact(style: .rigid)
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu")
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu", UUIDid: moduleUUID)
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
                                   .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -779,6 +784,8 @@ struct LogModuleHeader: View{
             .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/, 12)
             .padding(.bottom, 9)
        
+        }
+           
         
     }
 }

@@ -60,7 +60,7 @@ struct ReorderSets: View {
                         .frame(height: borderWeight)
                         .overlay(Color("BorderGray"))
             
-                    if viewModel.exersiseModules.count > 0 {
+                    if viewModel.filteredExerciseModules.count > 0 {
                         ZStack {
                             Color.red.edgesIgnoringSafeArea(.all) // Add this line to make the background red
 
@@ -68,10 +68,13 @@ struct ReorderSets: View {
                                 ZStack {
                                     
                                     List {
+                                        
                                         ForEach(viewModel.exersiseModules) { workoutModule in
-                                            if workoutModule.isRemoved == false {
+                                            if workoutModule.isLast == false {
                                                 Text(workoutModule.exersiseName)
                                             }
+                           
+                                            
                                         }
                                         .onMove(perform: relocate)
           

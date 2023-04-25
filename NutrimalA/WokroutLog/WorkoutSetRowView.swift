@@ -11,6 +11,7 @@ struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
     var moduleID: Int
+ 
     @State private var lbsTextField: String = ""
     @State private var familyName: String = ""
     @State private var RPEpopUpDisplayed = false
@@ -18,7 +19,7 @@ struct WorkoutSetRowView: View{
     
     var body: some View{
 
-        
+      
         HStack(spacing: 0){
 
             
@@ -219,7 +220,7 @@ struct WorkoutSetRowView: View{
                                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
-                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
+                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", UUIDid: UUID()) // wront UUID
                                 viewModel.setLastRow(index: rowObject.id)
                                 viewModel.setLastModule(index: moduleID)
                    
@@ -253,8 +254,8 @@ struct WorkoutSetRowView: View{
                                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
-                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE")
-                                viewModel.setLastRow(index: rowObject.id)
+                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", UUIDid: UUID()) // wront UUID
+                                 viewModel.setLastRow(index: rowObject.id)
                                 viewModel.setLastModule(index: moduleID)
                             }}, label: {
                                 Capsule()

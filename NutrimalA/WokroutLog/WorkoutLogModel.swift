@@ -5,19 +5,22 @@ struct WorkoutLogModel {
     
     private(set) var exerciseQueue: [Exersise] = []
     
-    
-    
     private(set) var exersiseModules: [ExersiseLogModule] = []
+    
+
+  
     var workoutTime: WorkoutTime = WorkoutTime()
     var restTime : WorkoutTime = WorkoutTime(timeElapsed: 0, timePreset: 120)
-    var popUps = [PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpRPE"), PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpDotsMenu"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "popUpDataMetrics"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "DropDownMenu"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "SetTimeSubMenu"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "SetUnitSubMenu"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "ExersisesPopUp"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "TimerCompletedPopUP"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "ReorderSets")
+    var popUps = [
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "popUpRPE"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "popUpDotsMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "popUpDataMetrics"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "DropDownMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetTimeSubMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetUnitSubMenu"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ExersisesPopUp"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TimerCompletedPopUP"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ReorderSets")
     ]
 //    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     
@@ -33,9 +36,7 @@ struct WorkoutLogModel {
     mutating func setLastRow(index: Int) {
         lastRowChangedID = index
     }
-    init() {
-        
-    }
+ 
     mutating func setRowCompletionStatus(exersiseID: Int, RowID: Int, state: Bool) {
         exersiseModules[exersiseID].setRows[RowID].setCompleted = state
     }
@@ -43,10 +44,11 @@ struct WorkoutLogModel {
         var RPEpopUpState = false
         var popUpRowIndex: Int
         var popUpExersiseModuleIndex: Int
+        var popUPUUID: UUID
         var id: String
     }
     
-    struct ExersiseLogModule: Identifiable, Codable {
+    struct ExersiseLogModule: Identifiable, Codable, Equatable {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
         let id: UUID
@@ -55,6 +57,7 @@ struct WorkoutLogModel {
         var ExersiseID: Int
         var ExersiseCatagory: String = ""
         var ExersiseEquipment: String
+        var isLast: Bool = false
 
     }
     
@@ -69,7 +72,7 @@ struct WorkoutLogModel {
     
     
 
-    struct ExersiseSetRow: Identifiable, Codable {
+    struct ExersiseSetRow: Identifiable, Codable, Equatable {
         var setIndex: Int
         var previousSet: String = "0"
         var weight: Float = 0
@@ -137,7 +140,7 @@ struct WorkoutLogModel {
     }
     
     mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String) {
-        let index = exersiseModules.count
+
         exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment))
     }
     
@@ -184,7 +187,7 @@ struct WorkoutLogModel {
 
         
     }
-    
+    // dont save the shitters that have is last attached
     func saveExersiseModules() {
         let defaults = UserDefaults.standard
 
@@ -257,12 +260,7 @@ struct WorkoutLogModel {
 
     
     
-    mutating func setRemoved(exersiseID: Int) {
-        // Stop views from accessing data by updating their state
-        
-        exersiseModules[exersiseID].isRemoved = true
-       
-    }
+
     
     mutating func clearExerciseModules() {
         exersiseModules = []
@@ -291,12 +289,35 @@ struct WorkoutLogModel {
     }
     
     
-    mutating func removeExersiseModule(exersiseID: Int) {
+    mutating func removeExersiseModule(exersiseID: UUID) {
         // Stop views from accessing data by updating their state
+        print("Removing exersise module with ID: \(exersiseID)")
         
-        exersiseModules.remove(at: exersiseID)
-       
+        print("Current exersiseModules:")
+        for (index, module) in exersiseModules.enumerated() {
+            print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName)")
+        }
+        
+        if let index = exersiseModules.firstIndex(where: { $0.id == exersiseID }) {
+            if exersiseModules[index] == exersiseModules.last {
+                
+                exersiseModules[index].isLast = true
+            } else {
+                exersiseModules.remove(at: index)
+            }
+          
+        } else {
+            print("Exersise module with ID: \(exersiseID) not found")
+        }
+        
+
+        
+        print("Updated exersiseModules:")
+        for (index, module) in exersiseModules.enumerated() {
+            print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName) isLAst \(module.isLast)")
+        }
     }
+
     
     mutating func reorderExercises(from source: IndexSet, to destination: Int) {
         exersiseModules.move(fromOffsets: source, toOffset: destination)
@@ -322,10 +343,11 @@ struct WorkoutLogModel {
         exersiseModules[exersiseModuleID].setRows[RowID].repMetric = RPE
     }
     
-    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int, popUpId: String) {
+    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int, popUpId: String, UUIDid: UUID) {
         if let popUpIndex = popUps.firstIndex(where: {$0.id == popUpId}) {
             popUps[popUpIndex].popUpExersiseModuleIndex = exersiseModuleID
             popUps[popUpIndex].popUpRowIndex = RowID
+            popUps[popUpIndex].popUPUUID = UUIDid
         }
 
     }

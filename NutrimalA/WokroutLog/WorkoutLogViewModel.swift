@@ -28,7 +28,9 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.reorderExercises(from: source, to: destination)
     }
     
-   
+    var filteredExerciseModules: [WorkoutLogModel.ExersiseLogModule] {
+        exersiseModules.filter { !$0.isLast }
+    }
     struct ExeciseNameStruct: Identifiable {
         var name: String
         var id: Int
@@ -93,7 +95,7 @@ class WorkoutLogViewModel: ObservableObject {
     
 
     
-    
+  
     
     // MARK: - Intent(s)
     
@@ -112,9 +114,7 @@ class WorkoutLogViewModel: ObservableObject {
        
     }
     
-    func setRemoved(exersiseID: Int) {
-        workoutLogModel.setRemoved(exersiseID: exersiseID)
-    }
+
     func setExersiseModuleRPEDisplayStatus(exersiseID: Int, state: Bool) {
         workoutLogModel.setExersiseModuleRPEDisplayStatus(exersiseID: exersiseID, state: state)
     }
@@ -122,7 +122,7 @@ class WorkoutLogViewModel: ObservableObject {
     func toggleExersiseModuleNotesDisplayStatus(exersiseID: Int) {
         workoutLogModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: exersiseID)
     }
-    func removeExersiseModule(exersiseID: Int) {
+    func removeExersiseModule(exersiseID: UUID) {
         workoutLogModel.removeExersiseModule(exersiseID: exersiseID)
     }
     
@@ -181,8 +181,8 @@ class WorkoutLogViewModel: ObservableObject {
     func setPrevouslyChecked(exersiseModuleID : Int, RowID: Int, state: Bool) {
         workoutLogModel.setPrevouslyChecked(exersiseModuleID: exersiseModuleID, RowID: RowID, state: state)
     }
-    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int, popUpId: String) {
-        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID, popUpId: popUpId)
+    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int, popUpId: String, UUIDid: UUID) {
+        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID, popUpId: popUpId, UUIDid: UUIDid)
     }
     func setRepMetric(exersiseModuleID : Int, RowID: Int, RPE: Float) {
         workoutLogModel.setRepMetric(exersiseModuleID: exersiseModuleID, RowID: RowID, RPE: RPE)

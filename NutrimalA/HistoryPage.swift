@@ -196,46 +196,7 @@ struct HistoryPage: View {
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 ForEach(workout.exercises) {exercise in
-                                                    if exercise.isRemoved == false {
-                                                        HStack {
-                                                            HStack {
-                                                                TextHelvetica(content: "\(exercise.setRows.count) x \(exercise.exersiseName)", size: 16)
-                                                                    .foregroundColor(Color("GrayFontOne"))
-                                                                    .lineLimit(1)
-                                                                 
-                                                                    .padding(.leading, 10)
-                                                                Spacer()
-                                                            }.frame(width: getScreenBounds().width * 0.4)
-                                                           
-                                                                    
-                                                            let rows = exercise.setRows
-                                                            let bestRow = calculateBestSet(rows: rows)
-                                                    
-                                                            HStack(spacing: 0){
-                                                                TextHelvetica(content: "\(bestRow!.reps) x \(bestRow!.weight.clean)", size: 16)
-                                                          
-                                                                    .foregroundColor(Color("GrayFontOne"))
-                                                                if bestRow!.repMetric != 0 {
-                                                                    TextHelvetica(content: " @ \(bestRow!.repMetric.clean)", size: 16)
-                                                                        .foregroundColor(Color("GrayFontOne"))
-                                                                }
-                                                            }
-                                                            Spacer()
-                                                        }
-                                                     
-                                                        if let index = workout.exercises.firstIndex(where: { $0.id == exercise.id }) {
-                                                            if (index != workout.exercises.indices.last){
-                                                                Divider()
-                                                                    
-                                                                    .frame(height: borderWeight)
-                                                                    .overlay(Color("BorderGray"))
-                                                            }
-                                                        }
-                                                      
-
-                                                       
-                                                            
-                                                    }
+                                                  
                                                 }
                                             }
                                             .padding(.vertical, 15)

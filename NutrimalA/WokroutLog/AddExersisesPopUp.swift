@@ -68,6 +68,7 @@ struct AddExersisesPopUp: View {
                         withAnimation(.spring()) {
                             viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
                         }
+                       
                         viewModel.addExercisesFromQueue()
         
 

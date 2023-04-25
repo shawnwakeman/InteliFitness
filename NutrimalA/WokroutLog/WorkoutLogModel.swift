@@ -16,7 +16,9 @@ struct WorkoutLogModel {
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "SetTimeSubMenu"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "SetUnitSubMenu"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "ExersisesPopUp"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "TimerCompletedPopUP")]
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "TimerCompletedPopUP"),
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, id: "ReorderSets")
+    ]
 //    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     
    
@@ -34,8 +36,11 @@ struct WorkoutLogModel {
     init() {
         
     }
-    mutating func setRowCompletionStatus(exersiseID: Int, RowID: Int, state: Bool) {
-        exersiseModules[exersiseID].setRows[RowID].setCompleted = state
+    mutating func setRowCompletionStatus(exersiseID: UUID, RowID: Int, state: Bool) {
+        if let index = exersiseModules.firstIndex(where: { $0.id == exersiseID }) {
+            exersiseModules[index].setRows[RowID].setCompleted = state
+        }
+      
     }
     struct PopUpData: Identifiable {
         var RPEpopUpState = false
@@ -48,7 +53,7 @@ struct WorkoutLogModel {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
         var isRemoved: Bool = false
-        let id: Int
+        let id: UUID
         var displayingRPE: Bool = true
         var displayingNotes: Bool = false
         var ExersiseID: Int
@@ -136,12 +141,15 @@ struct WorkoutLogModel {
     }
     
     mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String) {
-        let index = exersiseModules.count
-        exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: index, ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment))
+      
+        exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment))
     }
     
-    mutating func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {
-        exersiseModules[ExersiseModuleID].setRows[RowID].setCompleted.toggle()
+    mutating func toggleCompletedSet(ExersiseModuleID: UUID, RowID: Int) {
+        if let index = exersiseModules.firstIndex(where: { $0.id == ExersiseModuleID }) {
+            exersiseModules[index].setRows[RowID].setCompleted.toggle()
+        }
+
     }
     
     mutating func toggleTime() {
@@ -296,6 +304,12 @@ struct WorkoutLogModel {
         exersiseModules.remove(at: exersiseID)
        
     }
+    
+    mutating func reorderExercises(from source: IndexSet, to destination: Int) {
+            exersiseModules.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    
     mutating func setExersiseModuleRPEDisplayStatus(exersiseID: Int, state: Bool) {
         exersiseModules[exersiseID].displayingRPE = state
     }

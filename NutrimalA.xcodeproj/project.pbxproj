@@ -34,6 +34,7 @@
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
 		D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */; };
 		D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */; };
+		D063801429F71C7500E2B0F7 /* ReorderSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D063801329F71C7500E2B0F7 /* ReorderSets.swift */; };
 		D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */; };
 		D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */; };
 		D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B44229F45E5F001898BA /* HistoryPage.swift */; };
@@ -96,6 +97,7 @@
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCompletedPopUp.swift; sourceTree = "<group>"; };
 		D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exercises.json; sourceTree = "<group>"; };
+		D063801329F71C7500E2B0F7 /* ReorderSets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderSets.swift; sourceTree = "<group>"; };
 		D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExersisesPopUp.swift; sourceTree = "<group>"; };
 		D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		D0A8B44229F45E5F001898BA /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */,
 				D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */,
 				D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */,
+				D063801329F71C7500E2B0F7 /* ReorderSets.swift */,
 				D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */,
 				D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */,
 				D0AD966529E0CF75000B6711 /* HapticManager.swift */,
@@ -355,6 +358,7 @@
 				D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */,
 				D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */,
 				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
+				D063801429F71C7500E2B0F7 /* ReorderSets.swift in Sources */,
 				D008F49029F36D9900B1C6EC /* dataController.swift in Sources */,
 				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,

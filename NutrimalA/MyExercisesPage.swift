@@ -19,7 +19,7 @@ import SwiftUI
 
 struct MyExercisesPage: View {
     @ObservedObject var viewModel: HomePageViewModel
-    @Binding var asdh: Bool
+    @Binding var isNavigationBarHidden: Bool
     @State private var search: String = ""
 
 
@@ -32,7 +32,11 @@ struct MyExercisesPage: View {
     }
     
     
-    init(viewModel: HomePageViewModel, asdh: Binding<Bool>) {
+    init(viewModel: HomePageViewModel, isNavigationBarHidden: Binding<Bool>) {
+        
+        let appearance = UINavigationBarAppearance()
+        
+        
         
         
         UINavigationBar.appearance().barTintColor = .clear
@@ -53,7 +57,8 @@ struct MyExercisesPage: View {
        
         
         self.viewModel = viewModel
-        self._asdh = asdh
+        self._isNavigationBarHidden = isNavigationBarHidden
+ 
         
        
     }
@@ -69,17 +74,13 @@ struct MyExercisesPage: View {
           
 
                                   .navigationBarTitle(Text("Exercises").font(.subheadline), displayMode: .inline)
-                         
+                                  .navigationBarHidden(false)
                                   .navigationBarItems(
-                                                      leading: Button(action: {
-                                                          withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
-                                                                    asdh.toggle()
-                                                                }
-                                                        }) {
-                                                          Image(systemName: "arrow.left")
-                                                      },
+                                                      
                                                       trailing: NavigationLink(destination: CalendarView()) {
+                                                          
                                                           Text("New")
+                                                        
                                                             
                                                             
                                                              
@@ -108,15 +109,17 @@ struct MyExercisesPage: View {
                         .frame(height: getScreenBounds().height * 0.3)
                         .position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.02)
                         .foregroundColor(Color("MainGray"))
-                    Header(asdh: $asdh)
+                    
+                    Header()
                         
                         .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.07)
 
 
                 }
+                .preferredColorScheme(.light)
                        
 
-            }
+            }.preferredColorScheme(.light)
         }
         
 //        ZStack {
@@ -276,7 +279,7 @@ struct MyExercisesPage: View {
     }
     struct Header: View {
         @State private var search: String = ""
-        @Binding var asdh: Bool
+
         var body: some View {
             VStack {
 

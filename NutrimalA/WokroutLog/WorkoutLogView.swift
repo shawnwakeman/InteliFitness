@@ -20,22 +20,46 @@ struct WorkoutLogView: View {
     @State private var blocked = false
     @State private var exersiseNotes: String = ""
     @State private var newModuleOpacity = false
-    @State private var workoutName: String = "Workout Name"
+    @State private var workoutName: String = ""
+ 
 
     @Environment(\.scenePhase) private var scenePhase
     
+
     var body: some View {
-        
+     
         
         ZStack {
             ScrollView(.vertical){
                 VStack(spacing: 0) {
                     HStack {
-                        TextField("", text: $workoutName)
-                            .font(.custom("SpaceGrotesk-Medium", size: 42))
+                    
+                        TextField("", text: $workoutName, prompt: Text("Workout Name").foregroundColor(Color("WhiteFontOne")))
+                            .font(.custom("SpaceGrotesk-Medium", size: 35))
                             .foregroundColor(Color("WhiteFontOne"))
                             .bold()
                             .multilineTextAlignment(.leading)
+                            .scaledToFit()
+           
+                        ZStack{
+                            
+                            Image("meatBalls")
+                                .resizable()
+                                .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                            
+                            
+
+                            Button(action: {
+                                withAnimation(.spring()) {
+                                    workoutLogViewModel.setPopUpState(state: true, popUpId: "ReorderSets")
+                                }}, label: {
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .stroke(Color("BorderGray"), lineWidth: WorkoutLogView.borderWeight)
+                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                                                      
+
+                        }
+                        
                         Spacer()
                     }
 
@@ -161,6 +185,9 @@ struct WorkoutLogView: View {
 
                 DataMetricsPopUp(viewModel: workoutLogViewModel)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.7 : getScreenBounds().height * 1.3)
+                
+                ReorderSets(viewModel: workoutLogViewModel)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? getScreenBounds().height * 0.25 : getScreenBounds().height * 1.4)
 
             }
             
@@ -443,16 +470,19 @@ struct WorkoutTimer : View {
 struct ExersiseLogModule: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @Binding var blocked: Bool
-    var parentModuleID: Int
+    var parentModuleID: UUID
+    
     var body: some View {
         VStack(spacing: -2){
+          
             LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID)
             
-            if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
+            let exerciseID = workoutLogViewModel.getUUIDindex(index: parentModuleID)
+            if workoutLogViewModel.exersiseModules[exerciseID].displayingNotes {
                 
-                NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+                NotesModule(viewModel: workoutLogViewModel, parentModuleID: exerciseID)
             }
-            CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
+            CoreLogModule(viewModel: workoutLogViewModel, ModuleID: exerciseID)
         }
 
     }
@@ -665,7 +695,7 @@ struct addSetButton: View {
 struct LogModuleHeader: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     @Binding var blocked: Bool
-    var parentModuleID: Int
+    var parentModuleID: UUID
     var body: some View{
       
             
@@ -674,18 +704,19 @@ struct LogModuleHeader: View{
                 
                     
                     
-
+                let exerciseID =  viewModel.getUUIDindex(index: parentModuleID)
 
                 Button {print("Button pressed")}
                 label: {
                     HStack(alignment: .bottom, spacing: 6) {
-                        TextHelvetica(content: viewModel.exersiseModules[parentModuleID].exersiseName, size: 22)
+                       
+                        TextHelvetica(content: viewModel.exersiseModules[exerciseID].exersiseName, size: 22)
                             .foregroundColor(Color("LinkBlue"))
                             .multilineTextAlignment(.leading)
                         HStack(spacing: 0) {
-                            if viewModel.exersiseModules[parentModuleID].ExersiseEquipment != "" {
+                            if viewModel.exersiseModules[exerciseID].ExersiseEquipment != "" {
                                 TextHelvetica(content: "(", size: 22)
-                                TextHelvetica(content: viewModel.exersiseModules[parentModuleID].ExersiseEquipment, size: 22)
+                                TextHelvetica(content: viewModel.exersiseModules[exerciseID].ExersiseEquipment, size: 22)
                                     .offset(y: 1.7)
                       
                                 TextHelvetica(content: ")", size: 22)
@@ -712,7 +743,7 @@ struct LogModuleHeader: View{
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         withAnimation(.spring()) {
                             viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics")
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: exerciseID, RowID: 0, popUpId: "popUpDataMetrics")
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
                                   .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -733,7 +764,7 @@ struct LogModuleHeader: View{
                             HapticManager.instance.impact(style: .rigid)
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu")
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: exerciseID, RowID: 0, popUpId: "popUpDotsMenu")
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
                                   .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -806,7 +837,7 @@ struct NotesModule: View{
 }
 struct CoreLogModule: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
-    var ModuleID: Int
+    var ModuleID: UUID
     var body: some View{
       
         ZStack{
@@ -1160,14 +1191,14 @@ struct SuperTextField: View {
 struct ContentGrid: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
 
-    var ModuleID: Int
+    var ModuleID: UUID
     var body: some View{
-        
-        let module = viewModel.exersiseModules[ModuleID]
+        let exerciseID = viewModel.getUUIDindex(index: ModuleID)
+        let module = viewModel.exersiseModules[exerciseID]
         
         ForEach(module.setRows){
             row in
-            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID)
+            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: exerciseID)
 
               
       
@@ -1192,8 +1223,9 @@ struct ContentGrid: View {
 
 struct Header: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
-    var parentModuleID: Int
+    var parentModuleID: UUID
     var body: some View{
+        let exerciseID = viewModel.getUUIDindex(index: parentModuleID)
         ZStack{
             Rectangle()
                 .cornerRadius(4, corners: [.topLeft, .topRight])
@@ -1224,7 +1256,7 @@ struct Header: View {
                     Button {
                         HapticManager.instance.impact(style: .rigid)
               
-                        viewModel.addEmptySet(moduleID: parentModuleID)
+                        viewModel.addEmptySet(moduleID: exerciseID)
               
  
                     }

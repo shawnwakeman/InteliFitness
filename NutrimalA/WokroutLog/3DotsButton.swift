@@ -319,6 +319,7 @@ struct DotsMenuView: View {
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                     }
+              
                 }
                 label: {
                     HStack{

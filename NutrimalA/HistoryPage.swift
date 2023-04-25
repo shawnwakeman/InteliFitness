@@ -25,13 +25,19 @@ import SwiftUI
 struct HistoryPage: View {
 
     @ObservedObject var viewModel: HomePageViewModel
-    @Binding var asdh: Bool
+
+
+    @Binding var isNavigationBarHidden: Bool
+    
     @State private var search: String = ""
     @State private var showTitle = true
     @State private var rectanglePosition: CGFloat = .zero
-    private let scrollId = "scrollId"
     
-    init(viewModel: HomePageViewModel, asdh: Binding<Bool>) {
+    private let scrollId = "scrollId"
+
+
+    
+    init(viewModel: HomePageViewModel, isNavigationBarHidden: Binding<Bool>) {
         
         
         UINavigationBar.appearance().barTintColor = .clear
@@ -52,8 +58,9 @@ struct HistoryPage: View {
        
         
         self.viewModel = viewModel
-        self._asdh = asdh
-        
+  
+        self._isNavigationBarHidden = isNavigationBarHidden
+ 
        
     }
     
@@ -75,15 +82,9 @@ struct HistoryPage: View {
       
 
                     .navigationBarTitle(Text("History").font(.subheadline), displayMode: .inline)
-                
+                    .navigationBarHidden(false)
                               .navigationBarItems(
-                                                  leading: Button(action: {
-                                                      withAnimation(.spring(response: 0.4, dampingFraction: 1, blendDuration: 0)) {
-                                                                asdh.toggle()
-                                                            }
-                                                    }) {
-                                                      Image(systemName: "arrow.left")
-                                                  },
+                                                  
                                                   trailing: NavigationLink(destination: CalendarView()) {
                                                       Text("Calendar")
                                                         
@@ -288,6 +289,10 @@ struct HistoryPage: View {
 
            // Use inline mode for the title
 
+            }
+            .navigationBarTitle("Visible Title 1")
+            .onAppear {
+                self.isNavigationBarHidden = false
             }
         }
 

@@ -193,24 +193,65 @@ struct HistoryPage: View {
                                         .padding(.bottom, -20)
                                         .padding(.leading, 20)
                                         
-                                        HStack {
+                                        
                                             VStack(alignment: .leading) {
+                                                Rectangle()
+                                                    .frame(height: getScreenBounds().height * 0.006)
+                                                    .foregroundColor(.clear)
+                                                
                                                 ForEach(workout.exercises) {exercise in
                                                   
+                                                       
+                                    
+                                                    
+                                                    HStack {
+                                                        
+                                                        
+                                                        HStack {
+                                                            TextHelvetica(content: "\(exercise.setRows.count) x \(exercise.exersiseName)", size: 16)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                                .lineLimit(1)
+                                                             
+                                                                .padding(.leading, 10)
+                                                            Spacer()
+                                                        }.frame(width: getScreenBounds().width * 0.4)
+                                                       
+                                                                
+                                                        let rows = exercise.setRows
+                                                        if let bestRow = calculateBestSet(rows: rows) {
+                                                            HStack(spacing: 0){
+                                                                TextHelvetica(content: "\(bestRow.reps) x \(bestRow.weight.clean)", size: 16)
+                                                          
+                                                                    .foregroundColor(Color("GrayFontOne"))
+                                                                if bestRow.repMetric != 0 {
+                                                                    TextHelvetica(content: " @ \(bestRow.repMetric.clean)", size: 16)
+                                                                        .foregroundColor(Color("GrayFontOne"))
+                                                                }
+                                                            }
+                                                            Spacer()
+                                                        }
+                                                        
+                                                          
+                                                        
+                                                    }
+                                                    Divider()
+                                                        .frame(height: borderWeight)
+                                                        .overlay(Color("BorderGray"))
+
                                                 }
-                                            }
-                                            .padding(.vertical, 15)
-                                           
-                                      
+                          
+                                               
                                           
-                                        }
-                                        
-                                        .cornerRadius(10)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                                        .padding(.vertical, 20)
+                                              
+                                            }
+                                            
+                                            .cornerRadius(10)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                                            .padding(.vertical, 20)
                                         .padding(.horizontal, 15)
+                                        
                                         
                                        
                                     }
@@ -262,42 +303,43 @@ struct HistoryPage: View {
     }
     
     func calculateBestSet(rows: [WorkoutLogModel.ExersiseSetRow]) -> WorkoutLogModel.ExersiseSetRow? {
-            var mostDifficultSet: WorkoutLogModel.ExersiseSetRow?
-            var highestDifficulty: Float = 0
+        var mostDifficultSet: WorkoutLogModel.ExersiseSetRow? = nil
+        var highestDifficulty: Float = 0
+        
+        for row in rows {
+            var nonZeroValues: Int = 0
+            var totalValue: Float = 0
             
-            for row in rows {
-                var nonZeroValues: Int = 0
-                var totalValue: Float = 0
-                
-                if row.repMetric != 0 {
-                    totalValue += row.repMetric
-                    nonZeroValues += 1
-                }
-                
-                if row.weight != 0 {
-                    totalValue += row.weight
-                    nonZeroValues += 1
-                }
-                
-                if row.reps != 0 {
-                    totalValue += Float(row.reps)
-                    nonZeroValues += 1
-                }
-                
-                if nonZeroValues == 0 {
-                    continue
-                }
-                
-                let averageValue: Float = totalValue / Float(nonZeroValues)
-                
-                if averageValue > highestDifficulty {
-                    highestDifficulty = averageValue
-                    mostDifficultSet = row
-                }
+            if row.repMetric != 0 {
+                totalValue += row.repMetric
+                nonZeroValues += 1
             }
             
-            return mostDifficultSet
+            if row.weight != 0 {
+                totalValue += row.weight
+                nonZeroValues += 1
+            }
+            
+            if row.reps != 0 {
+                totalValue += Float(row.reps)
+                nonZeroValues += 1
+            }
+            
+            if nonZeroValues == 0 {
+                continue
+            }
+            
+            let averageValue: Float = totalValue / Float(nonZeroValues)
+            
+            if averageValue > highestDifficulty {
+                highestDifficulty = averageValue
+                mostDifficultSet = row
+            }
+        }
+        
+        return mostDifficultSet
     }
+
 }
 
 struct CalendarView: View {

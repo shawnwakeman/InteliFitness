@@ -57,6 +57,7 @@ struct WorkoutLogModel {
         var ExersiseID: Int
         var ExersiseCatagory: String = ""
         var ExersiseEquipment: String
+        var restTime: Int
         var isLast: Bool = false
 
     }
@@ -67,6 +68,7 @@ struct WorkoutLogModel {
         var exerciseEquipment: String
         let id: Int
         var selected: Bool = false
+        var restTime: Int
     }
     
     
@@ -139,9 +141,9 @@ struct WorkoutLogModel {
         exersiseModules[exersiseModuleID].setRows[RowID].prevouslyChecked  = state
     }
     
-    mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String) {
+    mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String, restTime: Int) {
 
-        exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment))
+        exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment, restTime: restTime))
     }
     
     mutating func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {
@@ -170,9 +172,22 @@ struct WorkoutLogModel {
 
     mutating func setRestTime(time: Int) {
         restTime.timeElapsed = time
+        restTime.timePreset = time
 
 
         
+    }
+    
+    mutating func setTimePreset(time: Int) {
+        restTime.timePreset = time
+       
+
+    }
+    
+    mutating func setTimeInWorkout(time: Int, exerciseID: Int) {
+    
+
+        exersiseModules[exerciseID].restTime = time
     }
     
     mutating func setWorkoutTime(time: Int) {
@@ -192,7 +207,8 @@ struct WorkoutLogModel {
         let defaults = UserDefaults.standard
 
         do {
-            let encodedData = try JSONEncoder().encode(exersiseModules)
+            let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
+            let encodedData = try JSONEncoder().encode(filterExerciseModules)
             defaults.set(encodedData, forKey: "exersiseModules")
             let time = try JSONEncoder().encode(Date())
             defaults.set(time, forKey: "workoutTime")
@@ -214,15 +230,6 @@ struct WorkoutLogModel {
 
     mutating func loadExersiseModules() {
         let defaults = UserDefaults.standard
-
-        if let savedData = defaults.object(forKey: "exersiseModules") as? Data {
-            do {
-                exersiseModules = try JSONDecoder().decode([ExersiseLogModule].self, from: savedData)
-                
-            } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
-            }
-        }
         
         if let savedData = defaults.object(forKey: "workoutTime") as? Data {
             if let elapsedTime = defaults.object(forKey: "elapsedTime") as? Data {
@@ -256,6 +263,17 @@ struct WorkoutLogModel {
             }
          
         }
+        
+        
+        if let savedData = defaults.object(forKey: "exersiseModules") as? Data {
+            do {
+                exersiseModules = try JSONDecoder().decode([ExersiseLogModule].self, from: savedData)
+                
+            } catch {
+                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+            }
+        }
+
     }
 
     

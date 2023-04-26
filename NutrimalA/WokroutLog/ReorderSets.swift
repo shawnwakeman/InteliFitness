@@ -15,6 +15,9 @@ struct ReorderSets: View {
     
     @State private var showingAlert = false
     @State private var itemToDelete: ExersiseLogModule? = nil
+    
+
+
     var body: some View {
         // Add a blur effect to the background
 
@@ -26,7 +29,7 @@ struct ReorderSets: View {
                     HStack {
                         
                         
-                        TextHelvetica(content: "Reorder Exercises", size: 27)
+                        TextHelvetica(content: "Edit Exercises", size: 27)
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()
@@ -61,32 +64,41 @@ struct ReorderSets: View {
                         .overlay(Color("BorderGray"))
             
                     if viewModel.filteredExerciseModules.count > 0 {
-                        ZStack {
-                            Color.red.edgesIgnoringSafeArea(.all) // Add this line to make the background red
+                 
+                          // Add this line to make the background red
 
-                            NavigationView {
-                                ZStack {
-                                    
-                                    List {
-                                        
-                                        ForEach(viewModel.exersiseModules) { workoutModule in
-                                            if workoutModule.isLast == false {
-                                                Text(workoutModule.exersiseName)
-                                            }
-                           
-                                            
+              
+                            
+         
+                         
+                                
+                                List {
+
+                                    ForEach(viewModel.exersiseModules) { workoutModule in
+                                        if workoutModule.isLast == false {
+  
+                                            TextHelvetica(content: workoutModule.exersiseName, size: 20)
+                                                .foregroundColor(Color("WhiteFontOne"))
+                                                .listRowBackground(Color("MainGray"))
                                         }
-                                        .onMove(perform: relocate)
-          
+                                        
                                     }
-                                    .environment(\.editMode, $editMode)
+                                    .onMove(perform: relocate)
                                 }
-                            }
-                        }
+                                .scrollContentBackground(.hidden)
+                                .background(Color("DBblack").edgesIgnoringSafeArea(.all))
+                                .environment(\.editMode, $editMode)
+                           
+                                
+                           
+                       
+                 
+                    
                         
                     } else {
                         Spacer()
                         TextHelvetica(content: "Exercises Will Apear Here", size: 25)
+                            .foregroundColor(Color("GrayFontOne"))
                             .offset(y: -20)
                         Spacer()
                         
@@ -96,7 +108,7 @@ struct ReorderSets: View {
                     
                     
                 }
-                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.4)
+                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.35)
                 .background(Color("DBblack"))
                 .cornerRadius(10)
                 .overlay(

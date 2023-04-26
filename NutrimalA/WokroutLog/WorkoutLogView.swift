@@ -21,6 +21,7 @@ struct WorkoutLogView: View {
     @State private var exersiseNotes: String = ""
     @State private var newModuleOpacity = false
     @State private var workoutName: String = ""
+
  
 
     @Environment(\.scenePhase) private var scenePhase
@@ -33,36 +34,47 @@ struct WorkoutLogView: View {
         ZStack {
             ScrollView(.vertical){
                 VStack(spacing: 0) {
-                    HStack {
-                    
-                        TextField("", text: $workoutName, prompt: Text("Workout Name").foregroundColor(Color("WhiteFontOne")))
-                            .font(.custom("SpaceGrotesk-Medium", size: 40))
-                            .foregroundColor(Color("WhiteFontOne"))
-                            .bold()
-                            .multilineTextAlignment(.leading)
-                            .scaledToFit()
-           
-                        ZStack{
-                            
-                            Image("meatBalls")
-                                .resizable()
-                                .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
-                            
-                            
 
-                            Button(action: {
-                                withAnimation(.spring()) {
-                                    workoutLogViewModel.setPopUpState(state: true, popUpId: "ReorderSets")
-                                }}, label: {
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .stroke(Color("BorderGray"), lineWidth: WorkoutLogView.borderWeight)
-                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
-                                                      
-
-                        }
+                        HStack {
                         
-                        Spacer()
-                    }
+                            TextField("", text: $workoutName, prompt: Text("").foregroundColor(Color("GrayFontOne")))
+                                .font(.custom("SpaceGrotesk-Medium", size: 40))
+                                .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                                .scaledToFit()
+                                
+                            
+                            
+                            ZStack{
+                                
+                                Image("meatBalls")
+                                    .resizable()
+                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                
+                                
+
+                                Button(action: {
+                                    withAnimation(.spring()) {
+                                        workoutLogViewModel.setPopUpState(state: true, popUpId: "ReorderSets")
+                                    }}, label: {
+                                        RoundedRectangle(cornerRadius: 3)
+                                            .stroke(Color("BorderGray"), lineWidth: WorkoutLogView.borderWeight)
+                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                                                          
+
+                            }
+                            .offset(y: 3)
+                            Spacer()
+                        }
+                       
+                        
+                    
+                    
+                        
+                        
+                        
+                    
 
  
                   
@@ -162,13 +174,14 @@ struct WorkoutLogView: View {
 
      
             let popUps = workoutLogViewModel.workoutLogModel.popUps
-            let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState
+            let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState || popUps[8].RPEpopUpState
             
 
             Rectangle()
                 .edgesIgnoringSafeArea(.all)
                 .foregroundColor(.black)
                 .opacity(displayStats ? 0.65 : 0)
+            
             Group {
 
                 TimerCompletedPopUp(viewModel: workoutLogViewModel)
@@ -176,7 +189,7 @@ struct WorkoutLogView: View {
                     .allowsHitTesting(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState)
                 PopupView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
-                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.72 : UIScreen.main.bounds.height * 1.5)
+                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.69 : UIScreen.main.bounds.height * 1.5)
 
 
 
@@ -191,7 +204,7 @@ struct WorkoutLogView: View {
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.7 : getScreenBounds().height * 1.3)
                 
                 ReorderSets(viewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? getScreenBounds().height * 0.25 : getScreenBounds().height * 1.4)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? getScreenBounds().height * 0.7 : getScreenBounds().height * 1.4)
 
             }
             
@@ -268,6 +281,10 @@ struct WorkoutLogView: View {
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
                 workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerCompletedPopUP")
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "ReorderSets")
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
+                
             }
 
             withAnimation(.spring(response: 0))
@@ -308,7 +325,12 @@ struct WorkoutLogView: View {
                 fatalError("Unknown scene phase")
             }
         }
-        .onAppear(perform: requestNotificationPermission)
+        .onAppear {
+            workoutName = "Workout Name"
+
+            requestNotificationPermission()
+            
+        }
     }
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
@@ -768,6 +790,7 @@ struct LogModuleHeader: View{
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
                             viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu", UUIDid: moduleUUID)
+                            viewModel.setTimePreset(time: viewModel.exersiseModules[parentModuleID].restTime)
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
                                   .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -939,7 +962,7 @@ struct PopupView: View {
                             let exerciseID = viewModel.getUUIDindex(index: workoutModule.id)
                             viewModel.toggleCompletedSet(ExersiseModuleID: exerciseID, RowID: workoutModule.setRows[viewModel.lastRowUsed].id, customValue: true)
                             if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
-                              
+                                viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[popUp.popUpExersiseModuleIndex].restTime)
                                 viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
                                 scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
                             }
@@ -981,11 +1004,12 @@ struct PopupView: View {
                         
 
                     }
-                    .offset(x: -10)
+                   
                     .frame(width: 60, height: 40)
                     
                         
                 }.frame(maxWidth: 50)
+                
                 
 
                 
@@ -994,6 +1018,11 @@ struct PopupView: View {
             
             .padding(.horizontal)
             .padding(.vertical, 10)
+            Divider()
+            .frame(height: borderWeight)
+            .overlay(Color("BorderGray"))
+            .offset(y: -4)
+            
             HStack {
                 switch selectedRPE {
                 case 0 :
@@ -1100,65 +1129,36 @@ struct PopupView: View {
             
                 
                 
-                Divider()
-                    
-                    .frame(height: borderWeight-0.8)
-         
-                    .overlay(Color("BorderGray"))
+              
 
-
-                HStack {
-                    HStack {
-                        TextHelvetica(content: "Target", size: 19)
-                                .foregroundColor(Color("GrayFontOne"))
-                            Divider()
-                            .frame(width: borderWeight, height: 20)
-                            .overlay(Color("BorderGray"))
- 
-                            TextHelvetica(content: "10.5", size: 18)
-                                .foregroundColor(Color("GrayFontOne"))
-                              
-        
-                    }
-                    .padding(.trailing, 5)
-                    .padding(.all, 10)
-                   
-                    Divider()
-                        
-                        .frame(width: borderWeight, height: 51)
-             
-                        .overlay(Color("BorderGray"))
-                        .offset(x: 7)
-                    
-                    HStack(spacing: 0) {
-                        TextHelvetica(content: "Show RPE", size: 18)
-                            .foregroundColor(Color("GrayFontOne"))
-                            .padding(.trailing, 9)
-                        Divider()
-                        .frame(width: borderWeight, height: 20)
-                            .overlay(Color("BorderGray"))
-                        
-                        Toggle("", isOn: $isToggled)
-                            .frame(maxWidth: 52)
-                            .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
-                     
-                        
-                    }
-                    .offset(x: 2)
-                    .padding(.leading, 10)
-                    .padding(.vertical, 10)
-
-                }
+            
                 
             }
      
-            .frame(width: getScreenBounds().width * 0.88, height: getScreenBounds().height * 0.12)
+            .frame(width: getScreenBounds().width * 0.88, height: getScreenBounds().height * 0.065)
             .background(Color("DBblack"))
             .cornerRadius(10)
             .overlay(RoundedRectangle(cornerRadius: 10)
                 .stroke(Color("BorderGray"), lineWidth: borderWeight))
 
+            HStack {
+                HStack {
+                    TextHelvetica(content: "Target", size: 19)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Divider()
+                        .frame(width: borderWeight, height: 20)
+                        .overlay(Color("BorderGray"))
 
+                        TextHelvetica(content: "10.5", size: 18)
+                            .foregroundColor(Color("GrayFontOne"))
+                          
+    
+                }
+
+                .padding(.all, 10)
+    
+
+            }
             
         }
         .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.33)

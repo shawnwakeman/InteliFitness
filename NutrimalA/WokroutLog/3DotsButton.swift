@@ -16,6 +16,8 @@ struct DotsMenuView: View {
     @State private var showingRestTime = false
     @State private var showingUnitSet = false
     @State private var yourMom = 120
+    
+    @State private var timeForSliderStart = 0
     var body: some View {
         // Add a blur effect to the background
         VStack{
@@ -144,6 +146,7 @@ struct DotsMenuView: View {
                             .frame(height: borderWeight)
                             .overlay(Color("BorderGray"))
                         Button {
+                            
                             withAnimation(.spring()) {
                                 viewModel.setPopUpState(state: true, popUpId: "SetTimeSubMenu")
                             }
@@ -152,7 +155,8 @@ struct DotsMenuView: View {
                            
                                 viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
                             }
-
+                            
+                
 
                         }
                         label: {
@@ -392,7 +396,8 @@ struct restTimeSet: View {
                 Button {
 
                 
-                     
+                    viewModel.setTimeInWorkout(time: Int(time), ModuleID: viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex)
+                
                     viewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
                    
                     HapticManager.instance.impact(style: .rigid)
@@ -450,6 +455,10 @@ struct restTimeSet: View {
         .onAppear {
             time = Double(viewModel.restTime.timePreset)
         }
+        .onChange(of: viewModel.restTime.timePreset) { newValue in
+            time = Double(newValue)
+        }
+
         .frame(height: getScreenBounds().height * 0.25)
         .background(Color("DBblack"))
         .cornerRadius(10)

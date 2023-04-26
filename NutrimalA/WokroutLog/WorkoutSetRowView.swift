@@ -112,12 +112,19 @@ struct WorkoutSetRowView: View{
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
         @State private var lbsTextField: String = ""
+        
+        
         var body: some View {
+            
             TextField("", text: $lbsTextField, prompt: Text(rowObject.weightPlaceholder).foregroundColor(Color("GrayFontTwo")))
                 .keyboardType(.decimalPad)
                 .autocorrectionDisabled(true)
                 .font(.custom("SpaceGrotesk-Medium", size: 20))
                 .foregroundColor(Color("WhiteFontOne"))
+                .onTapGesture {
+                    lbsTextField = ""
+                }
+
                 .frame(width: getScreenBounds().width * 0.18, height: getScreenBounds().height * 0.045)
                 .background(.clear)
                 .multilineTextAlignment(.center)
@@ -156,6 +163,12 @@ struct WorkoutSetRowView: View{
                     viewModel.setLastModule(index: moduleID)
                     viewModel.setLastRow(index: rowObject.id)
                 }
+                .onAppear {
+                    if rowObject.weight != 0 {
+                        lbsTextField = String(rowObject.weight.clean)
+                    }
+                    
+                }
             
             
         }
@@ -166,12 +179,18 @@ struct WorkoutSetRowView: View{
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
         @State private var repsTextField: String = ""
+        
+
         var body: some View {
             TextField("", text: $repsTextField, prompt: Text(rowObject.repsPlaceholder).foregroundColor(Color("GrayFontTwo")))
                     .keyboardType(.numberPad)
                     .autocorrectionDisabled(true)
                     .font(.custom("SpaceGrotesk-Medium", size: 20))
                     .foregroundColor(Color("WhiteFontOne"))
+                    .onTapGesture {
+                        repsTextField = ""
+                    }
+
                     .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
                     .background(.clear)
                     .multilineTextAlignment(.center)
@@ -188,15 +207,19 @@ struct WorkoutSetRowView: View{
           
                     }
                        
-                    .onTapGesture {
-                        repsTextField = ""
-                    }
-
+           
                     .onChange(of: repsTextField) { newValue in
                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
                         viewModel.setLastModule(index: moduleID)
                         viewModel.setLastRow(index: rowObject.id)
                     }
+                    .onAppear {
+                        if rowObject.reps != 0 {
+                            repsTextField = String(rowObject.reps)
+                        }
+         
+                    }
+            
             
         }
     }
@@ -311,7 +334,7 @@ struct WorkoutSetRowView: View{
                             if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
                                 
                                 
-                                viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                                viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
                                 scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
                             }
                             viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
@@ -322,7 +345,7 @@ struct WorkoutSetRowView: View{
                         HapticManager.instance.impact(style: .heavy)
                     }
                     else {
-                        let _ = print("asdasdasdasd")
+                        HapticManager.instance.notification(type: .error)
                     }
 
                     

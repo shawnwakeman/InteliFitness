@@ -107,8 +107,8 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.addEmptySet(moduleID: moduleID)
     }
     
-    func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String) {
-        workoutLogModel.addEmptyWorkoutModule(exerciseName: exerciseName, exerciseID: exerciseID, ExersiseEquipment: ExersiseEquipment)
+    func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String, restTime: Int) {
+        workoutLogModel.addEmptyWorkoutModule(exerciseName: exerciseName, exerciseID: exerciseID, ExersiseEquipment: ExersiseEquipment, restTime: restTime)
        
         
        
@@ -162,6 +162,14 @@ class WorkoutLogViewModel: ObservableObject {
         }
         
     }
+    func setTimePreset(time: Int) {
+        workoutLogModel.setTimePreset(time: time)
+    }
+    
+    func setTimeInWorkout(time: Int, ModuleID: Int) {
+        workoutLogModel.setTimeInWorkout(time: time, exerciseID: ModuleID)
+    }
+    
     
     func toggleTime(){
         workoutLogModel.toggleTime()
@@ -212,7 +220,7 @@ class WorkoutLogViewModel: ObservableObject {
         
     func addExercisesFromQueue() {
         exersiseQueue.forEach { exercise in
-            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment)
+            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
         }
         clearToExersiseQueue()
     }

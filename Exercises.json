@@ -4,49 +4,57 @@
         "exerciseCategory": ["Chest", "Triceps"],
         "exerciseEquipment": "Barbell",
         "id": 0,
-        "selected": false
+        "selected": false,
+        "restTime": 140
     },
     {
         "exerciseName": "Back Squat",
         "exerciseCategory": ["Quadriceps", "Hamstrings"],
         "exerciseEquipment": "Barbell",
         "id": 1,
-        "selected": false
+        "selected": false,
+        "restTime": 121
+
     },
     {
         "exerciseName": "Deadlift",
         "exerciseCategory": ["Lower Back", "Hamstrings"],
         "exerciseEquipment": "Barbell",
         "id": 2,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Pull-up",
         "exerciseCategory": ["Back", "Biceps"],
         "exerciseEquipment": "",
         "id": 3,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Military Press",
         "exerciseCategory": ["Shoulders", "Triceps"],
         "exerciseEquipment": "Barbell",
         "id": 4,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Lat Pulldown",
         "exerciseCategory": ["Back", "Biceps"],
         "exerciseEquipment": "Machine",
         "id": 5,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Reverse Pec Deck",
         "exerciseCategory": ["Shoulders", "Upper Back"],
         "exerciseEquipment": "Machine",
         "id": 6,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
 
     
@@ -55,41 +63,83 @@
         "exerciseCategory": ["Biceps"],
         "exerciseEquipment": "Machine",
         "id": 7,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Barbell Rows",
         "exerciseCategory": ["Back", "Biceps"],
         "exerciseEquipment": "Barbell",
         "id": 8,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Pec Deck",
         "exerciseCategory": ["Chest", "Shoulders"],
         "exerciseEquipment": "Machine",
         "id": 9,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Dips",
         "exerciseCategory": ["Triceps", "Chest"],
         "exerciseEquipment": "",
         "id": 10,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Tricep Pushdowns",
         "exerciseCategory": ["Triceps", "Chest"],
         "exerciseEquipment": "Machine",
         "id": 11,
-        "selected": false
+        "selected": false,
+        "restTime": 120
     },
     {
         "exerciseName": "Incline Press",
         "exerciseCategory": ["Chest", "Triceps", "Shoulders"],
         "exerciseEquipment": "Dumbell",
         "id": 12,
-        "selected": false
+        "selected": false,
+        "restTime": 120
+    },
+    {
+        "exerciseName": "Romanian Deadlift",
+        "exerciseCategory": ["Hamstrings", "Lower Back"],
+        "exerciseEquipment": "Barbell",
+        "id": 13,
+        "selected": false,
+        "restTime": 120
+    },
+    {
+        "exerciseName": "Leg Press",
+        "exerciseCategory": ["Quadriceps", "Hamstrings", "Glutes"],
+        "exerciseEquipment": "Machine",
+        "id": 14,
+        "selected": false,
+        "restTime": 120
+    },
+    {
+        "exerciseName": "Leg Extension",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Machine",
+        "id": 15,
+        "selected": false,
+        "restTime": 120
+    },
+    {
+        "exerciseName": "Hamstring Curl",
+        "exerciseCategory": ["Hamstrings"],
+        "exerciseEquipment": "Machine",
+        "id": 16,
+        "selected": false,
+        "restTime": 120
     }
+
+
+
+
 ]

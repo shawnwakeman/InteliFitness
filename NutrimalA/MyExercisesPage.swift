@@ -34,7 +34,7 @@ struct MyExercisesPage: View {
     
     init(viewModel: HomePageViewModel, isNavigationBarHidden: Binding<Bool>) {
         
-        let appearance = UINavigationBarAppearance()
+    
         
         
         

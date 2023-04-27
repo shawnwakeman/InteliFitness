@@ -181,10 +181,12 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.setSelectionState(ExersiseID: ExersiseID)
     }
     
-    func deleteSet(moduleID: Int, rowID: Int) {
-        workoutLogModel.deleteSet(moduleID: moduleID, rowID: rowID)
+    func deleteSet(moduleID: Int, rowID: Int, moduleUUID: UUID) {
+        workoutLogModel.deleteSet(moduleID: moduleID, rowID: rowID, moduleUUID: moduleUUID)
     }
-    
+    func editRestTime(time: Int) {
+        workoutLogModel.editRestTime(time: time)
+    }
     
     func setPopUpState(state: Bool, popUpId: String) {
         workoutLogModel.setPopUpState(state: state, popUpId: popUpId)

@@ -206,6 +206,7 @@ struct WorkoutLogView: View {
                         workoutLogViewModel.setPopUpState(state: false, popUpId: "ReorderSets")
                         workoutLogViewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
                         workoutLogViewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerPopUp")
         //                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
         //                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
                         
@@ -277,11 +278,6 @@ struct WorkoutLogView: View {
                 .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
             
             
-            
-            
-
-
-            
             weightUnitSet(viewModel: workoutLogViewModel)
                 .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0)
 
@@ -317,6 +313,19 @@ struct WorkoutLogView: View {
 
 
             }
+            
+            
+            Group {
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(workoutLogViewModel.workoutLogModel.popUps[11].RPEpopUpState ? 1 : 0)
+                    .scaleEffect(1.2)
+                
+                TimerPopUp(viewModel: workoutLogViewModel)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TimerPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
+
+            }
+            
           
             Group {
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -624,6 +633,7 @@ struct SetMenu: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var isToggled = false
+
     var body: some View {
         // Add a blur effect to the background
         
@@ -753,7 +763,7 @@ struct SetMenu: View {
                     HapticManager.instance.impact(style: .rigid)
                     let index = viewModel.getPopUp(popUpId: "SetMenuPopUp")
 
-                    viewModel.deleteSet(moduleID: index.popUpExersiseModuleIndex, rowID: index.popUpRowIndex)
+                    viewModel.deleteSet(moduleID: index.popUpExersiseModuleIndex, rowID: index.popUpRowIndex, moduleUUID: index.popUPUUID)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
                     }
@@ -972,7 +982,7 @@ struct ExersiseLogModule: View {
 
                 NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
             }
-            CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID)
+            CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID, moduleUUID: moduleUUID)
         }
 
     }
@@ -1331,6 +1341,7 @@ struct NotesModule: View{
 struct CoreLogModule: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var ModuleID: Int
+    var moduleUUID: UUID
     var body: some View{
       
         ZStack{
@@ -1346,7 +1357,7 @@ struct CoreLogModule: View {
          
                 VStack(alignment: .leading, spacing: 0){
                     Header(viewModel: viewModel, parentModuleID: ModuleID)
-                    ContentGrid(viewModel: viewModel, ModuleID: ModuleID)
+                    ContentGrid(viewModel: viewModel, ModuleID: ModuleID, moduleUUID: moduleUUID)
                     
                 }
               
@@ -1664,24 +1675,24 @@ struct ContentGrid: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
 
     var ModuleID: Int
+    var moduleUUID: UUID
     var body: some View{
         
         let module = viewModel.exersiseModules[ModuleID]
         
         ForEach(module.setRows){
             row in
-            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID)
-
-              
-      
-            if (row.id != module.setRows.indices.last){
+            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID)
+           
+            if row.id != module.setRows.count - 1 {
                 Divider()
-                    
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
-            }
-            
 
+            }
+                
+          
+          
                 
 
 

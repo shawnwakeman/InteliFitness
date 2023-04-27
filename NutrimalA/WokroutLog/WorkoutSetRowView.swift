@@ -11,7 +11,7 @@ struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
     var moduleID: Int
- 
+    var moduleUUID: UUID
     @State private var lbsTextField: String = ""
     @State private var familyName: String = ""
     @State private var RPEpopUpDisplayed = false
@@ -23,7 +23,7 @@ struct WorkoutSetRowView: View{
         HStack(spacing: 0){
 
             
-            setIndexView(moduleID: moduleID, rowObject: rowObject, viewModel: viewModel)
+            setIndexView(moduleID: moduleID, moduleUUID: moduleUUID, rowObject: rowObject, viewModel: viewModel)
             
             previousSetView(rowObject: rowObject)
             
@@ -37,16 +37,21 @@ struct WorkoutSetRowView: View{
             HStack{
 
                 repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
-                if viewModel.exersiseModules[moduleID].displayingRPE == true {
-                    repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
+                if let module = viewModel.exersiseModules[safe: moduleID] {
+                    if module.displayingRPE == true {
+                        repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
+                    }
+                   
                 }
             
                 
                 
             }
+            .frame(width: getScreenBounds().width * 0.2)
           
 
             .background(Color("DDB"))
+
             Divider()
                 .frame(width: borderWeight)
                 .overlay(Color("BorderGray"))
@@ -66,6 +71,7 @@ struct WorkoutSetRowView: View{
     // MARK: - SubStructs(s)
     struct setIndexView: View {
         var moduleID: Int
+        var moduleUUID: UUID
         var rowObject: WorkoutLogModel.ExersiseSetRow
         @ObservedObject var viewModel: WorkoutLogViewModel
         var body: some View {
@@ -76,9 +82,10 @@ struct WorkoutSetRowView: View{
                        .background(.clear)
                        .onTapGesture {
                            withAnimation(.spring()) {
+                               UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                HapticManager.instance.impact(style: .rigid)
                                viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
-                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: UUID()) // need to change later
+                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: moduleUUID) // need to change later
                            }
                           
                        }
@@ -372,4 +379,8 @@ struct WorkoutSetRowView: View{
 
 
 
-
+extension Collection where Indices.Iterator.Element == Index {
+   public subscript(safe index: Index) -> Iterator.Element? {
+     return (startIndex <= index && index < endIndex) ? self[index] : nil
+   }
+}

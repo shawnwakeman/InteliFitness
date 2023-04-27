@@ -22,7 +22,8 @@ struct WorkoutLogModel {
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TimerCompletedPopUP"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ReorderSets"),
                 PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TitlePagePopUp"),
-                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetMenuPopUp")
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetMenuPopUp"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TimerPopUp")
     ]
 //    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     
@@ -87,7 +88,7 @@ struct WorkoutLogModel {
         var rowSelected: Bool = false
         var repMetric: Float = 0
         var prevouslyChecked: Bool = false
-        let id: Int
+        var id: Int
         
         
     }
@@ -160,6 +161,7 @@ struct WorkoutLogModel {
         exersiseModules[exersiseModuleID].setRows[RowID].reps = value
     }
     mutating func setWeightValue(exersiseModuleID : Int, RowID: Int, value: Float) {
+        
         exersiseModules[exersiseModuleID].setRows[RowID].weight = value
     }
     mutating func addToTime(step: Int) {
@@ -180,12 +182,10 @@ struct WorkoutLogModel {
         
     }
     
-    mutating func deleteSet(moduleID: Int, rowID: Int) {
-        if exersiseModules[moduleID].setRows.count == 1 {
-            let uuidIndex = exersiseModules[moduleID].id
-            removeExersiseModule(exersiseID: uuidIndex)
-        }
-        exersiseModules[moduleID].setRows.remove(at: rowID)
+    mutating func editRestTime(time: Int) {
+        restTime.timeElapsed = time
+       
+
     }
     
     
@@ -315,6 +315,21 @@ struct WorkoutLogModel {
    
             exercises[index].selected = false
         }
+    }
+    
+    mutating func deleteSet(moduleID: Int, rowID: Int, moduleUUID: UUID) {
+        var currentSetRows = exersiseModules[moduleID].setRows
+        if currentSetRows.count == 1 {
+          
+            removeExersiseModule(exersiseID: moduleUUID)
+        } else {
+            currentSetRows.remove(at: rowID)
+            for (index, element) in currentSetRows.enumerated() {
+                currentSetRows[index].id = index
+            }
+            exersiseModules[moduleID].setRows = currentSetRows
+        }
+        
     }
     
     

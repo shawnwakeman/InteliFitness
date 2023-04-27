@@ -26,6 +26,14 @@ struct DropDownMenuView: View {
                 .aspectRatio(3.3, contentMode: .fit)
                 
                 HStack {
+                    Button {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        withAnimation(.spring()) {
+                            viewModel.setPopUpState(state: true, popUpId: "TimerPopUp")
+                        }
+                        
+                    }
+                label: {
                     ZStack{
                         
                         ZStack{
@@ -56,6 +64,8 @@ struct DropDownMenuView: View {
                     .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
                     .aspectRatio(2.5, contentMode: .fit)
                     .padding(.leading, 25)
+                }
+                   
                    
                     Rectangle()
                         .aspectRatio(1, contentMode: .fit)
@@ -98,7 +108,7 @@ struct DropDownMenuView: View {
                  
                 }
        
-            
+                
                 ElapsedTime(viewModel: viewModel, step: 1, fontSize: 20)
    
                     .foregroundColor(Color("GrayFontOne"))

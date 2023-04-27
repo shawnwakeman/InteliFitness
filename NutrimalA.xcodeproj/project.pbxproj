@@ -42,6 +42,7 @@
 		D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */; };
 		D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */; };
 		D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */; };
+		D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,7 @@
 		D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DotsButton.swift; sourceTree = "<group>"; };
 		D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMetricsButton.swift; sourceTree = "<group>"; };
 		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPopUp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */,
 				D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */,
 				D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */,
+				D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */,
 			);
 			path = WokroutLog;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
 				D008F4DA29F42FF900B1C6EC /* timerAtribute.swift in Sources */,
+				D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */,
 				D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */,
 				D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */,
 				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,

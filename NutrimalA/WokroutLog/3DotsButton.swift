@@ -147,7 +147,7 @@ struct DotsMenuView: View {
                             .overlay(Color("BorderGray"))
                         Button {
                             
-                            withAnimation(.spring()) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
                                 viewModel.setPopUpState(state: true, popUpId: "SetTimeSubMenu")
                             }
        
@@ -197,7 +197,7 @@ struct DotsMenuView: View {
                     }
                  
                     Button {
-                        withAnimation(.spring()) {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
                             viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
                         }
    
@@ -398,7 +398,10 @@ struct restTimeSet: View {
                 
                     viewModel.setTimeInWorkout(time: Int(time), ModuleID: viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex)
                 
-                    viewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.70, blendDuration: 0)) {
+                        viewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
+                    }
+                  
                    
                     HapticManager.instance.impact(style: .rigid)
 
@@ -485,7 +488,9 @@ struct weightUnitSet: View {
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
-                    viewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.70, blendDuration: 0)) {
+                        viewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
+                    }
                     HapticManager.instance.impact(style: .rigid)
 
 

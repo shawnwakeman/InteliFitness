@@ -21,7 +21,7 @@ struct WorkoutLogView: View {
     @State private var exersiseNotes: String = ""
     @State private var newModuleOpacity = false
     @State private var workoutName: String = ""
-
+    @State private var NamePopUp: Bool = false
  
 
     @Environment(\.scenePhase) private var scenePhase
@@ -35,38 +35,52 @@ struct WorkoutLogView: View {
             ScrollView(.vertical){
                 VStack(spacing: 0) {
 
+                    ZStack {
                         HStack {
-                        
-                            TextField("", text: $workoutName, prompt: Text("").foregroundColor(Color("GrayFontOne")))
-                                .font(.custom("SpaceGrotesk-Medium", size: 40))
-                                .foregroundColor(Color("WhiteFontOne"))
-                                .bold()
-                                .multilineTextAlignment(.leading)
-                                .scaledToFit()
-                                
                             
-                            
-                            ZStack{
+                                TextField("", text: $workoutName, prompt: Text("").foregroundColor(Color("GrayFontOne")))
+                                    .font(.custom("SpaceGrotesk-Medium", size: 40))
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                    .bold()
+                                    .multilineTextAlignment(.leading)
+                                    .scaledToFit()
+                                    
                                 
-                                Image("meatBalls")
-                                    .resizable()
-                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
                                 
+                                ZStack{
+                                    
+                                    Image("meatBalls")
+                                        .resizable()
+                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                    
+                                    
                                 
+                                    Button(action: {
+                                        HapticManager.instance.impact(style: .rigid)
+                                        withAnimation(.spring()) {
+                                            workoutLogViewModel.setPopUpState(state: true, popUpId: "TitlePagePopUp")
+                                        }}, label: {
+                                            RoundedRectangle(cornerRadius: 3)
+                                                .stroke(Color("BorderGray"), lineWidth: WorkoutLogView.borderWeight)
+                                            .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                                    
+                                    
+                                                              
 
-                                Button(action: {
-                                    withAnimation(.spring()) {
-                                        workoutLogViewModel.setPopUpState(state: true, popUpId: "ReorderSets")
-                                    }}, label: {
-                                        RoundedRectangle(cornerRadius: 3)
-                                            .stroke(Color("BorderGray"), lineWidth: WorkoutLogView.borderWeight)
-                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
-                                                          
-
-                            }
-                            .offset(y: 3)
-                            Spacer()
+                                }
+                                .offset(y: 3)
+                                Spacer()
                         }
+                        .zIndex(0)
+                        
+                        
+             
+                            
+                        
+                    
+                        
+                           
+                    }
                        
                         
                     
@@ -140,6 +154,7 @@ struct WorkoutLogView: View {
             }
             
             .onTapGesture {
+
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 //                if workoutLogViewModel.lastRowUsed != 100 {
 //                    let workoutModule = workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed]
@@ -174,23 +189,46 @@ struct WorkoutLogView: View {
 
      
             let popUps = workoutLogViewModel.workoutLogModel.popUps
-            let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState || popUps[8].RPEpopUpState
+            let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState || popUps[8].RPEpopUpState || popUps[9].RPEpopUpState || popUps[10].RPEpopUpState
             
 
             Rectangle()
                 .edgesIgnoringSafeArea(.all)
                 .foregroundColor(.black)
-                .opacity(displayStats ? 0.65 : 0)
+                .opacity(displayStats ? 0.4 : 0)
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerCompletedPopUP")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "ReorderSets")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
+                        workoutLogViewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+        //                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
+        //                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
+                        
+                    }
+                }
             
             Group {
 
                 TimerCompletedPopUp(viewModel: workoutLogViewModel)
                     .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState ? 1 : 0)
                     .allowsHitTesting(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState)
+                
+                
                 PopupView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
                     .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.69 : UIScreen.main.bounds.height * 1.5)
-
+                
+                
+               
+                
+                PopupView(viewModel: workoutLogViewModel)
+                    .shadow(radius: 10)
+                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.69 : UIScreen.main.bounds.height * 1.5)
 
 
                 DotsMenuView(viewModel: workoutLogViewModel)
@@ -204,21 +242,39 @@ struct WorkoutLogView: View {
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * 0.7 : getScreenBounds().height * 1.3)
                 
                 ReorderSets(viewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? getScreenBounds().height * 0.7 : getScreenBounds().height * 1.4)
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? 1 : 0)
+                    
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? 1 : 0.5, anchor: .top)
+
+//
+//                    .opacity(workoutLogViewModel.getPopUp(popUpId: "TitlePagePopUp").RPEpopUpState ? 1 : 0)
+//
+//                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "TitlePagePopUp").RPEpopUpState ? 1 : 0.5, anchor: .top)
 
             }
             
           
 
+            NamePopUP( viewModel: workoutLogViewModel)
 
+//                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
+//                .position(x: getScreenBounds().width / 2, y: getScreenBounds().height * 0.2)
+
+                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
+                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TitlePagePopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
             
-
-
+            
+            SetMenu( viewModel: workoutLogViewModel)
+                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
+                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
             
             restTimeSet(viewModel: workoutLogViewModel)
-                .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.3)
-                .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 100 : 0)
+                .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
+
+                .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
             
+                .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
             
             
             
@@ -227,8 +283,10 @@ struct WorkoutLogView: View {
 
             
             weightUnitSet(viewModel: workoutLogViewModel)
-                .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.3)
-                .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 100 : 0)
+                .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0)
+
+                .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
+                .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
             
             
             Group {
@@ -239,6 +297,7 @@ struct WorkoutLogView: View {
                 
                 DropDownMenuView(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
                     .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.24)
+                    .shadow(color: .black, radius: 12)
                     .onTapGesture {
                         
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -275,17 +334,6 @@ struct WorkoutLogView: View {
         .onTapGesture {
           
  
-            withAnimation(.spring()) {
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpDataMetrics")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "DropDownMenu")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerCompletedPopUP")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "ReorderSets")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
-                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
-                
-            }
 
             withAnimation(.spring(response: 0))
             {
@@ -362,7 +410,424 @@ struct VisualEffectView: UIViewRepresentable {
     }
 }
 
+struct NamePopUP: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    @State private var isToggled = false
+    var body: some View {
+        // Add a blur effect to the background
+        
+        VStack {
+            
+             
+            HStack {
+
+
+                TextHelvetica(content: "Exersise Metrics", size: 27)
+                    .foregroundColor(Color("WhiteFontOne"))
+                
+                Spacer()
+                
+                Button {
+                    HapticManager.instance.impact(style: .rigid)
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
+                    }
+                }
+                label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .foregroundColor(Color("MainGray"))
+                        Image(systemName: "xmark")
+                            .bold()
+                    }
+                    
+                        
+                }.frame(width: 50, height: 30)
+                
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            
+            Divider()
+            
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+            
+            VStack {
+                Button {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.70, blendDuration: 0)) {
+                        viewModel.setPopUpState(state: true, popUpId: "ReorderSets")
+                    }
+
+                    withAnimation(.linear(duration: 0.9)){
+                   
+                        viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
+                    }
+
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "scalemass")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Reorder Exercises", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                Button {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+                    }
+
+                    withAnimation(.linear(duration: 0.9)){
+                   
+                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                    }
+
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "scalemass")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Add Warm Up Sets", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                Button {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+                    }
+
+                    withAnimation(.linear(duration: 0.9)){
+                   
+                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                    }
+
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "scalemass")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Add Warm Up Sets", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color(.clear))
+                
+
+            }
+            
+          
+           
+            
+        }
+        .frame(maxWidth: getScreenBounds().width * 0.95)
+        .background(Color("DBblack"))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+
+
+
+            
+    }
     
+    struct DisplayRow: View {
+        var metric: String
+        var value: String
+        var body: some View {
+            HStack{
+               
+                TextHelvetica(content: metric, size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+                
+                Spacer()
+                
+                TextHelvetica(content: value, size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+            }
+            .padding(.horizontal)
+            .frame(maxHeight: 22)
+            
+            Divider()
+            
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+        }
+    }
+    
+
+
+}
+
+struct SetMenu: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    @State private var isToggled = false
+    var body: some View {
+        // Add a blur effect to the background
+        
+        VStack {
+            
+             
+            HStack {
+
+
+                TextHelvetica(content: "Exersise Metrics", size: 27)
+                    .foregroundColor(Color("WhiteFontOne"))
+                
+                Spacer()
+                
+                Button {
+                    HapticManager.instance.impact(style: .rigid)
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                    }
+                }
+                label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .foregroundColor(Color("MainGray"))
+                        Image(systemName: "xmark")
+                            .bold()
+                    }
+                    
+                        
+                }.frame(width: 50, height: 30)
+                
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            
+            Divider()
+            
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+            
+            VStack {
+                Button {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: true, popUpId: "ReorderSets")
+                    }
+
+                    withAnimation(.linear(duration: 0.9)){
+                   
+                        viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
+                    }
+
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "scalemass")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Reorder Exercises", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                    
+                    
+                }
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                Button {
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+                    }
+
+                    withAnimation(.linear(duration: 0.9)){
+                   
+                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                    }
+
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "scalemass")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Add Warm Up Sets", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        Spacer()
+                        TextHelvetica(content: "", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+                }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                
+                
+                Button {
+  
+                    HapticManager.instance.impact(style: .rigid)
+                    let index = viewModel.getPopUp(popUpId: "SetMenuPopUp")
+
+                    viewModel.deleteSet(moduleID: index.popUpExersiseModuleIndex, rowID: index.popUpRowIndex)
+                    withAnimation(.spring()) {
+                        viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                    }
+              
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "xmark")
+                            .foregroundColor(Color("MainRed"))
+                            .imageScale(.large)
+                            .bold()
+                    
+                        TextHelvetica(content: "Remove Exersise", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+
+                        
+                    }
+                    .offset(y: -5)
+                    .padding(.horizontal)
+                    .frame(maxHeight: 30)
+                    
+                }
+                
+
+            }
+            
+          
+           
+            
+        }
+        .frame(maxWidth: getScreenBounds().width * 0.95)
+        .background(Color("DBblack"))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+
+
+
+            
+    }
+    
+    struct DisplayRow: View {
+        var metric: String
+        var value: String
+        var body: some View {
+            HStack{
+               
+                TextHelvetica(content: metric, size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+                
+                Spacer()
+                
+                TextHelvetica(content: value, size: 18)
+                    .foregroundColor(Color("WhiteFontOne"))
+            }
+            .padding(.horizontal)
+            .frame(maxHeight: 22)
+            
+            Divider()
+            
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+        }
+    }
+    
+
+
+}
+
+
+
 //    init() {
 //        for famliyName in UIFont.familyNames {
 //            print(famliyName)
@@ -768,7 +1233,7 @@ struct LogModuleHeader: View{
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         withAnimation(.spring()) {
                             viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics", UUIDid: moduleUUID)
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics", exerciseUUID: UUID())
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
                                   .stroke(Color("BorderGray"), lineWidth: borderWeight)
@@ -789,7 +1254,7 @@ struct LogModuleHeader: View{
                             HapticManager.instance.impact(style: .rigid)
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             viewModel.setPopUpState(state: true, popUpId: "popUpDotsMenu")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu", UUIDid: moduleUUID)
+                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDotsMenu", exerciseUUID: moduleUUID)
                             viewModel.setTimePreset(time: viewModel.exersiseModules[parentModuleID].restTime)
                         }}, label: {
                             RoundedRectangle(cornerRadius: 3)
@@ -878,12 +1343,14 @@ struct CoreLogModule: View {
             
             
             
-            VStack(alignment: .leading, spacing: 0){
-                Header(viewModel: viewModel, parentModuleID: ModuleID)
-                ContentGrid(viewModel: viewModel, ModuleID: ModuleID)
-                
-            }
-            
+         
+                VStack(alignment: .leading, spacing: 0){
+                    Header(viewModel: viewModel, parentModuleID: ModuleID)
+                    ContentGrid(viewModel: viewModel, ModuleID: ModuleID)
+                    
+                }
+              
+           
         }
         .frame(width: getScreenBounds().width * 0.9)
     }

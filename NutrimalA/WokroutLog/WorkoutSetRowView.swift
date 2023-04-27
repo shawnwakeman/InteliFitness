@@ -23,7 +23,7 @@ struct WorkoutSetRowView: View{
         HStack(spacing: 0){
 
             
-            setIndexView(rowObject: rowObject)
+            setIndexView(moduleID: moduleID, rowObject: rowObject, viewModel: viewModel)
             
             previousSetView(rowObject: rowObject)
             
@@ -32,7 +32,7 @@ struct WorkoutSetRowView: View{
             Divider()
                 .frame(width: borderWeight)
                 .overlay(Color("BorderGray"))
-                .zIndex(1)
+  
             
             HStack{
 
@@ -44,7 +44,7 @@ struct WorkoutSetRowView: View{
                 
                 
             }
-            .frame(width: getScreenBounds().width * 0.2, height: getScreenBounds().height * 0.045)
+          
 
             .background(Color("DDB"))
             Divider()
@@ -65,14 +65,23 @@ struct WorkoutSetRowView: View{
     
     // MARK: - SubStructs(s)
     struct setIndexView: View {
+        var moduleID: Int
         var rowObject: WorkoutLogModel.ExersiseSetRow
-        
+        @ObservedObject var viewModel: WorkoutLogViewModel
         var body: some View {
             TextHelvetica(content: String(rowObject.setIndex), size: 20)
                        .padding()
                        .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
                        .foregroundColor(Color("LinkBlue"))
                        .background(.clear)
+                       .onTapGesture {
+                           withAnimation(.spring()) {
+                               HapticManager.instance.impact(style: .rigid)
+                               viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
+                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: UUID()) // need to change later
+                           }
+                          
+                       }
                    Divider()
                        .frame(width: borderWeight)
                        .overlay(Color("BorderGray"))
@@ -243,7 +252,7 @@ struct WorkoutSetRowView: View{
                                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
-                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", UUIDid: UUID()) // wront UUID
+                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", exerciseUUID: UUID()) // wront UUID
                                 viewModel.setLastRow(index: rowObject.id)
                                 viewModel.setLastModule(index: moduleID)
                    
@@ -277,7 +286,7 @@ struct WorkoutSetRowView: View{
                                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
-                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", UUIDid: UUID()) // wront UUID
+                                viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", exerciseUUID: UUID()) // wront UUID
                                  viewModel.setLastRow(index: rowObject.id)
                                 viewModel.setLastModule(index: moduleID)
                             }}, label: {

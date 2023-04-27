@@ -105,6 +105,7 @@ struct HistoryPage: View {
                         Rectangle()
                             .frame(height: getScreenBounds().height * 0.06)
                             .foregroundColor(.clear)
+                        
                     
                         
                         ForEach(viewModel.history) { workout in
@@ -276,13 +277,20 @@ struct HistoryPage: View {
                     }
                 }
                 
-                
-                 Rectangle()
-                     .frame(height: getScreenBounds().height * 0.3)
-                     .position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.15)
-                     .foregroundColor(Color("MainGray"))
-                
-               
+                VStack(spacing: 0) {
+                    Rectangle()
+                        .frame(height: getScreenBounds().height * 0.3)
+                     
+                        .foregroundColor(Color("MainGray"))
+                        .shadow(radius: 10)
+                   
+                   Divider()
+                       
+                       .frame(height: borderWeight)
+                       .overlay(Color("BorderGray"))
+                }.position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.14)
+                    .shadow(radius: 10)
+                 
 
 
                

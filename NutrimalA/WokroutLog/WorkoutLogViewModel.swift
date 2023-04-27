@@ -181,7 +181,10 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.setSelectionState(ExersiseID: ExersiseID)
     }
     
-
+    func deleteSet(moduleID: Int, rowID: Int) {
+        workoutLogModel.deleteSet(moduleID: moduleID, rowID: rowID)
+    }
+    
     
     func setPopUpState(state: Bool, popUpId: String) {
         workoutLogModel.setPopUpState(state: state, popUpId: popUpId)
@@ -189,8 +192,8 @@ class WorkoutLogViewModel: ObservableObject {
     func setPrevouslyChecked(exersiseModuleID : Int, RowID: Int, state: Bool) {
         workoutLogModel.setPrevouslyChecked(exersiseModuleID: exersiseModuleID, RowID: RowID, state: state)
     }
-    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int, popUpId: String, UUIDid: UUID) {
-        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID, popUpId: popUpId, UUIDid: UUIDid)
+    func setPopUpCurrentRow(exersiseModuleID : Int, RowID: Int, popUpId: String, exerciseUUID: UUID) {
+        workoutLogModel.setPopUpCurrentRow(exersiseModuleID: exersiseModuleID, RowID: RowID, popUpId: popUpId, exerciseUUID: exerciseUUID)
     }
     func setRepMetric(exersiseModuleID : Int, RowID: Int, RPE: Float) {
         workoutLogModel.setRepMetric(exersiseModuleID: exersiseModuleID, RowID: RowID, RPE: RPE)

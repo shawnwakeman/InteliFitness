@@ -109,6 +109,8 @@ struct MyExercisesPage: View {
                         .frame(height: getScreenBounds().height * 0.3)
                         .position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.02)
                         .foregroundColor(Color("MainGray"))
+                        .shadow(radius: 10, y: 5)
+                    
                     
                     Header()
                         
@@ -281,65 +283,73 @@ struct MyExercisesPage: View {
         @State private var search: String = ""
 
         var body: some View {
-            VStack {
+            VStack(spacing: 0) {
+                VStack {
 
 
-                    
-                ZStack {
-                    TextField("", text: $search, prompt: Text("Search").foregroundColor(Color("GrayFontTwo")))
-                    // not right font also probably wrong on other things.
-                        .keyboardType(.decimalPad)
-                        .padding(.leading)
-                        .multilineTextAlignment(.leading)
-                        .autocorrectionDisabled(true)
-                        .font(.custom("SpaceGrotesk-Medium", size: 20))
-                        .foregroundColor(Color("WhiteFontOne"))
-                        .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
-                        .background(.clear)
-                        .background(Color("DDB"))
-                }
-                .cornerRadius(6)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                
-                
-                HStack {
-                    
+                        
                     ZStack {
-                        Rectangle()
-                            .foregroundColor(Color("MainGray"))
-                            .frame( height: getScreenBounds().height * 0.045)
+                        TextField("", text: $search, prompt: Text("Search").foregroundColor(Color("GrayFontTwo")))
+                        // not right font also probably wrong on other things.
+                            .keyboardType(.decimalPad)
+                            .padding(.leading)
+                            .multilineTextAlignment(.leading)
+                            .autocorrectionDisabled(true)
+                            .font(.custom("SpaceGrotesk-Medium", size: 20))
+                            .foregroundColor(Color("WhiteFontOne"))
+                            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
                             .background(.clear)
                             .background(Color("DDB"))
-                        
-                        TextHelvetica(content: "Any Body Part", size: 16)
                     }
                     .cornerRadius(6)
                     .overlay(
                         RoundedRectangle(cornerRadius: 6)
                             .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                     
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(Color("MainGray"))
-                            .frame( height: getScreenBounds().height * 0.045)
-                            .background(.clear)
-                            .background(Color("DDB"))
+                    
+                    HStack {
                         
-                        TextHelvetica(content: "Any Category", size: 16)
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(Color("MainGray"))
+                                .frame( height: getScreenBounds().height * 0.045)
+                                .background(.clear)
+                                .background(Color("DDB"))
+                            
+                            TextHelvetica(content: "Any Body Part", size: 16)
+                        }
+                        .cornerRadius(6)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                        
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(Color("MainGray"))
+                                .frame( height: getScreenBounds().height * 0.045)
+                                .background(.clear)
+                                .background(Color("DDB"))
+                            
+                            TextHelvetica(content: "Any Category", size: 16)
+                        }
+                        .cornerRadius(6)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                     }
-                    .cornerRadius(6)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                }
-             
-                .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
-                
-            }.frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.12)
-                .offset(y: -5)
+                 
+                    .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
+            
+                    
+                }.frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.12)
+                    .offset(y: -5)
                 .background(Color("MainGray"))
+                
+                
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+            }
 
             
         }

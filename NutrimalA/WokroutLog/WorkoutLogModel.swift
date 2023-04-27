@@ -20,7 +20,9 @@ struct WorkoutLogModel {
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetUnitSubMenu"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ExersisesPopUp"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TimerCompletedPopUP"),
-                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ReorderSets")
+                  PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ReorderSets"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TitlePagePopUp"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetMenuPopUp")
     ]
 //    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     
@@ -177,6 +179,15 @@ struct WorkoutLogModel {
 
         
     }
+    
+    mutating func deleteSet(moduleID: Int, rowID: Int) {
+        if exersiseModules[moduleID].setRows.count == 1 {
+            let uuidIndex = exersiseModules[moduleID].id
+            removeExersiseModule(exersiseID: uuidIndex)
+        }
+        exersiseModules[moduleID].setRows.remove(at: rowID)
+    }
+    
     
     mutating func setTimePreset(time: Int) {
         restTime.timePreset = time
@@ -361,11 +372,11 @@ struct WorkoutLogModel {
         exersiseModules[exersiseModuleID].setRows[RowID].repMetric = RPE
     }
     
-    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int, popUpId: String, UUIDid: UUID) {
+    mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int, popUpId: String, exerciseUUID: UUID) {
         if let popUpIndex = popUps.firstIndex(where: {$0.id == popUpId}) {
             popUps[popUpIndex].popUpExersiseModuleIndex = exersiseModuleID
             popUps[popUpIndex].popUpRowIndex = RowID
-            popUps[popUpIndex].popUPUUID = UUIDid
+            popUps[popUpIndex].popUPUUID = exerciseUUID
         }
 
     }

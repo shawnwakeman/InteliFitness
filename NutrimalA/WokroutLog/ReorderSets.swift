@@ -29,7 +29,7 @@ struct ReorderSets: View {
                     HStack {
                         
                         
-                        TextHelvetica(content: "Edit Exercises", size: 27)
+                        TextHelvetica(content: "Reorder Exercises", size: 27)
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()

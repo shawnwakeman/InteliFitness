@@ -13,7 +13,7 @@ let borderWeight: CGFloat = 1.7
 
 
 struct WorkoutLogView: View {
-    static let borderWeight: CGFloat = 1.7
+
     @ObservedObject var homePageVeiwModel: HomePageViewModel
     @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @State private var progressValue: Float = 0.5
@@ -61,7 +61,7 @@ struct WorkoutLogView: View {
                                             workoutLogViewModel.setPopUpState(state: true, popUpId: "TitlePagePopUp")
                                         }}, label: {
                                             RoundedRectangle(cornerRadius: 3)
-                                                .stroke(Color("BorderGray"), lineWidth: WorkoutLogView.borderWeight)
+                                                .stroke(Color("BorderGray"), lineWidth: borderWeight)
                                             .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
                                     
                                     

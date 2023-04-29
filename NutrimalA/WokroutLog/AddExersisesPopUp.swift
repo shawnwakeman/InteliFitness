@@ -136,15 +136,34 @@ struct AddExersisesPopUp: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                    .padding(.horizontal, 15)
-                    Button {
-                        showingNew = true
-                    }
-                label: {
-                    Text("new")
-                }
                     
-                }
+                    Button {
+                        withAnimation(.spring()) {
+                            showingNew = true
+                        }
+                        
+                    }
+                    label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .foregroundColor(Color("MainGray"))
+                            
+                            Image(systemName: "plus")
+                                .resizable()
+                                .bold()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 17, height: 17)
+                                .foregroundColor(Color("LinkBlue"))
+
+                            
+                        }
+                        
+                    }.frame(width: 40, height: 36)
+                    
+                }.padding(.horizontal, 15)
                     
                 
                 
@@ -218,7 +237,7 @@ struct AddExersisesPopUp: View {
                
                 Divider()
                     
-                    .frame(height: 2)
+                    .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 if filteredExercises.isEmpty {
                     VStack {
@@ -354,7 +373,7 @@ struct AddExersisesPopUp: View {
                 .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
             
             NameAndCategoryView(viewModel: homePageViewModel, showingNew: $showingNew)
-                .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.35 : getScreenBounds().height * 1.3)
+                .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.3)
         }
            
             

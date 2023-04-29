@@ -97,7 +97,7 @@ struct NameAndCategoryView: View {
                     }
                     var exercisesToBeSaved = viewModel.exersises
                     print(exercisesToBeSaved)
-                    exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120))
+                    exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: []))
                     print(exercisesToBeSaved)
                     viewModel.saveExercisesToUserDefaults(exercisesToBeSaved)
                 }

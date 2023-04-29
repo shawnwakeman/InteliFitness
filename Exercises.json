@@ -5,7 +5,9 @@
         "exerciseEquipment": "Barbell",
         "id": 0,
         "selected": false,
-        "restTime": 140
+        "restTime": 140,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Back Squat",
@@ -13,8 +15,9 @@
         "exerciseEquipment": "Barbell",
         "id": 1,
         "selected": false,
-        "restTime": 121
-
+        "restTime": 121,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Deadlift",
@@ -22,7 +25,9 @@
         "exerciseEquipment": "Barbell",
         "id": 2,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Pull-up",
@@ -30,7 +35,9 @@
         "exerciseEquipment": "",
         "id": 3,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Military Press",
@@ -38,7 +45,9 @@
         "exerciseEquipment": "Barbell",
         "id": 4,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Lat Pulldown",
@@ -46,7 +55,9 @@
         "exerciseEquipment": "Machine",
         "id": 5,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Reverse Pec Deck",
@@ -54,7 +65,9 @@
         "exerciseEquipment": "Machine",
         "id": 6,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
 
     
@@ -64,7 +77,9 @@
         "exerciseEquipment": "Machine",
         "id": 7,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Barbell Rows",
@@ -72,7 +87,9 @@
         "exerciseEquipment": "Barbell",
         "id": 8,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Pec Deck",
@@ -80,7 +97,9 @@
         "exerciseEquipment": "Machine",
         "id": 9,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Dips",
@@ -88,7 +107,9 @@
         "exerciseEquipment": "BodyWeight",
         "id": 10,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Tricep Pushdowns",
@@ -96,7 +117,9 @@
         "exerciseEquipment": "Machine",
         "id": 11,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Incline Press",
@@ -104,7 +127,9 @@
         "exerciseEquipment": "Dumbell",
         "id": 12,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Romanian Deadlift",
@@ -112,7 +137,9 @@
         "exerciseEquipment": "Barbell",
         "id": 13,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Leg Press",
@@ -120,7 +147,9 @@
         "exerciseEquipment": "Machine",
         "id": 14,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Leg Extension",
@@ -128,7 +157,9 @@
         "exerciseEquipment": "Machine",
         "id": 15,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     },
     {
         "exerciseName": "Hamstring Curl",
@@ -136,7 +167,9 @@
         "exerciseEquipment": "Machine",
         "id": 16,
         "selected": false,
-        "restTime": 120
+        "restTime": 120,
+        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "exerciseHistory": []
     }
 
 

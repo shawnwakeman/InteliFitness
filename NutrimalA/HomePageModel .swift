@@ -57,6 +57,8 @@ struct HomePageModel {
         let id: Int
         var selected: Bool = false
         var restTime: Int
+        var instructions: [String]
+        var exerciseHistory: [WorkoutLogModel.ExersiseLogModule] = []
     }
     
     mutating func setWorkoutLogModuleStatus(state: Bool) {
@@ -78,6 +80,11 @@ struct HomePageModel {
     
 
     mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+        
+        for exercise in exersiseModules {
+            let exerciseID = exercise.ExersiseID
+            exercises[exerciseID].exerciseHistory.append(exercise)
+        }
         // needs to be cleaned
         let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
         let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)

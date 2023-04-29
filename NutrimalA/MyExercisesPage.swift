@@ -220,7 +220,7 @@ struct MyExercisesPage: View {
                                                                     // action to perform when the button is tapped
                                                     viewModel.setCurrentExercise(exercise: exercise)
                                                     displayingExerciseView = true
-                                                    print(exercise)
+                                                    
                                                    
                                                 }, label: {
                                                     Rectangle()
@@ -293,7 +293,7 @@ struct MyExercisesPage: View {
             
             NameAndCategoryView(viewModel: viewModel, showingNew: $showingNew)
                 .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.35 : getScreenBounds().height * 1.3)
-            ExercisePage()
+            ExercisePage(viewModel: viewModel, showingExrcisePage: $displayingExerciseView)
                 .position(x: getScreenBounds().width/2, y: displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
             
         }
@@ -445,21 +445,6 @@ struct DisplayOnOpenMenuViewModifier: ViewModifier {
     }
 }
  
-extension Bundle {
-    func decode<T: Decodable>(_ file: String) -> T {
-        guard let url = self.url(forResource: file, withExtension: nil) else {
-            fatalError("Failed to locate \(file) in bundle.")
-        }
-        guard let data = try? Data(contentsOf: url) else {
-            fatalError("Failed to load \(file) from bundle.")
-        }
-        let decoder = JSONDecoder()
-        guard let result = try? decoder.decode(T.self, from: data) else {
-            fatalError("Failed to decode \(file) from bundle.")
-        }
-        return result
-    }
-}
 
 
 extension View {

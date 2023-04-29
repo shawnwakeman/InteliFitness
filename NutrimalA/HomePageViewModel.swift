@@ -24,6 +24,8 @@ class HomePageViewModel: ObservableObject {
     var exersiseQueue: Array<HomePageModel.Exersise> {
         return homePageModel.exerciseQueue
     }
+    
+
 
     var history: [HomePageModel.Workout] {
         return homePageModel.history

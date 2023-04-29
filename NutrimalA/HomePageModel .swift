@@ -6,6 +6,8 @@ struct HomePageModel {
         var exercises: [Exersise]
 
         private(set) var history: [Workout] = []
+    
+        private(set) var exerciseQueue: [Exersise] = []
 
         var currentExervice: Exersise?
 
@@ -54,6 +56,7 @@ struct HomePageModel {
         var exerciseEquipment: String
         let id: Int
         var selected: Bool = false
+        var restTime: Int
     }
     
     mutating func setWorkoutLogModuleStatus(state: Bool) {
@@ -61,15 +64,16 @@ struct HomePageModel {
     }
     
 
-    func checkLetter(letter: String) -> Bool {
-        for exercise in exercises {
-            if let firstLetter = exercise.exerciseName.first {
-                if String(firstLetter).uppercased() == letter.uppercased() {
-                    return true
-                }
-            }
+
+    
+    mutating func removeExersiseFromQueue(exersiseID: Int) {
+        if let index = exerciseQueue.firstIndex(where: { $0.id == exersiseID }) {
+            exerciseQueue.remove(at: index)
+            print("Removed item")
+        } else {
+            print("No matching item found")
         }
-        return false
+
     }
     
 
@@ -136,9 +140,23 @@ struct HomePageModel {
     }
 
 
+    mutating func setSelectionState(ExersiseID: Int) {
+        exercises[ExersiseID].selected.toggle()
+    }
+
     
+    mutating func addToExersiseQueue(exersiseID: Int) {
+        exerciseQueue.append(exercises[exersiseID])
+    }
     
-    
+    mutating func clearToExersiseQueue() {
+        exerciseQueue = []
+        for index in exercises.indices {
+ 
+   
+            exercises[index].selected = false
+        }
+    }
     
     
     func saveExersiseHistory() {
@@ -168,6 +186,13 @@ struct HomePageModel {
     }
 
 }
+
+
+
+
+
+
+
 extension Bundle {
     func decode<T: Decodable>(_ filename: String, as type: T.Type = T.self) -> T {
         guard let url = self.url(forResource: filename, withExtension: nil) else {

@@ -332,7 +332,7 @@ struct WorkoutLogView: View {
                     .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.workoutLogModel.popUps[6].RPEpopUpState ? 1 : 0)
                     .offset(y: getScreenBounds().height * -0.07)
-                AddExersisesPopUp(viewModel: workoutLogViewModel)
+                AddExersisesPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
             }
          

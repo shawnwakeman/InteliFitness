@@ -20,6 +20,10 @@ class HomePageViewModel: ObservableObject {
     var workoutLogModuleStatus: Bool{
         return homePageModel.displayingWorkoutLogView
     }
+    
+    var exersiseQueue: Array<HomePageModel.Exersise> {
+        return homePageModel.exerciseQueue
+    }
 
     var history: [HomePageModel.Workout] {
         return homePageModel.history
@@ -34,17 +38,30 @@ class HomePageViewModel: ObservableObject {
         homePageModel.setWorkoutLogModuleStatus(state: state)
     }
     
-    func checkLetter(letter: String) -> Bool {
-        return homePageModel.checkLetter(letter: letter)
-    }
+
     
     func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
         homePageModel.addToHistory(workoutName: workoutName, exersiseModules: exersiseModules)
      
     }
+    func clearToExersiseQueue() {
+        homePageModel.clearToExersiseQueue()
+    }
     
+    func addToExersiseQueue(ExersiseID: Int) {
+        homePageModel.addToExersiseQueue(exersiseID: ExersiseID)
+    }
+    
+    func removeExersiseFromQueue(ExersiseID: Int) {
+        homePageModel.removeExersiseFromQueue(exersiseID: ExersiseID)
+    }
+    
+    func setSelectionState(ExersiseID: Int) {
+        homePageModel.setSelectionState(ExersiseID: ExersiseID)
+    }
     func saveExersiseHistory() {
         homePageModel.saveExersiseHistory()
+        
 
     }
     
@@ -52,6 +69,7 @@ class HomePageViewModel: ObservableObject {
         homePageModel.deleteFromHistory(workoutID: workoutID)
 
     }
+
     func setCurrentExercise(exercise: HomePageModel.Exersise) {
         homePageModel.setCurrentExercise(execise: exercise)
     }

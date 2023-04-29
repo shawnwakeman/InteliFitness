@@ -1,9 +1,9 @@
 import Foundation
 import SwiftUI
 struct WorkoutLogModel {
-    private(set) var exercises: [Exersise] = Bundle.main.decode("Exercises.json")
+
     
-    private(set) var exerciseQueue: [Exersise] = []
+
     
     private(set) var exersiseModules: [ExersiseLogModule] = []
     
@@ -115,20 +115,6 @@ struct WorkoutLogModel {
 //            print("Error saving exercises: \(error)")
 //        }
 //    }
-    
-
-
-    func checkLetter(letter: String) -> Bool {
-        for exercise in exercises {
-            if let firstLetter = exercise.exerciseName.first {
-                if String(firstLetter).uppercased() == letter.uppercased() {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
 
     
     
@@ -191,9 +177,7 @@ struct WorkoutLogModel {
 
         
     }
-    mutating func setSelectionState(ExersiseID: Int) {
-        exercises[ExersiseID].selected.toggle()
-    }
+
 
     mutating func setRestTime(time: Int) {
         restTime.timeElapsed = time
@@ -315,28 +299,11 @@ struct WorkoutLogModel {
     mutating func clearExerciseModules() {
         exersiseModules = []
     }
-    mutating func addToExersiseQueue(exersiseID: Int) {
-        exerciseQueue.append(exercises[exersiseID])
-    }
-    
-    mutating func removeExersiseFromQueue(exersiseID: Int) {
-        if let index = exerciseQueue.firstIndex(where: { $0.id == exersiseID }) {
-            exerciseQueue.remove(at: index)
-            print("Removed item")
-        } else {
-            print("No matching item found")
-        }
 
-    }
     
-    mutating func clearToExersiseQueue() {
-        exerciseQueue = []
-        for index in exercises.indices {
- 
-   
-            exercises[index].selected = false
-        }
-    }
+
+    
+
     
     mutating func deleteSet(moduleID: Int, rowID: Int, moduleUUID: UUID) {
         var currentSetRows = exersiseModules[moduleID].setRows

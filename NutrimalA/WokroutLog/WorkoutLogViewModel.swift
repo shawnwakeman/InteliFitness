@@ -40,18 +40,14 @@ class WorkoutLogViewModel: ObservableObject {
         return workoutLogModel.exersiseModules
     }
     
-    var exersiseQueue: Array<WorkoutLogModel.Exersise> {
-        return workoutLogModel.exerciseQueue
-    }
+
     
 //    func itemExists(withId id: Int) -> Bool {
 //        return exersiseQueue.contains { $0.id == id }
 //    }
 //    
 
-    var exersises: Array<WorkoutLogModel.Exersise> {
-        return workoutLogModel.exercises
-    }
+
     
     var workoutTime: WorkoutLogModel.WorkoutTime {
         return workoutLogModel.workoutTime
@@ -177,9 +173,7 @@ class WorkoutLogViewModel: ObservableObject {
     func addToTime(step: Int){
         workoutLogModel.addToTime(step: step)
     }
-    func setSelectionState(ExersiseID: Int) {
-        workoutLogModel.setSelectionState(ExersiseID: ExersiseID)
-    }
+
     
     func deleteSet(moduleID: Int, rowID: Int, moduleUUID: UUID) {
         workoutLogModel.deleteSet(moduleID: moduleID, rowID: rowID, moduleUUID: moduleUUID)
@@ -207,27 +201,17 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.setWeightValue(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
     }
     
-    func addToExersiseQueue(ExersiseID: Int) {
-        workoutLogModel.addToExersiseQueue(exersiseID: ExersiseID)
-    }
+
+
     
-    func removeExersiseFromQueue(ExersiseID: Int) {
-        workoutLogModel.removeExersiseFromQueue(exersiseID: ExersiseID)
-    }
-    
-    func clearToExersiseQueue() {
-        workoutLogModel.clearToExersiseQueue()
-    }
-    
-    func checkLetter(letter: String) -> Bool {
-        return workoutLogModel.checkLetter(letter: letter)
-    }
+
         
-    func addExercisesFromQueue() {
-        exersiseQueue.forEach { exercise in
+    
+    func addExercisesFromQueue(exercises: [HomePageModel.Exersise]) {
+        exercises.forEach { exercise in
             addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
         }
-        clearToExersiseQueue()
+
     }
     
     func saveExersiseModules() {

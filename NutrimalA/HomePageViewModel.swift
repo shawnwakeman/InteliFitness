@@ -20,7 +20,7 @@ class HomePageViewModel: ObservableObject {
     var workoutLogModuleStatus: Bool{
         return homePageModel.displayingWorkoutLogView
     }
-    
+
     var history: [HomePageModel.Workout] {
         return homePageModel.history
     }
@@ -52,11 +52,19 @@ class HomePageViewModel: ObservableObject {
         homePageModel.deleteFromHistory(workoutID: workoutID)
 
     }
+    func setCurrentExercise(exercise: HomePageModel.Exersise) {
+        homePageModel.setCurrentExercise(execise: exercise)
+    }
     
     func loadHistory() {
         homePageModel.loadHistory()
 
     }
+    
+    func saveExercisesToUserDefaults(_ exercises: [HomePageModel.Exersise]) {
+        homePageModel.saveExercisesToUserDefaults(exercises)
+    }
+//    func addToexercise
 
 
     

@@ -9,7 +9,7 @@
     },
     {
         "exerciseName": "Back Squat",
-        "exerciseCategory": ["Quadriceps", "Hamstrings"],
+        "exerciseCategory": ["Quadriceps"],
         "exerciseEquipment": "Barbell",
         "id": 1,
         "selected": false,
@@ -85,7 +85,7 @@
     {
         "exerciseName": "Dips",
         "exerciseCategory": ["Triceps", "Chest"],
-        "exerciseEquipment": "",
+        "exerciseEquipment": "BodyWeight",
         "id": 10,
         "selected": false,
         "restTime": 120

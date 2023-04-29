@@ -12,16 +12,43 @@ import SwiftUI
 struct AddExersisesPopUp: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var search: String = ""
+    @State private var searchText = ""
+    @State private var selectedType: String? = nil
+    @State private var selectedColor: String? = nil
 
+    private var filteredExercises: [WorkoutLogModel.Exersise] {
+        var filtered = viewModel.exersises
 
+            if !searchText.isEmpty {
+                filtered = filtered.filter { $0.exerciseName.localizedCaseInsensitiveContains(searchText) }
+            }
+
+            if let type = selectedType {
+                filtered = filtered.filter { $0.exerciseEquipment == type }
+            }
+
+            if let color = selectedColor {
+                filtered = filtered.filter { $0.exerciseCategory.contains(color) }
+            }
+
+            return filtered
+        }
+    
+    private var sectionedExercises: [String: [WorkoutLogModel.Exersise]] {
+            Dictionary(grouping: filteredExercises) { $0.exerciseName.prefix(1).uppercased() }
+        }
+
+        private func uniqueValues<T: Hashable>(for keyPath: KeyPath<WorkoutLogModel.Exersise, T>) -> [T] {
+            Set(viewModel.exersises.map { $0[keyPath: keyPath] }).sorted { "\($0)" < "\($1)" }
+        }
     
     var body: some View {
         
-        ZStack {
-   
+        
             VStack(spacing: 0) {
+              
                 HStack {
-                    
+                                    
                     Button {
                         
                         HapticManager.instance.impact(style: .rigid)
@@ -93,32 +120,220 @@ struct AddExersisesPopUp: View {
                         
                     }
                     .frame(width: 60, height: 40)
+                                
+                                            
+                                    }
+                .padding(16)
+                    
+                    TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color("GrayFontOne")))  .font(.custom("SpaceGrotesk-Medium", size: 18))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 10)
+                    .background(Color("DBblack"))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                    .padding(.horizontal, 15)
                 
-                            
-                    }
-                .padding(.horizontal)
-                .frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.1)
-                .background(Color("MainGray"))
                 
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-                
-                ScrollView(.vertical) {
-                    VStack {
-                        Header()
-                        let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
-  
-                        ForEach(alphabet, id: \.self) { letter in
-                            ExerciseGroup(viewModel: viewModel, letter: letter)
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.01)
+                    .foregroundColor(.clear)
+                HStack {
+                    Menu {
+                        // Add a default option to clear the selection
+                        Button(action: {
+                            selectedType = nil
+                        }) {
+                            Text("Any Body Part")
                         }
-                
-                   
                         
+                        // Add a separator
+                        Divider()
+                        
+                        Picker(selection: $selectedType) {
+                            ForEach(uniqueValues(for: \.exerciseEquipment), id: \.self) { equipment in
+                                if !equipment.isEmpty {
+                                    Text(equipment).tag(String?.some(equipment))
+                                }
+                                
+                            }
+                      
+                        } label: {}
+                    } label: {
+                        TextHelvetica(content: selectedType ?? "Any Body Part", size: 18)
+                            .font(.largeTitle)
+                            .frame(width: getScreenBounds().width / 2.165)
                     }
+                    .frame(height: getScreenBounds().height * 0.04)
+                    .background(Color("MainGray"))
+            
+                    Menu {
+                        // Add a default option to clear the selection
+                        Button(action: {
+                            selectedColor = nil
+                        }) {
+                            Text("Any Category")
+                        }
+                        
+                        // Add a separator
+                        Divider()
+                        Picker(selection: $selectedColor) {
+                            ForEach(uniqueValues(for: \.exerciseCategory[0]), id: \.self) { category in
+                                 
+                                    Text(category).tag(String?.some(category))
+                                
+                               
+                            }
+                        } label: {}
+                        
+                    } label: {
+                        TextHelvetica(content: selectedColor ?? "Any Category", size: 18)
+                            .font(.largeTitle)
+                            .frame(width: getScreenBounds().width / 2.165)
+                    }
+                    .frame(height: getScreenBounds().height * 0.04)
+                    .background(Color("MainGray"))
                 }
-              
+                
+                
+                
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.02)
+                    .foregroundColor(.clear)
+                
+                
+               
+                Divider()
+                    
+                    .frame(height: 2)
+                    .overlay(Color("BorderGray"))
+                if filteredExercises.isEmpty {
+                    VStack {
+                        Text("No exercises found")
+                            .font(.title)
+                            .padding(.top, 40)
+                        
+                        Text("Please add an exercise")
+                            .font(.subheadline)
+                            .padding(.top, 10)
+                        
+                        Spacer()
+                    }
+                    .frame(width: 1000)
+                    .background(Color("DBblack"))
+                    
+                } else {
+                    List {
+                        if searchText.isEmpty {
+                            
+                        
+                            ForEach(sectionedExercises.keys.sorted(), id: \.self) { key in
+                                    Section(header: TextHelvetica(content: key, size: 22)) {
+                                        ForEach(sectionedExercises[key]!, id: \.id) { exercise in
+                                            ZStack {
+                                                Button(action: {
+                                                                    // action to perform when the button is tapped
+                                                if viewModel.exersises[exercise.id].selected == false {
+                                                       viewModel.addToExersiseQueue(ExersiseID: exercise.id)
+                                                   } else {
+                                                       viewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
+                                                   }
+                                                    withAnimation(.spring()) {
+                                                        viewModel.setSelectionState(ExersiseID: exercise.id)
+                                                    }
+                                                   
+                                                }, label: {
+                                                    Rectangle()
+                                                        .opacity(0.0001)
+                                                        .foregroundColor(.black)
+                                                }).buttonStyle(.plain)
+                                                HStack {
+                                                    VStack(alignment: .leading) {
+                                                        if viewModel.exersises[exercise.id].selected == false {
+                                                            TextHelvetica(content: exercise.exerciseName, size: 18)
+                                                                .foregroundColor(Color("WhiteFontOne"))
+                                                            TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        else {
+                                                            TextHelvetica(content: exercise.exerciseName, size: 18)
+                                                                .foregroundColor(Color("LinkBlue"))
+                                                            TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        
+                                                    }
+                                                    Spacer()
+                                                    
+                                                    Button {}
+                                                   label: {
+                                                       ZStack {
+                                                           if viewModel.exersises[exercise.id].selected == false {
+                                                               
+                                                               TextHelvetica(content: "?", size: 23)
+                                                                   .bold()
+                                                                   .foregroundColor(Color("LinkBlue"))
+                                                           } else {
+                                                               
+                                                                 Image("checkMark")
+                                                                     .resizable()
+                                                                     .aspectRatio(contentMode: .fit)
+                                                                     .frame(width: 17, height: 17)
+                                                                     
+                                                           }
+                                                         
+                                                         
+                                                           
+                                                       }
+                                                   }
+                                                   .frame(width: getScreenBounds().width * 0.12, height: getScreenBounds().height * 0.04)
+                                                    
+                                                    
+                                                }
+                                               
+                                         
+                                                
+                                            }
+                                            
+                                          
+                                   
+                                            .listRowBackground(Color("MainGray"))
+                                            .listStyle(GroupedListStyle())
+                                          
+                                        }
+                                    }
+                                }
+                           
+                        } else {
+                            ForEach(filteredExercises, id: \.id) { exercise in
+                                VStack(alignment: .leading) {
+                                    TextHelvetica(content: exercise.exerciseName, size: 18)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                    TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                        .foregroundColor(Color("GrayFontOne"))
+                                }
+                            }
+                            .listRowBackground(Color("MainGray"))
+                            .listStyle(GroupedListStyle())
+                        }
+                    }
+                    .scrollContentBackground(.hidden)
+                    .background(Color("DBblack").edgesIgnoringSafeArea(.all))
+   
+                    .environment(\.defaultMinListRowHeight, 80)
+                   
+                }
+                 
+               
+               
+                                                                     
+                         
+                
+
             }
+  
+            .background(Color("MainGray"))
             .frame(height: getScreenBounds().height * 0.86)
             .background(Color("DBblack"))
             .cornerRadius(20)
@@ -132,7 +347,7 @@ struct AddExersisesPopUp: View {
 //            }
 //            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
      
-        }
+        
        
 
        

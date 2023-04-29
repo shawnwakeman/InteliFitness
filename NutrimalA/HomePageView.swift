@@ -308,7 +308,7 @@ struct P1View: View {
                          
                         }
                         .onTapGesture {
-                            self.selectedDestination = AnyView(MyExercisesPage(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                            self.selectedDestination = AnyView(MyExercisesPage(viewModel: homePageViewModel))
                         }
                        
                         

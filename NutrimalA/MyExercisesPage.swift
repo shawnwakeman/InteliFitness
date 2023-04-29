@@ -19,412 +19,415 @@ import SwiftUI
 
 struct MyExercisesPage: View {
     @ObservedObject var viewModel: HomePageViewModel
-    @Binding var isNavigationBarHidden: Bool
-    @State private var search: String = ""
 
-
-    struct ViewOffsetKey: PreferenceKey {
-        static var defaultValue: CGFloat = 0
-
-        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-            value = nextValue()
-        }
-    }
+    @State private var searchText = ""
+    @State private var selectedType: String? = nil
+    @State private var selectedColor: String? = nil
     
-    
-    init(viewModel: HomePageViewModel, isNavigationBarHidden: Binding<Bool>) {
-        
-    
-        
+    @State private var showingNew: Bool = false
+    @State private var displayingExerciseView: Bool = false
+    init(viewModel: HomePageViewModel, searchText: String = "", selectedType: String? = nil, selectedColor: String? = nil) {
         
         
+               
+               
+               
+       UINavigationBar.appearance().barTintColor = .clear
+       UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+       UINavigationBar.appearance().barTintColor = UIColor(Color("MainGray"))
         
-        UINavigationBar.appearance().barTintColor = .clear
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        UINavigationBar.appearance().barTintColor = UIColor(Color("MainGray"))
-           
-        // Set font color for NavigationBarTitle with displayMode = .inline
-        UINavigationBar.appearance().titleTextAttributes = [
-            .font : UIFont(name: "SpaceGrotesk-Bold", size: 20)!,
-            .foregroundColor: UIColor(Color("WhiteFontOne"))
-        ]
+          
+       // Set font color for NavigationBarTitle with displayMode = .inline
+       UINavigationBar.appearance().titleTextAttributes = [
+           .font : UIFont(name: "SpaceGrotesk-Bold", size: 20)!,
+           .foregroundColor: UIColor(Color("WhiteFontOne"))
+       ]
 
-        // Set font color for NavigationBarTitle with Large Font
-        UINavigationBar.appearance().largeTitleTextAttributes = [
-            .font : UIFont(name: "SpaceGrotesk-Bold", size: 40)!,
-            .foregroundColor: UIColor(Color("WhiteFontOne")) // Replace UIColor.red with your desired color
-        ]
-       
+       // Set font color for NavigationBarTitle with Large Font
+       UINavigationBar.appearance().largeTitleTextAttributes = [
+           .font : UIFont(name: "SpaceGrotesk-Bold", size: 40)!,
+           .foregroundColor: UIColor(Color("WhiteFontOne")) // Replace UIColor.red with your desired color
+       ]
         
         self.viewModel = viewModel
-        self._isNavigationBarHidden = isNavigationBarHidden
- 
-        
-       
+        _searchText = State(initialValue: searchText)
+        _selectedType = State(initialValue: selectedType)
+        _selectedColor = State(initialValue: selectedColor)
     }
+
+    
+    
+
+    
+    private var filteredExercises: [HomePageModel.Exersise] {
+        var filtered = viewModel.exersises
+
+            if !searchText.isEmpty {
+                filtered = filtered.filter { $0.exerciseName.localizedCaseInsensitiveContains(searchText) }
+            }
+
+            if let type = selectedType {
+                filtered = filtered.filter { $0.exerciseEquipment == type }
+            }
+
+            if let color = selectedColor {
+                filtered = filtered.filter { $0.exerciseCategory.contains(color) }
+            }
+
+            return filtered
+        }
+    
+    private var sectionedExercises: [String: [HomePageModel.Exersise]] {
+            Dictionary(grouping: filteredExercises) { $0.exerciseName.prefix(1).uppercased() }
+        }
+
+        private func uniqueValues<T: Hashable>(for keyPath: KeyPath<HomePageModel.Exersise, T>) -> [T] {
+            Set(viewModel.exersises.map { $0[keyPath: keyPath] }).sorted { "\($0)" < "\($1)" }
+        }
+    
+  
     
     var body: some View {
-        NavigationStack {
-          
-            ZStack {
-                Color("DBblack").ignoresSafeArea()
-      
-                ZStack {
+        ZStack {
+            NavigationStack{
+                VStack(spacing: 0) {
                     Text("")
-          
-
-                                  .navigationBarTitle(Text("Exercises").font(.subheadline), displayMode: .inline)
-                                  .navigationBarHidden(false)
-                                  .navigationBarItems(
-                                                      
-                                                      trailing: NavigationLink(destination: CalendarView()) {
-                                                          
-                                                          Text("New")
-                                                        
-                                                            
-                                                            
-                                                             
-                                                              
-                                                      }
-                                              )
                     
-                    ScrollView {
-               
-                        
-                        LazyVStack {
-                            Rectangle()
-                                .frame(height: getScreenBounds().height * 0.2)
-                                .foregroundColor(.clear)
-                            let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
-      
-                            ForEach(alphabet, id: \.self) { letter in
-                                ExerciseGroup(viewModel: viewModel, letter: letter)
+                    
+                        .navigationBarTitle(Text("Exercises").font(.subheadline), displayMode: .inline)
+                        .navigationBarHidden(false)
+                        .navigationBarItems(
+                            
+                            trailing: Button {
+                                withAnimation(.spring()) {
+                                    showingNew = true
+                                }
+                            } label: {
+                                Text("new")
                             }
-                            Rectangle()
-                                .frame(height: getScreenBounds().height * 0.2)
-                                .foregroundColor(.clear)
-                        }
-                    }
+                        )
+                    
+                    TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color("GrayFontOne")))  .font(.custom("SpaceGrotesk-Medium", size: 18))
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(Color("DBblack"))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                        .padding(.horizontal, 15)
+                    
+                    
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.3)
-                        .position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.02)
-                        .foregroundColor(Color("MainGray"))
-                        .shadow(radius: 10, y: 5)
-                    
-                    
-                    Header()
-                        
-                        .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.07)
-
-
-                }
-                .preferredColorScheme(.light)
-                       
-
-            }.preferredColorScheme(.light)
-        }
-        
-//        ZStack {
-//
-//            VStack(spacing: 0) {
-//                VStack {
-//
-//
-//
-//                    Header(asdh: $asdh)
-//
-//
-//
-//
-//
-//
-//
-//
-//                }
-//                .padding(.horizontal)
-//                .frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.18)
-//                .background(Color("MainGray"))
-//
-//                Divider()
-//                    .frame(height: borderWeight)
-//                    .overlay(Color("BorderGray"))
-//
-//                ScrollView(.vertical) {
-//                    Rectangle()
-//                        .frame(height: getScreenBounds().height * 0.025)
-//                        .foregroundColor(.clear)
-//                    VStack {
-//
-//                        let alphabet: [String] = (65...90).map { String(UnicodeScalar($0)!) }
-//
-//                        ForEach(alphabet, id: \.self) { letter in
-//                            ExerciseGroup(viewModel: viewModel, letter: letter)
-//                        }
-//
-//
-//
-//                    }
-//                    Rectangle()
-//                        .frame(height: getScreenBounds().height * 0.2)
-//                        .foregroundColor(.clear)
-//                }
-//
-//            }
-//
-//            .background(Color("DBblack"))
-//
-//
-////            HStack {
-////                ExersiseBodyPartButton()
-////                ExersiseBodyPartButton()
-////            }
-////            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
-//
-//        }
-    }
-    
-    
-    
-    
-    
-    
-    struct ExerciseGroup: View {
-        @ObservedObject var viewModel: HomePageViewModel
-        var letter: String
-        var borderColor = Color("LinkBlue")
-        
-        var body: some View {
-            VStack(alignment: .leading, spacing: 0) {
-                
-                if viewModel.checkLetter(letter: letter){
-                    TextHelvetica(content: letter, size: 25)
-                        .padding(.horizontal)
-                        .foregroundColor(Color("WhiteFontOne"))
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        
-                        ForEach(viewModel.exersises.filter { workoutModule in
-                            if let firstLetter = workoutModule.exerciseName.first {
-                                return firstLetter.uppercased() == letter
-                            } else {
-                                return false
+                        .frame(height: getScreenBounds().height * 0.01)
+                        .foregroundColor(.clear)
+                    HStack {
+                        Menu {
+                            // Add a default option to clear the selection
+                            Button(action: {
+                                selectedType = nil
+                            }) {
+                                Text("Any Body Part")
                             }
-                        }) { workoutModule in
-                            ExersiseRow(viewModel: viewModel, exersiseName: workoutModule.exerciseName, exersiseCatagory: workoutModule.exerciseCategory[0], exerciseEquipment: workoutModule.exerciseEquipment, exersiseID: workoutModule.id)
-                           
+                            
+                            // Add a separator
                             Divider()
-                                .frame(height: borderWeight)
-                                .overlay(Color("BorderGray"))
+                            
+                            Picker(selection: $selectedType) {
+                                ForEach(uniqueValues(for: \.exerciseEquipment), id: \.self) { equipment in
+                                    if !equipment.isEmpty {
+                                        Text(equipment).tag(String?.some(equipment))
+                                    }
+                                    
+                                }
+                                
+                            } label: {}
+                        } label: {
+                            TextHelvetica(content: selectedType ?? "Any Body Part", size: 18)
+                                .font(.largeTitle)
+                                .frame(width: getScreenBounds().width / 2.165)
                         }
-                    
+                        .frame(height: getScreenBounds().height * 0.04)
+                        .background(Color("MainGray"))
                         
+                        Menu {
+                            // Add a default option to clear the selection
+                            Button(action: {
+                                selectedColor = nil
+                            }) {
+                                Text("Any Category")
+                            }
+                            
+                            // Add a separator
+                            Divider()
+                            Picker(selection: $selectedColor) {
+                                ForEach(uniqueValues(for: \.exerciseCategory[0]), id: \.self) { category in
+                                    
+                                    Text(category).tag(String?.some(category))
+                                    
+                                    
+                                }
+                            } label: {}
+                            
+                        } label: {
+                            TextHelvetica(content: selectedColor ?? "Any Category", size: 18)
+                                .font(.largeTitle)
+                                .frame(width: getScreenBounds().width / 2.165)
+                        }
+                        .frame(height: getScreenBounds().height * 0.04)
+                        .background(Color("MainGray"))
                     }
-                    .background(Color("DBblack"))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                    .padding(.horizontal)
+                    
+                    
                     
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.03)
+                        .frame(height: getScreenBounds().height * 0.02)
                         .foregroundColor(.clear)
                     
-                }
-            }
-        }
-    }
-    struct ExersiseRow: View {
-        @ObservedObject var viewModel: HomePageViewModel
-        var exersiseName: String
-        var exersiseCatagory: String
-        var exerciseEquipment: String
-        var exersiseID: Int
-
-        var body: some View {
-            HStack {
-                Button {
-
-                
-                }
-            label: {
-                //                    Image("dataIcon")
-                //                        .resizable()
-                //                        .frame(width: getScreenBounds().width * 0.15, height: getScreenBounds().height * 0.05)
-                VStack(alignment: .leading) {
-                    HStack(spacing: 5) {
-                        TextHelvetica(content: exersiseName, size: 18)
-                            .foregroundColor(Color("WhiteFontOne"))
-                        if exerciseEquipment != "" {
-                            TextHelvetica(content: "(" + exerciseEquipment + ")", size: 18)
-                                .foregroundColor(Color("WhiteFontOne"))
-                        }
-        
-                        
-                    }
-                   
-                    TextHelvetica(content: exersiseCatagory, size: 18)
-                        .foregroundColor(Color("GrayFontTwo"))
-                }
-                
-                Spacer()
-
-                
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 7)
-            }
-            .background(viewModel.exersises[exersiseID].selected ? Color("LinkBlue").opacity(0.3) : Color("LinkBlue").opacity(0))
-            
-        }
-        
-    }
-    struct Header: View {
-        @State private var search: String = ""
-
-        var body: some View {
-            VStack(spacing: 0) {
-                VStack {
-
-
-                        
-                    ZStack {
-                        TextField("", text: $search, prompt: Text("Search").foregroundColor(Color("GrayFontTwo")))
-                        // not right font also probably wrong on other things.
-                            .keyboardType(.decimalPad)
-                            .padding(.leading)
-                            .multilineTextAlignment(.leading)
-                            .autocorrectionDisabled(true)
-                            .font(.custom("SpaceGrotesk-Medium", size: 20))
-                            .foregroundColor(Color("WhiteFontOne"))
-                            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
-                            .background(.clear)
-                            .background(Color("DDB"))
-                    }
-                    .cornerRadius(6)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                     
                     
-                    HStack {
-                        
-                        ZStack {
-                            Rectangle()
-                                .foregroundColor(Color("MainGray"))
-                                .frame( height: getScreenBounds().height * 0.045)
-                                .background(.clear)
-                                .background(Color("DDB"))
+                    Divider()
+                    
+                        .frame(height: 2)
+                        .overlay(Color("BorderGray"))
+                    if filteredExercises.isEmpty {
+                        VStack {
+                            Text("No exercises found")
+                                .font(.title)
+                                .padding(.top, 40)
                             
-                            TextHelvetica(content: "Any Body Part", size: 16)
-                        }
-                        .cornerRadius(6)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                        
-                        ZStack {
-                            Rectangle()
-                                .foregroundColor(Color("MainGray"))
-                                .frame( height: getScreenBounds().height * 0.045)
-                                .background(.clear)
-                                .background(Color("DDB"))
+                            Text("Please add an exercise")
+                                .font(.subheadline)
+                                .padding(.top, 10)
                             
-                            TextHelvetica(content: "Any Category", size: 16)
+                            Spacer()
                         }
-                        .cornerRadius(6)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                        .frame(width: 1000)
+                        .background(Color("DBblack"))
+                        
+                    } else {
+                        List {
+                            if searchText.isEmpty {
+                                
+                                
+                                ForEach(sectionedExercises.keys.sorted(), id: \.self) { key in
+                                    Section(header: TextHelvetica(content: key, size: 22)) {
+                                        ForEach(sectionedExercises[key]!, id: \.id) { exercise in
+                                            
+                                            
+                                            ZStack {
+                                                Button(action: {
+                                                                    // action to perform when the button is tapped
+                                                    viewModel.setCurrentExercise(exercise: exercise)
+                                                    displayingExerciseView = true
+                                                    print(exercise)
+                                                   
+                                                }, label: {
+                                                    Rectangle()
+                                                        .opacity(0.0001)
+                                                        .foregroundColor(.black)
+                                                }).buttonStyle(.plain)
+                                                HStack {
+                                                    VStack(alignment: .leading) {
+                                                       
+                                                        TextHelvetica(content: exercise.exerciseName, size: 18)
+                                                            .foregroundColor(Color("WhiteFontOne"))
+                                                        TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                        
+                                                       
+                                                        
+                                                    }
+                                                    Spacer()
+                                                    
+                                                   
+                                                    
+                                                    
+                                                }
+                                               
+                                         
+                                                
+                                            }
+                                            .listRowBackground(Color("MainGray"))
+                                            .listStyle(GroupedListStyle())
+                                            .onTapGesture {
+                                                print("asd123456")
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            } else {
+                                ForEach(filteredExercises, id: \.id) { exercise in
+                                    VStack(alignment: .leading) {
+                                        TextHelvetica(content: exercise.exerciseName, size: 18)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                        TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                            .foregroundColor(Color("GrayFontOne"))
+                                    }
+                                }
+                                .listRowBackground(Color("MainGray"))
+                                .listStyle(GroupedListStyle())
+                            }
+                        }
+                        .scrollContentBackground(.hidden)
+                        .background(Color("DBblack").edgesIgnoringSafeArea(.all))
+                        
+                        .environment(\.defaultMinListRowHeight, 80)
+                        
                     }
-                 
-                    .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
-            
                     
-                }.frame(width: getScreenBounds().width * 1, height: getScreenBounds().height * 0.12)
-                    .offset(y: -5)
+                    
+                    
+                    
+                    
+                    
+                    
+                }
+                
                 .background(Color("MainGray"))
+            }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
+            
+            NameAndCategoryView(viewModel: viewModel, showingNew: $showingNew)
+                .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.35 : getScreenBounds().height * 1.3)
+            ExercisePage()
+                .position(x: getScreenBounds().width/2, y: displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
+            
+        }
+        
+    }
+    struct ExerciseInfo: View {
+        @Environment(\.presentationMode) var presentationMode
+        @ObservedObject var viewModel: HomePageViewModel
+        @Binding var displayingExerciseView: Bool
+
+        var body: some View {
+            // Add a blur effect to the background
+            
+            VStack {
                 
+                 
+                HStack {
+
+                    Button {
+                        withAnimation(.spring()) {
+                            displayingExerciseView = false
+                        }
+                        
+                    }
+                  
+                    label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .foregroundColor(Color("MainGray"))
+                            Image(systemName: "xmark")
+                                .bold()
+                        }
+                        
+                            
+                    }.frame(width: 50, height: 30)
+                    Spacer()
+                    if let exercise = viewModel.homePageModel.currentExervice {
+                        TextHelvetica(content: exercise.exerciseName, size: 20)
+                            .foregroundColor(Color("WhiteFontOne"))
+                    }
+                    
+                    
+                    Spacer()
+                    
+                    Button {
+                        withAnimation(.spring()) {
+                            displayingExerciseView = false
+                        }
+                        
+                    }
+                  
+                    label: {
+                        TextHelvetica(content: "Save", size: 18)
+                            .foregroundColor(Color("LinkBlue"))
+                            
+                    }.frame(width: 50, height: 30)
+                    
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
                 
                 Divider()
+                
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                
+                VStack {
+                    
+                   
+                    HStack {
+                        TextHelvetica(content: "Body Part", size: 12)
+                        Menu {
+                            
+                        }
+                    label: {
+                        
+                    }
+                        
+                    }
+                    HStack {
+                        TextHelvetica(content: "Category", size: 12)
+                    }
+
+                }
+                
+              
+               
+                
+            }
+            .frame(maxWidth: getScreenBounds().width * 0.95)
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+
+
+
+                
+        }
+        
+        struct DisplayRow: View {
+            var metric: String
+            var value: String
+            var body: some View {
+                HStack{
+                   
+                    TextHelvetica(content: metric, size: 18)
+                        .foregroundColor(Color("WhiteFontOne"))
+                    
+                    Spacer()
+                    
+                    TextHelvetica(content: value, size: 18)
+                        .foregroundColor(Color("WhiteFontOne"))
+                }
+                .padding(.horizontal)
+                .frame(maxHeight: 22)
+                
+                Divider()
+                
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
             }
-
-            
         }
+        
+
+
     }
-    
-    struct ExersiseBodyPartButton: View {
-        
-        @State var isMenuOpen = false
-        
-        var body: some View {
-            ZStack {
-                
-                Row()
-                .displayOnMenuOpen(isMenuOpen, offset: 150)
-                
-                
-                Row()
-                .displayOnMenuOpen(isMenuOpen, offset: 100)
-                   
-                
-                Row()
-                .frame( height: getScreenBounds().height * 0.045)
-                .displayOnMenuOpen(isMenuOpen, offset: 45)
 
-                ZStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .foregroundColor(Color("MainGray"))
 
-                        .background(Color("DDB"))
-                    Button {
-                        isMenuOpen.toggle()
-                    }
-                    label : {
-                        RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
-                   
-                    }
-                   
-                    
-                    TextHelvetica(content: "Any Body Part", size: 16)
-                        .foregroundColor(Color("WhiteFontOne"))
-                }
-                .frame( height: getScreenBounds().height * 0.045)
-               
-            }
-        }
-        
-        
-        struct Row: View {
-            var body: some View {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .foregroundColor(Color("MainGray"))
 
-                        .background(Color("DDB"))
-                    Button {
-                     
-                    }
-                    label : {
-                        RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
-                   
-                    }
-                   
-                    
-                    TextHelvetica(content: "Any Body Part", size: 16)
-                        .foregroundColor(Color("WhiteFontOne"))
-                }
-                .frame( height: getScreenBounds().height * 0.045)
-            }
-        }
-    }
-    
-    
-    
 }
 
 

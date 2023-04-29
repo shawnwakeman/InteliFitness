@@ -65,7 +65,7 @@ struct WorkoutLogModel {
 
     }
     
-    struct Exersise: Identifiable, Decodable {
+    struct Exersise: Identifiable, Codable {
         var exerciseName: String
         var exerciseCategory: [String]
         var exerciseEquipment: String
@@ -94,8 +94,29 @@ struct WorkoutLogModel {
     }
 
     
-   
+//    func encodeExercises(_ exercises: [Exersise]) -> Data? {
+//        let encoder = JSONEncoder()
+//        do {
+//            let data = try encoder.encode(exercises)
+//            return data
+//        } catch {
+//            print("Error encoding exercises: \(error)")
+//            return nil
+//        }
+//    }
+//    func saveExercises(_ data: Data) {
+//        let fileManager = FileManager.default
+//        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+//        let fileURL = documentsURL.appendingPathComponent("Exercises.json")
+//
+//        do {
+//            try data.write(to: fileURL, options: .atomic)
+//        } catch {
+//            print("Error saving exercises: \(error)")
+//        }
+//    }
     
+
 
     func checkLetter(letter: String) -> Bool {
         for exercise in exercises {
@@ -324,7 +345,7 @@ struct WorkoutLogModel {
             removeExersiseModule(exersiseID: moduleUUID)
         } else {
             currentSetRows.remove(at: rowID)
-            for (index, element) in currentSetRows.enumerated() {
+            for (index, _) in currentSetRows.enumerated() {
                 currentSetRows[index].id = index
             }
             exersiseModules[moduleID].setRows = currentSetRows

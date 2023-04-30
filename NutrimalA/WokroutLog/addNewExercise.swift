@@ -111,10 +111,7 @@ struct NameAndCategoryView: View {
             }
             .padding(.horizontal)
             .padding(.vertical, 10)
-            Divider()
-            
-                .frame(height: borderWeight)
-                .overlay(Color("BorderGray"))
+           
             Rectangle()
                 .frame(height: getScreenBounds().height * 0.01)
                 .foregroundColor(.clear)

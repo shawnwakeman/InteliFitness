@@ -21,29 +21,25 @@ struct HomePageView: View {
     @State private var loadedPage: PageToLoad = .myExercises
 
     var body: some View {
-        NavigationStack {
-            ZStack {
+        ZStack {
+           
+            
+            NavigationStack {
+           
 
-                GeometryReader { geometry in
-                            ZStack {
-                                P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, homePageViewModel: homePageViewModel)
-                                
-                                
-//
-                                
-                            }
-     
 
-                        }
-
-                WorkoutLogView(homePageVeiwModel: homePageViewModel)
-                               .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * 1.49)
-                               .ignoresSafeArea()
-
-              
+            
+                    P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, homePageViewModel: homePageViewModel)
+                        
+                
             }
             
+            WorkoutLogView(homePageVeiwModel: homePageViewModel)
+                           .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * 1.49)
+                           .ignoresSafeArea()
+
         }
+       
 
     }
     
@@ -267,6 +263,9 @@ struct P1View: View {
                             Spacer()
                           
                         }.frame(height: getScreenBounds().height * 0.08)
+                    }
+                    .onTapGesture {
+                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel))
                     }
                     HStack {
                         ZStack {

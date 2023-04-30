@@ -21,8 +21,10 @@ struct ExercisePage: View {
             VStack {
                 HStack {
                     Button {
-                      
-                        showingExrcisePage = false
+                        withAnimation(.spring()) {
+                            showingExrcisePage = false
+                        }
+                     
                         
                     }
                     label: {
@@ -41,7 +43,7 @@ struct ExercisePage: View {
                     
                     
                     Spacer()
-                    TextHelvetica(content: "Exersise Metrics", size: 20)
+                    TextHelvetica(content: exercise.exerciseName, size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
@@ -49,7 +51,7 @@ struct ExercisePage: View {
                        
                     }
                     label: {
-                        TextHelvetica(content: "Save", size: 21)
+                        TextHelvetica(content: "Edit", size: 18)
                             .foregroundColor(Color("LinkBlue"))
                     }
                    
@@ -86,7 +88,7 @@ struct ExercisePage: View {
 
                 Spacer()
             }
-            .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.8)
+            .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.7)
             .background(Color("DBblack"))
             .cornerRadius(10)
             .overlay(
@@ -103,16 +105,194 @@ struct ExercisePage: View {
 struct Page1View: View {
     var exercise: HomePageModel.Exersise
     var body: some View {
-        ForEach(exercise.instructions, id: \.self) { instruction in
-                    Text(instruction)
+        HStack {
+            TextHelvetica(content: "Instructions", size: 25)
+                .foregroundColor(Color("WhiteFontOne"))
+            Spacer()
         }
+        .padding(.horizontal)
+        
+        VStack(alignment: .leading) {
+            ForEach(exercise.instructions.indices, id: \.self) { index in
+                TextHelvetica( content: "\(index + 1). \(exercise.instructions[index])", size: 15)
+                    .foregroundColor(Color("GrayFontOne"))
+                    
+            }
+            .padding(.all, 10)
+     
+       
+        }
+       
+        .background(Color("DBblack"))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+        .frame(width: getScreenBounds().width * 0.89)
     }
 }
 
 struct Page2View: View {
     var exercise: HomePageModel.Exersise
     var body: some View {
-        Text(exercise.exerciseHistory[0].exersiseName)
+     
+        ScrollView {
+
+            
+            LazyVStack {
+                
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.06)
+                    .foregroundColor(.clear)
+                
+            
+                
+                ForEach(exercise.exerciseHistory) { workout in
+                 
+                        
+                        
+                        
+                        
+                        
+                        VStack(spacing: 0) {
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading) {
+                                    TextHelvetica(content: "Tuesday Feb 12" , size: 27)
+                                        .foregroundColor(Color("WhiteFontOne"))
+                                    
+                                }
+                                Spacer()
+                                
+                                ZStack{
+                                    
+                                    Image("meatBalls")
+                                        .resizable()
+                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                    
+                                    
+
+                                  
+                                                              
+
+                                }
+                                .offset(y: 3)
+                                
+                            }
+                          
+                            .padding(.all, 12)
+                            .background(Color("MainGray"))
+                            
+                            Rectangle()
+                                .frame(height: getScreenBounds().height * 0.006)
+                                .foregroundColor(Color("MainGray"))
+                            
+                            HStack {
+                                TextHelvetica(content: "1000 lbs", size: 16)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: "1000 sets", size: 16)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: "14 reps", size: 16)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: "5 PRs", size: 16)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                              
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 7)
+                            .background(Color("MainGray"))
+                            
+                            Divider()
+                                
+                                .frame(height: borderWeight)
+                                .overlay(Color("BorderGray"))
+                            
+                            VStack {
+                                HStack {
+                                    TextHelvetica(content: "Sets", size: 24)
+                                        .foregroundColor(Color("WhiteFontOne"))
+                                   
+                                    Spacer()
+                                    
+                                    TextHelvetica(content: "1 RM", size: 20)
+                                        .foregroundColor(Color("WhiteFontOne"))
+                                }
+                                .padding(.top, 15)
+                                .padding(.bottom, -20)
+                                .padding(.horizontal, 20)
+                                
+                                
+                                    VStack(alignment: .leading) {
+                                        
+                                        Rectangle()
+                                            .frame(height: 10)
+                                            .foregroundColor(.clear)
+                                        ForEach(workout.setRows) { row in
+                                            VStack {
+                                                
+                                                HStack(spacing: 0){
+                                                  
+                                                    TextHelvetica(content: "\(row.reps) x \(row.weight.clean)", size: 19)
+                                              
+                                                        .foregroundColor(Color("GrayFontOne"))
+                                                    if row.repMetric != 0 {
+                                                        TextHelvetica(content: " @ \(row.repMetric.clean)", size: 19)
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                    }
+                                                    Spacer()
+                                                    TextHelvetica(content: "120", size: 19)
+                                              
+                                                        .foregroundColor(Color("GrayFontOne"))
+                                                    
+                                                }.padding(.horizontal)
+                                           
+                                                Divider()
+                                                    .frame(height: borderWeight)
+                                                    .overlay(Color("BorderGray"))
+                                               
+
+                                            }
+                                          
+                                            
+                                        }
+
+                                   
+
+
+                                    }
+
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                                    .padding(.vertical, 20)
+                                .padding(.horizontal, 15)
+                                
+                                
+                               
+                            }
+                          
+                        }
+                       
+                        .background(Color("DBblack"))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+
+                        .padding(.vertical)
+                        .padding(.horizontal, 18)
+                                    
+          
+                }
+                
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.2)
+                    .foregroundColor(.clear)
+            }
+        }
         
     }
 }

@@ -127,17 +127,15 @@ struct HistoryPage: View {
                                         
                                         ZStack{
                                             
-                                            Image("meatBalls")
-                                                .resizable()
-                                                .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                            
                                             
                                             
 
                                             Button(action: {
                                                 viewModel.deleteExerciseHistory(workoutID: workout.id)
                                             }, label: {
-                                                    RoundedRectangle(cornerRadius: 3)
-                                                          .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                                                Image("meatBalls")
+                                                    .resizable()
                                                     .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
                                                                       
 
@@ -152,10 +150,6 @@ struct HistoryPage: View {
                                     Rectangle()
                                         .frame(height: getScreenBounds().height * 0.006)
                                         .foregroundColor(Color("MainGray"))
-                                    Divider()
-                                        
-                                        .frame(height: borderWeight)
-                                        .overlay(Color("BorderGray"))
                                     
                                     HStack {
                                         TextHelvetica(content: "1 h 30 m", size: 16)
@@ -279,15 +273,12 @@ struct HistoryPage: View {
                 
                 VStack(spacing: 0) {
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.3)
+                        .frame(height: getScreenBounds().height * 0.28)
                      
                         .foregroundColor(Color("MainGray"))
                         .shadow(radius: 10)
                    
-                   Divider()
-                       
-                       .frame(height: borderWeight)
-                       .overlay(Color("BorderGray"))
+                 
                 }.position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.14)
                     .shadow(radius: 10)
                  
@@ -348,7 +339,11 @@ struct HistoryPage: View {
         return mostDifficultSet
     }
 
+    
+   
+
 }
+
 
 struct CalendarView: View {
     var body: some View {

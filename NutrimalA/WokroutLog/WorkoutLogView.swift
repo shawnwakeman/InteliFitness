@@ -8,7 +8,7 @@
 import SwiftUI
 
 import AVFoundation
-let borderWeight: CGFloat = 1.7
+let borderWeight: CGFloat = 0.75
 
 
 
@@ -838,15 +838,7 @@ struct SetMenu: View {
 
 
 
-//    init() {
-//        for famliyName in UIFont.familyNames {
-//            print(famliyName)
-//            for fontName in UIFont.fontNames(forFamilyName: famliyName){
-//                print(fontName)
-//            }
-//
-//        }
-//    }
+   
     
 
 
@@ -1142,7 +1134,7 @@ struct FullWidthButton: View{
 
 
                     TextHelvetica(content: "Add Exersise", size: 20)
-                        .foregroundColor(Color(.white))
+                        .foregroundColor(Color("WhiteFontOne"))
                 }
             }
             
@@ -1586,14 +1578,14 @@ struct PopupView: View {
                                     
                                         .frame(width: getScreenBounds().width * 0.11, height: getScreenBounds().height * 0.07)
                                         .background(Color("WhiteFontOne"))
-                                        .border(Color("BorderGray"), width: borderWeight - 0.5)
+                                        .border(Color("BorderGray"), width: borderWeight)
                                     
                                 } else {
                                 TextHelvetica(content: String(displayRPE.clean), size: 18)
                                 
                                         .frame(width: getScreenBounds().width * 0.11, height: getScreenBounds().height * 0.07)
                                     .background(Color("MainGray"))
-                                    .border(Color("BorderGray"), width: borderWeight - 0.5)
+                                    .border(Color("BorderGray"), width: borderWeight)
                                 
                                 }
                         }
@@ -1684,12 +1676,12 @@ struct ContentGrid: View {
             row in
             WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID)
            
-            if row.id != module.setRows.count - 1 {
-                Divider()
-                    .frame(height: borderWeight)
-                    .overlay(Color("BorderGray"))
-
-            }
+//            if row.id != module.setRows.count - 1 {
+//                Divider()
+//                    .frame(height: borderWeight)
+//                    .overlay(Color("BorderGray"))
+//
+//            }
                 
           
           

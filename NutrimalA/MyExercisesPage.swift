@@ -180,6 +180,7 @@ struct MyExercisesPage: View {
                     
                     
                     
+                    
                     Rectangle()
                         .frame(height: getScreenBounds().height * 0.02)
                         .foregroundColor(.clear)
@@ -187,9 +188,10 @@ struct MyExercisesPage: View {
                     
                     
                     Divider()
+                                        
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
                     
-                        .frame(height: 2)
-                        .overlay(Color("BorderGray"))
                     if filteredExercises.isEmpty {
                         VStack {
                             Text("No exercises found")
@@ -219,7 +221,10 @@ struct MyExercisesPage: View {
                                                 Button(action: {
                                                                     // action to perform when the button is tapped
                                                     viewModel.setCurrentExercise(exercise: exercise)
-                                                    displayingExerciseView = true
+                                                    withAnimation(.spring()) {
+                                                        displayingExerciseView = true
+                                                    }
+                                                    
                                                     
                                                    
                                                 }, label: {
@@ -255,6 +260,9 @@ struct MyExercisesPage: View {
                                             }
                                         }
                                     }
+                                   
+                                    
+                                    
                                 }
                                 
                             } else {
@@ -284,6 +292,7 @@ struct MyExercisesPage: View {
                     
                     
                 }
+
                 
                 .background(Color("MainGray"))
             }
@@ -291,10 +300,22 @@ struct MyExercisesPage: View {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
             
+            let showing = showingNew || displayingExerciseView
+            Rectangle()
+                .edgesIgnoringSafeArea(.all)
+                .foregroundColor(.black)
+                .opacity(showing ? 0.4 : 0)
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        showingNew = false
+                        displayingExerciseView = false
+                        
+                    }
+                }
             NameAndCategoryView(viewModel: viewModel, showingNew: $showingNew)
                 .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.35 : getScreenBounds().height * 1.3)
             ExercisePage(viewModel: viewModel, showingExrcisePage: $displayingExerciseView)
-                .position(x: getScreenBounds().width/2, y: displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
+                .position(x: getScreenBounds().width/2, y: displayingExerciseView ? getScreenBounds().height * 0.4 : getScreenBounds().height * 1.3)
             
         }
         

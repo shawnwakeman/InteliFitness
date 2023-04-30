@@ -371,7 +371,16 @@ struct AddExersisesPopUp: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
                 .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-            
+            Rectangle()
+                .edgesIgnoringSafeArea(.all)
+                .foregroundColor(.black)
+                .opacity(showingNew ? 0.4 : 0)
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        showingNew = false
+                        
+                    }
+                }
             NameAndCategoryView(viewModel: homePageViewModel, showingNew: $showingNew)
                 .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.3)
         }

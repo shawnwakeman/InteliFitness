@@ -6,7 +6,12 @@
         "id": 0,
         "selected": false,
         "restTime": 140,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Lie down on a flat bench with your feet firmly on the ground.",
+        "Grip the barbell with your hands slightly wider than shoulder-width apart.",
+        "Lower the barbell to your chest, keeping your elbows at a 45-degree angle from your body.",
+        "Push the barbell back up until your arms are fully extended."
+        ],
         "exerciseHistory": []
     },
     {
@@ -16,37 +21,56 @@
         "id": 1,
         "selected": false,
         "restTime": 121,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Place the barbell on your upper back, gripping it with hands wider than shoulder-width apart.",
+        "Stand with your feet shoulder-width apart and toes pointing slightly outward.",
+        "Lower your body by bending your knees and pushing your hips back.",
+        "Push through your heels to return to the starting position."
+        ],
         "exerciseHistory": []
     },
-    {
+{
         "exerciseName": "Deadlift",
         "exerciseCategory": ["Lower Back", "Hamstrings"],
         "exerciseEquipment": "Barbell",
         "id": 2,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Stand with your feet hip-width apart and the barbell over your mid-foot.",
+        "Bend your knees and hips to lower your body and grip the barbell with an overhand or mixed grip.",
+        "Keep your back straight and chest up as you lift the barbell off the ground by extending your hips and knees.",
+        "Lower the barbell back to the ground by bending your knees and hips."
+        ],
         "exerciseHistory": []
     },
-    {
+{
         "exerciseName": "Pull-up",
         "exerciseCategory": ["Back", "Biceps"],
         "exerciseEquipment": "",
         "id": 3,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Grip a pull-up bar with your hands shoulder-width apart and palms facing away from your body.",
+        "Hang from the bar with your arms fully extended and feet off the ground.",
+        "Pull your body up by bending your elbows and squeezing your shoulder blades together.",
+        "Lower your body back down to the starting position."
+        ],
         "exerciseHistory": []
     },
-    {
+{
         "exerciseName": "Military Press",
         "exerciseCategory": ["Shoulders", "Triceps"],
         "exerciseEquipment": "Barbell",
         "id": 4,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Stand with your feet shoulder-width apart and hold a barbell at your collarbone level with your palms facing forward.",
+        "Press the barbell overhead by extending your arms.",
+        "Pause for a moment at the top, then lower the barbell back to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -56,7 +80,12 @@
         "id": 5,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Sit on the lat pulldown machine and adjust the thigh pad to secure your legs.",
+        "Grip the bar with your hands slightly wider than shoulder-width apart and palms facing away from your body.",
+        "Pull the bar down to your upper chest by bending your elbows and squeezing your shoulder blades together.",
+        "Slowly extend your arms to return the bar to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -66,11 +95,14 @@
         "id": 6,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Sit on the pec deck machine facing the back pad and adjust the seat height so the handles are at shoulder level.",
+        "Grip the handles with your palms facing inward and elbows slightly bent.",
+        "Pull the handles back by squeezing your shoulder blades together.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     },
-
-    
     {
         "exerciseName": "Cable Curls",
         "exerciseCategory": ["Biceps"],
@@ -78,7 +110,12 @@
         "id": 7,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Stand facing the cable machine with your feet shoulder-width apart.",
+        "Grip the handle with your palms facing up and arms fully extended.",
+        "Curl the handle toward your chest by bending your elbows.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -88,7 +125,12 @@
         "id": 8,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Stand with your feet shoulder-width apart and hold a barbell with an overhand grip.",
+        "Bend your knees slightly and hinge forward at your hips, keeping your back straight.",
+        "Pull the barbell toward your lower chest by bending your elbows and squeezing your shoulder blades together.",
+        "Slowly lower the barbell back to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -98,7 +140,12 @@
         "id": 9,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Sit on the pec deck machine with your back against the pad.",
+        "Place your forearms on the padded levers, with your elbows at a 90-degree angle.",
+        "Push the levers together by squeezing your chest muscles.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -108,7 +155,11 @@
         "id": 10,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Grip the parallel dip bars with your palms facing inward and arms straight.",
+        "Lower your body by bending your elbows until your upper arms are parallel to the ground.",
+        "Push through your palms to return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -118,17 +169,27 @@
         "id": 11,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Stand facing the cable machine with your feet shoulder-width apart.",
+        "Grip the handle with your palms facing down and elbows bent at a 90-degree angle.",
+        "Push the handle down by extending your elbows until your arms are straight.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
         "exerciseName": "Incline Press",
         "exerciseCategory": ["Chest", "Triceps", "Shoulders"],
-        "exerciseEquipment": "Dumbell",
+        "exerciseEquipment": "Dumbbell",
         "id": 12,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Lie down on an incline bench with your feet firmly on the ground.",
+        "Hold a dumbbell in each hand at chest level, with your palms facing away from your body.",
+        "Press the dumbbells up until your arms are fully extended.",
+        "Lower the dumbbells back to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -138,7 +199,11 @@
         "id": 13,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Stand with your feet hip-width apart and hold a barbell with an overhand grip.",
+        "Keeping your back straight and knees slightly bent, hinge forward at your hips to lower the barbell.",
+        "Push through your heels to return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -148,7 +213,12 @@
         "id": 14,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Sit on the leg press machine with your back against the pad and feet on the platform.",
+        "Adjust the seat so that your knees form a 90-degree angle.",
+        "Push through your heels to extend your legs and move the platform away from your body.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -158,7 +228,12 @@
         "id": 15,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Sit on the leg extension machine with your back against the pad.",
+        "Place your ankles under the padded lever, adjusting the machine as needed.",
+        "Extend your legs by pushing against the padded lever.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     },
     {
@@ -168,11 +243,12 @@
         "id": 16,
         "selected": false,
         "restTime": 120,
-        "instructions": ["do a thing", "do another thing", "do more shit", "do dis ho"],
+        "instructions": [
+        "Lie face down on the hamstring curl machine with your knees just off the edge of the pad.",
+        "Place your ankles under the padded lever, adjusting the machine as needed.",
+        "Curl your legs toward your glutes by bending your knees.",
+        "Slowly return to the starting position."
+        ],
         "exerciseHistory": []
     }
-
-
-
-
 ]

@@ -93,6 +93,18 @@ struct HomePageModel {
     
     mutating func deleteFromHistory(workoutID: UUID) {
         if let index = history.firstIndex(where: { $0.id == workoutID }) {
+            let workout = history[index]
+            for exercise in workout.exercises {
+                let exerciseID = exercise.ExersiseID
+                let exerciseLogModuleUUID = exercise.id
+                for exerciseIteration in exercises[exerciseID].exerciseHistory {
+                    if exerciseIteration.id == exerciseLogModuleUUID {
+                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.id == exerciseIteration.id }) {
+                            exercises[exerciseID].exerciseHistory.remove(at: index)
+                        }
+                    }
+                }
+            }
             history.remove(at: index)
         }
     }
@@ -166,7 +178,8 @@ struct HomePageModel {
     }
     
     
-    func saveExersiseHistory() {
+    mutating func saveExersiseHistory() {
+        saveExercisesToUserDefaults(exercises)
         let defaults = UserDefaults.standard
 
         do {

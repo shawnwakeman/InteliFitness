@@ -16,9 +16,11 @@ enum PageToLoad {
 struct HomePageView: View {
     @State private var displayingWorkoutTHing = false
     @StateObject var homePageViewModel = HomePageViewModel()
+    @StateObject var workoutLogViewModel = WorkoutLogViewModel()
     @Environment(\.presentationMode) private var presentationMode
     @State private var isNavigationBarHidden = true
     @State private var loadedPage: PageToLoad = .myExercises
+    
 
     var body: some View {
         ZStack {
@@ -29,14 +31,19 @@ struct HomePageView: View {
 
 
             
-                    P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, homePageViewModel: homePageViewModel)
+                P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageViewModel)
                         
                 
             }
+          
+            if workoutLogViewModel.exersiseModules.count != 0 {
+                WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
+                               .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * 1.49)
+                               .ignoresSafeArea()
+            }
+               
+           
             
-            WorkoutLogView(homePageVeiwModel: homePageViewModel)
-                           .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * 1.49)
-                           .ignoresSafeArea()
 
         }
        
@@ -92,6 +99,7 @@ func showAllDeliveries() {
 struct P1View: View {
     @Binding var loadedPage: PageToLoad
     @Binding var isNavigationBarHidden: Bool
+    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @ObservedObject var homePageViewModel : HomePageViewModel
     @State private var selectedDestination: AnyView? = nil
     var body: some View {
@@ -265,7 +273,7 @@ struct P1View: View {
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
                     .onTapGesture {
-                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel))
+                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel))
                     }
                     HStack {
                         ZStack {
@@ -330,10 +338,12 @@ struct P1View: View {
                     .frame(height: getScreenBounds().width/3.4)
                     .padding(.bottom, 14)
                 }
-               
-                Rectangle()
-                    .frame(height: getScreenBounds().height * 0.07)
-                    .foregroundColor(.clear)
+                if homePageViewModel.ongoingWorkout {
+                    Rectangle()
+                        .frame(height: getScreenBounds().height * 0.07)
+                        .foregroundColor(.clear)
+                }
+             
                 
             } .padding(.all)
                 .background(Color("DBblack"))

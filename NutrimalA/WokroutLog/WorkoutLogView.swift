@@ -15,7 +15,7 @@ let borderWeight: CGFloat = 0.75
 struct WorkoutLogView: View {
 
     @ObservedObject var homePageVeiwModel: HomePageViewModel
-    @StateObject var workoutLogViewModel = WorkoutLogViewModel()
+    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @State private var progressValue: Float = 0.5
     @State private var blocked = false
     @State private var exersiseNotes: String = ""
@@ -156,32 +156,7 @@ struct WorkoutLogView: View {
             .onTapGesture {
 
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-//                if workoutLogViewModel.lastRowUsed != 100 {
-//                    let workoutModule = workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed]
-//                    let reps = workoutModule.setRows[workoutLogViewModel.lastRowUsed].reps
-//                    let weight = workoutModule.setRows[workoutLogViewModel.lastRowUsed].weight//
-      
-//                    if reps != 0 && weight != 0 {
-//                        
-//                        HapticManager.instance.impact(style: .heavy)
-//                        
-//                        withAnimation(.spring()) {
-//                            workoutLogViewModel.toggleCompletedSet(ExersiseModuleID: workoutModule.id, RowID: workoutModule.setRows[workoutLogViewModel.lastRowUsed].id, customValue: true)
-//                        }
-//                       
-//                        if workoutLogViewModel.exersiseModules[workoutLogViewModel.lastModuleUsed].setRows[workoutLogViewModel.lastRowUsed].prevouslyChecked == false {
-//                            
-//                            workoutLogViewModel.restAddToTime(step: 1, time: workoutLogViewModel.restTime.timePreset)
-//                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(workoutLogViewModel.restTime.timePreset))
-//                        }
-//                        workoutLogViewModel.setPrevouslyChecked(exersiseModuleID: workoutLogViewModel.lastModuleUsed, RowID: workoutLogViewModel.lastRowUsed, state: true)
-//                        workoutLogViewModel.setLastRow(index: 100)
-//                        workoutLogViewModel.setLastModule(index: 100)
-//                        
-//                        
-//                        
-//                  }
-//                }
+                
             }
           
             
@@ -226,11 +201,7 @@ struct WorkoutLogView: View {
                 
                 
                
-                
-                PopupView(viewModel: workoutLogViewModel)
-                    .shadow(radius: 10)
-                    .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.69 : UIScreen.main.bounds.height * 1.5)
-
+         
 
                 DotsMenuView(viewModel: workoutLogViewModel)
                     .shadow(radius: 10)
@@ -332,7 +303,7 @@ struct WorkoutLogView: View {
                     .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.workoutLogModel.popUps[6].RPEpopUpState ? 1 : 0)
                     .offset(y: getScreenBounds().height * -0.07)
-                AddExersisesPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
+                AddExersisesPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, heightModifier: 0.86)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
             }
          

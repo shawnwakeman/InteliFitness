@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 struct HomePageModel {
-    var displayingWorkoutLogView: Bool
+        var displayingWorkoutLogView: Bool
 
         var exercises: [Exersise]
 
@@ -10,10 +10,12 @@ struct HomePageModel {
         private(set) var exerciseQueue: [Exersise] = []
 
         var currentExervice: Exersise?
+    
+        var ongoingWorkout: Bool
 
-        init(displayingWorkoutLogView: Bool = false) {
+    init(displayingWorkoutLogView: Bool = false, ongoingWorkout: Bool = true) {
             self.displayingWorkoutLogView = displayingWorkoutLogView
-
+            self.ongoingWorkout = ongoingWorkout
             // Set the default state for the exercises array
             let defaultExercises: [Exersise] = Bundle.main.decode("Exercises.json")
 
@@ -48,7 +50,9 @@ struct HomePageModel {
     }
     
     
-
+    mutating func setOngoingWorkoutState(state: Bool) {
+        ongoingWorkout = state
+    }
     
     struct Exersise: Identifiable, Codable {
         var exerciseName: String

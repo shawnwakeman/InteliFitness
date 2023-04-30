@@ -25,6 +25,10 @@ class HomePageViewModel: ObservableObject {
         return homePageModel.exerciseQueue
     }
     
+    var ongoingWorkout: Bool {
+        return homePageModel.ongoingWorkout
+    }
+    
 
 
     var history: [HomePageModel.Workout] {
@@ -65,6 +69,10 @@ class HomePageViewModel: ObservableObject {
         homePageModel.saveExersiseHistory()
         
 
+    }
+    
+    func setOngoingState(state: Bool) {
+        homePageModel.setOngoingWorkoutState(state: state)
     }
     
     func deleteExerciseHistory(workoutID: UUID) {

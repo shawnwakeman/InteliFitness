@@ -12,6 +12,7 @@ import SwiftUI
 struct AddExersisesPopUp: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     @ObservedObject var homePageViewModel: HomePageViewModel
+    var heightModifier: CGFloat
     @State private var search: String = ""
     @State private var searchText = ""
     @State private var selectedType: String? = nil
@@ -365,7 +366,7 @@ struct AddExersisesPopUp: View {
             }
   
             .background(Color("MainGray"))
-            .frame(height: getScreenBounds().height * 0.86)
+            .frame(height: getScreenBounds().height * heightModifier)
             .background(Color("DBblack"))
             .cornerRadius(20)
             .overlay(

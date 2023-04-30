@@ -45,6 +45,7 @@
 		D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */; };
 		D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */; };
 		D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */; };
+		D0D28F4529FEC76B00857C61 /* createWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4429FEC76B00857C61 /* createWorkout.swift */; };
 		D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +113,7 @@
 		D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DotsButton.swift; sourceTree = "<group>"; };
 		D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMetricsButton.swift; sourceTree = "<group>"; };
 		D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkoutsPage.swift; sourceTree = "<group>"; };
+		D0D28F4429FEC76B00857C61 /* createWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createWorkout.swift; sourceTree = "<group>"; };
 		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPopUp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -231,6 +233,7 @@
 				D008F48029F1E7CD00B1C6EC /* HomePageView.swift */,
 				D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */,
 				D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */,
+				D0D28F4429FEC76B00857C61 /* createWorkout.swift */,
 				D008F47D29F1E65900B1C6EC /* WokroutLog */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
@@ -364,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D28F4529FEC76B00857C61 /* createWorkout.swift in Sources */,
 				D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */,
 				D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */,
 				D008F48129F1E7CD00B1C6EC /* HomePageView.swift in Sources */,

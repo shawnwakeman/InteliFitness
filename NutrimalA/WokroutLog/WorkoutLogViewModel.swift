@@ -18,6 +18,11 @@ class WorkoutLogViewModel: ObservableObject {
     
     @Published var workoutLogModel = WorkoutLogModel()
     
+    func resetWorkoutModel() {
+
+        workoutLogModel = WorkoutLogModel()
+    }
+    
 
     @Published var popUpStates = ["3DotsPopUp": false, "DataMetricsPopUp": false, "key3": true]
     

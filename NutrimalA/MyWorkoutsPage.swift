@@ -11,13 +11,13 @@ struct MyWorkoutsPage: View {
     
     @ObservedObject var viewModel: HomePageViewModel
 
-
+    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     
    
 
 
     
-    init(viewModel: HomePageViewModel) {
+    init(viewModel: HomePageViewModel, workoutLogViewModel: WorkoutLogViewModel) {
         
         
         UINavigationBar.appearance().barTintColor = .clear
@@ -38,6 +38,7 @@ struct MyWorkoutsPage: View {
        
         
         self.viewModel = viewModel
+        self.workoutLogViewModel = workoutLogViewModel
   
 
  
@@ -63,10 +64,8 @@ struct MyWorkoutsPage: View {
                             .navigationBarHidden(false)
                             .navigationBarItems(
                                 
-                                trailing: Button {
-                                    
-                                } label: {
-                                    Text("new")
+                                trailing: NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel)) {
+                                    Text("New")
                                 }
                             )
                         Spacer()
@@ -87,6 +86,10 @@ struct MyWorkoutsPage: View {
                             }
                                 
                             Button {
+                                viewModel.setOngoingState(state: false)
+                                workoutLogViewModel.resetWorkoutModel()
+                                workoutLogViewModel.addEmptyWorkoutModule(exerciseName: "asd", exerciseID: 2, ExersiseEquipment: "asd", restTime: 12)
+                                viewModel.setOngoingState(state: true)
                                 
                             }
                             label: {
@@ -145,7 +148,16 @@ struct MyWorkoutsPage: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 20) {
                     ForEach(0..<5) { _ in
-                        WorkoutModule(title: "Module Title", description: "Module Description")
+                   
+                        
+                        
+                        NavigationLink(destination: workoutLauncher()) {
+                            WorkoutModule(title: "Module Title", description: "Module Description")
+                            
+                        }
+                   
+                   
+                        
                     }
                 }
             }
@@ -186,6 +198,7 @@ struct WorkoutModule: View {
                     .frame(height: getScreenBounds().height * 0.000)
                 TextHelvetica(content: "back squat(barbell), bench press(barbell), etc.", size: 12)
                     .foregroundColor(Color("GrayFontOne"))
+                    .multilineTextAlignment(.leading)
               
                 Spacer()
                 
@@ -218,5 +231,16 @@ struct WorkoutModule: View {
         
     }
 }
+
+struct workoutLauncher: View {
+    var body: some View {
+        VStack {
+            Text("asd")
+        }.navigationBarTitle("Calendar", displayMode: .inline)
+      
+    }
+    
+}
+
 
 

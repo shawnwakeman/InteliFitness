@@ -7,13 +7,15 @@ struct HomePageModel {
 
         private(set) var history: [Workout] = []
     
+        private(set) var myExercises: [Workout] = []
+    
         private(set) var exerciseQueue: [Exersise] = []
 
         var currentExervice: Exersise?
     
         var ongoingWorkout: Bool
 
-    init(displayingWorkoutLogView: Bool = false, ongoingWorkout: Bool = true) {
+    init(displayingWorkoutLogView: Bool = false, ongoingWorkout: Bool = false) {
             self.displayingWorkoutLogView = displayingWorkoutLogView
             self.ongoingWorkout = ongoingWorkout
             // Set the default state for the exercises array
@@ -36,7 +38,14 @@ struct HomePageModel {
     
    
     
-
+    func saveOngoingWorkoutStatus(status: Bool) {
+        UserDefaults.standard.set(status, forKey: "ongoingWorkout")
+    }
+    
+    mutating func loadOngoingWorkoutStatus() {
+        ongoingWorkout = UserDefaults.standard.bool(forKey: "ongoingWorkout")
+   
+    }
     
     mutating func setCurrentExercise(execise: Exersise) {
         currentExervice = execise
@@ -47,6 +56,7 @@ struct HomePageModel {
         let WorkoutName: String
         let notes: String = ""
         var exercises: [WorkoutLogModel.ExersiseLogModule]
+        var category: String
     }
     
     
@@ -85,14 +95,30 @@ struct HomePageModel {
 
     mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
         
-        for exercise in exersiseModules {
-            let exerciseID = exercise.ExersiseID
-            exercises[exerciseID].exerciseHistory.append(exercise)
-        }
+
         // needs to be cleaned
         let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
         let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)
-        history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows))
+        
+        for exercise in removedBlankRows {
+            let exerciseID = exercise.ExersiseID
+            exercises[exerciseID].exerciseHistory.append(exercise)
+        }
+        history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows, category: ""))
+    }
+    
+    mutating func addToMyExercises(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+        
+
+        // needs to be cleaned
+        let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
+        let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)
+        
+        for exercise in removedBlankRows {
+            let exerciseID = exercise.ExersiseID
+            exercises[exerciseID].exerciseHistory.append(exercise)
+        }
+        myExercises.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows, category: ""))
     }
     
     mutating func deleteFromHistory(workoutID: UUID) {
@@ -194,6 +220,8 @@ struct HomePageModel {
             print("Failed to encode exersiseModules: \(error.localizedDescription)")
         }
     }
+    
+
 
     
     
@@ -201,6 +229,31 @@ struct HomePageModel {
         let defaults = UserDefaults.standard
 
         if let savedData = defaults.object(forKey: "history") as? Data {
+            do {
+                history = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
+            } catch {
+                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    mutating func saveMyWorkouts() {
+        saveExercisesToUserDefaults(exercises)
+        let defaults = UserDefaults.standard
+
+        do {
+          
+            let encodedData = try JSONEncoder().encode(myExercises)
+            defaults.set(encodedData, forKey: "myExercises")
+        } catch {
+            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+        }
+    }
+    
+    mutating func loadMyExercises() {
+        let defaults = UserDefaults.standard
+
+        if let savedData = defaults.object(forKey: "myExercises") as? Data {
             do {
                 history = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
             } catch {

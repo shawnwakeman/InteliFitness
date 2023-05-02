@@ -230,3 +230,12 @@ class WorkoutLogViewModel: ObservableObject {
     
 
 }
+extension WorkoutLogViewModel {
+    func exerciseModule(at index: Int) -> WorkoutLogModel.ExersiseLogModule? {
+        if index >= 0 && index < exersiseModules.count {
+            return exersiseModules[index]
+        } else {
+            return nil
+        }
+    }
+}

@@ -88,8 +88,13 @@ struct MyWorkoutsPage: View {
                             Button {
                                 viewModel.setOngoingState(state: false)
                                 workoutLogViewModel.resetWorkoutModel()
-                                workoutLogViewModel.addEmptyWorkoutModule(exerciseName: "asd", exerciseID: 2, ExersiseEquipment: "asd", restTime: 12)
-                                viewModel.setOngoingState(state: true)
+                                
+                                withAnimation(.spring()) {
+                                    viewModel.setOngoingState(state: true)
+                                    viewModel.setWorkoutLogModuleStatus(state: true)
+                           
+                                }
+                               
                                 
                             }
                             label: {
@@ -113,6 +118,25 @@ struct MyWorkoutsPage: View {
                                 }
                             }
                             
+                        }
+                        
+                        Section(header: TextHelvetica(content: "My Workouts", size: 23).bold().foregroundColor(Color("WhiteFontOne"))) {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 20) {
+                                    ForEach(viewModel.myWorkouts) { workout in
+                                   
+                                        
+                                        
+                                        NavigationLink(destination: workoutLauncher()) {
+                                            WorkoutModule(title: workout.WorkoutName, description: "Module Description")
+                                            
+                                        }
+                                   
+                                   
+                                        
+                                    }
+                                }
+                            }
                         }
                         
                         workoutSection(title: "Back Workout")

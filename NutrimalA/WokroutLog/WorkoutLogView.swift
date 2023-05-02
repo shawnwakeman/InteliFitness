@@ -126,12 +126,15 @@ struct WorkoutLogView: View {
                  
                         
                     ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
+                        if let index = workoutLogViewModel.exersiseModules.firstIndex(where: { $0.id == workoutModule.id }) {
+                            if workoutModule.isLast == false {
+                                let exerciseID = workoutLogViewModel.getUUIDindex(index: workoutModule.id)
+                      
+                                ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id)
 
-                        if workoutModule.isLast == false {
-                            let exerciseID = workoutLogViewModel.getUUIDindex(index: workoutModule.id)
-                            ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id)
-
+                            }
                         }
+
                  
                        
                     }
@@ -337,17 +340,22 @@ struct WorkoutLogView: View {
         .onChange(of: scenePhase) { newScenePhase in
             switch newScenePhase {
             case .active:
-  
+                withAnimation(.spring()) {
+                    homePageVeiwModel.loadOngoingWorkoutStatus()
+                }
+            
                 workoutLogViewModel.loadExersiseModules()
                 homePageVeiwModel.loadHistory()
+            
 
             case .inactive:
                 print("App is inactive")
             case .background:
         
                 workoutLogViewModel.saveExersiseModules()
-             
+                homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
                 homePageVeiwModel.saveExersiseHistory()
+                homePageVeiwModel.saveMyWorkouts()
   
             @unknown default:
                 fatalError("Unknown scene phase")
@@ -938,14 +946,17 @@ struct ExersiseLogModule: View {
     var moduleUUID: UUID
     var body: some View {
         VStack(spacing: -2){
-    
-            LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID, moduleUUID: moduleUUID)
-            
-            if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
+            if let exerciseModule = workoutLogViewModel.exerciseModule(at: parentModuleID) {
+                
+                LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID, moduleUUID: moduleUUID)
+               
+                if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
 
-                NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+                    NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
+                }
+                CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID, moduleUUID: moduleUUID)
             }
-            CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID, moduleUUID: moduleUUID)
+            
         }
 
     }
@@ -1640,26 +1651,21 @@ struct ContentGrid: View {
     var ModuleID: Int
     var moduleUUID: UUID
     var body: some View{
-        
-        let module = viewModel.exersiseModules[ModuleID]
-        
-        ForEach(module.setRows){
-            row in
-            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID)
-           
-//            if row.id != module.setRows.count - 1 {
-//                Divider()
-//                    .frame(height: borderWeight)
-//                    .overlay(Color("BorderGray"))
-//
-//            }
+        if let exerciseModule = viewModel.exerciseModule(at: ModuleID) {
+            let module = viewModel.exersiseModules[ModuleID]
+            
+            ForEach(module.setRows){
+                row in
+                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID)
                 
-          
-          
+                //            if row.id != module.setRows.count - 1 {
+                //                Divider()
+                //                    .frame(height: borderWeight)
+                //                    .overlay(Color("BorderGray"))
+                //
+                //            }
                 
-
-
-
+            }
         }
         
     }

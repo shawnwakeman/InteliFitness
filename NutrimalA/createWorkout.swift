@@ -18,7 +18,7 @@ struct createWorkout: View {
         @State private var workoutName: String = ""
         @State private var NamePopUp: Bool = false
      
-
+        @Environment(\.presentationMode) private var presentationMode
         @Environment(\.scenePhase) private var scenePhase
         
 
@@ -32,47 +32,48 @@ struct createWorkout: View {
                         Text("")
               
 
-                            .navigationBarTitle(Text("History").font(.subheadline), displayMode: .inline)
+                            .navigationBarTitle(Text("New Workout").font(.subheadline), displayMode: .inline)
                             .navigationBarHidden(false)
                                       .navigationBarItems(
                                                           
-                                                          trailing: NavigationLink(destination: CalendarView()) {
-                                                              ZStack{
-                                                                  
-                                                                  ZStack{
-                                                                      RoundedRectangle(cornerRadius: 6)
-                                                                          .foregroundColor(Color("LinkBlue"))
+                                  trailing: NavigationLink(destination: CalendarView()) {
+                                      ZStack{
+                                          
+                                          ZStack{
+                                              RoundedRectangle(cornerRadius: 6)
+                                                  .foregroundColor(Color("LinkBlue"))
 
-                                                                      
-                                                                  }
-                                                                
-                                                                  
-                                                                  Button {
                                               
-                                                                  
-                                                                   
-                                                                     
-                                                                  }
-                                                              label: {
-                                                                  TextHelvetica(content: "Finish", size: 19)
-                                                                       .foregroundColor(Color("WhiteFontOne"))
-                                                              }
-                                                                  
-                                                              
-                                                                  
-                                                                  
-                                                              }
-                                                              .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.048)
-                                                   
-                                                              .aspectRatio(2.5, contentMode: .fit)
-                                                          
-                                                           
-                                                                
-                                                                
-                                                                 
-                                                                  
-                                                          }
-                                                  )
+                                          }
+                                        
+                                          
+                                          Button {
+                      
+                                              homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
+                                              presentationMode.wrappedValue.dismiss()
+                                           
+                                             
+                                          }
+                                      label: {
+                                          TextHelvetica(content: "Create", size: 19)
+                                               .foregroundColor(Color("WhiteFontOne"))
+                                      }
+                                          
+                                      
+                                          
+                                          
+                                      }
+                                      .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.048)
+                           
+                                      .aspectRatio(2.5, contentMode: .fit)
+                                  
+                                   
+                                        
+                                        
+                                         
+                                          
+                                  }
+                                )
                         VStack(spacing: 0) {
 
                             ZStack {

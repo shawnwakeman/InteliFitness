@@ -35,6 +35,10 @@ class HomePageViewModel: ObservableObject {
         return homePageModel.history
     }
     
+    var myWorkouts: [HomePageModel.Workout] {
+        return homePageModel.myExercises
+    }
+    
     
     var exersises: Array<HomePageModel.Exersise> {
         return homePageModel.exercises
@@ -42,6 +46,15 @@ class HomePageViewModel: ObservableObject {
 
     func setWorkoutLogModuleStatus(state: Bool) {
         homePageModel.setWorkoutLogModuleStatus(state: state)
+    }
+    
+    func saveOngoingWorkoutStatus(status: Bool) {
+        homePageModel.saveOngoingWorkoutStatus(status: status)
+    }
+    
+    func loadOngoingWorkoutStatus() {
+        homePageModel.loadOngoingWorkoutStatus()
+        
     }
     
 
@@ -91,6 +104,19 @@ class HomePageViewModel: ObservableObject {
     
     func saveExercisesToUserDefaults(_ exercises: [HomePageModel.Exersise]) {
         homePageModel.saveExercisesToUserDefaults(exercises)
+    }
+    
+    func loadMyExercises() {
+        homePageModel.loadMyExercises()
+
+    }
+    
+    func saveMyWorkouts() {
+        homePageModel.saveMyWorkouts()
+    }
+    
+    func addToMyWorkouts(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+        homePageModel.addToMyExercises(workoutName: workoutName, exersiseModules: exersiseModules)
     }
 //    func addToexercise
 

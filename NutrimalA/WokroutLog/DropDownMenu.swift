@@ -87,6 +87,16 @@ struct DropDownMenuView: View {
     
                             homePageViewModel.addToHistory(workoutName: "Insert Workout Name", exersiseModules: viewModel.exersiseModules)
                             viewModel.setWorkoutTime(time: 0)
+                            
+                            withAnimation(.spring()) {
+                                homePageViewModel.setOngoingState(state: false)
+                                homePageViewModel.setWorkoutLogModuleStatus(state: false)
+                       
+                            }
+                            
+                       
+                        
+                            
                          
                            
                         }

@@ -36,16 +36,25 @@ struct HomePageView: View {
                 
             }
           
-            if workoutLogViewModel.exersiseModules.count != 0 {
-                WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
-                               .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * 1.49)
-                               .ignoresSafeArea()
-            }
+
+            let offset = homePageViewModel.ongoingWorkout ? 0: 0.5
+            WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
+                .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * (1.49 + offset))
+                           .ignoresSafeArea()
+         
+                
+
+
+                
+              
+
+           
                
            
             
 
         }
+
        
 
     }
@@ -53,6 +62,7 @@ struct HomePageView: View {
    
     
 }
+
 
 // MARK: - Functions
 func startDeliveryPizza() {

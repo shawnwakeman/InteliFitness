@@ -23,6 +23,7 @@ struct WorkoutLogView: View {
     @State private var workoutName: String = ""
     @State private var NamePopUp: Bool = false
  
+ 
 
     @Environment(\.scenePhase) private var scenePhase
     
@@ -126,11 +127,11 @@ struct WorkoutLogView: View {
                  
                         
                     ForEach(workoutLogViewModel.exersiseModules){ workoutModule in
-                        if let index = workoutLogViewModel.exersiseModules.firstIndex(where: { $0.id == workoutModule.id }) {
+                        if workoutLogViewModel.exersiseModules.firstIndex(where: { $0.id == workoutModule.id }) != nil {
                             if workoutModule.isLast == false {
                                 let exerciseID = workoutLogViewModel.getUUIDindex(index: workoutModule.id)
                       
-                                ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id)
+                                ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id, isLive: true)
 
                             }
                         }
@@ -197,8 +198,8 @@ struct WorkoutLogView: View {
                     .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState ? 1 : 0)
                     .allowsHitTesting(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState)
                 
-                
-                PopupView(viewModel: workoutLogViewModel)
+                PopupView(viewModel: workoutLogViewModel, isLive: true)
+
                     .shadow(radius: 10)
                     .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * 0.69 : UIScreen.main.bounds.height * 1.5)
                 
@@ -275,10 +276,16 @@ struct WorkoutLogView: View {
                       
                         withAnimation(.spring()) {
                             if homePageVeiwModel.workoutLogModuleStatus == true {
-                                homePageVeiwModel.setWorkoutLogModuleStatus(state: false)
+                                withAnimation(.spring()) {
+                                    homePageVeiwModel.setWorkoutLogModuleStatus(state: false)
+                                }
+                                
                             }
                             else {
-                                homePageVeiwModel.setWorkoutLogModuleStatus(state: true)
+                                withAnimation(.spring()) {
+                                    homePageVeiwModel.setWorkoutLogModuleStatus(state: true)
+                                }
+                                
                             }
                             
                             
@@ -298,17 +305,21 @@ struct WorkoutLogView: View {
                 TimerPopUp(viewModel: workoutLogViewModel)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TimerPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
 
-            }
+           
             
           
-            Group {
+            
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
                     .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.workoutLogModel.popUps[6].RPEpopUpState ? 1 : 0)
                     .offset(y: getScreenBounds().height * -0.07)
                 AddExersisesPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, heightModifier: 0.86)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
+                
+                
             }
+            ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
+                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
          
           
         }
@@ -336,7 +347,16 @@ struct WorkoutLogView: View {
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
-        ))
+        )
+            .overlay(
+                Image("noisy-background")
+                    .resizable()
+                    .scaleEffect(1)
+                    .opacity(0.2)
+                    .blendMode(.overlay)
+                    .ignoresSafeArea()
+            ))
+        
         .onChange(of: scenePhase) { newScenePhase in
             switch newScenePhase {
             case .active:
@@ -354,7 +374,7 @@ struct WorkoutLogView: View {
         
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
-                homePageVeiwModel.saveExersiseHistory()
+
                 homePageVeiwModel.saveMyWorkouts()
   
             @unknown default:
@@ -451,7 +471,7 @@ struct NamePopUP: View {
                         viewModel.setPopUpState(state: true, popUpId: "ReorderSets")
                     }
 
-                    withAnimation(.linear(duration: 0.9)){
+                    withAnimation(.spring()){
                    
                         viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
                     }
@@ -460,7 +480,7 @@ struct NamePopUP: View {
                 label: {
                     HStack{
                         
-                        Image(systemName: "scalemass")
+                        Image(systemName: "arrow.up.arrow.down")
                             .foregroundColor(Color("LinkBlue"))
                             .imageScale(.large)
                             .bold()
@@ -479,6 +499,7 @@ struct NamePopUP: View {
                             .frame(maxHeight: 22)
                     }
                     .padding(.horizontal)
+                    .offset(x: -5)
                     .frame(maxHeight: 22)
                 }
                     Divider()
@@ -498,26 +519,20 @@ struct NamePopUP: View {
                 label: {
                     HStack{
                         
-                        Image(systemName: "scalemass")
-                            .foregroundColor(Color("LinkBlue"))
+                        Image(systemName: "pause.fill")
+                            .foregroundColor(Color(.systemYellow))
                             .imageScale(.large)
                             .bold()
-                            .multilineTextAlignment(.leading)
-                        
-                        TextHelvetica(content: "Add Warm Up Sets", size: 18)
+                    
+                        TextHelvetica(content: "Pause Workout", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
-                        
                         Spacer()
-                        TextHelvetica(content: "", size: 17)
-                            .foregroundColor(Color("GrayFontOne"))
-                        Image("sidwaysArrow")
-                            .resizable()
+
                         
-                            .aspectRatio(24/48, contentMode: .fit)
-                            .frame(maxHeight: 22)
                     }
+     
                     .padding(.horizontal)
-                    .frame(maxHeight: 22)
+                    .frame(maxHeight: 30)
                 }
                     Divider()
                         .frame(height: borderWeight)
@@ -536,26 +551,20 @@ struct NamePopUP: View {
                 label: {
                     HStack{
                         
-                        Image(systemName: "scalemass")
-                            .foregroundColor(Color("LinkBlue"))
+                        Image(systemName: "nosign")
+                            .foregroundColor(Color("MainRed"))
                             .imageScale(.large)
                             .bold()
-                            .multilineTextAlignment(.leading)
-                        
-                        TextHelvetica(content: "Add Warm Up Sets", size: 18)
+                    
+                        TextHelvetica(content: "Cancel Workout", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
-                        
                         Spacer()
-                        TextHelvetica(content: "", size: 17)
-                            .foregroundColor(Color("GrayFontOne"))
-                        Image("sidwaysArrow")
-                            .resizable()
+
                         
-                            .aspectRatio(24/48, contentMode: .fit)
-                            .frame(maxHeight: 22)
                     }
+                    .offset(x: -3)
                     .padding(.horizontal)
-                    .frame(maxHeight: 22)
+                    .frame(maxHeight: 30)
                 }
                     Divider()
                         .frame(height: borderWeight)
@@ -941,20 +950,22 @@ struct WorkoutTimer : View {
 
 struct ExersiseLogModule: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
+    @ObservedObject var homePageViewModel: HomePageViewModel
     @Binding var blocked: Bool
     var parentModuleID: Int
     var moduleUUID: UUID
+    var isLive: Bool
     var body: some View {
         VStack(spacing: -2){
-            if let exerciseModule = workoutLogViewModel.exerciseModule(at: parentModuleID) {
-                
-                LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID, moduleUUID: moduleUUID)
+            if workoutLogViewModel.exerciseModule(at: parentModuleID) != nil {
+          
+                LogModuleHeader(viewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: parentModuleID, moduleUUID: moduleUUID, homePageViewModel: homePageViewModel)
                
                 if workoutLogViewModel.exersiseModules[parentModuleID].displayingNotes {
 
                     NotesModule(viewModel: workoutLogViewModel, parentModuleID: parentModuleID)
                 }
-                CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID, moduleUUID: moduleUUID)
+                CoreLogModule(viewModel: workoutLogViewModel, ModuleID: parentModuleID, moduleUUID: moduleUUID, isLive: isLive, homePageViewModel: homePageViewModel)
             }
             
         }
@@ -1171,9 +1182,10 @@ struct LogModuleHeader: View{
     @Binding var blocked: Bool
     var parentModuleID: Int
     var moduleUUID: UUID
+    @ObservedObject var homePageViewModel: HomePageViewModel
     var body: some View{
       
-        if viewModel.exersiseModules.count > 0 {
+        if viewModel.exerciseModule(at: parentModuleID) != nil {
             HStack(alignment: .bottom){
               
                 
@@ -1181,9 +1193,17 @@ struct LogModuleHeader: View{
                     
 
 
-                Button {print("Button pressed")}
+                Button {print("Button pressed")
+                    let exercise = homePageViewModel.exersises[viewModel.exersiseModules[parentModuleID].ExersiseID]
+                    homePageViewModel.setCurrentExercise(exercise: exercise)
+                    withAnimation(.spring()) {
+                        viewModel.displayingExerciseView.toggle()
+                    }
+                   
+                 
+                }
                 label: {
-                    HStack(alignment: .bottom, spacing: 6) {
+                    HStack(alignment: .bottom, spacing: 6) { //a/sd/a
                         TextHelvetica(content: viewModel.exersiseModules[parentModuleID].exersiseName, size: 22)
                             .foregroundColor(Color("LinkBlue"))
                             .multilineTextAlignment(.leading)
@@ -1316,6 +1336,8 @@ struct CoreLogModule: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var ModuleID: Int
     var moduleUUID: UUID
+    var isLive: Bool
+    @ObservedObject var homePageViewModel: HomePageViewModel
     var body: some View{
       
         ZStack{
@@ -1331,7 +1353,7 @@ struct CoreLogModule: View {
          
                 VStack(alignment: .leading, spacing: 0){
                     Header(viewModel: viewModel, parentModuleID: ModuleID)
-                    ContentGrid(viewModel: viewModel, ModuleID: ModuleID, moduleUUID: moduleUUID)
+                    ContentGrid(viewModel: viewModel, ModuleID: ModuleID, moduleUUID: moduleUUID, isLive: isLive, homePageViewModel: homePageViewModel)
                     
                 }
               
@@ -1355,6 +1377,7 @@ struct PopupView: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var isToggled = false
     @State private var selectedRPE = 0.0
+    var isLive: Bool
 
     var body: some View {
         // Add a blur effect to the background
@@ -1393,8 +1416,13 @@ struct PopupView: View {
                         viewModel.setPopUpState(state: false, popUpId: "popUpRPE")
                     }
                     if selectedRPE != 0 {
+                        if isLive {
+                            viewModel.setRepMetric(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, RPE: Float(selectedRPE))
+                        } else {
+                            viewModel.setRepMetricPlaceHolder(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, value: Float(selectedRPE))
+                        }
+                        
                        
-                        viewModel.setRepMetric(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, RPE: Float(selectedRPE))
                         
                     } else {
                    
@@ -1406,13 +1434,16 @@ struct PopupView: View {
                         let workoutModule = viewModel.exersiseModules[viewModel.lastModuleUsed]
                         let reps = workoutModule.setRows[viewModel.lastRowUsed].reps
                         let weight = workoutModule.setRows[viewModel.lastRowUsed].weight//
-                        let RPE = workoutModule.setRows[viewModel.lastRowUsed].repMetric
-                        if reps != 0 && weight != 0 && RPE != 0 {
+                        
+                        if reps != 0 && weight != 0 {
                             
                
                             
                             let exerciseID = viewModel.getUUIDindex(index: workoutModule.id)
-                            viewModel.toggleCompletedSet(ExersiseModuleID: exerciseID, RowID: workoutModule.setRows[viewModel.lastRowUsed].id, customValue: true)
+                            withAnimation(.spring()) {
+                                viewModel.toggleCompletedSet(ExersiseModuleID: exerciseID, RowID: workoutModule.setRows[viewModel.lastRowUsed].id, customValue: true)
+                            }
+                           
                             if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
                                 viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[popUp.popUpExersiseModuleIndex].restTime)
                                 viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
@@ -1451,6 +1482,7 @@ struct PopupView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 17, height: 17)
+                                .foregroundColor(Color(.systemGreen))
                                   
                         }
                         
@@ -1650,22 +1682,84 @@ struct ContentGrid: View {
 
     var ModuleID: Int
     var moduleUUID: UUID
+    var isLive: Bool
+    @ObservedObject var homePageViewModel: HomePageViewModel
     var body: some View{
-        if let exerciseModule = viewModel.exerciseModule(at: ModuleID) {
+        if viewModel.exerciseModule(at: ModuleID) != nil {
             let module = viewModel.exersiseModules[ModuleID]
+            let exercise = homePageViewModel.exersises[module.ExersiseID]
             
-            ForEach(module.setRows){
-                row in
-                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID)
-                
-                //            if row.id != module.setRows.count - 1 {
-                //                Divider()
-                //                    .frame(height: borderWeight)
-                //                    .overlay(Color("BorderGray"))
-                //
-                //            }
-                
-            }
+         
+                ForEach(module.setRows){
+                    row in
+                    if isLive {
+                        if let mostRecent = exercise.exerciseHistory.last {
+                           
+                            if row.id < mostRecent.setRows.count {
+                                    let prevRow = mostRecent.setRows[row.id]
+                               
+                                if prevRow.repMetric != 0 {
+                                    
+                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
+                                    WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    
+                                } else {
+                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps)"
+                                    WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    
+                                }
+                                
+                            } else {
+                                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                            }
+                            
+                      
+                            
+                        } else {
+                            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                        }
+                    } else {
+                        if let mostRecent = exercise.exerciseHistory.last {
+                           
+                            if row.id < mostRecent.setRows.count {
+                                    let prevRow = mostRecent.setRows[row.id]
+                               
+                                if prevRow.repMetric != 0 {
+                                    
+                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
+                                    WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    
+                                } else {
+                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps)"
+                                    WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    
+                                }
+                                
+                            } else {
+                                
+                                WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                            }
+                            
+                      
+                            
+                        } else {
+                            WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                        }
+                    }
+                   
+                   
+                    
+                    //            if row.id != module.setRows.count - 1 {
+                    //                Divider()
+                    //                    .frame(height: borderWeight)
+                    //                    .overlay(Color("BorderGray"))
+                    //
+                    //            }
+                    
+                }
+          
+          
+           
         }
         
     }
@@ -1717,6 +1811,7 @@ struct Header: View {
                             .scaleEffect(1.8)
                             .foregroundColor(Color("LinkBlue"))
                             .offset(x: 8)
+                       
 
                         
                         

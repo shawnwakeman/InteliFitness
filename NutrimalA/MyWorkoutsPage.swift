@@ -62,83 +62,114 @@ struct MyWorkoutsPage: View {
                         
                             .navigationBarTitle(Text("Exercises").font(.subheadline), displayMode: .inline)
                             .navigationBarHidden(false)
-                            .navigationBarItems(
-                                
-                                trailing: NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel)) {
-                                    Text("New")
-                                }
-                            )
+                            
                         Spacer()
-                        
-                        HStack {
-                            TextHelvetica(content: "Quick Start", size: 23).bold().foregroundColor(Color("WhiteFontOne"))
-                            Spacer()
-                        }
-     
-                        .padding(.vertical, -10)
-                        ZStack {
+                        VStack(spacing: 0) {
+                            HStack {
+                                TextHelvetica(content: "Quick Start", size: 23).bold().foregroundColor(Color("WhiteFontOne"))
+                                Spacer()
+                            }
+         
+                            .padding(.vertical, -20)
                             ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                                    .padding(.vertical)
-                                   
-                                    .aspectRatio(5.5/1, contentMode: .fill)
-                            }
-                                
-                            Button {
-                                viewModel.setOngoingState(state: false)
-                                workoutLogViewModel.resetWorkoutModel()
-                                
-                                withAnimation(.spring()) {
-                                    viewModel.setOngoingState(state: true)
-                                    viewModel.setWorkoutLogModuleStatus(state: true)
-                           
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .foregroundColor(Color("BlueOverlay"))
+                                        .padding(.vertical)
+                                       
+                                        .aspectRatio(5.5/1, contentMode: .fill)
                                 }
+                                    
+                                Button {
+                                    viewModel.setOngoingState(state: false)
+                                    workoutLogViewModel.resetWorkoutModel()
+                                    
+                                    withAnimation(.spring()) {
+                                        viewModel.setOngoingState(state: true)
+                                        viewModel.setWorkoutLogModuleStatus(state: true)
                                
+                                    }
+                                   
+                                    
+                                }
+                                label: {
+                                    ZStack{
+                                        ZStack{
+                                            
+
+                                            
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+
+                                                .padding(.vertical)
+                                                
+                                                .aspectRatio(5.5/1, contentMode: .fill)
+                                            
+                                        }
+
+
+                                        TextHelvetica(content: "Start Blank Workout", size: 20)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                    }
+                                }
                                 
                             }
-                            label: {
-                                ZStack{
-                                    ZStack{
-                                        
+                        }
+                      
+                        
+                        Section(header:
+                                    
+                                    HStack {
+                            
+                                        TextHelvetica(content: "My Workouts", size: 28).bold().foregroundColor(Color("LinkBlue"))
+                            Spacer()
+                            NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel)) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                        .foregroundColor(Color("MainGray"))
+                                    
+                                    Image(systemName: "plus")
+                                        .resizable()
+                                        .bold()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 17, height: 17)
+                                        .foregroundColor(Color("LinkBlue"))
 
-                                        
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
-
-                                            .padding(.vertical)
+                                    
+                                }.frame(width: 35, height: 35)
+                                
+                            }
+                        }) {
+                            if viewModel.myWorkouts.count > 0 {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 20) {
+                                        ForEach(viewModel.myWorkouts.reversed()) { workout in
+                                       
                                             
-                                            .aspectRatio(5.5/1, contentMode: .fill)
-                                        
+                                           
+                                            NavigationLink(destination:  workoutLauncher(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, workout: workout)) {
+                                                WorkoutModule(title: workout.WorkoutName, description: "Module Description")
+                                                
+                                            }
+                                       
+                                       
+                                            
+                                        }
                                     }
-
-
-                                    TextHelvetica(content: "Start Empty Workout", size: 20)
-                                        .foregroundColor(Color("WhiteFontOne"))
                                 }
+                            } else {
+                                TextHelvetica(content: "Created workouts will apear here", size: 22)
+                                    .foregroundColor(Color("GrayFontOne"))
                             }
                             
                         }
-                        
-                        Section(header: TextHelvetica(content: "My Workouts", size: 23).bold().foregroundColor(Color("WhiteFontOne"))) {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 20) {
-                                    ForEach(viewModel.myWorkouts) { workout in
-                                   
-                                        
-                                        
-                                        NavigationLink(destination: workoutLauncher()) {
-                                            WorkoutModule(title: workout.WorkoutName, description: "Module Description")
-                                            
-                                        }
-                                   
-                                   
-                                        
-                                    }
-                                }
-                            }
+                        HStack {
+                            TextHelvetica(content: "Templates", size: 28).bold().foregroundColor(Color("LinkBlue"))
+                                Spacer()
                         }
-                        
                         workoutSection(title: "Back Workout")
                         workoutSection(title: "Chest Workout")
                         workoutSection(title: "Leg Workout")
@@ -175,10 +206,10 @@ struct MyWorkoutsPage: View {
                    
                         
                         
-                        NavigationLink(destination: workoutLauncher()) {
+//                        NavigationLink(destination: workoutLauncher()) {
                             WorkoutModule(title: "Module Title", description: "Module Description")
                             
-                        }
+//                        }
                    
                    
                         
@@ -257,10 +288,156 @@ struct WorkoutModule: View {
 }
 
 struct workoutLauncher: View {
+    @ObservedObject var viewModel: HomePageViewModel
+    @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
+    var workout: HomePageModel.Workout
+    
     var body: some View {
         VStack {
-            Text("asd")
-        }.navigationBarTitle("Calendar", displayMode: .inline)
+            VStack {
+               
+                HStack {
+                    TextHelvetica(content: workout.WorkoutName, size: 30)
+                        .bold()
+                        .foregroundColor(Color("WhiteFontOne"))
+                    Spacer()
+                    Button {
+                        
+                    }
+                    label: {
+                        TextHelvetica(content: "edit", size: 18)
+                    }
+                }
+                
+                HStack {
+                    TextHelvetica(content: "lower Body", size: 24)
+             
+                        .foregroundColor(Color("GrayFontOne"))
+                    
+                    Spacer()
+                }
+                
+                Spacer ()
+                
+            
+       
+                ZStack {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 5)
+                            .foregroundColor(Color("BlueOverlay"))
+                            .padding(.vertical)
+                           
+                            .aspectRatio(5.5/1, contentMode: .fill)
+                    }
+                        
+                    Button {
+                       
+                        viewModel.setOngoingState(state: false)
+                        workoutLogViewModel.loadWorkout(workout: workout)
+                        
+                        withAnimation(.spring()) {
+                            viewModel.setOngoingState(state: true)
+                            viewModel.setWorkoutLogModuleStatus(state: true)
+                   
+                        }
+                        
+                    }
+                    label: {
+                        ZStack{
+                            ZStack{
+                                
+
+                                
+                                RoundedRectangle(cornerRadius: 5)
+                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+
+                                    .padding(.vertical)
+                                    
+                                    .aspectRatio(5.5/1, contentMode: .fill)
+                                
+                            }
+
+
+                            TextHelvetica(content: "Start Workout", size: 20)
+                                .foregroundColor(Color("WhiteFontOne"))
+                        }
+                    }
+                    
+                }
+               
+                
+            }
+            .padding(.all)
+            .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.18)
+            .background(Color("DBblack"))
+            .cornerRadius(7)
+            .overlay(
+                RoundedRectangle(cornerRadius: 7)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            .padding(.vertical)
+            .padding(.horizontal, 2)
+           
+            
+            VStack(spacing: 0) {
+                HStack {
+                    TextHelvetica(content: "Workout Summary", size: 25)
+                        .foregroundColor(Color("WhiteFontOne"))
+                    
+                    Spacer()
+                    
+                }
+           
+                .padding(.all)
+                .background(Color("MainGray"))
+                Divider()
+                                    
+                .frame(height: borderWeight)
+                .overlay(Color("BorderGray"))
+                
+                Spacer()
+                ScrollView {
+                    ForEach(workout.exercises) { exercise in
+                        HStack {
+                     
+                            TextHelvetica(content: exercise.exersiseName, size: 20)
+                                .foregroundColor(Color("GrayFontOne"))
+          
+                            Spacer()
+                          
+                            
+                             
+                               
+                        
+                            TextHelvetica(content: "\(exercise.setRows.count) sets", size: 20)
+                                .foregroundColor(Color("GrayFontOne"))
+                             
+                           
+                        }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal)
+                       
+                    }
+                  
+                }
+                    
+                Spacer()
+                               
+            }
+            .scaledToFit()
+            .frame(width: getScreenBounds().width * 0.95)
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            .padding(.vertical)
+            .padding(.horizontal, 2)
+        
+          
+            Spacer()
+            
+        }.navigationBarTitle("Start Workout", displayMode: .inline)
+        
       
     }
     

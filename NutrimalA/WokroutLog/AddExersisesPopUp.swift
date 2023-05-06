@@ -60,6 +60,7 @@ struct AddExersisesPopUp: View {
                             viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
                         }
                         homePageViewModel.clearToExersiseQueue()
+                        searchText = ""
                     }
                     label: {
                         ZStack {
@@ -83,10 +84,21 @@ struct AddExersisesPopUp: View {
                     
               
                     Spacer()
-                    if homePageViewModel.exersiseQueue.count > 0 {
-                        TextHelvetica(content: String(homePageViewModel.exersiseQueue.count), size: 25)
+                    HStack(spacing: 0) {
+                        TextHelvetica(content: String("Add Exercise "), size: 25)
                             .foregroundColor(Color("WhiteFontOne"))
+                        if homePageViewModel.exersiseQueue.count > 0 {
+                            TextHelvetica(content: "(" , size: 23)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            TextHelvetica(content:
+                                            String(homePageViewModel.exersiseQueue.count), size: 25)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            TextHelvetica(content:
+                                            ")", size: 23)
+                                .foregroundColor(Color("WhiteFontOne"))
+                        }
                     }
+                
          
                     Spacer()
                     
@@ -98,7 +110,7 @@ struct AddExersisesPopUp: View {
                         withAnimation(.spring()) {
                             viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
                         }
-                       
+                        searchText = ""
                         viewModel.addExercisesFromQueue(exercises: homePageViewModel.exersiseQueue)
                         homePageViewModel.clearToExersiseQueue()
         
@@ -137,32 +149,11 @@ struct AddExersisesPopUp: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                    
-                    Button {
-                        withAnimation(.spring()) {
-                            showingNew = true
-                        }
-                        
+                    .onTapGesture {
+                        selectedType = nil
+                        selectedColor = nil
                     }
-                    label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 4)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                                .foregroundColor(Color("MainGray"))
-                            
-                            Image(systemName: "plus")
-                                .resizable()
-                                .bold()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 17, height: 17)
-                                .foregroundColor(Color("LinkBlue"))
-
-                            
-                        }
-                        
-                    }.frame(width: 40, height: 36)
+        
                     
                 }.padding(.horizontal, 15)
                     
@@ -176,8 +167,13 @@ struct AddExersisesPopUp: View {
                         // Add a default option to clear the selection
                         Button(action: {
                             selectedType = nil
+                            searchText = ""
                         }) {
-                            Text("Any Body Part")
+                            
+                            Text("Any Equipment")
+                                
+                           
+                            
                         }
                         
                         // Add a separator
@@ -193,19 +189,28 @@ struct AddExersisesPopUp: View {
                       
                         } label: {}
                     } label: {
-                        TextHelvetica(content: selectedType ?? "Any Body Part", size: 18)
+                  
+                        TextHelvetica(content: selectedType ?? "Any Equipment", size: 18)
                             .font(.largeTitle)
                             .frame(width: getScreenBounds().width / 2.165)
+                            
+                   
+                       
                     }
                     .frame(height: getScreenBounds().height * 0.04)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
                     .background(Color("MainGray"))
             
                     Menu {
                         // Add a default option to clear the selection
                         Button(action: {
                             selectedColor = nil
+                            searchText = ""
                         }) {
-                            Text("Any Category")
+                           
+                            Text("Any Muscle Group")
                         }
                         
                         // Add a separator
@@ -220,11 +225,18 @@ struct AddExersisesPopUp: View {
                         } label: {}
                         
                     } label: {
-                        TextHelvetica(content: selectedColor ?? "Any Category", size: 18)
-                            .font(.largeTitle)
+                        
+                            TextHelvetica(content: selectedColor ?? "Any Muscle Group", size: 18)
+                                .font(.largeTitle)
                             .frame(width: getScreenBounds().width / 2.165)
+                            
+                       
                     }
+                   
                     .frame(height: getScreenBounds().height * 0.04)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
                     .background(Color("MainGray"))
                 }
                 
@@ -242,17 +254,53 @@ struct AddExersisesPopUp: View {
                     .overlay(Color("BorderGray"))
                 if filteredExercises.isEmpty {
                     VStack {
-                        Text("No exercises found")
-                            .font(.title)
+ 
+                      
+                        TextHelvetica(content: "No exercises found", size: 25)
+                            .foregroundColor(Color("WhiteFontOne"))
                             .padding(.top, 40)
+                       
+                           
+                         
+                        TextHelvetica(content: "Add a new exercise", size: 20)
+                            .foregroundColor(Color("GrayFontOne"))
+                            .padding(.top, 3)
                         
-                        Text("Please add an exercise")
-                            .font(.subheadline)
-                            .padding(.top, 10)
+                        
+                        
+                        Button {
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                            
+                            withAnimation(.spring()) {
+                                showingNew = true
+                        
+                                
+                            }
+                            
+                        }
+                        label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 4)
+                                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                    .foregroundColor(Color("MainGray"))
+                                
+                                Image(systemName: "plus")
+                                    .resizable()
+                                    .bold()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 17, height: 17)
+                                    .foregroundColor(Color("LinkBlue"))
+
+                                
+                            }
+                            
+                        }.frame(width: 40, height: 36)
                         
                         Spacer()
                     }
-                    .frame(width: 1000)
+                    .frame(maxWidth: .infinity)
                     .background(Color("DBblack"))
                     
                 } else {
@@ -265,15 +313,27 @@ struct AddExersisesPopUp: View {
                                         ForEach(sectionedExercises[key]!, id: \.id) { exercise in
                                             ZStack {
                                                 Button(action: {
-                                                                    // action to perform when the button is tapped
-                                                if homePageViewModel.exersises[exercise.id].selected == false {
-                                                    homePageViewModel.addToExersiseQueue(ExersiseID: exercise.id)
-                                                   } else {
-                                                       homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
-                                                   }
-                                                    withAnimation(.spring()) {
-                                                        homePageViewModel.setSelectionState(ExersiseID: exercise.id)
+                                                    if viewModel.replacingExercise.replacing {
+                                                   
+                                                        let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
+                                                        let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
+                                                        viewModel.setExerciseModule(index: viewModel.replacingExercise.indexToReplace!, exerciseModule: module)
+                                                        withAnimation(.spring()) {
+                                                            viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
+                                                        }
+                                                     
+                                                        
+                                                    } else {
+                                                        if homePageViewModel.exersises[exercise.id].selected == false {
+                                                            homePageViewModel.addToExersiseQueue(ExersiseID: exercise.id)
+                                                           } else {
+                                                               homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
+                                                           }
+                                                            withAnimation(.spring()) {
+                                                                homePageViewModel.setSelectionState(ExersiseID: exercise.id)
+                                                            }
                                                     }
+                                              
                                                    
                                                 }, label: {
                                                     Rectangle()
@@ -339,15 +399,86 @@ struct AddExersisesPopUp: View {
                            
                         } else {
                             ForEach(filteredExercises, id: \.id) { exercise in
-                                VStack(alignment: .leading) {
-                                    TextHelvetica(content: exercise.exerciseName, size: 18)
-                                    .foregroundColor(Color("WhiteFontOne"))
-                                    TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
-                                        .foregroundColor(Color("GrayFontOne"))
+                                ZStack {
+                                    Button(action: {
+                                        if viewModel.replacingExercise.replacing {
+                                       
+                                            let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
+                                            let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
+                                            viewModel.setExerciseModule(index: viewModel.replacingExercise.indexToReplace!, exerciseModule: module)
+                                            withAnimation(.spring()) {
+                                                viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
+                                            }
+                                         
+                                            
+                                        } else {
+                                            if homePageViewModel.exersises[exercise.id].selected == false {
+                                                homePageViewModel.addToExersiseQueue(ExersiseID: exercise.id)
+                                               } else {
+                                                   homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
+                                               }
+                                                withAnimation(.spring()) {
+                                                    homePageViewModel.setSelectionState(ExersiseID: exercise.id)
+                                                }
+                                        }
+                                  
+                                       
+                                    }, label: {
+                                        Rectangle()
+                                            .opacity(0.0001)
+                                            .foregroundColor(.black)
+                                    }).buttonStyle(.plain)
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            if homePageViewModel.exersises[exercise.id].selected == false {
+                                                TextHelvetica(content: exercise.exerciseName, size: 18)
+                                                    .foregroundColor(Color("WhiteFontOne"))
+                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                            }
+                                            else {
+                                                TextHelvetica(content: exercise.exerciseName, size: 18)
+                                                    .foregroundColor(Color("LinkBlue"))
+                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                            }
+                                            
+                                        }
+                                        Spacer()
+                                        
+                                        Button {}
+                                       label: {
+                                           ZStack {
+                                               if homePageViewModel.exersises[exercise.id].selected == false {
+                                                   
+                                                   TextHelvetica(content: "?", size: 23)
+                                                       .bold()
+                                                       .foregroundColor(Color("LinkBlue"))
+                                               } else {
+                                                   
+                                                     Image("checkMark")
+                                                         .resizable()
+                                                         .aspectRatio(contentMode: .fit)
+                                                         .frame(width: 17, height: 17)
+                                                         
+                                               }
+                                             
+                                             
+                                               
+                                           }
+                                       }
+                                       .frame(width: getScreenBounds().width * 0.12, height: getScreenBounds().height * 0.04)
+                                        
+                                        
+                                    }
+                                   
+                             
+                                    
                                 }
+                                .listRowBackground(Color("MainGray"))
+                                .listStyle(GroupedListStyle())
                             }
-                            .listRowBackground(Color("MainGray"))
-                            .listStyle(GroupedListStyle())
+                        
                         }
                     }
                     .scrollContentBackground(.hidden)

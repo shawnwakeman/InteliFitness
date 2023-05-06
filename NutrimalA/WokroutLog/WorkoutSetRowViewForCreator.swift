@@ -1,13 +1,13 @@
 //
-//  WorkoutSetRowView.swift
+//  WorkoutSetRowViewForCreator.swift
 //  NutrimalA
 //
-//  Created by Shawn Wakeman on 4/7/23.
+//  Created by Shawn Wakeman on 5/5/23.
 //
 
 import SwiftUI
 import Combine
-struct WorkoutSetRowView: View{
+struct WorkoutSetRowViewForCreator: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
     var moduleID: Int
@@ -79,7 +79,7 @@ struct WorkoutSetRowView: View{
             TextHelvetica(content: String(rowObject.setIndex), size: 20)
                        .padding()
                        .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
-                       .foregroundColor(Color("LinkBlue"))
+                       .foregroundColor(Color("WhiteFontOne"))
                        .background(.clear)
                        .onTapGesture {
                            withAnimation(.spring()) {
@@ -137,7 +137,7 @@ struct WorkoutSetRowView: View{
                 .keyboardType(.decimalPad)
                 .autocorrectionDisabled(true)
                 .font(.custom("SpaceGrotesk-Medium", size: 20))
-                .foregroundColor(Color("WhiteFontOne"))
+                .foregroundColor(Color("GrayFontTwo"))
                 .onTapGesture {
                     lbsTextField = lbsTextField
                 }
@@ -176,7 +176,7 @@ struct WorkoutSetRowView: View{
 
 
                 .onChange(of: lbsTextField) { newValue in
-                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+                    viewModel.setWeightValuePlaceHolder(exersiseModuleID: moduleID, RowID: rowObject.id, value: lbsTextField)
                     viewModel.setLastModule(index: moduleID)
                     viewModel.setLastRow(index: rowObject.id)
                 }
@@ -203,7 +203,7 @@ struct WorkoutSetRowView: View{
                     .keyboardType(.numberPad)
                     .autocorrectionDisabled(true)
                     .font(.custom("SpaceGrotesk-Medium", size: 20))
-                    .foregroundColor(Color("WhiteFontOne"))
+                    .foregroundColor(Color("GrayFontTwo"))
                     .onTapGesture {
                         repsTextField = repsTextField
                     }
@@ -226,7 +226,7 @@ struct WorkoutSetRowView: View{
                        
            
                     .onChange(of: repsTextField) { newValue in
-                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+                        viewModel.setRepValuePlaceHolder(exersiseModuleID: moduleID, RowID: rowObject.id, value: repsTextField)
                         viewModel.setLastModule(index: moduleID)
                         viewModel.setLastRow(index: rowObject.id)
                     }
@@ -246,7 +246,7 @@ struct WorkoutSetRowView: View{
         @ObservedObject var viewModel: WorkoutLogViewModel
         var moduleID: Int
         var body: some View {
-            if rowObject.repMetric != 0 {
+            if rowObject.rpeTarget != 0 {
                 ZStack{
                     
                     ZStack{
@@ -273,14 +273,15 @@ struct WorkoutSetRowView: View{
                         
                     }
                     
-                
+            
+                    TextHelvetica(content: String(rowObject.rpeTarget.clean), size: 13)
+                            .foregroundColor(Color("GrayFontOne"))
                    
-             
-                    TextHelvetica(content: String(rowObject.repMetric.clean), size: 13)
-                        .foregroundColor(Color("WhiteFontOne"))
-                 
+                   
+                       
                     
                 }
+                
                 .padding(.leading, -8)
                 .padding(.trailing, 5)
                 
@@ -310,7 +311,7 @@ struct WorkoutSetRowView: View{
                     }
                     
                     TextHelvetica(content: "", size: 13)
-                        .foregroundColor(Color("GrayFontOne"))
+                        .foregroundColor(Color.white)
                     
                 }
                 .onTapGesture {
@@ -382,12 +383,4 @@ struct WorkoutSetRowView: View{
             
         }
     }
-}
-
-
-
-extension Collection where Indices.Iterator.Element == Index {
-   public subscript(safe index: Index) -> Iterator.Element? {
-     return (startIndex <= index && index < endIndex) ? self[index] : nil
-   }
 }

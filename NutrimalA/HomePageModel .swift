@@ -15,9 +15,11 @@ struct HomePageModel {
     
         var ongoingWorkout: Bool
 
+
     init(displayingWorkoutLogView: Bool = false, ongoingWorkout: Bool = false) {
             self.displayingWorkoutLogView = displayingWorkoutLogView
             self.ongoingWorkout = ongoingWorkout
+  
             // Set the default state for the exercises array
             let defaultExercises: [Exersise] = Bundle.main.decode("Exercises.json")
 
@@ -36,7 +38,7 @@ struct HomePageModel {
             }()
         }
     
-   
+
     
     func saveOngoingWorkoutStatus(status: Bool) {
         UserDefaults.standard.set(status, forKey: "ongoingWorkout")
@@ -54,7 +56,7 @@ struct HomePageModel {
     struct Workout: Identifiable, Codable {
         let id: UUID
         let WorkoutName: String
-        let notes: String = ""
+        var notes: String = ""
         var exercises: [WorkoutLogModel.ExersiseLogModule]
         var category: String
     }
@@ -112,13 +114,10 @@ struct HomePageModel {
 
         // needs to be cleaned
         let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
-        let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)
+   
         
-        for exercise in removedBlankRows {
-            let exerciseID = exercise.ExersiseID
-            exercises[exerciseID].exerciseHistory.append(exercise)
-        }
-        myExercises.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows, category: ""))
+        
+        myExercises.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: filterExerciseModules, category: ""))
     }
     
     mutating func deleteFromHistory(workoutID: UUID) {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CategorySelectionMenu: View {
     @Binding var selectedCategory: String
-    let categories = ["Category 1", "Category 2", "Category 3"]
+    let categories = ["Barbell", "Bodyweight", "Dumbell", "Machine", "Other", "Weighted Bodyweight", "Assisted Bodyweight ", "Reps Only", "Cardio", "Duration"]
 
     var body: some View {
         Menu {
@@ -29,7 +29,8 @@ struct CategorySelectionMenu: View {
 
 struct BodyPartSelectionMenu: View {
     @Binding var selectedBodyPart: String
-    let categories = ["Category 5", "Catego2 2", "Catego3ry 3"]
+    let categories = ["Back", "Biceps", "Chest", "Back", "Hamstrings", "Lower Back", "Quadricpes", "Triceps", "Other",
+                      "Core", "Shoulders", "Olympic", "Full Body", "Cardio"]
 
     var body: some View {
         Menu {
@@ -68,6 +69,10 @@ struct NameAndCategoryView: View {
                         showingNew = false
                     }
 
+
+               
+                    name = ""
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                    
                     
                 }
@@ -87,22 +92,28 @@ struct NameAndCategoryView: View {
                 
                 
                 Spacer()
-                TextHelvetica(content: "Exersise Metrics", size: 20)
+                TextHelvetica(content: "Add Exercise", size: 20)
                     .foregroundColor(Color("WhiteFontOne"))
                 
                 Spacer()
                 Button {
-                    withAnimation(.spring()) {
-                        showingNew = false
+                    if name.count > 0 {
+                        withAnimation(.spring()) {
+                            showingNew = false
+                        }
+                        var exercisesToBeSaved = viewModel.exersises
+                        print(exercisesToBeSaved)
+                        exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: []))
+                        print(exercisesToBeSaved)
+                        viewModel.saveExercisesToUserDefaults(exercisesToBeSaved)
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
-                    var exercisesToBeSaved = viewModel.exersises
-                    print(exercisesToBeSaved)
-                    exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: []))
-                    print(exercisesToBeSaved)
-                    viewModel.saveExercisesToUserDefaults(exercisesToBeSaved)
+            
+                    name = ""
+                    
                 }
                 label: {
-                    TextHelvetica(content: "Save", size: 21)
+                    TextHelvetica(content: "Save", size: 18)
                         .foregroundColor(Color("LinkBlue"))
                 }
                
@@ -123,14 +134,18 @@ struct NameAndCategoryView: View {
                 .padding(.horizontal, 15)
 
             HStack {
-                Text("Category:")
+       
+                TextHelvetica(content: "Equipment", size: 20)
+                    .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 CategorySelectionMenu(selectedCategory: $selectedCategory)
             }
             .padding()
 
             HStack {
-                Text("Body Part:")
+            
+                TextHelvetica(content: "Muscle Group:", size: 20)
+                    .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 BodyPartSelectionMenu(selectedBodyPart: $selectedBodyPart)
             }

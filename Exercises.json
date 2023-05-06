@@ -1,7 +1,7 @@
 [
     {
         "exerciseName": "Bench Press",
-        "exerciseCategory": ["Chest", "Triceps"],
+        "exerciseCategory": ["Chest"],
         "exerciseEquipment": "Barbell",
         "id": 0,
         "selected": false,
@@ -31,7 +31,7 @@
     },
 {
         "exerciseName": "Deadlift",
-        "exerciseCategory": ["Lower Back", "Hamstrings"],
+        "exerciseCategory": ["Lower Back"],
         "exerciseEquipment": "Barbell",
         "id": 2,
         "selected": false,
@@ -46,7 +46,7 @@
     },
 {
         "exerciseName": "Pull-up",
-        "exerciseCategory": ["Back", "Biceps"],
+        "exerciseCategory": ["Back"],
         "exerciseEquipment": "",
         "id": 3,
         "selected": false,
@@ -61,7 +61,7 @@
     },
 {
         "exerciseName": "Military Press",
-        "exerciseCategory": ["Shoulders", "Triceps"],
+        "exerciseCategory": ["Shoulders"],
         "exerciseEquipment": "Barbell",
         "id": 4,
         "selected": false,
@@ -75,7 +75,7 @@
     },
     {
         "exerciseName": "Lat Pulldown",
-        "exerciseCategory": ["Back", "Biceps"],
+        "exerciseCategory": ["Back"],
         "exerciseEquipment": "Machine",
         "id": 5,
         "selected": false,
@@ -90,7 +90,7 @@
     },
     {
         "exerciseName": "Reverse Pec Deck",
-        "exerciseCategory": ["Shoulders", "Upper Back"],
+        "exerciseCategory": ["Shoulders"],
         "exerciseEquipment": "Machine",
         "id": 6,
         "selected": false,
@@ -120,7 +120,7 @@
     },
     {
         "exerciseName": "Barbell Rows",
-        "exerciseCategory": ["Back", "Biceps"],
+        "exerciseCategory": ["Back"],
         "exerciseEquipment": "Barbell",
         "id": 8,
         "selected": false,
@@ -135,7 +135,7 @@
     },
     {
         "exerciseName": "Pec Deck",
-        "exerciseCategory": ["Chest", "Shoulders"],
+        "exerciseCategory": ["Chest"],
         "exerciseEquipment": "Machine",
         "id": 9,
         "selected": false,
@@ -150,7 +150,7 @@
     },
     {
         "exerciseName": "Dips",
-        "exerciseCategory": ["Triceps", "Chest"],
+        "exerciseCategory": ["Triceps"],
         "exerciseEquipment": "BodyWeight",
         "id": 10,
         "selected": false,
@@ -164,7 +164,7 @@
     },
     {
         "exerciseName": "Tricep Pushdowns",
-        "exerciseCategory": ["Triceps", "Chest"],
+        "exerciseCategory": ["Triceps"],
         "exerciseEquipment": "Machine",
         "id": 11,
         "selected": false,
@@ -179,7 +179,7 @@
     },
     {
         "exerciseName": "Incline Press",
-        "exerciseCategory": ["Chest", "Triceps", "Shoulders"],
+        "exerciseCategory": ["Chest"],
         "exerciseEquipment": "Dumbbell",
         "id": 12,
         "selected": false,
@@ -194,7 +194,7 @@
     },
     {
         "exerciseName": "Romanian Deadlift",
-        "exerciseCategory": ["Hamstrings", "Lower Back"],
+        "exerciseCategory": ["Hamstrings"],
         "exerciseEquipment": "Barbell",
         "id": 13,
         "selected": false,
@@ -208,7 +208,7 @@
     },
     {
         "exerciseName": "Leg Press",
-        "exerciseCategory": ["Quadriceps", "Hamstrings", "Glutes"],
+        "exerciseCategory": ["Quadriceps"],
         "exerciseEquipment": "Machine",
         "id": 14,
         "selected": false,

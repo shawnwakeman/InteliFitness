@@ -57,7 +57,10 @@ class HomePageViewModel: ObservableObject {
         
     }
     
-
+//    func toggleReplacingExercise(status: Bool) {
+//        replacingExercise.toggle()
+//    }
+    
     
     func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
         homePageModel.addToHistory(workoutName: workoutName, exersiseModules: exersiseModules)

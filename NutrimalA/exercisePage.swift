@@ -7,16 +7,28 @@
 
 import SwiftUI
 
-enum Page {
-    case page1, page2, page3, page4
+enum Page: Int {
+    case page1 = 0
+    case page2
+    case page3
+    case page4
 }
+
 
 struct ExercisePage: View {
     @State private var selectedPage: Page = .page1
     @ObservedObject var viewModel: HomePageViewModel
     @Binding var showingExrcisePage: Bool
 
+    private var customBinding: Binding<Page> {
+        Binding<Page>(
+            get: { selectedPage },
+            set: { selectedPage = $0 }
+        )
+    }
+
     var body: some View {
+        let offset = viewModel.ongoingWorkout ? 0 : 0.13
         if let exercise = viewModel.homePageModel.currentExervice {
             VStack {
                 HStack {
@@ -24,8 +36,6 @@ struct ExercisePage: View {
                         withAnimation(.spring()) {
                             showingExrcisePage = false
                         }
-                     
-                        
                     }
                     label: {
                         ZStack {
@@ -37,10 +47,7 @@ struct ExercisePage: View {
                             Image(systemName: "xmark")
                                 .bold()
                         }
-                        
-                            
                     }.frame(width: 50, height: 30)
-                    
                     
                     Spacer()
                     TextHelvetica(content: exercise.exerciseName, size: 20)
@@ -54,27 +61,17 @@ struct ExercisePage: View {
                         TextHelvetica(content: "Edit", size: 18)
                             .foregroundColor(Color("LinkBlue"))
                     }
-                   
-                    
-                    
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 10)
-                
-                
-                
-                Picker("Pages", selection: $selectedPage) {
-                    Text("About").tag(Page.page1)
-                    Text("History").tag(Page.page2)
-                    Text("Data").tag(Page.page3)
-                    Text("Records").tag(Page.page4)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
+
+                CustomSegmentedPicker(selection: customBinding, labels: ["About", "History", "Data", "Records"])
+                    .padding()
+
                 Divider()
-                
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
+
                 switch selectedPage {
                 case .page1:
                     Page1View(exercise: exercise)
@@ -87,18 +84,62 @@ struct ExercisePage: View {
                 }
 
                 Spacer()
+              
             }
-            .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.7)
+            .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * (0.7 + offset))
             .background(Color("DBblack"))
             .cornerRadius(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color("BorderGray"), lineWidth: borderWeight))
-
+            .offset(y: getScreenBounds().height * (offset/5))
         }
-
     }
 }
+
+struct CustomSegmentedPicker: View {
+    @Binding var selection: Page
+    var labels: [String]
+    private let slidingBarHeight: CGFloat = 2
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                ForEach(0..<labels.count) { index in
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            selection = Page(rawValue: index)!
+                        }
+                    }) {
+                        TextHelvetica(content: labels[index], size: 15)
+                       
+                            .padding(.vertical, 5)
+                            
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(selection == Page(rawValue: index) ? Color("LinkBlue") : Color("WhiteFontOne"))
+                    }
+                }
+            }
+            .background(Color("MainGray"))
+
+            // Sliding bar
+            GeometryReader { geometry in
+                RoundedRectangle(cornerRadius: slidingBarHeight / 2)
+                    .frame(width: geometry.size.width / CGFloat(labels.count), height: slidingBarHeight)
+                    .foregroundColor(.blue)
+                    .offset(x: (geometry.size.width / CGFloat(labels.count)) * CGFloat(selection.rawValue))
+                    .animation(.easeInOut, value: selection)
+            }
+            .frame(height: slidingBarHeight)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+
+
+
+
 
 
 
@@ -147,7 +188,7 @@ struct Page2View: View {
                 
             
                 
-                ForEach(exercise.exerciseHistory) { workout in
+                ForEach(exercise.exerciseHistory.reversed()) { workout in
                  
                         
                         
@@ -233,8 +274,9 @@ struct Page2View: View {
                                             VStack {
                                                 
                                                 HStack(spacing: 0){
-                                                  
-                                                    TextHelvetica(content: "\(row.reps) x \(row.weight.clean)", size: 19)
+                                                    TextHelvetica(content: "\(row.setIndex) ", size: 19)
+                                                        .foregroundColor(Color("LinkBlue"))
+                                                    TextHelvetica(content: "- \(row.weight.clean) lbs x \(row.reps)", size: 19)
                                               
                                                         .foregroundColor(Color("GrayFontOne"))
                                                     if row.repMetric != 0 {

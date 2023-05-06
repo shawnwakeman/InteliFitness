@@ -8,12 +8,12 @@ struct WorkoutLogModel {
     private(set) var exersiseModules: [ExersiseLogModule] = []
     
 
-  
+    var replacingExercises = ReplacingExercises()
     var workoutTime: WorkoutTime = WorkoutTime()
     var restTime : WorkoutTime = WorkoutTime(timeElapsed: 0, timePreset: 120)
     var popUps = [
                 PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "popUpRPE"),
-                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "popUpDotsMenu"),
+                PopUpData(popUpRowIndex: 0, popUpExersiseModuleIndex: 0, popUPUUID: UUID(), id: "popUpDotsMenu"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "popUpDataMetrics"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "DropDownMenu"),
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetTimeSubMenu"),
@@ -32,6 +32,11 @@ struct WorkoutLogModel {
     var lastModuleChangedID: Int = 100
     var hidingPopUps = false
     
+    struct ReplacingExercises {
+        var replacing: Bool = false
+        var indexToReplace: Int?
+    }
+    
     mutating func setLastModule(index: Int) {
         lastModuleChangedID = index
     }
@@ -43,7 +48,7 @@ struct WorkoutLogModel {
     mutating func setRowCompletionStatus(exersiseID: Int, RowID: Int, state: Bool) {
         exersiseModules[exersiseID].setRows[RowID].setCompleted = state
     }
-    struct PopUpData: Identifiable {
+    struct PopUpData: Identifiable, Equatable {
         var RPEpopUpState = false
         var popUpRowIndex: Int
         var popUpExersiseModuleIndex: Int
@@ -87,6 +92,7 @@ struct WorkoutLogModel {
         var setCompleted: Bool = false
         var rowSelected: Bool = false
         var repMetric: Float = 0
+        var rpeTarget: Float = 0
         var prevouslyChecked: Bool = false
         var id: Int
         
@@ -147,6 +153,12 @@ struct WorkoutLogModel {
 
     }
     
+    mutating func loadWorkout(workout: HomePageModel.Workout) {
+        workoutTime.timeElapsed = 0
+        exersiseModules = workout.exercises
+        
+    }
+    
     mutating func setPrevouslyChecked(exersiseModuleID : Int, RowID: Int, state: Bool) {
         exersiseModules[exersiseModuleID].setRows[RowID].prevouslyChecked  = state
     }
@@ -167,9 +179,23 @@ struct WorkoutLogModel {
     mutating func setRepValue(exersiseModuleID : Int, RowID: Int, value: Int) {
         exersiseModules[exersiseModuleID].setRows[RowID].reps = value
     }
+    
+    mutating func setRepValuePlaceHolder(exersiseModuleID : Int, RowID: Int, value: String) {
+        exersiseModules[exersiseModuleID].setRows[RowID].repsPlaceholder = value
+    }
+    
+    mutating func setRepMetricPlaceHolder(exersiseModuleID : Int, RowID: Int, value: Float) {
+        exersiseModules[exersiseModuleID].setRows[RowID].rpeTarget = value
+    }
+    
     mutating func setWeightValue(exersiseModuleID : Int, RowID: Int, value: Float) {
         
         exersiseModules[exersiseModuleID].setRows[RowID].weight = value
+    }
+    
+    mutating func setWeightValuePlaceHolder(exersiseModuleID : Int, RowID: Int, value: String) {
+        
+        exersiseModules[exersiseModuleID].setRows[RowID].weightPlaceholder = value
     }
     mutating func addToTime(step: Int) {
         workoutTime.timeElapsed += step
@@ -185,6 +211,11 @@ struct WorkoutLogModel {
 
 
         
+    }
+    
+    mutating func toggleReplacingExercise(state: Bool, index: Int) {
+        replacingExercises.indexToReplace = index
+        replacingExercises.replacing = state
     }
     
     mutating func editRestTime(time: Int) {
@@ -296,8 +327,8 @@ struct WorkoutLogModel {
     
 
     
-    mutating func clearExerciseModules() {
-        exersiseModules = []
+    mutating func setExerciseModule(index: Int, exerciseModule: WorkoutLogModel.ExersiseLogModule) {
+        exersiseModules[index] = exerciseModule
     }
 
     
@@ -314,6 +345,7 @@ struct WorkoutLogModel {
             currentSetRows.remove(at: rowID)
             for (index, _) in currentSetRows.enumerated() {
                 currentSetRows[index].id = index
+                currentSetRows[index].setIndex = index + 1
             }
             exersiseModules[moduleID].setRows = currentSetRows
         }
@@ -356,7 +388,7 @@ struct WorkoutLogModel {
     }
     
     mutating func setExersiseModuleRPEDisplayStatus(exersiseID: Int, state: Bool) {
-        exersiseModules[exersiseID].displayingRPE = state
+        exersiseModules[exersiseID].displayingRPE.toggle()
     }
     mutating func toggleExersiseModuleNotesDisplayStatus(exersiseID: Int) {
         exersiseModules[exersiseID].displayingNotes.toggle()

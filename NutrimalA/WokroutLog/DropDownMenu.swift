@@ -28,12 +28,21 @@ struct DropDownMenuView: View {
                 HStack {
                     Button {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        withAnimation(.spring()) {
-                            viewModel.setPopUpState(state: true, popUpId: "TimerPopUp")
+                        if homePageViewModel.workoutLogModuleStatus == true {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: true, popUpId: "TimerPopUp")
+                            }
+                        } else {
+                            withAnimation(.spring()) {
+                                homePageViewModel.setWorkoutLogModuleStatus(state: true)
+                                viewModel.setPopUpState(state: true, popUpId: "TimerPopUp")
+                            }
                         }
+                        
                         
                     }
                 label: {
+                    
                     ZStack{
                         
                         ZStack{
@@ -47,7 +56,7 @@ struct DropDownMenuView: View {
 
                         
                         
-                        
+                       
                         HStack{
                             Image(systemName: "clock")
                                 .foregroundColor(Color("LinkBlue"))
@@ -60,19 +69,27 @@ struct DropDownMenuView: View {
                         
                         
                     }
-                    .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.05)
-                    .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
-                    .aspectRatio(2.5, contentMode: .fit)
-                    .padding(.leading, 25)
-                }
-                   
-                   
-                    Rectangle()
-                        .aspectRatio(1, contentMode: .fit)
-                        .foregroundColor(.clear)
-                        .padding(.horizontal, 50)
+                 
                     
-
+                }.frame(width: getScreenBounds().width * 0.25, height: getScreenBounds().height * 0.05)
+                        .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
+                        .aspectRatio(2.5, contentMode: .fit)
+                        .padding(.leading, 25)
+                        .background(Color.clear.frame(width: getScreenBounds().width * 0.25 * 1.5, height: getScreenBounds().height * 0.05 * 1.5)) // Increase the hitbox size
+                   
+                    ZStack {
+                        Rectangle()
+                            .aspectRatio(1, contentMode: .fit)
+                            .foregroundColor(.clear)
+                            .padding(.horizontal, 50)
+                        
+                        ElapsedTime(viewModel: viewModel, step: 1, fontSize: 20)
+           
+                            .foregroundColor(Color("GrayFontOne"))
+                     
+                            .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
+                    }
+                    
                     ZStack{
                         
                         ZStack{
@@ -94,8 +111,8 @@ struct DropDownMenuView: View {
                        
                             }
                             
-                       
-                        
+                            homePageViewModel.saveExersiseHistory()
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             
                          
                            
@@ -119,12 +136,8 @@ struct DropDownMenuView: View {
                 }
        
                 
-                ElapsedTime(viewModel: viewModel, step: 1, fontSize: 20)
-   
-                    .foregroundColor(Color("GrayFontOne"))
-                    .padding(.horizontal, 50)
-                    .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
-       
+              
+                    
               
             }
             

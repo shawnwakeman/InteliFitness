@@ -15,6 +15,9 @@ struct DotsMenuView: View {
     @State var notesdisplay = false
     @State private var showingRestTime = false
     @State private var showingUnitSet = false
+    @State private var showingNotes = false
+    @State private var showingRPE = false
+    @State private var showingExercise = ""
     @State private var yourMom = 120
     
     @State private var timeForSliderStart = 0
@@ -75,6 +78,15 @@ struct DotsMenuView: View {
                                         
   
                     Button {
+                        let moduleID = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+                        viewModel.toggleReplacingExercise(state: true, index: moduleID)
+                        withAnimation(.spring()) {
+                            viewModel.setPopUpState(state: true, popUpId: "ExersisesPopUp")
+
+                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                        }
+                        
+                      
                        
                     }
                     label: {
@@ -90,8 +102,14 @@ struct DotsMenuView: View {
                                 .foregroundColor(Color("WhiteFontOne"))
                             
                             Spacer()
-                       
+                            TextHelvetica(content: showingExercise.isEmpty ? "" : showingExercise, size: 17)
                                 .foregroundColor(Color("GrayFontOne"))
+                                
+                      
+                          
+                                  
+                           
+                           
                             Image("sidwaysArrow")
                                 .resizable()
                             
@@ -107,44 +125,42 @@ struct DotsMenuView: View {
                         .overlay(Color("BorderGray"))
                     
                     
-                    Button {
-                        withAnimation(.spring()) {
-                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
-                        }
-   
-                        withAnimation(.linear(duration: 0.9)){
-                       
-                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                        }
-
-                    }
-                    label: {
-                        HStack{
-                            
-                            Image(systemName: "scalemass")
-                                .foregroundColor(Color("LinkBlue"))
-                                .imageScale(.large)
-                                .bold()
-                                .multilineTextAlignment(.leading)
-                            
-                            TextHelvetica(content: "Add Warm Up Sets", size: 18)
-                                .foregroundColor(Color("WhiteFontOne"))
-                            
-                            Spacer()
-                            TextHelvetica(content: "", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
-                            Image("sidwaysArrow")
-                                .resizable()
-                            
-                                .aspectRatio(24/48, contentMode: .fit)
-                                .frame(maxHeight: 22)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxHeight: 22)
-                    }
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
+//                    Button {
+//                        withAnimation(.spring()) {
+//                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+//                        }
+//
+//                        withAnimation(.linear(duration: 0.9)){
+//
+//                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+//                        }
+//
+//                    }
+//                    label: {
+//                        HStack{
+//
+//                            Image(systemName: "scalemass")
+//                                .foregroundColor(Color("LinkBlue"))
+//                                .imageScale(.large)
+//                                .bold()
+//                                .multilineTextAlignment(.leading)
+//
+//                            TextHelvetica(content: "Add Warm Up Sets", size: 18)
+//                                .foregroundColor(Color("WhiteFontOne"))
+//
+//                            Spacer()
+//                            TextHelvetica(content: "", size: 17)
+//                                .foregroundColor(Color("GrayFontOne"))
+//                            Image("sidwaysArrow")
+//                                .resizable()
+//
+//                                .aspectRatio(24/48, contentMode: .fit)
+//                                .frame(maxHeight: 22)
+//                        }
+//                        .padding(.horizontal)
+//                        .frame(maxHeight: 22)
+//                    }
+            
                         Button {
                             
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
@@ -168,7 +184,7 @@ struct DotsMenuView: View {
                                     .bold()
                                     .multilineTextAlignment(.leading)
                                 
-                                TextHelvetica(content: "Set exersise rest time", size: 18)
+                                TextHelvetica(content: "Set auto rest time", size: 18)
                                     .foregroundColor(Color("WhiteFontOne"))
                                 
                                 Spacer()
@@ -244,26 +260,39 @@ struct DotsMenuView: View {
                     
                         TextHelvetica(content: "Enable/Disable RPE", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
+                      
                         Spacer()
                         
-                        Toggle(isOn: $vibrateOnRing) {
-                            Text("Vibrate on Ring")
-
-                        }.onChange(of: vibrateOnRing) { newValue in
-                            // Call your function here
-                            let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
-                            viewModel.setExersiseModuleRPEDisplayStatus(exersiseID: index, state: newValue)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                withAnimation(.spring()) {
-                                    viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                                }
-                            }
-                        }
+                            TextHelvetica(content: showingRPE ? "Disable" : "Enable ", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                                
+                   
+                        
+                
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                        
+                    
                         .labelsHidden()
                         .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
                     }
+                   
                     .padding(.horizontal)
                     .frame(maxHeight: 22)
+                    .onTapGesture {
+                           // Call your function here
+                        HapticManager.instance.impact(style: .rigid)
+                           let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+                           viewModel.setExersiseModuleRPEDisplayStatus(exersiseID: index, state: false)
+                           DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                               withAnimation(.spring()) {
+                                   viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                               }
+                           }
+                       }
                     
                     Divider()
                         .frame(height: borderWeight)
@@ -281,27 +310,38 @@ struct DotsMenuView: View {
                             .foregroundColor(Color("WhiteFontOne"))
                         Spacer()
                         
-                        Toggle(isOn: $notesdisplay) {
-                            Text("Vibrate on Ring")
-                            
-                        }.onChange(of: notesdisplay) { newValue in
-                            // Call your function here
-                            let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
-                            viewModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: index)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                withAnimation(.spring()) {
-                                    viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                                }
-                            }
-                        }
+                            TextHelvetica(content: showingNotes ? "Disable" : "Enable ", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                              
+                    
+                      
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                        
+                        
                         .labelsHidden()
                         .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
                         
+                        
                     }
+                   
                     .padding(.horizontal)
                     .frame(maxHeight: 22)
 
-                    
+                    .onTapGesture {
+                        // Call your function here
+                        HapticManager.instance.impact(style: .rigid)
+                        let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex
+                        viewModel.toggleExersiseModuleNotesDisplayStatus(exersiseID: index)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.spring()) {
+                                viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                            }
+                        }
+                    }
                     
                     
                     
@@ -362,6 +402,22 @@ struct DotsMenuView: View {
            
             yourMom = newValue
         }
+//        .onChange(of: viewModel.restTime.timePreset) { newValue in
+//
+//            yourMom = newValue
+//        }
+        .onChange(of: viewModel.getPopUp(popUpId: "popUpDotsMenu")) { newValue in
+            let index = newValue.popUpExersiseModuleIndex
+            if let safeIndex = viewModel.exersiseModules[safe: index] {
+               
+                showingRPE = viewModel.exersiseModules[index].displayingRPE
+                showingNotes = viewModel.exersiseModules[index].displayingNotes
+                showingExercise = viewModel.exersiseModules[index].exersiseName
+            }
+            
+            
+        }
+
         .frame(height: getScreenBounds().height * 0.7)
         
 

@@ -32,20 +32,24 @@ struct HomePageView: View {
 
             
                 P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageViewModel)
-                        
+                   
+                            
                 
             }
           
 
             let offset = homePageViewModel.ongoingWorkout ? 0: 0.5
-            WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
-                .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * (1.49 + offset))
-                           .ignoresSafeArea()
+      
+                WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
+                    .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * (1.49 + offset))
+                               .ignoresSafeArea()
+                              
+           
+       
          
                 
 
 
-                
               
 
            

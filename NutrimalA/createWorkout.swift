@@ -159,7 +159,7 @@ struct createWorkout: View {
 
                                 if workoutModule.isLast == false {
                                     let exerciseID = workoutLogViewModel.getUUIDindex(index: workoutModule.id)
-                                    ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id)
+                                    ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id, isLive: false)
 
                                 }
                          
@@ -244,7 +244,7 @@ struct createWorkout: View {
                     
                    
                     
-                    PopupView(viewModel: workoutLogViewModel)
+                    PopupView(viewModel: workoutLogViewModel, isLive: false)
                         .shadow(radius: 10)
                         .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * (0.69 - offset) : UIScreen.main.bounds.height * 1.5)
 

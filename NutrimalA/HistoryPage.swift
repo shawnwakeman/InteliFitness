@@ -32,7 +32,8 @@ struct HistoryPage: View {
     @State private var search: String = ""
     @State private var showTitle = true
     @State private var rectanglePosition: CGFloat = .zero
-    
+    @State private var showingExpandedExercise: Bool = false
+    @State private var selectedWorkout: HomePageModel.Workout?
     private let scrollId = "scrollId"
 
 
@@ -108,159 +109,169 @@ struct HistoryPage: View {
                         
                     
                         
-                        ForEach(viewModel.history) { workout in
+                        ForEach(viewModel.history.reversed()) { workout in
                          
                                 
                                 
                                 
                                 
+                            Button {
+                                selectedWorkout = workout
+                                withAnimation(.spring()) {
+                                    showingExpandedExercise.toggle()
+                                    
+                                }
                                 
-                                VStack(spacing: 0) {
-                                    HStack(alignment: .top) {
-                                        VStack(alignment: .leading) {
-                                            TextHelvetica(content: workout.WorkoutName, size: 27)
-                                                .foregroundColor(Color("WhiteFontOne"))
-                                            TextHelvetica(content: "Tuesday Feb 12", size: 17)
-                                                .foregroundColor(Color("GrayFontOne"))
-                                        }
-                                        Spacer()
-                                        
-                                        ZStack{
-                                            
-                                            
-                                            
-                                            
-
-                                            Button(action: {
-                                                viewModel.deleteExerciseHistory(workoutID: workout.id)
-                                            }, label: {
-                                                Image("meatBalls")
-                                                    .resizable()
-                                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
-                                                                      
-
-                                        }
-                                        .offset(y: 3)
-                                        
-                                    }
-                                  
-                                    .padding(.all, 12)
-                                    .background(Color("MainGray"))
-                                    
-                                    Rectangle()
-                                        .frame(height: getScreenBounds().height * 0.006)
-                                        .foregroundColor(Color("MainGray"))
-                                    
-                                    HStack {
-                                        TextHelvetica(content: "1 h 30 m", size: 16)
-                                            .foregroundColor(Color("GrayFontOne"))
-                                        Spacer()
-                                        TextHelvetica(content: "1000 lbs", size: 16)
-                                            .foregroundColor(Color("GrayFontOne"))
-                                        Spacer()
-                                        TextHelvetica(content: "14 sets", size: 16)
-                                            .foregroundColor(Color("GrayFontOne"))
-                                        Spacer()
-                                        TextHelvetica(content: "5 PRs", size: 16)
-                                            .foregroundColor(Color("GrayFontOne"))
-                                                      
-                                    }
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 7)
-                                    .background(Color("MainGray"))
-                                    
-                                    Divider()
-                                        
-                                        .frame(height: borderWeight)
-                                        .overlay(Color("BorderGray"))
-                                    
-                                    VStack {
-                                        HStack {
-                                            TextHelvetica(content: "Exercise", size: 22)
-                                                .foregroundColor(Color("WhiteFontOne"))
-                                            Spacer()
-                                            TextHelvetica(content: "Best Set", size: 22)
-                                                .foregroundColor(Color("WhiteFontOne"))
-                                                .offset(x: -10)
-                                            Spacer()
-                                        }
-                                        .padding(.top, 15)
-                                        .padding(.bottom, -20)
-                                        .padding(.leading, 20)
-                                        
-                                        
+                            }
+                        label: {
+                            
+                                    VStack(spacing: 0) {
+                                        HStack(alignment: .top) {
                                             VStack(alignment: .leading) {
-                                                Rectangle()
-                                                    .frame(height: getScreenBounds().height * 0.006)
-                                                    .foregroundColor(.clear)
+                                                TextHelvetica(content: workout.WorkoutName, size: 27)
+                                                    .foregroundColor(Color("WhiteFontOne"))
+                                                TextHelvetica(content: "Tuesday Feb 12", size: 17)
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                            }
+                                            Spacer()
+                                            
+                                            ZStack{
                                                 
-                                                ForEach(workout.exercises) {exercise in
-                                                  
-                                                       
-                                    
+                                                
+                                                
+                                                
+
+                                                Button(action: {
+                                                    viewModel.deleteExerciseHistory(workoutID: workout.id)
+                                                }, label: {
+                                                    Image("meatBalls")
+                                                        .resizable()
+                                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                                                                          
+
+                                            }
+                                            .offset(y: 3)
+                                            
+                                        }
+                                      
+                                        .padding(.all, 12)
+                                        .background(Color("MainGray"))
+                                        
+                                        Rectangle()
+                                            .frame(height: getScreenBounds().height * 0.006)
+                                            .foregroundColor(Color("MainGray"))
+                                        
+                                        HStack {
+                                            TextHelvetica(content: "1 h 30 m", size: 16)
+                                                .foregroundColor(Color("GrayFontOne"))
+                                            Spacer()
+                                            TextHelvetica(content: "1000 lbs", size: 16)
+                                                .foregroundColor(Color("GrayFontOne"))
+                                            Spacer()
+                                            TextHelvetica(content: "14 sets", size: 16)
+                                                .foregroundColor(Color("GrayFontOne"))
+                                            Spacer()
+                                            TextHelvetica(content: "5 PRs", size: 16)
+                                                .foregroundColor(Color("GrayFontOne"))
+                                                          
+                                        }
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 7)
+                                        .background(Color("MainGray"))
+                                        
+                                        Divider()
+                                            
+                                            .frame(height: borderWeight)
+                                            .overlay(Color("BorderGray"))
+                                        
+                                        VStack {
+                                            HStack {
+                                                TextHelvetica(content: "Exercise", size: 22)
+                                                    .foregroundColor(Color("WhiteFontOne"))
+                                                Spacer()
+                                                TextHelvetica(content: "Best Set", size: 22)
+                                                    .foregroundColor(Color("WhiteFontOne"))
+                                                    .offset(x: -10)
+                                                Spacer()
+                                            }
+                                            .padding(.top, 15)
+                                            .padding(.bottom, -20)
+                                            .padding(.leading, 20)
+                                            
+                                            
+                                                VStack(alignment: .leading) {
+                                                    Rectangle()
+                                                        .frame(height: getScreenBounds().height * 0.006)
+                                                        .foregroundColor(.clear)
                                                     
-                                                    HStack {
-                                                        
+                                                    ForEach(workout.exercises) {exercise in
+                                                      
+                                                           
+                                        
                                                         
                                                         HStack {
-                                                            TextHelvetica(content: "\(exercise.setRows.count) x \(exercise.exersiseName)", size: 16)
-                                                                .foregroundColor(Color("GrayFontOne"))
-                                                                .lineLimit(1)
-                                                             
-                                                                .padding(.leading, 10)
-                                                            Spacer()
-                                                        }.frame(width: getScreenBounds().width * 0.4)
-                                                       
-                                                                
-                                                        let rows = exercise.setRows
-                                                        if let bestRow = calculateBestSet(rows: rows) {
-                                                            HStack(spacing: 0){
-                                                                TextHelvetica(content: "\(bestRow.reps) x \(bestRow.weight.clean)", size: 16)
-                                                          
+                                                            
+                                                            
+                                                            HStack {
+                                                                TextHelvetica(content: "\(exercise.setRows.count) x \(exercise.exersiseName)", size: 16)
                                                                     .foregroundColor(Color("GrayFontOne"))
-                                                                if bestRow.repMetric != 0 {
-                                                                    TextHelvetica(content: " @ \(bestRow.repMetric.clean)", size: 16)
+                                                                    .lineLimit(1)
+                                                                 
+                                                                    .padding(.leading, 10)
+                                                                Spacer()
+                                                            }.frame(width: getScreenBounds().width * 0.4)
+                                                           
+                                                                    
+                                                            let rows = exercise.setRows
+                                                            if let bestRow = calculateBestSet(rows: rows) {
+                                                                HStack(spacing: 0){
+                                                                    TextHelvetica(content: "\(bestRow.weight.clean) lbs x \(bestRow.reps)", size: 16)
+                                                              
                                                                         .foregroundColor(Color("GrayFontOne"))
+                                                                    if bestRow.repMetric != 0 {
+                                                                        TextHelvetica(content: " @ \(bestRow.repMetric.clean)", size: 16)
+                                                                            .foregroundColor(Color("GrayFontOne"))
+                                                                    }
                                                                 }
+                                                                Spacer()
                                                             }
-                                                            Spacer()
+                                                            
+                                                              
+                                                            
                                                         }
-                                                        
-                                                          
-                                                        
+                                                        Divider()
+                                                            .frame(height: borderWeight)
+                                                            .overlay(Color("BorderGray"))
+
                                                     }
-                                                    Divider()
-                                                        .frame(height: borderWeight)
-                                                        .overlay(Color("BorderGray"))
-
-                                                }
-                          
-                                               
-                                          
+                              
+                                                   
                                               
-                                            }
+                                                  
+                                                }
+                                                
+                                                .cornerRadius(10)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                                                .padding(.vertical, 20)
+                                            .padding(.horizontal, 15)
                                             
-                                            .cornerRadius(10)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                                            .padding(.vertical, 20)
-                                        .padding(.horizontal, 15)
-                                        
-                                        
-                                       
+                                            
+                                           
+                                        }
+                                      
                                     }
-                                  
-                                }
-                               
-                                .background(Color("DBblack"))
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                                   
+                                    .background(Color("DBblack"))
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
 
-                                .padding(.vertical)
-                                .padding(.horizontal, 18)
+                                    .padding(.vertical)
+                                    .padding(.horizontal, 18)
+                        }
                                             
                   
                         }
@@ -284,10 +295,19 @@ struct HistoryPage: View {
                  
 
 
-               
-                       
-
-          
+                ZStack {
+                    VisualEffectView(effect: UIBlurEffect(style: .dark))
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(showingExpandedExercise ? 1 : 0)
+                    
+                    
+                    if let workoutToUse = selectedWorkout {
+                        
+                        ExpandedHistory(workout: workoutToUse, showingExpandedExercise: $showingExpandedExercise)
+                            .position(x: getScreenBounds().width/2, y: showingExpandedExercise ? getScreenBounds().height * 0.4 : getScreenBounds().height * 1.3)
+                    }
+                    
+                }
 
            // Use inline mode for the title
 
@@ -338,6 +358,193 @@ struct HistoryPage: View {
         
         return mostDifficultSet
     }
+    
+    struct ExpandedHistory: View {
+        var workout: HomePageModel.Workout
+        @Binding var showingExpandedExercise: Bool
+        var body: some View {
+            VStack(spacing: 0) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading) {
+                        TextHelvetica(content: workout.WorkoutName, size: 27)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        TextHelvetica(content: "Tuesday Feb 12", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
+                    }
+                    Spacer()
+                    
+                    ZStack{
+                        
+                        
+                        
+                        
+
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                showingExpandedExercise.toggle()
+                            }
+              
+                        }, label: {
+                        
+                                
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 4)
+                                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                    .foregroundColor(Color("MainGray"))
+                                Image(systemName: "xmark")
+                                    .bold()
+                            }.frame(width: 50, height: 30)
+                        })
+                                                  
+
+                    }
+                    .offset(y: 3)
+                    
+                }
+              
+                .padding(.all, 12)
+                .background(Color("MainGray"))
+                
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.006)
+                    .foregroundColor(Color("MainGray"))
+                
+                HStack {
+                    TextHelvetica(content: "1 h 30 m", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                    Spacer()
+                    TextHelvetica(content: "1000 lbs", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                    Spacer()
+                    TextHelvetica(content: "14 sets", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                    Spacer()
+                    TextHelvetica(content: "5 PRs", size: 16)
+                        .foregroundColor(Color("GrayFontOne"))
+                                  
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 7)
+                .background(Color("MainGray"))
+                
+                Divider()
+                    
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                
+                VStack {
+                    HStack {
+                        TextHelvetica(content: "Exercise", size: 22)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+                        TextHelvetica(content: "1RM", size: 20)
+                            .foregroundColor(Color("WhiteFontOne"))
+                           
+            
+                    }
+                    .padding(.trailing)
+                    .padding(.top, 15)
+                    .padding(.bottom, -20)
+                    .padding(.leading, 20)
+                    
+                    
+                        VStack(alignment: .leading) {
+                            Rectangle()
+                                .frame(height: getScreenBounds().height * 0.006)
+                                .foregroundColor(.clear)
+                            ScrollView {
+                                ForEach(workout.exercises) {exercise in
+                                  
+                                       
+                                    VStack(spacing: 5) {
+                                        HStack {
+                                            TextHelvetica(content: exercise.exersiseName, size: 20)
+                                                .bold()
+                                                .foregroundColor(Color("WhiteFontOne"))
+                                            Spacer()
+                                        }.padding(.horizontal)
+                                          
+               
+
+                                        
+                                        ForEach(exercise.setRows) { sets in
+                                            HStack(spacing: 0) {
+                                                Text("\(sets.setIndex) ")
+                                                    .font(.custom("SpaceGrotesk-Medium", size: 18))
+                                                    .foregroundColor(Color("LinkBlue"))
+                                               
+                                                Text("\(sets.weight.clean) lbs x \(sets.reps) ")
+                                                    .font(.custom("SpaceGrotesk-Medium", size: 18))
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                                if sets.repMetric != 0 {
+                                                    Text(" @ \(sets.repMetric.clean)")
+                                                        .font(.custom("SpaceGrotesk-Medium", size: 18))
+                                                        .foregroundColor(Color("GrayFontOne"))
+                                                }
+                                                Spacer()
+                                                Text("12")
+                                                    .font(.custom("SpaceGrotesk-Medium", size: 18))
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                                
+                                            }
+                                           
+                                            
+                                            
+                                        }.padding(.horizontal)
+                                    }
+                                    
+                                    
+                                    Divider()
+                                        .frame(height: borderWeight)
+                                        .overlay(Color("BorderGray"))
+
+                                }
+                            }
+                     
+      
+                           
+                      
+                          
+                        }
+                        
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                        .padding(.vertical, 20)
+                    .padding(.horizontal, 15)
+                    
+                    HStack {
+                        TextHelvetica(content: "Notes", size: 22)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+                    }       .padding(.horizontal)
+                    ScrollView {
+                        TextHelvetica(content: "thUASIHkdjhaslkj sklajh dklasjhklashd ah ahsdjk haslk dhakl hk h haklsh d", size: 20)
+                            .foregroundColor(Color("GrayFontOne"))
+                        
+                    }
+                    .frame(maxHeight: getScreenBounds().height * 0.1)
+                    .padding(.horizontal)
+                  
+                   
+                }
+              
+            }
+           
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+
+            .padding(.vertical)
+            .padding(.horizontal, 18)
+            .frame(maxHeight: getScreenBounds().height * 0.8)
+        }
+    }
 
     
    
@@ -345,22 +552,3 @@ struct HistoryPage: View {
 }
 
 
-struct CalendarView: View {
-    var body: some View {
-        VStack {
-            Text("Calendar View")
-                .font(.largeTitle)
-                .padding()
-            
-            Spacer()
-        }
-        .navigationBarTitle("Calendar", displayMode: .inline)
-    }
-}
-
-struct History: View {
-    
-    var body: some View {
-       Text("ASD")
-    }
-}

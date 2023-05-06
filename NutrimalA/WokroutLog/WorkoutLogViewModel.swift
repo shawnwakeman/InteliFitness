@@ -18,9 +18,17 @@ class WorkoutLogViewModel: ObservableObject {
     
     @Published var workoutLogModel = WorkoutLogModel()
     
+    @Published var displayingExerciseView: Bool = false
+    
+
+    
     func resetWorkoutModel() {
 
         workoutLogModel = WorkoutLogModel()
+    }
+    
+    func loadWorkout(workout: HomePageModel.Workout) {
+        workoutLogModel.loadWorkout(workout: workout)
     }
     
 
@@ -35,6 +43,10 @@ class WorkoutLogViewModel: ObservableObject {
     
     var filteredExerciseModules: [WorkoutLogModel.ExersiseLogModule] {
         exersiseModules.filter { !$0.isLast }
+    }
+    
+    var replacingExercise: WorkoutLogModel.ReplacingExercises {
+        workoutLogModel.replacingExercises
     }
     struct ExeciseNameStruct: Identifiable {
         var name: String
@@ -100,8 +112,8 @@ class WorkoutLogViewModel: ObservableObject {
     
     // MARK: - Intent(s)
     
-    func clearExerciseModules() {
-        workoutLogModel.clearExerciseModules()
+    func setExerciseModule(index: Int, exerciseModule: WorkoutLogModel.ExersiseLogModule) {
+        workoutLogModel.setExerciseModule(index: index, exerciseModule: exerciseModule)
     }
     
     func addEmptySet(moduleID: Int){
@@ -202,13 +214,27 @@ class WorkoutLogViewModel: ObservableObject {
     func setRepValue(exersiseModuleID : Int, RowID: Int, value: Int) {
         workoutLogModel.setRepValue(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
     }
+    func setRepMetricPlaceHolder(exersiseModuleID : Int, RowID: Int, value: Float) {
+        workoutLogModel.setRepMetricPlaceHolder(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
+    }
+    
+    func setRepValuePlaceHolder(exersiseModuleID : Int, RowID: Int, value: String) {
+        workoutLogModel.setRepValuePlaceHolder(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
+    }
     func setWeightValue(exersiseModuleID : Int, RowID: Int, value: Float) {
         workoutLogModel.setWeightValue(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
     }
     
-
-
+    func setWeightValuePlaceHolder(exersiseModuleID : Int, RowID: Int, value: String) {
+        workoutLogModel.setWeightValuePlaceHolder(exersiseModuleID: exersiseModuleID, RowID: RowID, value: value)
+    }
     
+
+
+    func toggleReplacingExercise(state: Bool, index: Int) {
+        workoutLogModel.toggleReplacingExercise(state: state, index: index)
+ 
+    }
 
         
     

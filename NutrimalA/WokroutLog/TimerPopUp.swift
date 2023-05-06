@@ -21,7 +21,7 @@ struct TimerPopUp: View {
                 HStack {
 
 
-                    TextHelvetica(content: "Exersise Metrics", size: 27)
+                    TextHelvetica(content: "Rest Timer", size: 27)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
@@ -232,7 +232,7 @@ struct TimerPopUp: View {
                             Button {
                                 viewModel.editRestTime(time: viewModel.restTime.timeElapsed + 10)
                                 viewModel.setTimePreset(time: viewModel.restTime.timePreset + 10)
-                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timeElapsed))
+                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timeElapsed + 1))
                                 if viewModel.restTime.timeElapsed < 0 {
                                     withAnimation(.spring()) {
                                         viewModel.setPopUpState(state: false, popUpId: "TimerPopUp")
@@ -264,7 +264,10 @@ struct TimerPopUp: View {
                                 Button {
                                     viewModel.editRestTime(time: viewModel.restTime.timeElapsed - 10)
                                     viewModel.setTimePreset(time: viewModel.restTime.timePreset - 10)
-                                    scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timeElapsed))
+                                    if viewModel.restTime.timeElapsed - 10 > 0 {
+                                        scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timeElapsed))
+                                    }
+                                   
                                 }
                             label: {
                                 ZStack{

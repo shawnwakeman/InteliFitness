@@ -108,6 +108,7 @@ struct MyExercisesPage: View {
                         )
                     
                     TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color("GrayFontOne")))  .font(.custom("SpaceGrotesk-Medium", size: 18))
+                    
                         .padding(.vertical, 8)
                         .padding(.horizontal, 10)
                         .background(Color("DBblack"))
@@ -116,6 +117,11 @@ struct MyExercisesPage: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                         .padding(.horizontal, 15)
+                        .onTapGesture {
+                            selectedType = nil
+                            selectedColor = nil
+                            
+                        }
                     
                     
                     Rectangle()
@@ -126,8 +132,13 @@ struct MyExercisesPage: View {
                             // Add a default option to clear the selection
                             Button(action: {
                                 selectedType = nil
+                                searchText = ""
                             }) {
-                                Text("Any Body Part")
+                                
+                                Text("Any Equipment")
+                                    
+                               
+                                
                             }
                             
                             // Add a separator
@@ -140,41 +151,57 @@ struct MyExercisesPage: View {
                                     }
                                     
                                 }
-                                
+                          
                             } label: {}
                         } label: {
-                            TextHelvetica(content: selectedType ?? "Any Body Part", size: 18)
+                      
+                            TextHelvetica(content: selectedType ?? "Any Equipment", size: 18)
                                 .font(.largeTitle)
                                 .frame(width: getScreenBounds().width / 2.165)
+                                
+                       
+                           
                         }
                         .frame(height: getScreenBounds().height * 0.04)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color("BorderGray"), lineWidth: borderWeight))
                         .background(Color("MainGray"))
-                        
+                
                         Menu {
                             // Add a default option to clear the selection
                             Button(action: {
                                 selectedColor = nil
+                                searchText = ""
                             }) {
-                                Text("Any Category")
+                               
+                                Text("Any Muscle Group")
                             }
                             
                             // Add a separator
                             Divider()
                             Picker(selection: $selectedColor) {
                                 ForEach(uniqueValues(for: \.exerciseCategory[0]), id: \.self) { category in
+                                     
+                                        Text(category).tag(String?.some(category))
                                     
-                                    Text(category).tag(String?.some(category))
-                                    
-                                    
+                                   
                                 }
                             } label: {}
                             
                         } label: {
-                            TextHelvetica(content: selectedColor ?? "Any Category", size: 18)
-                                .font(.largeTitle)
+                            
+                                TextHelvetica(content: selectedColor ?? "Any Muscle Group", size: 18)
+                                    .font(.largeTitle)
                                 .frame(width: getScreenBounds().width / 2.165)
+                                
+                           
                         }
+                       
                         .frame(height: getScreenBounds().height * 0.04)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color("BorderGray"), lineWidth: borderWeight))
                         .background(Color("MainGray"))
                     }
                     
@@ -194,17 +221,52 @@ struct MyExercisesPage: View {
                     
                     if filteredExercises.isEmpty {
                         VStack {
-                            Text("No exercises found")
-                                .font(.title)
-                                .padding(.top, 40)
+     
                             
-                            Text("Please add an exercise")
-                                .font(.subheadline)
-                                .padding(.top, 10)
+                              TextHelvetica(content: "No exercises found", size: 25)
+                                  .foregroundColor(Color("WhiteFontOne"))
+                                  .padding(.top, 40)
+                             
+                                 
+                               
+                              TextHelvetica(content: "Add a new exercise", size: 20)
+                                  .foregroundColor(Color("GrayFontOne"))
+                                  .padding(.top, 3)
+                            
+                            
+                            Button {
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                
+                                withAnimation(.spring()) {
+                                    showingNew = true
+                            
+                                    
+                                }
+                                
+                            }
+                            label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                        .foregroundColor(Color("MainGray"))
+                                    
+                                    Image(systemName: "plus")
+                                        .resizable()
+                                        .bold()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 17, height: 17)
+                                        .foregroundColor(Color("LinkBlue"))
+
+                                    
+                                }
+                                
+                            }.frame(width: 40, height: 36)
                             
                             Spacer()
                         }
-                        .frame(width: 1000)
+                        .frame(maxWidth: .infinity)
                         .background(Color("DBblack"))
                         
                     } else {
@@ -267,15 +329,49 @@ struct MyExercisesPage: View {
                                 
                             } else {
                                 ForEach(filteredExercises, id: \.id) { exercise in
-                                    VStack(alignment: .leading) {
-                                        TextHelvetica(content: exercise.exerciseName, size: 18)
-                                            .foregroundColor(Color("WhiteFontOne"))
-                                        TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
-                                            .foregroundColor(Color("GrayFontOne"))
+                                    ZStack {
+                                        Button(action: {
+                                                            // action to perform when the button is tapped
+                                            viewModel.setCurrentExercise(exercise: exercise)
+                                            withAnimation(.spring()) {
+                                                displayingExerciseView = true
+                                            }
+                                            
+                                            
+                                           
+                                        }, label: {
+                                            Rectangle()
+                                                .opacity(0.0001)
+                                                .foregroundColor(.black)
+                                        }).buttonStyle(.plain)
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                               
+                                                TextHelvetica(content: exercise.exerciseName, size: 18)
+                                                    .foregroundColor(Color("WhiteFontOne"))
+                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                                
+                                               
+                                                
+                                            }
+                                            Spacer()
+                                            
+                                           
+                                            
+                                            
+                                        }
+                                       
+                                 
+                                        
+                                    }
+                                    .listRowBackground(Color("MainGray"))
+                                    .listStyle(GroupedListStyle())
+                                    .onTapGesture {
+                                        print("asd123456")
                                     }
                                 }
-                                .listRowBackground(Color("MainGray"))
-                                .listStyle(GroupedListStyle())
+                                
                             }
                         }
                         .scrollContentBackground(.hidden)
@@ -314,6 +410,7 @@ struct MyExercisesPage: View {
                 }
             NameAndCategoryView(viewModel: viewModel, showingNew: $showingNew)
                 .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.35 : getScreenBounds().height * 1.3)
+           
             ExercisePage(viewModel: viewModel, showingExrcisePage: $displayingExerciseView)
                 .position(x: getScreenBounds().width/2, y: displayingExerciseView ? getScreenBounds().height * 0.4 : getScreenBounds().height * 1.3)
             

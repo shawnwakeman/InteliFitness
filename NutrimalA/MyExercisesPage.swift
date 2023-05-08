@@ -26,34 +26,7 @@ struct MyExercisesPage: View {
     
     @State private var showingNew: Bool = false
     @State private var displayingExerciseView: Bool = false
-    init(viewModel: HomePageViewModel, searchText: String = "", selectedType: String? = nil, selectedColor: String? = nil) {
-        
-        
-               
-               
-               
-       UINavigationBar.appearance().barTintColor = .clear
-       UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-       UINavigationBar.appearance().barTintColor = UIColor(Color("MainGray"))
-        
-          
-       // Set font color for NavigationBarTitle with displayMode = .inline
-       UINavigationBar.appearance().titleTextAttributes = [
-           .font : UIFont(name: "SpaceGrotesk-Bold", size: 20)!,
-           .foregroundColor: UIColor(Color("WhiteFontOne"))
-       ]
 
-       // Set font color for NavigationBarTitle with Large Font
-       UINavigationBar.appearance().largeTitleTextAttributes = [
-           .font : UIFont(name: "SpaceGrotesk-Bold", size: 40)!,
-           .foregroundColor: UIColor(Color("WhiteFontOne")) // Replace UIColor.red with your desired color
-       ]
-        
-        self.viewModel = viewModel
-        _searchText = State(initialValue: searchText)
-        _selectedType = State(initialValue: selectedType)
-        _selectedColor = State(initialValue: selectedColor)
-    }
 
     
     

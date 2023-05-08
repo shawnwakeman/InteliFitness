@@ -123,6 +123,24 @@ class HomePageViewModel: ObservableObject {
     }
 //    func addToexercise
 
-
+    // MARK: - Schedule
+    
+    @Published private(set) var schedule: Schedule = Schedule()
+    
+    func addWorkout(to date: Date, workout: ScheduleWorkout, recurringOption: Schedule.RecurringOption) {
+        schedule.addWorkout(to: date, workout: workout, recurringOption: recurringOption)
+    }
+    
+    func removeRecurringWorkouts(workoutID: Int, recurringID: Int) {
+        schedule.removeRecurringWorkouts(workoutID: workoutID, recurringID: recurringID)
+    }
+    
+    func removeWorkout(from date: Date, workoutID: Int) {
+        schedule.removeWorkout(from: date, workoutID: workoutID)
+    }
+    
+    func getWorkouts(for date: Date) -> [ScheduleWorkout]? {
+        return schedule.getWorkouts(for: date)
+    }
     
 }

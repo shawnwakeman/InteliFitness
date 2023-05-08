@@ -6,7 +6,7 @@ struct WorkoutLogModel {
 
     
     private(set) var exersiseModules: [ExersiseLogModule] = []
-    
+ 
 
     var replacingExercises = ReplacingExercises()
     var workoutTime: WorkoutTime = WorkoutTime()

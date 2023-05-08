@@ -17,7 +17,7 @@ struct createWorkout: View {
         @State private var newModuleOpacity = false
         @State private var workoutName: String = ""
         @State private var NamePopUp: Bool = false
-     
+        @Binding var isNavigationBarHidden: Bool
         @Environment(\.presentationMode) private var presentationMode
         @Environment(\.scenePhase) private var scenePhase
         
@@ -27,6 +27,7 @@ struct createWorkout: View {
          
             
             ZStack {
+                
                 NavigationStack {
                     ScrollView(.vertical){
                         Text("")
@@ -181,7 +182,7 @@ struct createWorkout: View {
                         }
                         
                 
-                    }
+                    }.padding(.top, 75)
                     
                     .onTapGesture {
 
@@ -194,7 +195,7 @@ struct createWorkout: View {
                 
                 VStack(spacing: 0) {
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.28)
+                        .frame(height: getScreenBounds().height * 0.51)
                      
                         .foregroundColor(Color("MainGray"))
                         .shadow(radius: 10)
@@ -232,7 +233,8 @@ struct createWorkout: View {
                             
                         }
                     }
-                let offset = homePageVeiwModel.ongoingWorkout ? 0.1: 0
+ 
+                let offset = homePageVeiwModel.ongoingWorkout ? 0 : -0.1
                 Group {
 
                     TimerCompletedPopUp(viewModel: workoutLogViewModel)
@@ -309,7 +311,81 @@ struct createWorkout: View {
                     
                     
                   
+                    VStack {
+                        HStack(spacing: 15) {
+                            
+                            Button {
+                                presentationMode.wrappedValue.dismiss()
+                            } label: {
+                                HStack {
+                                    Image(systemName: "chevron.left")
+                                        .font(.body.bold())
+                                        .foregroundColor(Color("LinkBlue"))
+                                    TextHelvetica(content: "back", size: 17)
+                                        .foregroundColor(Color("LinkBlue"))
+                                    Spacer()
+                                }
+                                .frame(width: 100)
+                            }
+                            Spacer()
+                            TextHelvetica(content: "History", size: 20)
+                                .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
+                          
+                            Spacer()
+                            Button {
+                                
+                            } label: {
+                                Button {
+                                                      
+                                          homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
+                                          presentationMode.wrappedValue.dismiss()
+                                       
+                                         
+                                      }
+                                  label: {
+                                      
+                                      ZStack{
+                                                                             
+                                         ZStack{
+                                             RoundedRectangle(cornerRadius: 6)
+                                                 .foregroundColor(Color("LinkBlue"))
 
+                                             
+                                         }
+                                       
+                                         
+                                         Button {
+                     
+                                             homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
+                                             presentationMode.wrappedValue.dismiss()
+                                          
+                                            
+                                         }
+                                     label: {
+                                         TextHelvetica(content: "Create", size: 19)
+                                              .foregroundColor(Color("WhiteFontOne"))
+                                     }
+                                         
+                                     
+                                         
+                                         
+                                     }
+                                     .frame(width: 100 ,height: getScreenBounds().height * 0.048)
+                                      
+                          
+                                     .aspectRatio(2.5, contentMode: .fit)
+                                  }
+                               
+                            }
+                            
+                        }
+                            .padding(.horizontal)
+                            .frame(height: 60)
+                            .padding(.top, getScreenBounds().height * 0.06)
+                        
+                        Spacer()
+                    }
                         
 
 
@@ -335,12 +411,18 @@ struct createWorkout: View {
                         .opacity(workoutLogViewModel.workoutLogModel.popUps[6].RPEpopUpState ? 1 : 0)
                         .offset(y: getScreenBounds().height * -0.07)
                         AddExersisesPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, heightModifier: 0.82)
-                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.43 : getScreenBounds().height * 2) // shout be two
+                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.5 : getScreenBounds().height * 2) // shout be two
                         
                 }
              
               
             }
+            .navigationBarTitle("back")
+            .navigationBarHidden(self.isNavigationBarHidden)
+            .onAppear {
+                self.isNavigationBarHidden = true
+            }
+            .ignoresSafeArea(.all, edges: .top)
             .ignoresSafeArea(.keyboard)
            
             .onTapGesture {

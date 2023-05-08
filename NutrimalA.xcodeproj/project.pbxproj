@@ -36,6 +36,8 @@
 		D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */; };
 		D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */; };
 		D063801429F71C7500E2B0F7 /* ReorderSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D063801329F71C7500E2B0F7 /* ReorderSets.swift */; };
+		D0685BB42A06CD0B00F66C75 /* ScheduleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */; };
+		D0685BB82A084AFD00F66C75 /* CustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0685BB72A084AFD00F66C75 /* CustomHeader.swift */; };
 		D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */; };
 		D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */; };
 		D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B44229F45E5F001898BA /* HistoryPage.swift */; };
@@ -106,6 +108,8 @@
 		D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCompletedPopUp.swift; sourceTree = "<group>"; };
 		D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exercises.json; sourceTree = "<group>"; };
 		D063801329F71C7500E2B0F7 /* ReorderSets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderSets.swift; sourceTree = "<group>"; };
+		D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleMode.swift; sourceTree = "<group>"; };
+		D0685BB72A084AFD00F66C75 /* CustomHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeader.swift; sourceTree = "<group>"; };
 		D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExersisesPopUp.swift; sourceTree = "<group>"; };
 		D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
 		D0A8B44229F45E5F001898BA /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 			children = (
 				D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */,
 				D008F48F29F36D9900B1C6EC /* dataController.swift */,
+				D0685BB72A084AFD00F66C75 /* CustomHeader.swift */,
 			);
 			path = DataModelMain;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 				D0C884062A0447820035D66C /* Schedule.swift */,
 				D008F48029F1E7CD00B1C6EC /* HomePageView.swift */,
 				D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */,
+				D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */,
 				D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */,
 				D0D28F4429FEC76B00857C61 /* createWorkout.swift */,
 				D008F47D29F1E65900B1C6EC /* WokroutLog */,
@@ -375,11 +381,13 @@
 			files = (
 				D0D28F4529FEC76B00857C61 /* createWorkout.swift in Sources */,
 				D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */,
+				D0685BB82A084AFD00F66C75 /* CustomHeader.swift in Sources */,
 				D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */,
 				D008F48129F1E7CD00B1C6EC /* HomePageView.swift in Sources */,
 				D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */,
 				D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */,
 				D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */,
+				D0685BB42A06CD0B00F66C75 /* ScheduleMode.swift in Sources */,
 				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
 				D0C884092A05FE780035D66C /* WorkoutSetRowViewForCreator.swift in Sources */,
 				D050B42129FC8BA400BC5442 /* exercisePage.swift in Sources */,

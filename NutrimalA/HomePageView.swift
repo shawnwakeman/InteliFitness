@@ -115,6 +115,7 @@ struct P1View: View {
     @Binding var isNavigationBarHidden: Bool
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @ObservedObject var homePageViewModel : HomePageViewModel
+
     @State private var selectedDestination: AnyView? = nil
     var body: some View {
         ZStack {
@@ -256,6 +257,10 @@ struct P1View: View {
                           
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
+                    .onTapGesture {
+                        self.selectedDestination = AnyView(WeeklyScheduleView(schedule: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                      
+                    }
                    
                     
                     ZStack {
@@ -287,7 +292,8 @@ struct P1View: View {
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
                     .onTapGesture {
-                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel))
+                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                        
                     }
                     HStack {
                         ZStack {

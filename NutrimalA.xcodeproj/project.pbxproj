@@ -236,8 +236,8 @@
 			children = (
 				D008F48929F364E800B1C6EC /* DataModelMain */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
-				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
 				D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */,
+				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
 				D050B42029FC8BA400BC5442 /* exercisePage.swift */,
 				D0A8B44229F45E5F001898BA /* HistoryPage.swift */,
 				D0C884062A0447820035D66C /* Schedule.swift */,

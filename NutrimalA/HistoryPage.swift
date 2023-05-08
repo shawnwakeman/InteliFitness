@@ -139,10 +139,11 @@ struct Home: View {
 
 
 
-
+                                                    
 
                                                     Button(action: {
                                                         viewModel.deleteExerciseHistory(workoutID: workout.id)
+                                                        viewModel.saveExersiseHistory()
                                                     }, label: {
                                                         Image("meatBalls")
                                                             .resizable()
@@ -427,6 +428,7 @@ struct Home: View {
                             withAnimation(.spring()) {
                                 showingExpandedExercise.toggle()
                             }
+        
 
                         }, label: {
 

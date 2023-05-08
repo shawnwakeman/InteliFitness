@@ -69,6 +69,8 @@ struct TopBar: View {
 
 }
 
+
+
 struct CustomCorner : Shape {
     
     var corners: UIRectCorner

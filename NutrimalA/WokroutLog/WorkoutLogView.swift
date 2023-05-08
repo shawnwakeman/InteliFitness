@@ -369,7 +369,8 @@ struct WorkoutLogView: View {
             
 
             case .inactive:
-                print("App is inactive")
+                workoutLogViewModel.saveExersiseModules()
+                homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
             case .background:
         
                 workoutLogViewModel.saveExersiseModules()

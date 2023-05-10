@@ -79,7 +79,7 @@ struct WorkoutSetRowViewForCreator: View{
             TextHelvetica(content: String(rowObject.setIndex), size: 20)
                        .padding()
                        .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
-                       .foregroundColor(Color("WhiteFontOne"))
+                       .foregroundColor(Color("LinkBlue"))
                        .background(.clear)
                        .onTapGesture {
                            withAnimation(.spring()) {

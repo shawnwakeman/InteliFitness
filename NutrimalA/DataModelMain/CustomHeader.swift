@@ -33,6 +33,8 @@ struct OffsetModifier: ViewModifier {
 
 
 
+
+
 struct TopBar: View {
     
     var topEdge: CGFloat
@@ -47,6 +49,7 @@ struct TopBar: View {
                 TextHelvetica(content: name, size: 40)
                     .foregroundColor(Color("WhiteFontOne"))
                     .bold()
+    
                 
                 Spacer()
             }
@@ -68,6 +71,8 @@ struct TopBar: View {
     }
 
 }
+
+
 
 
 

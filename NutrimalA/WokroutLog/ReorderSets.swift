@@ -76,10 +76,11 @@ struct ReorderSets: View {
 
                                     ForEach(viewModel.exersiseModules) { workoutModule in
                                         if workoutModule.isLast == false {
-  
-                                            TextHelvetica(content: workoutModule.exersiseName, size: 20)
+                                            TextHelvetica(content: "\(workoutModule.exersiseName) (\(workoutModule.ExersiseEquipment))", size: 18)
                                                 .foregroundColor(Color("WhiteFontOne"))
                                                 .listRowBackground(Color("MainGray"))
+                                    
+                                                
                                         }
                                         
                                     }

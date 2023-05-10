@@ -21,6 +21,9 @@ class HomePageViewModel: ObservableObject {
         return homePageModel.displayingWorkoutLogView
     }
     
+    
+
+    
     var exersiseQueue: Array<HomePageModel.Exersise> {
         return homePageModel.exerciseQueue
     }
@@ -142,5 +145,44 @@ class HomePageViewModel: ObservableObject {
     func getWorkouts(for date: Date) -> [ScheduleWorkout]? {
         return schedule.getWorkouts(for: date)
     }
+    
+    func addToWorkoutQueue(workout: HomePageModel.Workout) {
+        schedule.addToWorkoutQueue(workout: workout)
+    }
+    
+    func clearWorkoutQueue() {
+        schedule.clearWorkoutQueue()
+    }
+    
+    func upcomingWorkout() -> ScheduleWorkout? {
+        let currentDate = Date()
+        let sortedWorkouts = schedule.workouts.sorted(by: { $0.key < $1.key })
+        
+        for (date, workoutArray) in sortedWorkouts {
+            if date >= currentDate {
+                return workoutArray.first
+            }
+        }
+        
+        return nil
+    }
+
+  
+    
+//    struct ScheduleWorkout: Identifiable {
+//        var id: Int
+//        var name: String
+//        var exercises: [String]
+//        var duration: Int
+//        var recurringID: Int?
+//    }
+//
+//    struct Workout: Identifiable, Codable {
+//        let id: UUID
+//        let WorkoutName: String
+//        var notes: String = ""
+//        var exercises: [WorkoutLogModel.ExersiseLogModule]
+//        var category: String
+//    }
     
 }

@@ -252,6 +252,14 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.loadExersiseModules()
     }
     
+    func saveTimers() {
+        workoutLogModel.saveTimers()
+    }
+    
+    func loadTimers() {
+        workoutLogModel.loadTimers()
+    }
+    
 
     
 

@@ -14,6 +14,7 @@ struct WorkoutSetRowView: View{
     var moduleUUID: UUID
     var previous: String
     @State private var lbsTextField: String = ""
+    @State private var repsTextField: String = ""
     @State private var familyName: String = ""
     @State private var RPEpopUpDisplayed = false
 
@@ -28,7 +29,7 @@ struct WorkoutSetRowView: View{
             
             previousSetView(previous: previous)
             
-            lbsTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+            lbsTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, lbsTextField: $lbsTextField)
             
             Divider()
                 .frame(width: borderWeight)
@@ -37,10 +38,10 @@ struct WorkoutSetRowView: View{
             
             HStack{
 
-                repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+                repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, repsTextField: $repsTextField)
                 if let module = viewModel.exersiseModules[safe: moduleID] {
                     if module.displayingRPE == true {
-                        repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
+                        repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
                     }
                    
                 }
@@ -60,7 +61,7 @@ struct WorkoutSetRowView: View{
             
                 
             
-            checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+            checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
             
         }
         .frame(height: getScreenBounds().height * 0.045)
@@ -128,7 +129,7 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
-        @State private var lbsTextField: String = ""
+        @Binding var lbsTextField: String
         
         
         var body: some View {
@@ -175,11 +176,9 @@ struct WorkoutSetRowView: View{
                 }
 
 
-                .onChange(of: lbsTextField) { newValue in
-                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
-                    viewModel.setLastModule(index: moduleID)
-                    viewModel.setLastRow(index: rowObject.id)
-                }
+              
+                   
+                
                 .onAppear {
                     if rowObject.weight != 0 {
                         lbsTextField = String(rowObject.weight.clean)
@@ -195,7 +194,7 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
-        @State private var repsTextField: String = ""
+        @Binding var repsTextField: String
         
 
         var body: some View {
@@ -225,11 +224,7 @@ struct WorkoutSetRowView: View{
                     }
                        
            
-                    .onChange(of: repsTextField) { newValue in
-                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
-                        viewModel.setLastModule(index: moduleID)
-                        viewModel.setLastRow(index: rowObject.id)
-                    }
+                   
                     .onAppear {
                         if rowObject.reps != 0 {
                             repsTextField = String(rowObject.reps)
@@ -245,6 +240,9 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         @ObservedObject var viewModel: WorkoutLogViewModel
         var moduleID: Int
+        
+        @Binding var repsTextField: String
+        @Binding var lbsTextField: String
         var body: some View {
             if rowObject.repMetric != 0 {
                 ZStack{
@@ -299,8 +297,15 @@ struct WorkoutSetRowView: View{
                                 HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", exerciseUUID: UUID()) // wront UUID
-                                 viewModel.setLastRow(index: rowObject.id)
-                                viewModel.setLastModule(index: moduleID)
+                                
+                                if repsTextField != "" && lbsTextField != "" {
+                                    viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+                                    
+                                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+                                    
+                                    viewModel.setLastRow(index: rowObject.id)
+                                    viewModel.setLastModule(index: moduleID)
+                                }
                             }}, label: {
                                 Capsule()
                                     .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
@@ -329,52 +334,75 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
+        
+        @Binding var repsTextField: String
+        @Binding var lbsTextField: String
         var body: some View {
             ZStack {
 
-                Image(systemName: "checkmark")
-                    .resizable()
-                    .padding(9.0)
-                    .bold()
-                    .foregroundColor(rowObject.setCompleted ? Color(.systemGreen) : Color("GrayFontOne"))
-                    .aspectRatio(40/37, contentMode: .fit)
-                    .scaleEffect(rowObject.setCompleted ? 0.9 : 0.7)
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .padding(9.0)
+                                .bold()
+                                .foregroundColor(rowObject.setCompleted ? Color(.systemGreen) : Color("GrayFontOne"))
+                                .aspectRatio(40/37, contentMode: .fit)
+                                .scaleEffect(rowObject.setCompleted ? 0.9 : 0.7)
+                          
+
+                            ZStack{
+                                
+                                Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
+                                
+                                
+                            }
+                            .onTapGesture {
+                                print(rowObject)
+                                if repsTextField != "" && lbsTextField != "" {
+
+                                    viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+
+
+
+                                    viewModel.setLastModule(index: moduleID)
+                                    viewModel.setLastRow(index: rowObject.id)
+                                    withAnimation(.spring()) {
+                                        viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                    }
+
+                                        if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+
+                                            viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                                        }
+                                        viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                    HapticManager.instance.impact(style: .heavy)
+                                }
+                                else {
+                                    HapticManager.instance.notification(type: .error)
+                                }
+                            
+                            
+
+                                
+                                
+                            }
+                            .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
+
+
+              
+                    
+
+                
               
 
-                ZStack{
-                    
-                    Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
-                    
-                    
-                }
-                .onTapGesture {
-                    print(rowObject)
-                    if rowObject.reps != 0 && rowObject.weight != 0 {
-                        withAnimation(.spring()) {
-                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
-                        }
-                            
-                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
-                                
-                                
-                                viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
-                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
-                            }
-                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
-                            
-                            
-                            
-                       
-                        HapticManager.instance.impact(style: .heavy)
-                    }
-                    else {
-                        HapticManager.instance.notification(type: .error)
-                    }
-
-                    
-                    
-                }
-                .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
+                
             }
 
 

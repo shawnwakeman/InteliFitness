@@ -257,25 +257,37 @@ struct WorkoutLogModel {
             let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
             let encodedData = try JSONEncoder().encode(filterExerciseModules)
             defaults.set(encodedData, forKey: "exersiseModules")
+        
+
+        } catch {
+            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+        }
+    }
+    
+    mutating func saveTimers() {
+        let defaults = UserDefaults.standard
+        do {
             let time = try JSONEncoder().encode(Date())
             defaults.set(time, forKey: "workoutTime")
             
             let elapsedTime = try JSONEncoder().encode(workoutTime.timeElapsed)
             defaults.set(elapsedTime, forKey: "elapsedTime")
             
-  
+
             defaults.set(elapsedTime, forKey: "elapsedRestTime")
             
             
             let restTime = try JSONEncoder().encode(Date())
             defaults.set(restTime, forKey: "restTime")
-
         } catch {
-            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+            print("Failed to encode time ")
         }
-    }
 
-    mutating func loadExersiseModules() {
+        
+    }
+    
+    mutating func loadTimers() {
+        
         let defaults = UserDefaults.standard
         
         if let savedData = defaults.object(forKey: "workoutTime") as? Data {
@@ -310,6 +322,13 @@ struct WorkoutLogModel {
             }
          
         }
+        
+    }
+
+    mutating func loadExersiseModules() {
+        let defaults = UserDefaults.standard
+        
+        
         
         
         if let savedData = defaults.object(forKey: "exersiseModules") as? Data {

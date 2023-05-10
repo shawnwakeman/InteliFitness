@@ -270,7 +270,7 @@ struct WorkoutLogView: View {
                     .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.24)
                     .shadow(color: .black, radius: 12)
                     .onTapGesture {
-                        
+                        HapticManager.instance.impact(style: .rigid)
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         
                       
@@ -318,8 +318,15 @@ struct WorkoutLogView: View {
                 
                 
             }
-            ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
-                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
+            Group {
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(workoutLogViewModel.displayingExerciseView ? 1 : 0)
+                    .offset(y: getScreenBounds().height * -0.07)
+                ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
+            }
+            
          
           
         }
@@ -366,18 +373,21 @@ struct WorkoutLogView: View {
             
                 workoutLogViewModel.loadExersiseModules()
                 homePageVeiwModel.loadHistory()
-            
-
+                workoutLogViewModel.loadTimers()
+                print("for")
             case .inactive:
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
+            
+
+                print("in")
             case .background:
-        
+                workoutLogViewModel.saveTimers()
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
 
                 homePageVeiwModel.saveMyWorkouts()
-  
+                print("back")
             @unknown default:
                 fatalError("Unknown scene phase")
             }
@@ -1205,21 +1215,11 @@ struct LogModuleHeader: View{
                 }
                 label: {
                     HStack(alignment: .bottom, spacing: 6) { //a/sd/a
-                        TextHelvetica(content: viewModel.exersiseModules[parentModuleID].exersiseName, size: 22)
+
+                        TextHelvetica(content: "\(viewModel.exersiseModules[parentModuleID].exersiseName) (\(viewModel.exersiseModules[parentModuleID].ExersiseEquipment))", size: 22)
                             .foregroundColor(Color("LinkBlue"))
                             .multilineTextAlignment(.leading)
-                        HStack(spacing: 0) {
-                            if viewModel.exersiseModules[parentModuleID].ExersiseEquipment != "" {
-                                TextHelvetica(content: "(", size: 22)
-                                TextHelvetica(content: viewModel.exersiseModules[parentModuleID].ExersiseEquipment, size: 22)
-                                    .offset(y: 1.7)
-                      
-                                TextHelvetica(content: ")", size: 22)
-                            }
-                            
-                        }
-                        
-                        .foregroundColor(Color("LinkBlue"))
+
 
                     }
      
@@ -1430,36 +1430,38 @@ struct PopupView: View {
                         viewModel.setRepMetric(exersiseModuleID: popUp.popUpExersiseModuleIndex, RowID: popUp.popUpRowIndex, RPE: 0)
                     }
                     HapticManager.instance.impact(style: .rigid)
-
-                    if viewModel.lastRowUsed != 100 {
-                        let workoutModule = viewModel.exersiseModules[viewModel.lastModuleUsed]
-                        let reps = workoutModule.setRows[viewModel.lastRowUsed].reps
-                        let weight = workoutModule.setRows[viewModel.lastRowUsed].weight//
-                        
-                        if reps != 0 && weight != 0 {
+                    if selectedRPE != 0 {
+                        if viewModel.lastRowUsed != 100 {
+                            let workoutModule = viewModel.exersiseModules[viewModel.lastModuleUsed]
+                            let reps = workoutModule.setRows[viewModel.lastRowUsed].reps
+                            let weight = workoutModule.setRows[viewModel.lastRowUsed].weight//
                             
-               
-                            
-                            let exerciseID = viewModel.getUUIDindex(index: workoutModule.id)
-                            withAnimation(.spring()) {
-                                viewModel.toggleCompletedSet(ExersiseModuleID: exerciseID, RowID: workoutModule.setRows[viewModel.lastRowUsed].id, customValue: true)
+                            if reps != 0 && weight != 0 {
+                                
+                   
+                                
+                                let exerciseID = viewModel.getUUIDindex(index: workoutModule.id)
+                                withAnimation(.spring()) {
+                                    viewModel.toggleCompletedSet(ExersiseModuleID: exerciseID, RowID: workoutModule.setRows[viewModel.lastRowUsed].id, customValue: true)
+                                }
+                               
+                                if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
+                                    viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[popUp.popUpExersiseModuleIndex].restTime)
+                                    viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                                    scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                                }
+                                viewModel.setPrevouslyChecked(exersiseModuleID: viewModel.lastModuleUsed, RowID: viewModel.lastRowUsed, state: true)
+                                viewModel.setLastRow(index: 100)
+                                viewModel.setLastModule(index: 100)
+                                
                             }
+                            
                            
-                            if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
-                                viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[popUp.popUpExersiseModuleIndex].restTime)
-                                viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
-                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
-                            }
-                            viewModel.setPrevouslyChecked(exersiseModuleID: viewModel.lastModuleUsed, RowID: viewModel.lastRowUsed, state: true)
-                            viewModel.setLastRow(index: 100)
-                            viewModel.setLastModule(index: 100)
                             
+                          
                         }
-                        
-                       
-                        
-                      
                     }
+                   
                     
                 }
                 
@@ -1884,6 +1886,12 @@ extension View{
    func getScreenBounds() -> CGRect{
    return UIScreen.main.bounds
    }
+}
+
+func cancelNotifications() {
+    let notificationCenter = UNUserNotificationCenter.current()
+    
+    notificationCenter.removeAllPendingNotificationRequests()
 }
 
 func scheduleNotification(title: String, body: String, interval: TimeInterval) {

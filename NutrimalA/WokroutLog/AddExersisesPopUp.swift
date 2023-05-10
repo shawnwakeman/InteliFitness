@@ -61,6 +61,7 @@ struct AddExersisesPopUp: View {
                         }
                         homePageViewModel.clearToExersiseQueue()
                         searchText = ""
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                     label: {
                         ZStack {
@@ -85,17 +86,21 @@ struct AddExersisesPopUp: View {
               
                     Spacer()
                     HStack(spacing: 0) {
-                        TextHelvetica(content: String("Add Exercise "), size: 25)
+                        TextHelvetica(content: String("Add Exercise "), size: 20)
                             .foregroundColor(Color("WhiteFontOne"))
+                            .bold()
                         if homePageViewModel.exersiseQueue.count > 0 {
-                            TextHelvetica(content: "(" , size: 23)
+                            TextHelvetica(content: "(" , size: 18)
                                 .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
                             TextHelvetica(content:
-                                            String(homePageViewModel.exersiseQueue.count), size: 25)
+                                            String(homePageViewModel.exersiseQueue.count), size: 20)
                                 .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
                             TextHelvetica(content:
-                                            ")", size: 23)
+                                            ")", size: 18)
                                 .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
                         }
                     }
                 
@@ -113,7 +118,8 @@ struct AddExersisesPopUp: View {
                         searchText = ""
                         viewModel.addExercisesFromQueue(exercises: homePageViewModel.exersiseQueue)
                         homePageViewModel.clearToExersiseQueue()
-        
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        
 
 
                     }
@@ -200,7 +206,11 @@ struct AddExersisesPopUp: View {
                     .frame(height: getScreenBounds().height * 0.04)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .stroke(
+                                selectedType != nil ? Color("LinkBlue") : Color("BorderGray"),
+                                lineWidth: borderWeight
+                            )
+                    )
                     .background(Color("MainGray"))
             
                     Menu {
@@ -236,7 +246,11 @@ struct AddExersisesPopUp: View {
                     .frame(height: getScreenBounds().height * 0.04)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .stroke(
+                                selectedColor != nil ? Color("LinkBlue") : Color("BorderGray"),
+                                lineWidth: borderWeight
+                            )
+                    )
                     .background(Color("MainGray"))
                 }
                 
@@ -273,6 +287,7 @@ struct AddExersisesPopUp: View {
                             
                             withAnimation(.spring()) {
                                 showingNew = true
+                        
                         
                                 
                             }
@@ -325,7 +340,9 @@ struct AddExersisesPopUp: View {
                                                         
                                                     } else {
                                                         if homePageViewModel.exersises[exercise.id].selected == false {
+                                                           
                                                             homePageViewModel.addToExersiseQueue(ExersiseID: exercise.id)
+                                                            
                                                            } else {
                                                                homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
                                                            }
@@ -343,14 +360,14 @@ struct AddExersisesPopUp: View {
                                                 HStack {
                                                     VStack(alignment: .leading) {
                                                         if homePageViewModel.exersises[exercise.id].selected == false {
-                                                            TextHelvetica(content: exercise.exerciseName, size: 18)
-                                                                .foregroundColor(Color("WhiteFontOne"))
+                                                            TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                                  .foregroundColor(Color("WhiteFontOne"))
                                                             TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
                                                                 .foregroundColor(Color("GrayFontOne"))
                                                         }
                                                         else {
-                                                            TextHelvetica(content: exercise.exerciseName, size: 18)
-                                                                .foregroundColor(Color("LinkBlue"))
+                                                            TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                                  .foregroundColor(Color("WhiteFontOne"))
                                                             TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
                                                                 .foregroundColor(Color("GrayFontOne"))
                                                         }
@@ -361,19 +378,14 @@ struct AddExersisesPopUp: View {
                                                     Button {}
                                                    label: {
                                                        ZStack {
-                                                           if homePageViewModel.exersises[exercise.id].selected == false {
+                                                           
                                                                
-                                                               TextHelvetica(content: "?", size: 23)
-                                                                   .bold()
-                                                                   .foregroundColor(Color("LinkBlue"))
-                                                           } else {
-                                                               
-                                                                 Image("checkMark")
-                                                                     .resizable()
-                                                                     .aspectRatio(contentMode: .fit)
-                                                                     .frame(width: 17, height: 17)
-                                                                     
-                                                           }
+                                                               Image("checkMark")
+                                                                   .resizable()
+                                                                   .aspectRatio(contentMode: .fit)
+                                                                   .frame(width: 17, height: 17)
+                                                                   .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
+                                                           
                                                          
                                                          
                                                            
@@ -431,14 +443,14 @@ struct AddExersisesPopUp: View {
                                     HStack {
                                         VStack(alignment: .leading) {
                                             if homePageViewModel.exersises[exercise.id].selected == false {
-                                                TextHelvetica(content: exercise.exerciseName, size: 18)
-                                                    .foregroundColor(Color("WhiteFontOne"))
+                                                TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                      .foregroundColor(Color("WhiteFontOne"))
                                                 TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
                                                     .foregroundColor(Color("GrayFontOne"))
                                             }
                                             else {
-                                                TextHelvetica(content: exercise.exerciseName, size: 18)
-                                                    .foregroundColor(Color("LinkBlue"))
+                                              TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                    .foregroundColor(Color("WhiteFontOne"))
                                                 TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
                                                     .foregroundColor(Color("GrayFontOne"))
                                             }
@@ -515,6 +527,12 @@ struct AddExersisesPopUp: View {
                 }
             NameAndCategoryView(viewModel: homePageViewModel, showingNew: $showingNew)
                 .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.3)
+        }
+        .onChange(of: selectedType) { newVaule in
+            searchText = ""
+        }
+        .onChange(of: selectedColor) { newVaule in
+            searchText = ""
         }
            
             

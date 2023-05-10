@@ -117,6 +117,9 @@ struct P1View: View {
     @ObservedObject var homePageViewModel : HomePageViewModel
 
     @State private var selectedDestination: AnyView? = nil
+    
+
+    
     var body: some View {
         ZStack {
             VStack(spacing: -3) {
@@ -228,6 +231,15 @@ struct P1View: View {
                         .padding(.all)
                         
                     }
+                    .onTapGesture {
+                        HapticManager.instance.impact(style: .rigid)
+                        if let workout = homePageViewModel.upcomingWorkout() {
+                            let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: workout.name, exercises: workout.exercises, category: "not Important")
+                            self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
+                        }
+                       
+                      
+                    }
                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 13)
@@ -258,7 +270,9 @@ struct P1View: View {
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
                     .onTapGesture {
-                        self.selectedDestination = AnyView(WeeklyScheduleView(schedule: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                        HapticManager.instance.impact(style: .rigid)
+             
+                        self.selectedDestination = AnyView(WeeklyScheduleView(schedule: homePageViewModel, viewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden))
                       
                     }
                    
@@ -292,7 +306,8 @@ struct P1View: View {
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
                     .onTapGesture {
-                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                        HapticManager.instance.impact(style: .rigid)
+                        self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: false))
                         
                     }
                     HStack {
@@ -313,6 +328,7 @@ struct P1View: View {
              
                         }
                         .onTapGesture {
+                            HapticManager.instance.impact(style: .rigid)
                             self.selectedDestination = AnyView(HistoryPage(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
                         }
                         ZStack {
@@ -335,6 +351,7 @@ struct P1View: View {
                          
                         }
                         .onTapGesture {
+                            HapticManager.instance.impact(style: .rigid)
                             self.selectedDestination = AnyView(MyExercisesPage(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
                         }
                        

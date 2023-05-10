@@ -10,14 +10,16 @@ import Foundation
 struct ScheduleWorkout: Identifiable {
     var id: Int
     var name: String
-    var exercises: [String]
-    var duration: Int
+    var exercises: [WorkoutLogModel.ExersiseLogModule]
     var recurringID: Int?
 }
 
 struct Schedule {
     private(set) var workouts = [Date: [ScheduleWorkout]]()
     
+    private(set) var workoutQueue: HomePageModel.Workout?
+
+  
     enum ReminderOption: String, CaseIterable, Identifiable {
         var id: String { self.rawValue }
         case none = "None"
@@ -28,6 +30,13 @@ struct Schedule {
     enum RecurringOption: String, CaseIterable, Identifiable {
         var id: String { self.rawValue }
         case none, daily, weekly
+    }
+    
+    mutating func addToWorkoutQueue(workout: HomePageModel.Workout) {
+        workoutQueue = workout
+    }
+    mutating func clearWorkoutQueue() {
+        workoutQueue = nil
     }
 
     private func startOfDay(for date: Date) -> Date {

@@ -121,6 +121,7 @@ struct Home: View {
                                         showingExpandedExercise.toggle()
 
                                     }
+                                    HapticManager.instance.impact(style: .rigid)
 
                                 }
                             label: {
@@ -142,8 +143,10 @@ struct Home: View {
                                                     
 
                                                     Button(action: {
+                                                        HapticManager.instance.impact(style: .rigid)
                                                         viewModel.deleteExerciseHistory(workoutID: workout.id)
                                                         viewModel.saveExersiseHistory()
+                                                        
                                                     }, label: {
                                                         Image("meatBalls")
                                                             .resizable()
@@ -309,6 +312,7 @@ struct Home: View {
                     
                     Button {
                         presentationMode.wrappedValue.dismiss()
+                        HapticManager.instance.impact(style: .rigid)
                     } label: {
                         HStack {
                             Image(systemName: "chevron.left")
@@ -327,7 +331,7 @@ struct Home: View {
                         .opacity(topBarTitleOpacity())
                     Spacer()
                     Button {
-                        
+                        HapticManager.instance.impact(style: .rigid)
                     } label: {
                         HStack {
                             Spacer()
@@ -355,9 +359,9 @@ struct Home: View {
 
 
                 if let workoutToUse = selectedWorkout {
-
+                    let offset = viewModel.ongoingWorkout ? 0 : 0.07
                     ExpandedHistory(workout: workoutToUse, showingExpandedExercise: $showingExpandedExercise)
-                        .position(x: getScreenBounds().width/2, y: showingExpandedExercise ? getScreenBounds().height * 0.52 : getScreenBounds().height * 1.5)
+                        .position(x: getScreenBounds().width/2, y: showingExpandedExercise ? getScreenBounds().height * (0.47 + offset) : getScreenBounds().height * 1.5)
                 }
 
             }
@@ -428,7 +432,7 @@ struct Home: View {
                             withAnimation(.spring()) {
                                 showingExpandedExercise.toggle()
                             }
-        
+                            HapticManager.instance.impact(style: .rigid)
 
                         }, label: {
 
@@ -574,7 +578,11 @@ struct Home: View {
 
                     }
                     .frame(maxHeight: getScreenBounds().height * 0.1)
-                    .padding(.horizontal)
+                    .padding(7)
+                    .background(Color("DDB"))
+                    
+                    .cornerRadius(10)
+                    .padding(.all, 15)
 
 
                 }

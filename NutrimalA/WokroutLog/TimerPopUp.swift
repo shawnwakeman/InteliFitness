@@ -292,6 +292,7 @@ struct TimerPopUp: View {
                                 .aspectRatio(2.5/1, contentMode: .fit)
                             }
                                     Button {
+                                        cancelNotifications()
                                         viewModel.editRestTime(time: 0)
                                         withAnimation(.spring()) {
                                             viewModel.setPopUpState(state: false, popUpId: "TimerPopUp")

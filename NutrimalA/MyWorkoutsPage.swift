@@ -16,11 +16,12 @@ struct MyWorkoutsPage: View {
 
 
     @Binding var isNavigationBarHidden: Bool
+    var isForAddingToSchedule: Bool
     var body: some View {
         GeometryReader { proxy in
             
             let topEdge = proxy.safeAreaInsets.top
-            MyWorkoutsPageMain(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, topEdge: topEdge, isNavigationBarHidden: $isNavigationBarHidden)
+            MyWorkoutsPageMain(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, topEdge: topEdge, isForAddingToSchedule: isForAddingToSchedule, isNavigationBarHidden: $isNavigationBarHidden)
                 .navigationBarTitle("back")
                 .navigationBarHidden(self.isNavigationBarHidden)
                 .onAppear {
@@ -38,11 +39,19 @@ struct MyWorkoutsPageMain: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     
     var topEdge: CGFloat
+    
+    var isForAddingToSchedule : Bool
     @Binding var isNavigationBarHidden: Bool
     let maxHeight = UIScreen.main.bounds.height / 3
     @Environment(\.presentationMode) var presentationMode
     @State var offset: CGFloat = 0
     
+    var columns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: 37),
+            GridItem(.flexible(), spacing: 30)
+        ]
+    }
     var body: some View {
         
         
@@ -52,7 +61,7 @@ struct MyWorkoutsPageMain: View {
                 
                 VStack(spacing: 15) {
                     GeometryReader { proxy in
-                        TopBar(topEdge: topEdge, name: "My Workouts", offset: $offset, maxHeight: maxHeight)
+                        TopBar(topEdge: topEdge, name: isForAddingToSchedule ? "Add Workout" : "My Exercises", offset: $offset, maxHeight: maxHeight)
                             
                                 .frame(maxWidth: .infinity)
                                 .frame(height: getHeaderHeight(), alignment: .bottom)
@@ -82,16 +91,9 @@ struct MyWorkoutsPageMain: View {
                     .zIndex(1)
                     
                     
-                    
-                    
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("")
+                    Spacer()
+                    if !isForAddingToSchedule {
                         
-                        
-                            .navigationBarTitle(Text("Exercises").font(.subheadline), displayMode: .inline)
-                            .navigationBarHidden(false)
-                        
-                        Spacer()
                         VStack(spacing: 0) {
                             HStack {
                                 TextHelvetica(content: "Quick Start", size: 23).foregroundColor(Color("WhiteFontOne"))
@@ -145,6 +147,12 @@ struct MyWorkoutsPageMain: View {
                             }
                             Spacer()
                         }
+                        .padding()
+                    }
+                    VStack(alignment: .leading, spacing: 20) {
+
+                        
+
                         
                         
                         Section(header:
@@ -170,25 +178,21 @@ struct MyWorkoutsPageMain: View {
                                     
                                     
                                 }.frame(width: 35, height: 35)
+                                    
                                 
                             }
                         }) {
                             if viewModel.myWorkouts.count > 0 {
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 20) {
+                                ScrollView {
+                                    LazyVGrid(columns: columns, spacing: -20) {
                                         ForEach(viewModel.myWorkouts.reversed()) { workout in
-                                            
-                                            
-                                            
-                                            NavigationLink(destination:  workoutLauncher(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: workout)) {
+                                            NavigationLink(destination: workoutLauncher(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: workout, isForAddingToSchedule: isForAddingToSchedule)) {
                                                 WorkoutModule(title: workout.WorkoutName, description: "Module Description")
                                                 
                                             }
-                                            
-                                            
-                                            
                                         }
                                     }
+                                    .padding(.horizontal)
                                 }
                             } else {
                                 TextHelvetica(content: "Created workouts will apear here", size: 22)
@@ -226,6 +230,7 @@ struct MyWorkoutsPageMain: View {
                     
                     Button {
                         presentationMode.wrappedValue.dismiss()
+                        HapticManager.instance.impact(style: .rigid)
                     } label: {
                         HStack {
                             Image(systemName: "chevron.left")
@@ -238,7 +243,7 @@ struct MyWorkoutsPageMain: View {
                         
                     }
                     Spacer()
-                    TextHelvetica(content: "My Workouts", size: 20)
+                    TextHelvetica(content: isForAddingToSchedule ? "Add Workout" : "My Exercises", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                         .opacity(topBarTitleOpacity())
@@ -379,7 +384,7 @@ struct WorkoutModule: View {
             Spacer()
 
         }
-        .frame(width: getScreenBounds().width * 0.5, height: getScreenBounds().height * 0.15)
+        .frame(width: getScreenBounds().width * 0.443, height: getScreenBounds().height * 0.15)
         .background(Color("DBblack"))
         .cornerRadius(10)
         .overlay(
@@ -396,7 +401,9 @@ struct workoutLauncher: View {
     @ObservedObject var workoutLogViewModel: WorkoutLogViewModel
     @Binding var isNavigationBarHidden: Bool
     var workout: HomePageModel.Workout
+    var isForAddingToSchedule: Bool
     @Environment(\.presentationMode) var presentationMode
+    @State private var isLinkActive = false
     var body: some View {
         ZStack {
             VStack {
@@ -439,39 +446,81 @@ struct workoutLauncher: View {
                                
                                 .aspectRatio(5.5/1, contentMode: .fill)
                         }
-                            
-                        Button {
-                           
-                            viewModel.setOngoingState(state: false)
-                            workoutLogViewModel.loadWorkout(workout: workout)
-                            
-                            withAnimation(.spring()) {
-                                viewModel.setOngoingState(state: true)
-                                viewModel.setWorkoutLogModuleStatus(state: true)
-                       
-                            }
-                            
-                        }
-                        label: {
-                            ZStack{
-                                ZStack{
-                                    
+                        
+                        if isForAddingToSchedule {
+                            Button(action: {
+                                viewModel.addToWorkoutQueue(workout: workout)
+                                isLinkActive = true
+                            }) {
+                                ZStack {
+                                    NavigationLink("", destination: WeeklyScheduleView(schedule: viewModel, viewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingWorkout: true), isActive: $isLinkActive)
+                                        .opacity(0) // Hide the NavigationLink
 
-                                    
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                    ZStack{
+                                        ZStack{
+                                            
 
-                                        .padding(.vertical)
-                                        
-                                        .aspectRatio(5.5/1, contentMode: .fill)
-                                    
+                                            
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+
+                                                .padding(.vertical)
+                                                
+                                                .aspectRatio(5.5/1, contentMode: .fill)
+                                            
+                                        }
+
+                                       
+                                        TextHelvetica(content: isForAddingToSchedule ? "Add Workout to Schedule" : "Start Workout", size: 20)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                    }
                                 }
+                            }
+                          
+                     
+                              
+                          
+                        } else {
+                            Button {
+                                
+                                    
+                                   
+                                    
+                        
+                                viewModel.setOngoingState(state: false)
+                                workoutLogViewModel.loadWorkout(workout: workout)
+                                
+                                withAnimation(.spring()) {
+                                    viewModel.setOngoingState(state: true)
+                                    viewModel.setWorkoutLogModuleStatus(state: true)
+                           
+                                }
+                                
+                                
+                                
+                            }
+                            label: {
+                                ZStack{
+                                    ZStack{
+                                        
 
+                                        
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
 
-                                TextHelvetica(content: "Start Workout", size: 20)
-                                    .foregroundColor(Color("WhiteFontOne"))
+                                            .padding(.vertical)
+                                            
+                                            .aspectRatio(5.5/1, contentMode: .fill)
+                                        
+                                    }
+
+                                   
+                                    TextHelvetica(content: isForAddingToSchedule ? "Add Workout to Schedule" : "Start Workout", size: 20)
+                                        .foregroundColor(Color("WhiteFontOne"))
+                                }
                             }
                         }
+                       
                         
                     }
                    
@@ -579,7 +628,8 @@ struct workoutLauncher: View {
                         .frame(width: getScreenBounds().width * 0.17)
                     }
                     Spacer()
-                    TextHelvetica(content: "Start Workout", size: 20)
+               
+                    TextHelvetica(content: isForAddingToSchedule ? "Add Workout" : "Start Workout", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                   

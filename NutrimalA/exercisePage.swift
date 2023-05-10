@@ -64,25 +64,45 @@ struct ExercisePage: View {
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 10)
-
-                CustomSegmentedPicker(selection: customBinding, labels: ["About", "History", "Data", "Records"])
-                    .padding()
+                if exercise.instructions.count > 0 {
+                    CustomSegmentedPicker(selection: customBinding, labels: ["About", "History", "Data", "Records"])
+                        .padding()
+                } else {
+                    CustomSegmentedPicker(selection: customBinding, labels: ["History", "Data", "Records"])
+                        .padding()
+                }
+               
 
                 Divider()
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
+                if exercise.instructions.count > 0 {
+                    
+                    switch selectedPage {
+                    case .page1:
+                        Page1View(exercise: exercise)
+                    case .page2:
+                        Page2View(exercise: exercise)
+                    case .page3:
+                        Page3View()
+                    case .page4:
+                        Page4View()
+                    }
 
-                switch selectedPage {
-                case .page1:
-                    Page1View(exercise: exercise)
-                case .page2:
-                    Page2View(exercise: exercise)
-                case .page3:
-                    Page3View()
-                case .page4:
-                    Page4View()
                 }
-
+                else {
+                    switch selectedPage {
+                    case .page1:
+                        Page2View(exercise: exercise)
+                    case .page2:
+                        Page3View()
+                    case .page3:
+                        Page4View()
+                    case .page4:
+                        Page4View()
+                    }
+                }
+              
                 Spacer()
               
             }

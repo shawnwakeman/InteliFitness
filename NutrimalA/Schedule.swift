@@ -2,14 +2,18 @@ import SwiftUI
 
 struct WeeklyScheduleView: View {
     @ObservedObject var schedule: HomePageViewModel
-
-
+    @ObservedObject var viewModel: WorkoutLogViewModel
     @Binding var isNavigationBarHidden: Bool
+    
+  
+    var isForAddingWorkout = false
     var body: some View {
         GeometryReader { proxy in
             
             let topEdge = proxy.safeAreaInsets.top
-            MainWokroutView(schedule: schedule, topEdge: topEdge)
+          
+            MainWokroutView(schedule: schedule, viewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, topEdge: topEdge, isForAddingWorkout: isForAddingWorkout)
+
                 .navigationBarTitle("back")
                 .navigationBarHidden(self.isNavigationBarHidden)
                 .onAppear {
@@ -20,31 +24,72 @@ struct WeeklyScheduleView: View {
     }
 }
 
+
+
 // Workout View
 struct WorkoutView: View {
     @Binding var workout: ScheduleWorkout
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(workout.name)
-                .font(.title2)
-                .fontWeight(.bold)
+        VStack(alignment: .leading, spacing: 0) {
+            
+            HStack {
+                TextHelvetica(content: workout.name, size: 17)
+                    .foregroundColor(Color("WhiteFontOne"))
+                Spacer()
+                ZStack{
+                    
+                    Image("meatBalls")
+                        .resizable()
+                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
 
-            Text("\(workout.duration) minutes")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-
-            VStack(alignment: .leading) {
-                ForEach(workout.exercises.indices, id: \.self) { index in
-                    Text(workout.exercises[index])
-                        .font(.subheadline)
                 }
-                .onDelete(perform: deleteExercise)
-            }
+            }.padding(.all, 10)
+                
+                .background(Color("MainGray"))
+       
+            
+            
+            Divider()
+                                
+            .frame(height: borderWeight)
+            .overlay(Color("BorderGray"))
+            VStack(alignment: .leading) {
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.000)
+                TextHelvetica(content: "back squat(barbell), bench press(barbell), etc.", size: 12)
+                    .foregroundColor(Color("GrayFontOne"))
+                    .multilineTextAlignment(.leading)
+              
+                Spacer()
+                
+                HStack{
+                    TextHelvetica(content: "12 sets", size: 15)
+                        .foregroundColor(Color("GrayFontOne"))
+                    Spacer()
+                    Image(systemName: "clock")
+                        .foregroundColor(Color("LinkBlue"))
+                        .imageScale(.medium)
+                        .bold()
+                    TextHelvetica(content: "1:30", size: 15)
+                        .foregroundColor(Color("GrayFontOne"))
+                     
+                }
+            }.padding(.horizontal, 10)
+               
+            
+            Spacer()
+
         }
-        .padding()
-        .background(Color(.systemGray6))
+        .frame(width: getScreenBounds().width * 0.443, height: getScreenBounds().height * 0.15)
+        .background(Color("DBblack"))
         .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+        .padding(.vertical)
+        .padding(.horizontal, 2)
+
     }
     
     private func deleteExercise(at offsets: IndexSet) {
@@ -54,18 +99,23 @@ struct WorkoutView: View {
 
 struct MainWokroutView: View {
     @ObservedObject var schedule: HomePageViewModel
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    @Binding var isNavigationBarHidden: Bool
+//    @Binding var selectedDestination: AnyView
+
     var topEdge: CGFloat
-    
+    var isForAddingWorkout = false
     let maxHeight = UIScreen.main.bounds.height / 4.5
     @Environment(\.presentationMode) var presentationMode
     @State var offset: CGFloat = 0
-    
+        
     @State private var showingAddWorkout = false
     @State private var showDeleteAlert = false
     @State private var selectedWorkoutID: Int?
     @State private var selectedRecurringID: Int?
     @State private var selectedDay: Date?
     @State private var currentWeek: String = ""
+    
 
     private var weeksWithWorkouts: Set<Int> {
         var weeksWithWorkouts = Set<Int>()
@@ -84,9 +134,12 @@ struct MainWokroutView: View {
 
     let weeks: [[Date]]
 
-    init(schedule: HomePageViewModel, topEdge: CGFloat) {
+    init(schedule: HomePageViewModel, viewModel: WorkoutLogViewModel, isNavigationBarHidden: Binding<Bool>, topEdge: CGFloat, isForAddingWorkout: Bool) {
         self.schedule = schedule
+        self.viewModel = viewModel
+        self._isNavigationBarHidden = isNavigationBarHidden
         self.topEdge = topEdge
+        self.isForAddingWorkout = isForAddingWorkout
         let calendar = Calendar.current
         let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
         self.weeks = (0..<4).map { weekOffset in
@@ -94,6 +147,8 @@ struct MainWokroutView: View {
                 calendar.date(byAdding: .day, value: dayOffset + weekOffset * 7, to: startOfWeek)
             }
         }
+        
+  
     }
 
     func workoutsSection(for day: Date) -> some View {
@@ -101,25 +156,33 @@ struct MainWokroutView: View {
             if var workouts = schedule.getWorkouts(for: day) { // Change this line
                 ForEach(workouts.indices, id: \.self) { index in
                     HStack {
+                        
                         WorkoutView(workout: Binding<ScheduleWorkout>(get: {
                             workouts[index]
                         }, set: { newValue in
                             workouts[index] = newValue
                         }))
                         Spacer()
-                        Button(action: {
-                            if let recurringID = workouts[index].recurringID {
-                                selectedWorkoutID = workouts[index].id
-                                selectedRecurringID = recurringID
-                                selectedDay = day
-                                showDeleteAlert = true
-                            } else {
-                                schedule.removeWorkout(from: day, workoutID: workouts[index].id)
+                        
+                            
+                       
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                            .frame(width: 50)
+                            .onTapGesture {
+                                print("Asd")
+                                if let recurringID = workouts[index].recurringID {
+                                    selectedWorkoutID = workouts[index].id
+                                    selectedRecurringID = recurringID
+                                    selectedDay = day
+                                    showDeleteAlert = true
+                                } else {
+                                    schedule.removeWorkout(from: day, workoutID: workouts[index].id)
+                                }
                             }
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
-                        }
+                                
+                              
+                           
                     }
                 }
             } else {
@@ -242,18 +305,6 @@ struct MainWokroutView: View {
                         .navigationTitle("Workout Schedule")
                         .zIndex(0)
                         
-                           
-                    
-
-
-                          
-
-
-
-                        
-                        
-                 
-                       
                         
                     }
                     
@@ -273,7 +324,8 @@ struct MainWokroutView: View {
             VStack {
                 HStack() {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        
+                      
                     } label: {
                         HStack {
                             Image(systemName: "chevron.left")
@@ -296,6 +348,9 @@ struct MainWokroutView: View {
                     Spacer() // This spacer will push the text and buttons apart
 
                     Button {
+                        withAnimation(.spring()) {
+                            showingAddWorkout.toggle()
+                        }
                         
                     } label: {
                         HStack {
@@ -324,13 +379,18 @@ struct MainWokroutView: View {
                     .edgesIgnoringSafeArea(.all)
                     .opacity(showingAddWorkout ? 1 : 0)
 
-
-                AddWorkoutView(schedule: schedule, showingAddWorkout: $showingAddWorkout)
-                    .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.35 : getScreenBounds().height * 1.3)
+                AddWorkoutView( schedule: schedule, viewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, showingAddWorkout: $showingAddWorkout)
+                    .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.3)
 
             }
 
             
+        }
+        .onAppear {
+            if self.isForAddingWorkout {
+                print("did the deed")
+                showingAddWorkout = true
+            }
         }
         
  
@@ -380,7 +440,12 @@ struct MainWokroutView: View {
 
 struct AddWorkoutView: View {
     @Environment(\.presentationMode) var presentationMode
+    
     @ObservedObject var schedule: HomePageViewModel
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    @Binding var isNavigationBarHidden: Bool
+    
+    
     @State private var workoutName: String = ""
     @State private var exerciseString: String = ""
     @State private var duration: String = ""
@@ -397,6 +462,7 @@ struct AddWorkoutView: View {
                     withAnimation(.spring()) {
                         showingAddWorkout.toggle()
                     }
+                    
                     
                     
                 }
@@ -421,8 +487,14 @@ struct AddWorkoutView: View {
                 
                 Spacer()
                 Button {
-                    
-                    
+                    if let workout = schedule.schedule.workoutQueue {
+                        saveWorkout(exercises: workout.exercises , workoutName: workout.WorkoutName)
+                    }
+                   
+                    withAnimation(.spring()) {
+                        showingAddWorkout.toggle()
+                    }
+                    schedule.clearWorkoutQueue()
                 }
                 label: {
                     TextHelvetica(content: "Save", size: 18)
@@ -439,49 +511,73 @@ struct AddWorkoutView: View {
 
                 Section(header: TextHelvetica(content: "Select Workout", size: 14)
                     .foregroundColor(Color("WhiteFontOne"))) {
-                    HStack {
-                        ZStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                             
-
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
-
+                        if let workout = schedule.schedule.workoutQueue {
+                            WorkoutModule(title: workout.WorkoutName , description: "cum")
                             
+                        } else {
+                            HStack {
+                                NavigationLink(destination: MyWorkoutsPage(viewModel: schedule, workoutLogViewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: true)) {
+                                    ZStack{
+                                        
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .foregroundColor(Color("BlueOverlay"))
+                                        
+                                        
+                                        
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        TextHelvetica(content: "Generate Workout", size: 17)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                            .multilineTextAlignment(.center)
+                                            .bold()
+                                            .padding()
+                                    }
+                                }
                                 
+                      
+                                Button {
+                                    
+                                } label: {
+                                 
+                                    ZStack{
+                                        
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .foregroundColor(Color("BlueOverlay"))
+                                        
+                                        
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        TextHelvetica(content: "Add Workout", size: 17)
+                                            .bold()
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                    }
+                                    .background(NavigationLink(destination: MyWorkoutsPage(viewModel: schedule, workoutLogViewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: false)) {
+                                        EmptyView()
+                                })
+                                    
+                                    
+                                }
+                               
+                         
                             }
-
-
-                            TextHelvetica(content: "Generate Workout", size: 20)
-                                .foregroundColor(Color("WhiteFontOne"))
-                                .multilineTextAlignment(.center)
+                            .frame(height: getScreenBounds().height * 0.12)
+                       
+                          
                         }
-              
-                        
-                        ZStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(Color("BlueOverlay"))
-                                
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
-
-                        
-                        
-                                
-                            }
-
-
-                            TextHelvetica(content: "Add Workout", size: 20)
-                                .foregroundColor(Color("WhiteFontOne"))
-                        }
-                 
-                    }
-                    .frame(height: getScreenBounds().height * 0.12)
+                    
                    
                 }
                     
@@ -523,7 +619,7 @@ struct AddWorkoutView: View {
 
 
         }
-        .frame(height: getScreenBounds().height * 0.67)
+        .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.67)
         .background(Color("DBblack")) // Add this line to set the background color to red
             .edgesIgnoringSafeArea(.bottom)
         .overlay(
@@ -545,11 +641,11 @@ struct AddWorkoutView: View {
     //                }
     //            }
 
-    private func saveWorkout() {
+    private func saveWorkout(exercises: [WorkoutLogModel.ExersiseLogModule], workoutName: String) {
         
-        let exercises = exerciseString.split(separator: ",").map { String($0.trimmingCharacters(in: .whitespaces)) }
+
         let recurringID = (recurringOption == .none) ? nil : Int.random(in: 1..<Int.max)
-        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, duration: Int(duration) ?? 0, recurringID: recurringID)
+        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, recurringID: recurringID)
         // Combine the selected date and time
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
@@ -566,7 +662,7 @@ struct AddWorkoutView: View {
 
         schedule.addWorkout(to: dateTime, workout: workout, recurringOption: recurringOption)
 
-        presentationMode.wrappedValue.dismiss()
+
     }
 
 }

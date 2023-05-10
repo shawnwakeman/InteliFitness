@@ -29,8 +29,27 @@ struct CategorySelectionMenu: View {
 
 struct BodyPartSelectionMenu: View {
     @Binding var selectedBodyPart: String
-    let categories = ["Back", "Biceps", "Chest", "Back", "Hamstrings", "Lower Back", "Quadricpes", "Triceps", "Other",
-                      "Core", "Shoulders", "Olympic", "Full Body", "Cardio"]
+    
+    let categories = [
+        "Neck",
+        "Shoulders",
+        "Upper Back",
+        "Chest",
+        "Biceps",
+        "Triceps",
+        "Forearms",
+        "Lower Back",
+        "Abdominals",
+        "Obliques",
+        "Glutes",
+        "Hip Flexors",
+        "Quadriceps",
+        "Hamstrings",
+        "Calves",
+        "Other",
+        "Full Body",
+        "Cardio"
+    ]
 
     var body: some View {
         Menu {

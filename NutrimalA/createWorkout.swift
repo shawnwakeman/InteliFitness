@@ -413,6 +413,13 @@ struct createWorkout: View {
                         AddExersisesPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, heightModifier: 0.82)
                         .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState ? getScreenBounds().height * 0.5 : getScreenBounds().height * 2) // shout be two
                         
+                
+                    VisualEffectView(effect: UIBlurEffect(style: .dark))
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(workoutLogViewModel.displayingExerciseView ? 1 : 0)
+                      
+                    ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
+                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
                 }
              
               

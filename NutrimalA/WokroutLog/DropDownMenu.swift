@@ -112,6 +112,7 @@ struct DropDownMenuView: View {
                             }
                             
                             homePageViewModel.saveExersiseHistory()
+                            cancelNotifications()
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             
                          

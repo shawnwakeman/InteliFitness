@@ -7,12 +7,14 @@ struct WeeklyScheduleView: View {
     
   
     var isForAddingWorkout = false
+
     var body: some View {
         GeometryReader { proxy in
             
             let topEdge = proxy.safeAreaInsets.top
           
             MainWokroutView(schedule: schedule, viewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, topEdge: topEdge, isForAddingWorkout: isForAddingWorkout)
+                
 
                 .navigationBarTitle("back")
                 .navigationBarHidden(self.isNavigationBarHidden)
@@ -298,11 +300,12 @@ struct MainWokroutView: View {
                               
                             }
                         }
-                        .frame(width: g.size.width - 1, height: g.size.height - 50, alignment: .center)
+                        .frame(width: g.size.width - 1, height: g.size.height - 1, alignment: .center)
                         .scrollContentBackground(.hidden)
                         .background(Color("MainGray").edgesIgnoringSafeArea(.all))
                         .listStyle(GroupedListStyle())
                         .navigationTitle("Workout Schedule")
+                        .padding(.bottom, 150)
                         .zIndex(0)
                         
                         
@@ -324,7 +327,7 @@ struct MainWokroutView: View {
             VStack {
                 HStack() {
                     Button {
-                        
+                        presentationMode.wrappedValue.dismiss()
                       
                     } label: {
                         HStack {
@@ -380,7 +383,7 @@ struct MainWokroutView: View {
                     .opacity(showingAddWorkout ? 1 : 0)
 
                 AddWorkoutView( schedule: schedule, viewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, showingAddWorkout: $showingAddWorkout)
-                    .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.3)
+                    .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
 
             }
 
@@ -454,6 +457,7 @@ struct AddWorkoutView: View {
     @State private var recurringOption: Schedule.RecurringOption = .none
     @State private var reminderOption: Schedule.ReminderOption = .none
     @Binding var showingAddWorkout: Bool
+
     var body: some View {
         VStack {
             
@@ -484,6 +488,7 @@ struct AddWorkoutView: View {
                 Spacer()
                 TextHelvetica(content: "Add Workout", size: 20)
                     .foregroundColor(Color("WhiteFontOne"))
+                
                 
                 Spacer()
                 Button {
@@ -516,7 +521,9 @@ struct AddWorkoutView: View {
                             
                         } else {
                             HStack {
-                                NavigationLink(destination: MyWorkoutsPage(viewModel: schedule, workoutLogViewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: true)) {
+                                Button {
+                                   
+                                } label: {
                                     ZStack{
                                         
                                         RoundedRectangle(cornerRadius: 5)
@@ -540,9 +547,10 @@ struct AddWorkoutView: View {
                                     }
                                 }
                                 
+                                
                       
                                 Button {
-                                    
+                                    schedule.showingExercises = true
                                 } label: {
                                  
                                     ZStack{
@@ -619,6 +627,9 @@ struct AddWorkoutView: View {
 
 
         }
+        .sheet(isPresented: $schedule.showingExercises) {
+            MyWorkoutsPage(viewModel: schedule, workoutLogViewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: true)
+        }
         .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.67)
         .background(Color("DBblack")) // Add this line to set the background color to red
             .edgesIgnoringSafeArea(.bottom)
@@ -645,7 +656,7 @@ struct AddWorkoutView: View {
         
 
         let recurringID = (recurringOption == .none) ? nil : Int.random(in: 1..<Int.max)
-        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, recurringID: recurringID)
+
         // Combine the selected date and time
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
@@ -659,7 +670,7 @@ struct AddWorkoutView: View {
         combinedComponents.minute = timeComponents.minute
 
         let dateTime = calendar.date(from: combinedComponents) ?? Date()
-
+        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, recurringID: recurringID, time: dateTime)
         schedule.addWorkout(to: dateTime, workout: workout, recurringOption: recurringOption)
 
 

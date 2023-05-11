@@ -297,6 +297,8 @@ struct createWorkout: View {
                     .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
                 
                 
+             
+                
                 weightUnitSet(viewModel: workoutLogViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0)
 
@@ -328,56 +330,50 @@ struct createWorkout: View {
                                 .frame(width: 100)
                             }
                             Spacer()
-                            TextHelvetica(content: "History", size: 20)
+                            TextHelvetica(content: "Create", size: 20)
                                 .foregroundColor(Color("WhiteFontOne"))
                                 .bold()
                           
                             Spacer()
-                            Button {
-                                
-                            } label: {
-                                Button {
-                                                      
-                                          homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
-                                          presentationMode.wrappedValue.dismiss()
-                                       
-                                         
-                                      }
-                                  label: {
-                                      
-                                      ZStack{
-                                                                             
-                                         ZStack{
-                                             RoundedRectangle(cornerRadius: 6)
-                                                 .foregroundColor(Color("LinkBlue"))
+                            
 
-                                             
-                                         }
+                            
+                                Button {
+            
+                                    homePageVeiwModel.addToMyWorkouts(workoutName: workoutName, exersiseModules: workoutLogViewModel.exersiseModules)
+                                    presentationMode.wrappedValue.dismiss()
+                                 
+                                   
+                                } label: {
+                                    ZStack{
+                                                                           
+                                    
+                                       RoundedRectangle(cornerRadius: 6)
+                                               .foregroundColor(Color("LinkBlue"))
+
+                                           
+                                        TextHelvetica(content: "Create", size: 19)
+                                             .foregroundColor(Color("WhiteFontOne"))
                                        
-                                         
-                                         Button {
-                     
-                                             homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
-                                             presentationMode.wrappedValue.dismiss()
-                                          
-                                            
-                                         }
-                                     label: {
-                                         TextHelvetica(content: "Create", size: 19)
-                                              .foregroundColor(Color("WhiteFontOne"))
-                                     }
-                                         
                                      
-                                         
-                                         
-                                     }
-                                     .frame(width: 100 ,height: getScreenBounds().height * 0.048)
-                                      
+                                       
+                                       
                           
-                                     .aspectRatio(2.5, contentMode: .fit)
-                                  }
+                                 
+                                       
+                                   
+                                       
+                                       
+                                   }
+                                   .frame(width: 100 ,height: getScreenBounds().height * 0.048)
+                                    
+                        
+                                   .aspectRatio(2.5, contentMode: .fit)
+                                }
+                                
+                                  
                                
-                            }
+                        
                             
                         }
                             .padding(.horizontal)
@@ -424,6 +420,7 @@ struct createWorkout: View {
              
               
             }
+            .offset(y: homePageVeiwModel.showingExercises ? -1 * getScreenBounds().height * 0.05: 0)
             .navigationBarTitle("back")
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
@@ -455,25 +452,7 @@ struct createWorkout: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             ))
-            .onChange(of: scenePhase) { newScenePhase in
-                switch newScenePhase {
-                case .active:
-      
-                    workoutLogViewModel.loadExersiseModules()
-                    homePageVeiwModel.loadHistory()
 
-                case .inactive:
-                    print("App is inactive")
-                case .background:
-            
-                    workoutLogViewModel.saveExersiseModules()
-                 
-                    homePageVeiwModel.saveExersiseHistory()
-      
-                @unknown default:
-                    fatalError("Unknown scene phase")
-                }
-            }
             .onAppear {
                 workoutName = "Workout Name"
 

@@ -346,7 +346,7 @@ struct AddExersisesPopUp: View {
                                                            } else {
                                                                homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
                                                            }
-                                                            withAnimation(.spring()) {
+                                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
                                                                 homePageViewModel.setSelectionState(ExersiseID: exercise.id)
                                                             }
                                                     }
@@ -429,7 +429,7 @@ struct AddExersisesPopUp: View {
                                                } else {
                                                    homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
                                                }
-                                                withAnimation(.spring()) {
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
                                                     homePageViewModel.setSelectionState(ExersiseID: exercise.id)
                                                 }
                                         }
@@ -461,19 +461,14 @@ struct AddExersisesPopUp: View {
                                         Button {}
                                        label: {
                                            ZStack {
-                                               if homePageViewModel.exersises[exercise.id].selected == false {
+                                               
                                                    
-                                                   TextHelvetica(content: "?", size: 23)
-                                                       .bold()
-                                                       .foregroundColor(Color("LinkBlue"))
-                                               } else {
-                                                   
-                                                     Image("checkMark")
-                                                         .resizable()
-                                                         .aspectRatio(contentMode: .fit)
-                                                         .frame(width: 17, height: 17)
-                                                         
-                                               }
+                                                   Image("checkMark")
+                                                       .resizable()
+                                                       .aspectRatio(contentMode: .fit)
+                                                       .frame(width: 17, height: 17)
+                                                       .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
+                                               
                                              
                                              
                                                

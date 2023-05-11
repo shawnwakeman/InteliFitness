@@ -14,7 +14,7 @@ class HomePageViewModel: ObservableObject {
         HomePageModel()
     }
     
-    
+    @Published var showingExercises: Bool = false
     @Published var homePageModel = createHomePageModel()
     
     var workoutLogModuleStatus: Bool{
@@ -154,18 +154,50 @@ class HomePageViewModel: ObservableObject {
         schedule.clearWorkoutQueue()
     }
     
+    func saveSchedule() {
+    
+        schedule.saveSchedule()
+    }
+
+    
+    func loadSchedule() {
+        schedule.loadSchedule()
+    }
+    
+    private func startOfDay(for date: Date) -> Date {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        return calendar.date(from: components) ?? date
+    }
+    
     func upcomingWorkout() -> ScheduleWorkout? {
         let currentDate = Date()
+        let startOfDayCurrentDate = startOfDay(for: currentDate)
         let sortedWorkouts = schedule.workouts.sorted(by: { $0.key < $1.key })
-        
+
         for (date, workoutArray) in sortedWorkouts {
-            if date >= currentDate {
+            if date > startOfDayCurrentDate {
                 return workoutArray.first
+            } else if date == startOfDayCurrentDate {
+                if let upcomingWorkout = workoutArray.first(where: { $0.time >= currentDate }) {
+                    return upcomingWorkout
+                }
             }
         }
-        
+
+        // If no upcoming workouts are found, check for a workout within an hour
+        let oneHourLater = currentDate.addingTimeInterval(3600)
+        let startOfDayOneHourLater = startOfDay(for: oneHourLater)
+        if let workoutArray = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value,
+           let workoutWithinAnHour = workoutArray.first(where: { $0.time <= oneHourLater }) {
+            return workoutWithinAnHour
+        }
+
+
         return nil
     }
+
+
 
   
     

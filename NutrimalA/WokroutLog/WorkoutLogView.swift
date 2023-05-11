@@ -230,35 +230,41 @@ struct WorkoutLogView: View {
 
             }
             
-          
+            Group {
+                NamePopUP( viewModel: workoutLogViewModel)
 
-            NamePopUP( viewModel: workoutLogViewModel)
+    //                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
+    //                .position(x: getScreenBounds().width / 2, y: getScreenBounds().height * 0.2)
 
-//                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
-//                .position(x: getScreenBounds().width / 2, y: getScreenBounds().height * 0.2)
+                    .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TitlePagePopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
+                
+                
+                SetMenu( viewModel: workoutLogViewModel)
+                    .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
+                
+                restTimeSet(viewModel: workoutLogViewModel)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
 
-                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
-                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TitlePagePopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
-            
-            
-            SetMenu( viewModel: workoutLogViewModel)
-                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
-                .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
-            
-            restTimeSet(viewModel: workoutLogViewModel)
-                .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
+                
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+                
 
-                .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
-            
-                .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
-            
-            
-            weightUnitSet(viewModel: workoutLogViewModel)
-                .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0)
+                
+             
+                
+                
+                weightUnitSet(viewModel: workoutLogViewModel)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0)
 
-                .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
-                .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
-            
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+                
+                
+            }
+
             
             Group {
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -291,7 +297,36 @@ struct WorkoutLogView: View {
                             
                         }
                     }
+                
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "PausePopUp").RPEpopUpState ? 1 : 0)
+                    .scaleEffect(1.3)
+                
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "CancelPopUp").RPEpopUpState ? 1 : 0)
+                    .scaleEffect(1.3)
+                CancelPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "CancelPopUp").RPEpopUpState ? 1 : 0)
 
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "CancelPopUp").RPEpopUpState ? 1 : 0.5, anchor: .top)
+
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+
+                FinishPopUp(viewModel: workoutLogViewModel)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "FinishPopUp").RPEpopUpState ? 1 : 0)
+
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "FinishPopUp").RPEpopUpState ? 1 : 0.5, anchor: .top)
+                
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+            
+                PausePopUp(viewModel: workoutLogViewModel)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "PausePopUp").RPEpopUpState ? 1 : 0)
+
+                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "PausePopUp").RPEpopUpState ? 1 : 0.5, anchor: .top)
+                
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
 
             }
             
@@ -325,6 +360,7 @@ struct WorkoutLogView: View {
                     .offset(y: getScreenBounds().height * -0.07)
                 ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
+                
             }
             
          
@@ -370,10 +406,12 @@ struct WorkoutLogView: View {
                 withAnimation(.spring()) {
                     homePageVeiwModel.loadOngoingWorkoutStatus()
                 }
-            
+                homePageVeiwModel.loadMyExercises()
                 workoutLogViewModel.loadExersiseModules()
                 homePageVeiwModel.loadHistory()
                 workoutLogViewModel.loadTimers()
+                homePageVeiwModel.loadSchedule()
+             
                 print("for")
             case .inactive:
                 workoutLogViewModel.saveExersiseModules()
@@ -382,6 +420,7 @@ struct WorkoutLogView: View {
 
                 print("in")
             case .background:
+                homePageVeiwModel.saveSchedule()
                 workoutLogViewModel.saveTimers()
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
@@ -517,13 +556,16 @@ struct NamePopUP: View {
                         .frame(height: borderWeight)
                         .overlay(Color("BorderGray"))
                 Button {
+                    cancelNotifications()
+                    viewModel.editRestTime(time: 0)
+                    viewModel.setTimeStep(step: 0)
                     withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+                        viewModel.setPopUpState(state: true, popUpId: "PausePopUp")
                     }
 
                     withAnimation(.linear(duration: 0.9)){
                    
-                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                        viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
                     }
 
                 }
@@ -550,12 +592,12 @@ struct NamePopUP: View {
                         .overlay(Color("BorderGray"))
                 Button {
                     withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+                        viewModel.setPopUpState(state: true, popUpId: "CancelPopUp")
                     }
 
                     withAnimation(.linear(duration: 0.9)){
                    
-                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                        viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
                     }
 
                 }
@@ -947,7 +989,7 @@ struct WorkoutTimer : View {
         }
         .onChange(of: viewModel.restTime.timeElapsed) { timeElapsed in
 
-            if timeElapsed == 0 {
+            if timeElapsed == 1 {
                 withAnimation(.spring()) {
                     viewModel.setPopUpState(state: true, popUpId: "TimerCompletedPopUP")
                 }

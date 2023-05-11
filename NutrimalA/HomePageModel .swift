@@ -176,6 +176,7 @@ struct HomePageModel {
     
 
     func loadExercisesFromUserDefaults() -> [Exersise]? {
+        
         if let data = UserDefaults.standard.data(forKey: "Exercises") {
             let decoder = JSONDecoder()
             do {
@@ -238,8 +239,10 @@ struct HomePageModel {
         }
     }
     
+
+    
     mutating func saveMyWorkouts() {
-        saveExercisesToUserDefaults(exercises)
+   
         let defaults = UserDefaults.standard
 
         do {
@@ -256,7 +259,7 @@ struct HomePageModel {
 
         if let savedData = defaults.object(forKey: "myExercises") as? Data {
             do {
-                history = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
+                myExercises = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
             } catch {
                 print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }

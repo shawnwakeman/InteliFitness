@@ -216,13 +216,26 @@ struct P1View: View {
 
                             Spacer()
                             HStack {
-                                VStack(alignment: .leading) {
-                                    TextHelvetica(content: "Up Next", size: 28)
-                                        .foregroundColor(Color("GrayFontOne"))
-                                    TextHelvetica(content: "Lower Body", size: 43)
-                                        .foregroundColor(Color("WhiteFontOne"))
-                                        .bold()
+                                if let workout = homePageViewModel.upcomingWorkout() {
+                                    VStack(alignment: .leading) {
+                                        TextHelvetica(content: "Up Next", size: 28)
+                                            .foregroundColor(Color("GrayFontOne"))
+                                        
+                                        TextHelvetica(content: workout.name, size: 43)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                            .bold()
+                                    }
+                                } else {
+                                    VStack(alignment: .leading) {
+                                        TextHelvetica(content: "Up Next", size: 28)
+                                            .foregroundColor(Color("GrayFontOne"))
+                                        
+                                        TextHelvetica(content: "Start New Workout", size: 43)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                            .bold()
+                                    }
                                 }
+                                
                                 Spacer()
                             }
                        
@@ -235,6 +248,9 @@ struct P1View: View {
                         HapticManager.instance.impact(style: .rigid)
                         if let workout = homePageViewModel.upcomingWorkout() {
                             let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: workout.name, exercises: workout.exercises, category: "not Important")
+                            self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
+                        } else {
+                            let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: "New Workout", exercises: [], category: "not Important")
                             self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
                         }
                        
@@ -308,6 +324,7 @@ struct P1View: View {
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
                         self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: false))
+
                         
                     }
                     HStack {

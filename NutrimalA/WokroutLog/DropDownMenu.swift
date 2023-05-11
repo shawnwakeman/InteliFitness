@@ -83,7 +83,7 @@ struct DropDownMenuView: View {
                             .foregroundColor(.clear)
                             .padding(.horizontal, 50)
                         
-                        ElapsedTime(viewModel: viewModel, step: 1, fontSize: 20)
+                        ElapsedTime(viewModel: viewModel, step: viewModel.workoutTime.timeStep, fontSize: 20)
            
                             .foregroundColor(Color("GrayFontOne"))
                      

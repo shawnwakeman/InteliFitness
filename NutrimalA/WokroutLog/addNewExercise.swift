@@ -31,21 +31,21 @@ struct BodyPartSelectionMenu: View {
     @Binding var selectedBodyPart: String
     
     let categories = [
-        "Neck",
+    
         "Shoulders",
         "Upper Back",
         "Chest",
         "Biceps",
         "Triceps",
-        "Forearms",
+    
         "Lower Back",
-        "Abdominals",
-        "Obliques",
+        "Abs",
+   
         "Glutes",
-        "Hip Flexors",
+  
         "Quadriceps",
         "Hamstrings",
-        "Calves",
+
         "Other",
         "Full Body",
         "Cardio"

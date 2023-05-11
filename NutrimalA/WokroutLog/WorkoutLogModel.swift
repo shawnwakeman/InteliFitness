@@ -23,7 +23,10 @@ struct WorkoutLogModel {
                   PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "ReorderSets"),
                 PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TitlePagePopUp"),
                 PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "SetMenuPopUp"),
-                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TimerPopUp")
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "TimerPopUp"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "PausePopUp"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "CancelPopUp"),
+                PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100, popUPUUID: UUID(), id: "FinishPopUp")
     ]
 //    var popUpRPE = PopUpData(popUpRowIndex: 100, popUpExersiseModuleIndex: 100)
     
@@ -134,6 +137,7 @@ struct WorkoutLogModel {
         var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         var backgroundTime: Date = Date()
         var timePreset: Int = 0
+        var timeStep = 1
 
     }
     
@@ -156,6 +160,7 @@ struct WorkoutLogModel {
     mutating func loadWorkout(workout: HomePageModel.Workout) {
         workoutTime.timeElapsed = 0
         exersiseModules = workout.exercises
+        
         
     }
     
@@ -249,6 +254,10 @@ struct WorkoutLogModel {
 
         
     }
+    
+    mutating func setTimeStep(step: Int) {
+        workoutTime.timeStep = step
+    }
     // dont save the shitters that have is last attached
     func saveExersiseModules() {
         let defaults = UserDefaults.standard
@@ -263,6 +272,24 @@ struct WorkoutLogModel {
             print("Failed to encode exersiseModules: \(error.localizedDescription)")
         }
     }
+    
+    mutating func loadExersiseModules() {
+        let defaults = UserDefaults.standard
+        
+        
+        
+        
+        if let savedData = defaults.object(forKey: "exersiseModules") as? Data {
+            do {
+                exersiseModules = try JSONDecoder().decode([ExersiseLogModule].self, from: savedData)
+                
+            } catch {
+                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+            }
+        }
+
+    }
+
     
     mutating func saveTimers() {
         let defaults = UserDefaults.standard
@@ -325,22 +352,6 @@ struct WorkoutLogModel {
         
     }
 
-    mutating func loadExersiseModules() {
-        let defaults = UserDefaults.standard
-        
-        
-        
-        
-        if let savedData = defaults.object(forKey: "exersiseModules") as? Data {
-            do {
-                exersiseModules = try JSONDecoder().decode([ExersiseLogModule].self, from: savedData)
-                
-            } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
-            }
-        }
-
-    }
 
     
     

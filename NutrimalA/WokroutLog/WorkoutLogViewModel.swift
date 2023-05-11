@@ -100,7 +100,7 @@ class WorkoutLogViewModel: ObservableObject {
             return workoutLogModel.popUps[popUpIndex]
         }
         else {
-            print("did not find pop up")
+            print("did not find pop up\(popUpId)")
             return workoutLogModel.popUps[0] // needs to be fixed
         }
 
@@ -111,6 +111,10 @@ class WorkoutLogViewModel: ObservableObject {
   
     
     // MARK: - Intent(s)
+    
+    func setTimeStep(step: Int) {
+        workoutLogModel.setTimeStep(step: step)
+    }
     
     func setExerciseModule(index: Int, exerciseModule: WorkoutLogModel.ExersiseLogModule) {
         workoutLogModel.setExerciseModule(index: index, exerciseModule: exerciseModule)

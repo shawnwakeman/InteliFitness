@@ -10,16 +10,41 @@ import SwiftUI
 struct TimerPopUp: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     @State private var search: String = ""
+    @State private var showingAlert: Bool = false
 
-
-    
+    func RPEexplain() -> Alert {
+        Alert(title: Text("Auto Rest Timer"),
+              message: Text("Do you want to delete all recurring instances of this workout or just this one?"))
+              
+             
+    }
     var body: some View {
         
         ZStack {
    
             VStack(spacing: 0) {
                 HStack {
-
+                    
+                    Button {
+                        HapticManager.instance.impact(style: .rigid)
+                        showingAlert.toggle()
+                    }
+                    label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .foregroundColor(Color("MainGray"))
+                            TextHelvetica(content: "?", size: 23)
+                                .bold()
+                                .foregroundColor(Color("LinkBlue"))
+                        
+                        }
+                        
+                            
+                    }.frame(width: 50, height: 30)
+                    Spacer()
 
                     TextHelvetica(content: "Rest Timer", size: 27)
                         .foregroundColor(Color("WhiteFontOne"))
@@ -77,6 +102,7 @@ struct TimerPopUp: View {
 //            .frame(width: getScreenBounds().width * 0.94, height: getScreenBounds().height * 0.045)
      
         }
+        .alert(isPresented: $showingAlert, content: RPEexplain)
        
 
        

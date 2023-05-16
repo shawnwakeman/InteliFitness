@@ -13,11 +13,12 @@ struct ScheduleWorkout: Identifiable, Codable {
     var exercises: [WorkoutLogModel.ExersiseLogModule]
     var recurringID: Int?
     var time: Date
+    var HasBeenDone: Bool
 }
 
 
 struct Schedule {
-    private(set) var workouts = [Date: [ScheduleWorkout]]()
+    var workouts = [Date: [ScheduleWorkout]]()
     
     private(set) var workoutQueue: HomePageModel.Workout?
 
@@ -110,6 +111,8 @@ struct Schedule {
             print("Failed to encode schedule: \(error.localizedDescription)")
         }
     }
+    
+
     
 
 

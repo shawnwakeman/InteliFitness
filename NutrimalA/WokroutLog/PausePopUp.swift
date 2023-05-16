@@ -98,12 +98,7 @@ struct PausePopUp: View {
         }
 
        
-        .onAppear {
-            time = Double(viewModel.restTime.timePreset)
-        }
-        .onChange(of: viewModel.restTime.timePreset) { newValue in
-            time = Double(newValue)
-        }
+
 
         .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.3)
         .background(Color("DBblack"))

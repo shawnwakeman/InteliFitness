@@ -31,7 +31,8 @@ struct WeeklyScheduleView: View {
 // Workout View
 struct WorkoutView: View {
     @Binding var workout: ScheduleWorkout
-
+    var HasBeenDone: Bool
+    @Binding var showingScheduleView: Bool
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
@@ -39,13 +40,21 @@ struct WorkoutView: View {
                 TextHelvetica(content: workout.name, size: 17)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
-                ZStack{
+            
+                Button {
+                    withAnimation(.spring()) {
+                        showingScheduleView.toggle()
+                    }
+              
                     
+                } label: {
                     Image("meatBalls")
                         .resizable()
                         .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
-
                 }
+                    
+
+              
             }.padding(.all, 10)
                 
                 .background(Color("MainGray"))
@@ -84,13 +93,22 @@ struct WorkoutView: View {
 
         }
         .frame(width: getScreenBounds().width * 0.443, height: getScreenBounds().height * 0.15)
-        .background(Color("DBblack"))
+        .background(Color("DBblack")) // Use a different color when `HasBeenDone` is true
         .cornerRadius(10)
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                
+                RoundedRectangle(cornerRadius: 10)
+                    .edgesIgnoringSafeArea(.all)
+                    .foregroundColor(.black)
+                    .opacity(HasBeenDone ? 0.4 : 0)
+            })
+            
         .padding(.vertical)
         .padding(.horizontal, 2)
+      
 
     }
     
@@ -117,6 +135,9 @@ struct MainWokroutView: View {
     @State private var selectedRecurringID: Int?
     @State private var selectedDay: Date?
     @State private var currentWeek: String = ""
+    
+    @State private var showingScheduleView: Bool = false
+    
     
 
     private var weeksWithWorkouts: Set<Int> {
@@ -163,7 +184,8 @@ struct MainWokroutView: View {
                             workouts[index]
                         }, set: { newValue in
                             workouts[index] = newValue
-                        }))
+                        }), HasBeenDone: workouts[index].HasBeenDone, showingScheduleView: $showingScheduleView)
+                    
                         Spacer()
                         
                             
@@ -239,52 +261,72 @@ struct MainWokroutView: View {
     var body: some View {
         let weeksWithWorkoutsSet = weeksWithWorkouts
         ZStack {
-            GeometryReader { g in
-                ScrollView(.vertical, showsIndicators: false) {
-                    
-                    VStack(spacing: 15) {
-                        GeometryReader { proxy in
-                            TopBar(topEdge: topEdge, name: "Schedule", offset: $offset, maxHeight: maxHeight)
-                                .offset(y: 45)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: getHeaderHeight(), alignment: .bottom)
-                                   
-                                    
-                                    
-                                    
-                            
-                                    
-
+     
+            ScrollView(.vertical, showsIndicators: false) {
+                
+                VStack(spacing: 15) {
+                    GeometryReader { proxy in
+                        TopBar(topEdge: topEdge, name: "Schedule", offset: $offset, maxHeight: maxHeight)
+                            .offset(y: 45)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: getHeaderHeight(), alignment: .bottom)
+                               
                                 
-                                    .background(Color("MainGray").opacity(topBarTitleOpacity()), in: CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
-                                .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
+                                
+                                
+                        
+                                
+
                             
-                        }
-                        .frame(height: maxHeight)
-                        .offset(y: -offset)
-                        .zIndex(1)
-            
-                      
+                                .background(Color("MainGray").opacity(topBarTitleOpacity()), in: CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
+                            .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
+                        
+                    }
+                    .frame(height: maxHeight)
+                    .offset(y: -offset)
+                    .zIndex(1)
+        
+                  
 
 
 
 
-                    
+                
 
 
-                        List {
+           
+                        VStack(alignment: .leading, spacing: 10) {
                             ForEach(weeks.indices.filter { weeksWithWorkoutsSet.contains($0) || isCurrentWeek(weeks[$0]) }, id: \.self) { weekIndex in
                                 let week = weeks[weekIndex]
-                         
-                                Section(header: (weeksWithWorkoutsSet.contains(weekIndex) || isCurrentWeek(week)) ? Text("Week of \(dateFormatter.string(from: week.first!))").font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (14 * 0.0025))).foregroundColor(Color("GrayFontOne")) : nil) {
-                                    
-                                    ForEach(week, id: \.self) { day in
-                                        VStack(alignment: .leading) {
-                                            TextHelvetica(content: dateFormatter.string(from: day), size: 18)
-                                  
-                                                .font(.headline)
+                                
+                                if weeksWithWorkoutsSet.contains(weekIndex) || isCurrentWeek(week) {
+                                    ZStack {
+                                       
+                                        HStack {
+                                            Text("Week of \(dateFormatter.string(from: week.first!))")
+                                                .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (14 * 0.0025)))
+                                                .foregroundColor(Color("GrayFontOne"))
                                                 .padding(.top)
+                                                .padding(.bottom, 5)
+                                            Spacer()
+                                        }
+                                        .background(Rectangle().frame(width: getScreenBounds().width).scaleEffect(1.2).foregroundColor(Color("MainGray")))
+                                      
+                                    }
+                                   
+                                        
+                                      
+                                   
+                                  
+                                }
+                                
+                                ForEach(week, id: \.self) { day in
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            TextHelvetica(content: dateFormatter.string(from: day), size: 18)
+                                                .font(.headline)
                                                 .foregroundColor(isCurrentDay(day) ? Color("LinkBlue"): Color("WhiteFontOne"))
+                                            
                                             if let workouts = schedule.getWorkouts(for: day), !workouts.isEmpty {
                                                 workoutsSection(for: day)
                                             } else if isCurrentWeek(week) {
@@ -292,35 +334,46 @@ struct MainWokroutView: View {
                                                     .foregroundColor(Color("GrayFontOne"))
                                             }
                                         }
-                                        .listRowBackground(Color("DBblack"))
-                                        .listStyle(GroupedListStyle())
+                                        .padding(.vertical)
+                                       
+                                        
+                                
+                                        Divider()
+                                     
+                                            .frame(width: getScreenBounds().width , alignment: .trailing)
                                       
+                                     
+                                          
+                                   
+                                        
                                     }
+                                    
+                                    
                                 }
-                              
                             }
                         }
-                        .frame(width: g.size.width - 1, height: g.size.height - 1, alignment: .center)
-                        .scrollContentBackground(.hidden)
-                        .background(Color("MainGray").edgesIgnoringSafeArea(.all))
-                        .listStyle(GroupedListStyle())
+                        .padding(.horizontal)
+                        .background(Color("DBblack").edgesIgnoringSafeArea(.all))
                         .navigationTitle("Workout Schedule")
-                        .padding(.bottom, 150)
+                        .padding(.bottom, 200)
                         .zIndex(0)
-                        
-                        
-                    }
+                   
+              
+
                     
-                    .modifier(OffsetModifier(modifierID: "SScroll", offset: $offset))
                     
-                 
                 }
-                .background(Color("MainGray"))
-                .coordinateSpace(name: "SScroll")
                 
+                .modifier(OffsetModifier(modifierID: "SScroll", offset: $offset))
                 
-                
+             
             }
+            .background(Color("MainGray"))
+            .coordinateSpace(name: "SScroll")
+                
+                
+                
+        
 
             .alert(isPresented: $showDeleteAlert, content: deleteWorkoutAlert)
       
@@ -347,7 +400,7 @@ struct MainWokroutView: View {
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                         .opacity(topBarTitleOpacity())
-
+                        .offset(x: getScreenBounds().width * -0.035)
                     Spacer() // This spacer will push the text and buttons apart
 
                     Button {
@@ -364,6 +417,7 @@ struct MainWokroutView: View {
                                 .foregroundColor(Color("LinkBlue"))
                             
                         }
+                        .offset( x: getScreenBounds().width * -0.08)
                         
                         .frame(width: 80)
                     }
@@ -384,6 +438,12 @@ struct MainWokroutView: View {
 
                 AddWorkoutView( schedule: schedule, viewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, showingAddWorkout: $showingAddWorkout)
                     .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
+                
+                let offset = schedule.ongoingWorkout ? 0 : 0.12
+                scheduleMenu(showingScheduleView: $showingScheduleView)
+                    .shadow(radius: 10)
+
+                    .position(x: getScreenBounds().width/2, y: showingScheduleView ? getScreenBounds().height * (0.52 + offset) : getScreenBounds().height * 1.5)
 
             }
 
@@ -670,10 +730,340 @@ struct AddWorkoutView: View {
         combinedComponents.minute = timeComponents.minute
 
         let dateTime = calendar.date(from: combinedComponents) ?? Date()
-        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, recurringID: recurringID, time: dateTime)
+        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, recurringID: recurringID, time: dateTime, HasBeenDone: false)
         schedule.addWorkout(to: dateTime, workout: workout, recurringOption: recurringOption)
 
 
     }
 
+}
+struct scheduleMenu: View {
+    @Binding var showingScheduleView: Bool
+    var body: some View {
+        // Add a blur effect to the background
+        VStack{
+
+
+            Spacer()
+            VStack {
+                
+
+                HStack {
+
+                    
+                    
+                    TextHelvetica(content: "Workout Options", size: 27)
+                        .foregroundColor(Color("WhiteFontOne"))
+                    Spacer()
+                    Button {
+                        HapticManager.instance.impact(style: .rigid)
+                        withAnimation(.spring()) {
+                            showingScheduleView.toggle()
+                        }
+
+                    }
+                    label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .foregroundColor(Color("MainGray"))
+                            Image(systemName: "xmark")
+                                .bold()
+                        }
+                        
+                            
+                    }.frame(width: 50, height: 30)
+                    
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                
+                Divider()
+                
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                
+                VStack {
+                   
+
+                        
+                    Group {
+
+                                        
+  
+                    Button {
+                      
+                      
+                       
+                    }
+                    label: {
+                        HStack{
+                            
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .foregroundColor(Color("LinkBlue"))
+                                .imageScale(.large)
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Replace exersise", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+
+                                
+                      
+                          
+                                  
+                           
+                           
+                            Image("sidwaysArrow")
+                                .resizable()
+                            
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                    }
+                    
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+                    
+//                    Button {
+//                        withAnimation(.spring()) {
+//                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+//                        }
+//
+//                        withAnimation(.linear(duration: 0.9)){
+//
+//                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+//                        }
+//
+//                    }
+//                    label: {
+//                        HStack{
+//
+//                            Image(systemName: "scalemass")
+//                                .foregroundColor(Color("LinkBlue"))
+//                                .imageScale(.large)
+//                                .bold()
+//                                .multilineTextAlignment(.leading)
+//
+//                            TextHelvetica(content: "Add Warm Up Sets", size: 18)
+//                                .foregroundColor(Color("WhiteFontOne"))
+//
+//                            Spacer()
+//                            TextHelvetica(content: "", size: 17)
+//                                .foregroundColor(Color("GrayFontOne"))
+//                            Image("sidwaysArrow")
+//                                .resizable()
+//
+//                                .aspectRatio(24/48, contentMode: .fit)
+//                                .frame(maxHeight: 22)
+//                        }
+//                        .padding(.horizontal)
+//                        .frame(maxHeight: 22)
+//                    }
+            
+                        Button {
+                            
+                         
+                            
+                
+
+                        }
+                        label: {
+                            HStack{
+                                
+                                Image(systemName: "clock")
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .imageScale(.large)
+                                    .bold()
+                                    .multilineTextAlignment(.leading)
+                                
+                                TextHelvetica(content: "Set auto rest time", size: 18)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                
+                                Spacer()
+
+                                
+                           
+                              
+                            }
+                            .padding(.horizontal)
+                            .frame(maxHeight: 22)
+                        }
+                     
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                    }
+                 
+                    Button {
+                       
+
+                    }
+                    label: {
+                        HStack{
+                            
+                            Image(systemName: "scalemass")
+                                .foregroundColor(Color("LinkBlue"))
+                                .imageScale(.large)
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Weight Unit", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+                            TextHelvetica(content: "Lbs", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                            Image("sidwaysArrow")
+                                .resizable()
+                            
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                        
+                        
+                    }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+                    HStack{
+                       
+                        TextHelvetica(content: "RPE", size: 20)
+                            .foregroundColor(Color("LinkBlue"))
+                    
+                        TextHelvetica(content: "Enable/Disable RPE", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                      
+                        Spacer()
+                        
+                         
+                                
+                   
+                        
+                
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                        
+                    
+                        .labelsHidden()
+                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
+                    }
+                   
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+
+                    
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+                    HStack{
+                        
+                        Image(systemName: "note.text")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Display Exersise Notes", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+                        
+                        
+                              
+                    
+                      
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                        
+                        
+                        .labelsHidden()
+                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
+                        
+                        
+                    }
+                   
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+
+                    .onTapGesture {
+                        // Call your function here
+                     
+                    }
+                    
+                    
+                    
+                    
+                    Divider()
+                    
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+
+
+                }
+                Button {
+  
+                   
+              
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "xmark")
+                            .foregroundColor(Color("MainRed"))
+                            .imageScale(.large)
+                            .bold()
+                    
+                        TextHelvetica(content: "Remove Exersise", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+
+                        
+                    }
+                    .offset(y: -5)
+                    .padding(.horizontal)
+                    .frame(maxHeight: 30)
+                    
+                }
+             
+               
+                
+            }
+            .frame(width: getScreenBounds().width * 0.95)
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            .padding()
+
+            
+        }
+     
+
+        .frame(height: getScreenBounds().height * 0.7)
+        
+
+
+            
+    }
 }

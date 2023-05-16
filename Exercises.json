@@ -12,7 +12,8 @@
         "Lower the barbell to your chest, keeping your elbows at a 45-degree angle from your body.",
         "Push the barbell back up until your arms are fully extended."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Back Squat",
@@ -27,7 +28,8 @@
         "Lower your body by bending your knees and pushing your hips back.",
         "Push through your heels to return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
 {
         "exerciseName": "Deadlift",
@@ -42,7 +44,8 @@
         "Keep your back straight and chest up as you lift the barbell off the ground by extending your hips and knees.",
         "Lower the barbell back to the ground by bending your knees and hips."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
 {
         "exerciseName": "Pull-up",
@@ -57,7 +60,8 @@
         "Pull your body up by bending your elbows and squeezing your shoulder blades together.",
         "Lower your body back down to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
 {
         "exerciseName": "Military Press",
@@ -71,7 +75,8 @@
         "Press the barbell overhead by extending your arms.",
         "Pause for a moment at the top, then lower the barbell back to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Lat Pulldown",
@@ -86,7 +91,8 @@
         "Pull the bar down to your upper chest by bending your elbows and squeezing your shoulder blades together.",
         "Slowly extend your arms to return the bar to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Reverse Pec Deck",
@@ -101,7 +107,8 @@
         "Pull the handles back by squeezing your shoulder blades together.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Cable Curls",
@@ -116,7 +123,8 @@
         "Curl the handle toward your chest by bending your elbows.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Barbell Rows",
@@ -131,7 +139,8 @@
         "Pull the barbell toward your lower chest by bending your elbows and squeezing your shoulder blades together.",
         "Slowly lower the barbell back to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Pec Deck",
@@ -146,7 +155,8 @@
         "Push the levers together by squeezing your chest muscles.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Dips",
@@ -160,7 +170,8 @@
         "Lower your body by bending your elbows until your upper arms are parallel to the ground.",
         "Push through your palms to return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Tricep Pushdowns",
@@ -175,7 +186,8 @@
         "Push the handle down by extending your elbows until your arms are straight.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Incline Press",
@@ -190,7 +202,8 @@
         "Press the dumbbells up until your arms are fully extended.",
         "Lower the dumbbells back to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Romanian Deadlift",
@@ -204,7 +217,8 @@
         "Keeping your back straight and knees slightly bent, hinge forward at your hips to lower the barbell.",
         "Push through your heels to return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Leg Press",
@@ -219,7 +233,8 @@
         "Push through your heels to extend your legs and move the platform away from your body.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Leg Extension",
@@ -234,7 +249,8 @@
         "Extend your legs by pushing against the padded lever.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 0
     },
     {
         "exerciseName": "Hamstring Curl",
@@ -249,6 +265,7 @@
         "Curl your legs toward your glutes by bending your knees.",
         "Slowly return to the starting position."
         ],
-        "exerciseHistory": []
+        "exerciseHistory": [],
+        "moduleType": 1
     }
 ]

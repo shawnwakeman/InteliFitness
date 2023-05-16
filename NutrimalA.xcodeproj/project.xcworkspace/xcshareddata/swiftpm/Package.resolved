@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "polynomialregressionswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/paescebu/PolynomialRegressionSwift",
+      "state" : {
+        "branch" : "master",
+        "revision" : "5d8c4faa49c5979bcb35895364938b1823c36fe9"
+      }
+    }
+  ],
+  "version" : 2
+}

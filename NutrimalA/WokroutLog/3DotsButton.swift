@@ -212,47 +212,8 @@ struct DotsMenuView: View {
                             .overlay(Color("BorderGray"))
                     }
                  
-                    Button {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
-                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
-                        }
-   
-                        withAnimation(.spring()){
-                       
-                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
-                        }
-
-                    }
-                    label: {
-                        HStack{
-                            
-                            Image(systemName: "scalemass")
-                                .foregroundColor(Color("LinkBlue"))
-                                .imageScale(.large)
-                                .bold()
-                                .multilineTextAlignment(.leading)
-                            
-                            TextHelvetica(content: "Weight Unit", size: 18)
-                                .foregroundColor(Color("WhiteFontOne"))
-                            
-                            Spacer()
-                            TextHelvetica(content: "Lbs", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
-                            Image("sidwaysArrow")
-                                .resizable()
-                            
-                                .aspectRatio(24/48, contentMode: .fit)
-                                .frame(maxHeight: 22)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxHeight: 22)
-                        
-                        
-                    }
-                    Divider()
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
-                    
+                  
+               
                     HStack{
                        
                         TextHelvetica(content: "RPE", size: 20)
@@ -408,7 +369,7 @@ struct DotsMenuView: View {
 //        }
         .onChange(of: viewModel.getPopUp(popUpId: "popUpDotsMenu")) { newValue in
             let index = newValue.popUpExersiseModuleIndex
-            if let safeIndex = viewModel.exersiseModules[safe: index] {
+            if viewModel.exersiseModules[safe: index] != nil {
                
                 showingRPE = viewModel.exersiseModules[index].displayingRPE
                 showingNotes = viewModel.exersiseModules[index].displayingNotes
@@ -418,7 +379,7 @@ struct DotsMenuView: View {
             
         }
 
-        .frame(height: getScreenBounds().height * 0.7)
+        .frame(height: getScreenBounds().height * 0.63)
         
 
 

@@ -22,6 +22,7 @@ struct WorkoutLogView: View {
     @State private var newModuleOpacity = false
     @State private var workoutName: String = ""
     @State private var NamePopUp: Bool = false
+    @State private var isFocused: Bool = false
  
  
 
@@ -45,6 +46,9 @@ struct WorkoutLogView: View {
                                     .bold()
                                     .multilineTextAlignment(.leading)
                                     .scaledToFit()
+                                    .onTapGesture {
+                                        workoutName = ""
+                                    }
                                     
                                 
                                 
@@ -186,8 +190,8 @@ struct WorkoutLogView: View {
                         workoutLogViewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
                         workoutLogViewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
                         workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerPopUp")
-        //                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
-        //                workoutLogViewModel.setPopUpState(state: false, popUpId: "SetUnitSubMenu")
+                       
+                        
                         
                     }
                 }
@@ -300,6 +304,16 @@ struct WorkoutLogView: View {
                 
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
                     .edgesIgnoringSafeArea(.all)
+                    .opacity(workoutLogViewModel.getPopUp(popUpId: "FinishPopUp").RPEpopUpState ? 1 : 0)
+                    .scaleEffect(1.3)
+                
+                FinishPopUp(homePageViewModel: homePageVeiwModel, viewModel: workoutLogViewModel)
+         
+
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "FinishPopUp").RPEpopUpState ? getScreenBounds().height * 0.43 : getScreenBounds().height * 1.5)
+                
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "PausePopUp").RPEpopUpState ? 1 : 0)
                     .scaleEffect(1.3)
                 
@@ -314,12 +328,8 @@ struct WorkoutLogView: View {
 
                     .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
 
-                FinishPopUp(viewModel: workoutLogViewModel)
-                    .opacity(workoutLogViewModel.getPopUp(popUpId: "FinishPopUp").RPEpopUpState ? 1 : 0)
-
-                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "FinishPopUp").RPEpopUpState ? 1 : 0.5, anchor: .top)
                 
-                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+              
             
                 PausePopUp(viewModel: workoutLogViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "PausePopUp").RPEpopUpState ? 1 : 0)
@@ -411,6 +421,7 @@ struct WorkoutLogView: View {
                 homePageVeiwModel.loadHistory()
                 workoutLogViewModel.loadTimers()
                 homePageVeiwModel.loadSchedule()
+                cancelSpecificNotification()
              
                 print("for")
             case .inactive:
@@ -426,6 +437,14 @@ struct WorkoutLogView: View {
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
 
                 homePageVeiwModel.saveMyWorkouts()
+                if homePageVeiwModel.ongoingWorkout {
+                    
+                
+                    let timeInterval: TimeInterval = 30 * 60
+
+                    scheduleSpecificNotification(title: "Ongoing Workout", body: "You still have an ongoing workout, Did you mean to finish it.", interval: timeInterval)
+             
+                }
                 print("back")
             @unknown default:
                 fatalError("Unknown scene phase")
@@ -1271,22 +1290,7 @@ struct LogModuleHeader: View{
                 
       
                 
-                ZStack{
-                    Image("dataIcon")
-                        .resizable()
-                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
-                    Button(action: {
-                        HapticManager.instance.impact(style: .rigid)
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        withAnimation(.spring()) {
-                            viewModel.setPopUpState(state: true, popUpId: "popUpDataMetrics")
-                            viewModel.setPopUpCurrentRow(exersiseModuleID: parentModuleID, RowID: 0, popUpId: "popUpDataMetrics", exerciseUUID: UUID())
-                        }}, label: {
-                            RoundedRectangle(cornerRadius: 3)
-                                  .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                            .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
-                    
-                }
+        
 
                 ZStack{
                     
@@ -1395,8 +1399,39 @@ struct CoreLogModule: View {
             
          
                 VStack(alignment: .leading, spacing: 0){
-                    Header(viewModel: viewModel, parentModuleID: ModuleID)
-                    ContentGrid(viewModel: viewModel, ModuleID: ModuleID, moduleUUID: moduleUUID, isLive: isLive, homePageViewModel: homePageViewModel)
+                    if let module = viewModel.exerciseModule(at: ModuleID) {
+//                        let _ = print(module.moduleType)
+
+                        if module.moduleType == WorkoutLogModel.moduleType.reps {
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                        }
+                        else if module.moduleType == WorkoutLogModel.moduleType.weightedReps {
+                            Header(viewModel: viewModel, parentModuleID: ModuleID, plusOrMinus: "+")
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                        }
+                        else if module.moduleType == WorkoutLogModel.moduleType.assistedReps {
+                            Header(viewModel: viewModel, parentModuleID: ModuleID, plusOrMinus: "-")
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                        }
+                        else if module.moduleType == WorkoutLogModel.moduleType.duration {
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                        }
+                        else if module.moduleType == WorkoutLogModel.moduleType.cardio {
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                        }
+                        else {
+                            Header(viewModel: viewModel, parentModuleID: ModuleID)
+                        }
+                        
+                        ContentGrid(viewModel: viewModel, ModuleID: ModuleID, moduleUUID: moduleUUID, isLive: isLive, homePageViewModel: homePageViewModel)
+                    } else {
+                        EmptyView()
+                    }
+                   
+                   
+                
+                   
+                   
                     
                 }
               
@@ -1421,14 +1456,17 @@ struct PopupView: View {
     @State private var isToggled = false
     @State private var selectedRPE = 0.0
     var isLive: Bool
-
+    @State private var showDeleteAlert: Bool = false
     var body: some View {
         // Add a blur effect to the background
         
         VStack {
             HStack {
                 
-                Button {HapticManager.instance.impact(style: .rigid)}
+                Button {
+                    HapticManager.instance.impact(style: .rigid)
+                    showDeleteAlert.toggle()
+                }
                 label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 4)
@@ -1490,6 +1528,7 @@ struct PopupView: View {
                                 if viewModel.exersiseModules[viewModel.lastModuleUsed].setRows[viewModel.lastRowUsed].prevouslyChecked == false {
                                     viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[popUp.popUpExersiseModuleIndex].restTime)
                                     viewModel.restAddToTime(step: 1, time: viewModel.restTime.timePreset)
+                                    
                                     scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
                                 }
                                 viewModel.setPrevouslyChecked(exersiseModuleID: viewModel.lastModuleUsed, RowID: viewModel.lastRowUsed, state: true)
@@ -1691,7 +1730,7 @@ struct PopupView: View {
             
         }
         .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.33)
-
+        .alert(isPresented: $showDeleteAlert, content: RPEexplain)
         .background(Color("DBblack"))
         .cornerRadius(10)
         .overlay(
@@ -1701,6 +1740,13 @@ struct PopupView: View {
 
 
             
+    }
+    
+    func RPEexplain() -> Alert {
+        Alert(title: Text("RPE"),
+              message: Text("Do you want to delete all recurring instances of this workout or just this one?"))
+              
+             
     }
 }
 
@@ -1721,6 +1767,8 @@ struct SuperTextField: View {
         }
     }
 }
+
+
 
 struct ContentGrid: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
@@ -1761,7 +1809,14 @@ struct ContentGrid: View {
                       
                             
                         } else {
-                            WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                            if module.moduleType == WorkoutLogModel.moduleType.reps {
+                                WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                            }
+                           
+                            else {
+                                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                            }
+                            
                         }
                     } else {
                         if let mostRecent = exercise.exerciseHistory.last {
@@ -1815,6 +1870,7 @@ struct ContentGrid: View {
 struct Header: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var parentModuleID: Int
+    var plusOrMinus: String = ""
     var body: some View{
         ZStack{
             Rectangle()
@@ -1834,7 +1890,7 @@ struct Header: View {
                         .offset(x: -5)
                     Spacer()
                     
-                    TextHelvetica(content: "Lbs", size: 20)
+                    TextHelvetica(content: plusOrMinus + "Lbs", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
@@ -1894,6 +1950,7 @@ struct DividerView: View {
         }
     }
 }
+
 
 
 
@@ -1962,6 +2019,43 @@ func scheduleNotification(title: String, body: String, interval: TimeInterval) {
             print("Notification scheduled with identifier: \(requestIdentifier)")
         }
     }
+}
+
+func scheduleSpecificNotification(title: String, body: String, interval: TimeInterval) {
+    let notificationCenter = UNUserNotificationCenter.current()
+
+    // Create the content of the notification
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+
+    content.sound = UNNotificationSound.defaultRingtone // should add custom sound later
+
+    // Create a trigger for the notification
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+
+    // Use a specific identifier for the request
+    let specificRequestIdentifier = "yourAppName.specificNotification"
+    let request = UNNotificationRequest(identifier: specificRequestIdentifier, content: content, trigger: trigger)
+
+    // Add the request to the notification center
+    notificationCenter.add(request) { error in
+        if let error = error {
+            print("Error scheduling specific notification: \(error)")
+        } else {
+            print("Specific notification scheduled with identifier: \(specificRequestIdentifier)")
+        }
+    }
+}
+
+func cancelSpecificNotification() {
+    let notificationCenter = UNUserNotificationCenter.current()
+
+    // Use the specific identifier for the request
+    let specificRequestIdentifier = "yourAppName.specificNotification"
+    
+    // Remove the specific pending notification request
+    notificationCenter.removePendingNotificationRequests(withIdentifiers: [specificRequestIdentifier])
 }
 
  

@@ -159,7 +159,7 @@ struct MyWorkoutsPageMain: View {
                                         
                                         HStack {
                                 
-                                TextHelvetica(content: "My Workouts", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
+                                TextHelvetica(content: "Templates", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
                                 Spacer()
                                 NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden)) {
                                     ZStack {
@@ -200,13 +200,8 @@ struct MyWorkoutsPageMain: View {
                                 }
                                 
                             }
-                            HStack {
-                                TextHelvetica(content: "Templates", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
-                                Spacer()
-                            }
-                            workoutSection(title: "Back Workout")
-                            workoutSection(title: "Chest Workout")
-                            workoutSection(title: "Leg Workout")
+                    
+
                             
                             
                             Spacer()
@@ -451,6 +446,7 @@ struct workoutLauncher: View {
                         
                         if isForAddingToSchedule {
                             Button(action: {
+                                presentationMode.wrappedValue.dismiss()
                                 viewModel.addToWorkoutQueue(workout: workout)
                                 viewModel.showingExercises = false
                             }) {
@@ -497,7 +493,7 @@ struct workoutLauncher: View {
                                     viewModel.setWorkoutLogModuleStatus(state: true)
                            
                                 }
-                                
+                                presentationMode.wrappedValue.dismiss()
                                 
                                 
                             }

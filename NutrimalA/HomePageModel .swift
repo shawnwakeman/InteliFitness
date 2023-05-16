@@ -61,6 +61,7 @@ struct HomePageModel {
         var notes: String = ""
         var exercises: [WorkoutLogModel.ExersiseLogModule]
         var category: String
+        var competionDate: Date
     }
     
     
@@ -77,6 +78,7 @@ struct HomePageModel {
         var restTime: Int
         var instructions: [String]
         var exerciseHistory: [WorkoutLogModel.ExersiseLogModule] = []
+        var moduleType: WorkoutLogModel.moduleType
     }
     
     mutating func setWorkoutLogModuleStatus(state: Bool) {
@@ -106,9 +108,11 @@ struct HomePageModel {
         
         for exercise in removedBlankRows {
             let exerciseID = exercise.ExersiseID
-            exercises[exerciseID].exerciseHistory.append(exercise)
+            var updatedExercise = exercise
+            updatedExercise.DateCompleted = Date()
+            exercises[exerciseID].exerciseHistory.append(updatedExercise)
         }
-        history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows, category: ""))
+        history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows, category: "", competionDate: Date()))
     }
     
     mutating func addToMyExercises(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
@@ -119,7 +123,7 @@ struct HomePageModel {
    
         
         
-        myExercises.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: filterExerciseModules, category: ""))
+        myExercises.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: filterExerciseModules, category: "", competionDate: Date()))
     }
     
     mutating func deleteFromHistory(workoutID: UUID) {

@@ -1,23 +1,85 @@
 //
-//  WorkoutSetRowView.swift
+//  RepsOnly.swift
 //  NutrimalA
 //
-//  Created by Shawn Wakeman on 4/7/23.
+//  Created by Shawn Wakeman on 5/14/23.
 //
 
-import SwiftUI
 import Combine
-struct WorkoutSetRowView: View{
+import SwiftUI
+
+struct HeaderRepsOnly: View {
+    @ObservedObject var viewModel: WorkoutLogViewModel
+    var parentModuleID: Int
+    var body: some View{
+        ZStack{
+            Rectangle()
+                .cornerRadius(4, corners: [.topLeft, .topRight])
+                .foregroundColor(Color("MainGray"))
+                .aspectRatio(7.3/1, contentMode: .fill)
+            VStack{
+                HStack{
+                    
+                    TextHelvetica(content: "Set", size: 20)
+                        .foregroundColor(Color("WhiteFontOne"))
+                  
+                        .padding(.leading, 35)
+                    Spacer()
+              
+                    TextHelvetica(content: "Previous", size: 20)
+                        .foregroundColor(Color("WhiteFontOne"))
+                        .offset(x: -18)
+                    Spacer()
+
+                    TextHelvetica(content: "Reps", size: 20)
+                        .padding(.trailing)
+                        .foregroundColor(Color("WhiteFontOne"))
+                        .offset(x: 7)
+                  Spacer()
+                Button {
+                    HapticManager.instance.impact(style: .rigid)
+          
+                    viewModel.addEmptySet(moduleID: parentModuleID)
+          
+
+                }
+                
+                label: {
+                    Image(systemName: "plus.app.fill")
+                        .scaleEffect(1.8)
+                        .foregroundColor(Color("LinkBlue"))
+                        .offset(x: 8)
+                   
+
+                    
+                    
+                }
+
+                }.offset(x: -20,y: 2)
+                
+                
+         
+            }
+
+        }
+        Divider()
+            .frame(height: borderWeight)
+            .overlay(Color("BorderGray"))
+            
+    }
+}
+
+
+struct WorkoutSetRowViewRepsOnly: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
     var moduleID: Int
     var moduleUUID: UUID
     var previous: String
-    @State private var lbsTextField: String = ""
+    @State private var lbsTextField: String = "0"
     @State private var repsTextField: String = ""
     @State private var familyName: String = ""
     @State private var RPEpopUpDisplayed = false
-
 
     
     var body: some View{
@@ -30,10 +92,10 @@ struct WorkoutSetRowView: View{
             
             previousSetView(previous: previous)
             
-            lbsTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, lbsTextField: $lbsTextField)
+         
             
             Divider()
-                .frame(width: borderWeight)
+                .frame(width: borderWeight - 0.6)
                 .overlay(Color("BorderGray"))
   
             
@@ -50,9 +112,9 @@ struct WorkoutSetRowView: View{
                 
                 
             }
-            .frame(width: getScreenBounds().width * 0.2)
+            .frame(width: getScreenBounds().width * 0.4)
           
-            
+
             .background(Color("DDB"))
 
             Divider()
@@ -65,7 +127,8 @@ struct WorkoutSetRowView: View{
             checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
             
         }
-        .frame(height: getScreenBounds().height * 0.045)
+        .frame(width: getScreenBounds().width * 0.94)
+        .frame(height: getScreenBounds().height * 0.046)
         
     }
     
@@ -144,7 +207,7 @@ struct WorkoutSetRowView: View{
                     lbsTextField = lbsTextField
                 }
 
-                .frame(width: getScreenBounds().width * 0.18, height: getScreenBounds().height * 0.045)
+                .frame(width: getScreenBounds().width * 0.28, height: getScreenBounds().height * 0.045)
                 .background(.clear)
                 .multilineTextAlignment(.center)
                 .background(Color("DDB"))
@@ -208,7 +271,7 @@ struct WorkoutSetRowView: View{
                         repsTextField = repsTextField
                     }
 
-                    .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
+                    .frame(width: getScreenBounds().width * 0.28, height: getScreenBounds().height * 0.045)
                     .background(.clear)
                     .multilineTextAlignment(.center)
                     .background(Color("DDB"))
@@ -374,7 +437,7 @@ struct WorkoutSetRowView: View{
 
                                         if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
 
-                                          
+
                                             viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
                                             scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
                                         }
@@ -405,18 +468,11 @@ struct WorkoutSetRowView: View{
 
                 
             }
+             
 
 
             
             
         }
     }
-}
-
-
-
-extension Collection where Indices.Iterator.Element == Index {
-   public subscript(safe index: Index) -> Iterator.Element? {
-     return (startIndex <= index && index < endIndex) ? self[index] : nil
-   }
 }

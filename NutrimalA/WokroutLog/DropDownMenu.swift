@@ -102,18 +102,14 @@ struct DropDownMenuView: View {
                         
                         Button {
     
+
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             homePageViewModel.addToHistory(workoutName: "Insert Workout Name", exersiseModules: viewModel.exersiseModules)
-                            viewModel.setWorkoutTime(time: 0)
-                            
                             withAnimation(.spring()) {
-                                homePageViewModel.setOngoingState(state: false)
-                                homePageViewModel.setWorkoutLogModuleStatus(state: false)
-                       
+                                viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
                             }
                             
-                            homePageViewModel.saveExersiseHistory()
-                            cancelNotifications()
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                         
                             
                          
                            

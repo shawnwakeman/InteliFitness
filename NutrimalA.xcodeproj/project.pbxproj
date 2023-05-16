@@ -32,6 +32,10 @@
 		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
+		D0476C722A10265700D9541E /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0476C712A10265700D9541E /* Charts.swift */; };
+		D0476C752A10269400D9541E /* PolynomialRegressionSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D0476C742A10269400D9541E /* PolynomialRegressionSwift */; };
+		D0476C772A10347F00D9541E /* ExerciseChartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0476C762A10347F00D9541E /* ExerciseChartDataModel.swift */; };
+		D0476C792A11BB5200D9541E /* RepsOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0476C782A11BB5200D9541E /* RepsOnly.swift */; };
 		D050B42129FC8BA400BC5442 /* exercisePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050B42029FC8BA400BC5442 /* exercisePage.swift */; };
 		D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */; };
 		D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */; };
@@ -107,6 +111,9 @@
 		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D0476C712A10265700D9541E /* Charts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
+		D0476C762A10347F00D9541E /* ExerciseChartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseChartDataModel.swift; sourceTree = "<group>"; };
+		D0476C782A11BB5200D9541E /* RepsOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsOnly.swift; sourceTree = "<group>"; };
 		D050B42029FC8BA400BC5442 /* exercisePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exercisePage.swift; sourceTree = "<group>"; };
 		D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCompletedPopUp.swift; sourceTree = "<group>"; };
 		D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exercises.json; sourceTree = "<group>"; };
@@ -146,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0476C752A10269400D9541E /* PolynomialRegressionSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +193,7 @@
 				D074D6532A0C83CD00BAD1C2 /* CancelPopUp.swift */,
 				D074D6552A0C845C00BAD1C2 /* FinishPopUp.swift */,
 				D074D6572A0C847B00BAD1C2 /* PausePopUp.swift */,
+				D0476C782A11BB5200D9541E /* RepsOnly.swift */,
 			);
 			path = WokroutLog;
 			sourceTree = "<group>";
@@ -196,7 +205,6 @@
 				D008F48F29F36D9900B1C6EC /* dataController.swift */,
 				D0685BB72A084AFD00F66C75 /* CustomHeader.swift */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
-				D0C884062A0447820035D66C /* Schedule.swift */,
 			);
 			path = DataModelMain;
 			sourceTree = "<group>";
@@ -247,8 +255,11 @@
 			children = (
 				D008F48929F364E800B1C6EC /* DataModelMain */,
 				D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */,
+				D0C884062A0447820035D66C /* Schedule.swift */,
 				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
 				D050B42029FC8BA400BC5442 /* exercisePage.swift */,
+				D0476C712A10265700D9541E /* Charts.swift */,
+				D0476C762A10347F00D9541E /* ExerciseChartDataModel.swift */,
 				D0A8B44229F45E5F001898BA /* HistoryPage.swift */,
 				D008F48029F1E7CD00B1C6EC /* HomePageView.swift */,
 				D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */,
@@ -306,6 +317,9 @@
 				D008F4D129F42BE000B1C6EC /* PBXTargetDependency */,
 			);
 			name = NutrimalA;
+			packageProductDependencies = (
+				D0476C742A10269400D9541E /* PolynomialRegressionSwift */,
+			);
 			productName = NutrimalA;
 			productReference = D0370E1E29CF84DD005682D8 /* NutrimalA.app */;
 			productType = "com.apple.product-type.application";
@@ -337,6 +351,9 @@
 				Base,
 			);
 			mainGroup = D0370E1529CF84DD005682D8;
+			packageReferences = (
+				D0476C732A10269400D9541E /* XCRemoteSwiftPackageReference "PolynomialRegressionSwift" */,
+			);
 			productRefGroup = D0370E1F29CF84DD005682D8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -400,6 +417,7 @@
 				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
 				D0C884092A05FE780035D66C /* WorkoutSetRowViewForCreator.swift in Sources */,
 				D050B42129FC8BA400BC5442 /* exercisePage.swift in Sources */,
+				D0476C722A10265700D9541E /* Charts.swift in Sources */,
 				D063801429F71C7500E2B0F7 /* ReorderSets.swift in Sources */,
 				D008F49029F36D9900B1C6EC /* dataController.swift in Sources */,
 				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
@@ -408,6 +426,7 @@
 				D008F4DA29F42FF900B1C6EC /* timerAtribute.swift in Sources */,
 				D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */,
 				D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */,
+				D0476C792A11BB5200D9541E /* RepsOnly.swift in Sources */,
 				D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */,
 				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,
 				D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */,
@@ -417,6 +436,7 @@
 				D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */,
 				D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */,
 				D0B9068B29FC54FC001F5A67 /* addNewExercise.swift in Sources */,
+				D0476C772A10347F00D9541E /* ExerciseChartDataModel.swift in Sources */,
 				D074D6582A0C847B00BAD1C2 /* PausePopUp.swift in Sources */,
 				D0C884072A0447820035D66C /* Schedule.swift in Sources */,
 				D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */,
@@ -701,6 +721,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D0476C732A10269400D9541E /* XCRemoteSwiftPackageReference "PolynomialRegressionSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/paescebu/PolynomialRegressionSwift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D0476C742A10269400D9541E /* PolynomialRegressionSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0476C732A10269400D9541E /* XCRemoteSwiftPackageReference "PolynomialRegressionSwift" */;
+			productName = PolynomialRegressionSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */ = {

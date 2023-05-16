@@ -55,11 +55,15 @@ struct DataMetricsPopUp: View {
                 .overlay(Color("BorderGray"))
             
             VStack {
+      
+                   
                 DisplayRow(metric: "Total Volume", value: "1203 lbs")
                 DisplayRow(metric: "Total Reps", value: "120")
                 DisplayRow(metric: "Weight/Set", value: "142.2 lbs")
                 DisplayRow(metric: "Reps/Set", value: "12.2")
                 DisplayRow(metric: "PR Sets", value: "3/8")
+            
+                
 
             }
             

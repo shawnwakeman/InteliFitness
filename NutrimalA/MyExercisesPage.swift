@@ -179,9 +179,7 @@ struct MyExercisesPageMain: View {
                                                 
                                                 
                                             }
-                                            .onTapGesture {
-                                                HapticManager.instance.impact(style: .rigid)
-                                            }
+                                        
                                             .frame(width: 35, height: 35)
                                             .opacity(getOpacity2())
                                             .offset(y: 30)
@@ -225,7 +223,7 @@ struct MyExercisesPageMain: View {
                                                     HapticManager.instance.impact(style: .rigid)
                                                 }) {
                                                     
-                                                    Text("Any Equipment")
+                                                    Text("Any Category")
                                                     
                                                     
                                                     

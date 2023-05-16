@@ -53,6 +53,7 @@ struct Home: View {
     @State private var showTitle = true
     @State private var rectanglePosition: CGFloat = .zero
     @State private var showingExpandedExercise: Bool = false
+    @State private var showingHistoryMenu: Bool = false
     @State private var selectedWorkout: HomePageModel.Workout?
     private let scrollId = "scrollId"
 
@@ -146,6 +147,10 @@ struct Home: View {
                                                         HapticManager.instance.impact(style: .rigid)
                                                         viewModel.deleteExerciseHistory(workoutID: workout.id)
                                                         viewModel.saveExersiseHistory()
+                                                        withAnimation(.spring()) {
+                                                            showingHistoryMenu.toggle()
+                                                            
+                                                        }
                                                         
                                                     }, label: {
                                                         Image("meatBalls")
@@ -357,12 +362,24 @@ struct Home: View {
                     .edgesIgnoringSafeArea(.all)
                     .opacity(showingExpandedExercise ? 1 : 0)
 
-
+              
                 if let workoutToUse = selectedWorkout {
                     let offset = viewModel.ongoingWorkout ? 0 : 0.07
                     ExpandedHistory(workout: workoutToUse, showingExpandedExercise: $showingExpandedExercise)
                         .position(x: getScreenBounds().width/2, y: showingExpandedExercise ? getScreenBounds().height * (0.47 + offset) : getScreenBounds().height * 1.5)
                 }
+                
+                Rectangle()
+                    .edgesIgnoringSafeArea(.all)
+                    .foregroundColor(.black)
+                    .opacity(showingHistoryMenu ? 0.4 : 0)
+                
+                let offset = viewModel.ongoingWorkout ? 0 : 0.12
+                historyMenu(showingHistoryMenu: $showingHistoryMenu)
+                    .shadow(radius: 10)
+
+                    .position(x: getScreenBounds().width/2, y: showingHistoryMenu ? getScreenBounds().height * (0.52 + offset) : getScreenBounds().height * 1.5)
+                
 
             }
         }
@@ -370,43 +387,7 @@ struct Home: View {
        
     }
     
-    func calculateBestSet(rows: [WorkoutLogModel.ExersiseSetRow]) -> WorkoutLogModel.ExersiseSetRow? {
-        var mostDifficultSet: WorkoutLogModel.ExersiseSetRow? = nil
-        var highestDifficulty: Float = 0
-
-        for row in rows {
-            var nonZeroValues: Int = 0
-            var totalValue: Float = 0
-
-            if row.repMetric != 0 {
-                totalValue += row.repMetric
-                nonZeroValues += 1
-            }
-
-            if row.weight != 0 {
-                totalValue += row.weight
-                nonZeroValues += 1
-            }
-
-            if row.reps != 0 {
-                totalValue += Float(row.reps)
-                nonZeroValues += 1
-            }
-
-            if nonZeroValues == 0 {
-                continue
-            }
-
-            let averageValue: Float = totalValue / Float(nonZeroValues)
-
-            if averageValue > highestDifficulty {
-                highestDifficulty = averageValue
-                mostDifficultSet = row
-            }
-        }
-
-        return mostDifficultSet
-    }
+   
 
     struct ExpandedHistory: View {
         var workout: HomePageModel.Workout
@@ -656,4 +637,375 @@ struct History: View {
     var body: some View {
        Text("view ho")
     }
+}
+
+
+struct historyMenu: View {
+    @Binding var showingHistoryMenu: Bool
+    var body: some View {
+        // Add a blur effect to the background
+        VStack{
+
+
+            Spacer()
+            VStack {
+                
+
+                HStack {
+
+                    
+                    
+                    TextHelvetica(content: "History Options", size: 27)
+                        .foregroundColor(Color("WhiteFontOne"))
+                    Spacer()
+                    Button {
+                        HapticManager.instance.impact(style: .rigid)
+                        withAnimation(.spring()) {
+                                showingHistoryMenu.toggle()
+                        }
+
+                    }
+                    label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .foregroundColor(Color("MainGray"))
+                            Image(systemName: "xmark")
+                                .bold()
+                        }
+                        
+                            
+                    }.frame(width: 50, height: 30)
+                    
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                
+                Divider()
+                
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                
+                VStack {
+                   
+
+                        
+                    Group {
+
+                                        
+  
+                    Button {
+                      
+                      
+                       
+                    }
+                    label: {
+                        HStack{
+                            
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .foregroundColor(Color("LinkBlue"))
+                                .imageScale(.large)
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Replace exersise", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+
+                                
+                      
+                          
+                                  
+                           
+                           
+                            Image("sidwaysArrow")
+                                .resizable()
+                            
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                    }
+                    
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+                    
+//                    Button {
+//                        withAnimation(.spring()) {
+//                            viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
+//                        }
+//
+//                        withAnimation(.linear(duration: 0.9)){
+//
+//                            viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+//                        }
+//
+//                    }
+//                    label: {
+//                        HStack{
+//
+//                            Image(systemName: "scalemass")
+//                                .foregroundColor(Color("LinkBlue"))
+//                                .imageScale(.large)
+//                                .bold()
+//                                .multilineTextAlignment(.leading)
+//
+//                            TextHelvetica(content: "Add Warm Up Sets", size: 18)
+//                                .foregroundColor(Color("WhiteFontOne"))
+//
+//                            Spacer()
+//                            TextHelvetica(content: "", size: 17)
+//                                .foregroundColor(Color("GrayFontOne"))
+//                            Image("sidwaysArrow")
+//                                .resizable()
+//
+//                                .aspectRatio(24/48, contentMode: .fit)
+//                                .frame(maxHeight: 22)
+//                        }
+//                        .padding(.horizontal)
+//                        .frame(maxHeight: 22)
+//                    }
+            
+                        Button {
+                            
+                         
+                            
+                
+
+                        }
+                        label: {
+                            HStack{
+                                
+                                Image(systemName: "clock")
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .imageScale(.large)
+                                    .bold()
+                                    .multilineTextAlignment(.leading)
+                                
+                                TextHelvetica(content: "Set auto rest time", size: 18)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                
+                                Spacer()
+
+                                
+                           
+                              
+                            }
+                            .padding(.horizontal)
+                            .frame(maxHeight: 22)
+                        }
+                     
+                        
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                    }
+                 
+                    Button {
+                       
+
+                    }
+                    label: {
+                        HStack{
+                            
+                            Image(systemName: "scalemass")
+                                .foregroundColor(Color("LinkBlue"))
+                                .imageScale(.large)
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Weight Unit", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+                            TextHelvetica(content: "Lbs", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                            Image("sidwaysArrow")
+                                .resizable()
+                            
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                        
+                        
+                    }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+                    HStack{
+                       
+                        TextHelvetica(content: "RPE", size: 20)
+                            .foregroundColor(Color("LinkBlue"))
+                    
+                        TextHelvetica(content: "Enable/Disable RPE", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                      
+                        Spacer()
+                        
+                         
+                                
+                   
+                        
+                
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                        
+                    
+                        .labelsHidden()
+                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
+                    }
+                   
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+
+                    
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+                    HStack{
+                        
+                        Image(systemName: "note.text")
+                            .foregroundColor(Color("LinkBlue"))
+                            .imageScale(.large)
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Display Exersise Notes", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+                        
+                        
+                              
+                    
+                      
+                        Image("sidwaysArrow")
+                            .resizable()
+                        
+                            .aspectRatio(24/48, contentMode: .fit)
+                            .frame(maxHeight: 22)
+                        
+                        
+                        .labelsHidden()
+                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
+                        
+                        
+                    }
+                   
+                    .padding(.horizontal)
+                    .frame(maxHeight: 22)
+
+                    .onTapGesture {
+                        // Call your function here
+                     
+                    }
+                    
+                    
+                    
+                    
+                    Divider()
+                    
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    
+
+
+                }
+                Button {
+  
+                   
+              
+                }
+                label: {
+                    HStack{
+                        
+                        Image(systemName: "xmark")
+                            .foregroundColor(Color("MainRed"))
+                            .imageScale(.large)
+                            .bold()
+                    
+                        TextHelvetica(content: "Remove Exersise", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer()
+
+                        
+                    }
+                    .offset(y: -5)
+                    .padding(.horizontal)
+                    .frame(maxHeight: 30)
+                    
+                }
+             
+               
+                
+            }
+            .frame(width: getScreenBounds().width * 0.95)
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+            .padding()
+
+            
+        }
+     
+
+        .frame(height: getScreenBounds().height * 0.7)
+        
+
+
+            
+    }
+}
+
+
+func calculateBestSet(rows: [WorkoutLogModel.ExersiseSetRow]) -> WorkoutLogModel.ExersiseSetRow? {
+    var mostDifficultSet: WorkoutLogModel.ExersiseSetRow? = nil
+    var highestDifficulty: Float = 0
+
+    for row in rows {
+        var nonZeroValues: Int = 0
+        var totalValue: Float = 0
+
+        if row.repMetric != 0 {
+            totalValue += row.repMetric
+            nonZeroValues += 1
+        }
+
+        if row.weight != 0 {
+            totalValue += row.weight
+            nonZeroValues += 1
+        }
+
+        if row.reps != 0 {
+            totalValue += Float(row.reps)
+            nonZeroValues += 1
+        }
+
+        if nonZeroValues == 0 {
+            continue
+        }
+
+        let averageValue: Float = totalValue / Float(nonZeroValues)
+
+        if averageValue > highestDifficulty {
+            highestDifficulty = averageValue
+            mostDifficultSet = row
+        }
+    }
+
+    return mostDifficultSet
 }

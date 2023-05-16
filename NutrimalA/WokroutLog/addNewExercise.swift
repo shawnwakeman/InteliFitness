@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CategorySelectionMenu: View {
     @Binding var selectedCategory: String
-    let categories = ["Barbell", "Bodyweight", "Dumbell", "Machine", "Other", "Weighted Bodyweight", "Assisted Bodyweight ", "Reps Only", "Cardio", "Duration"]
+    let categories = ["Barbell", "Bodyweight", "Dumbell", "Machine", "Other", "Weighted Bodyweight", "Assisted Bodyweight", "Reps Only", "Cardio", "Duration"]
 
     var body: some View {
         Menu {
@@ -26,6 +26,8 @@ struct CategorySelectionMenu: View {
         }
     }
 }
+
+
 
 struct BodyPartSelectionMenu: View {
     @Binding var selectedBodyPart: String
@@ -72,6 +74,7 @@ struct NameAndCategoryView: View {
     @State private var name: String = ""
     @State private var selectedCategory: String = "Not Selected"
     @State private var selectedBodyPart: String = "Not Selected"
+
     @Binding var showingNew: Bool
 
 
@@ -116,19 +119,38 @@ struct NameAndCategoryView: View {
                 
                 Spacer()
                 Button {
-                    if name.count > 0 {
+                    if name.count > 0 && selectedCategory != "Not Selected" && selectedBodyPart != "Not Selected" {
                         withAnimation(.spring()) {
                             showingNew = false
                         }
                         var exercisesToBeSaved = viewModel.exersises
                         print(exercisesToBeSaved)
-                        exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: []))
+                        if selectedCategory == "Reps Only" {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.reps))
+                        }
+                        else if selectedCategory == "Weighted Bodyweight" {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.weightedReps))
+                        }
+                        else if selectedCategory == "Assisted Bodyweight" {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.assistedReps))
+                        }
+                        else if selectedCategory == "Duration" {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.duration))
+                        }
+                        else if selectedCategory == "Cardio" {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.cardio))
+                        }
+                        else {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.weightReps))
+                        }
+                        
                         print(exercisesToBeSaved)
                         viewModel.saveExercisesToUserDefaults(exercisesToBeSaved)
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        name = ""
                     }
             
-                    name = ""
+                    
                     
                 }
                 label: {
@@ -145,7 +167,7 @@ struct NameAndCategoryView: View {
             Rectangle()
                 .frame(height: getScreenBounds().height * 0.01)
                 .foregroundColor(.clear)
-            TextField("Search", text: $name)
+            TextField("Exercise Name", text: $name)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 10)
                 .background(Color.gray.opacity(0.1))
@@ -154,7 +176,7 @@ struct NameAndCategoryView: View {
 
             HStack {
        
-                TextHelvetica(content: "Equipment", size: 20)
+                TextHelvetica(content: "Category", size: 20)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 CategorySelectionMenu(selectedCategory: $selectedCategory)

@@ -128,7 +128,7 @@ struct P1View: View {
                    Image(systemName: "person.crop.circle")
                         .scaleEffect(2.5)
                         .padding(.all)
-                        .foregroundColor(Color("WhiteFontOne"))
+                        .foregroundColor(.clear)
                      
                   
                 }
@@ -157,63 +157,7 @@ struct P1View: View {
                             .foregroundColor(Color("MainGray"))
                         
                         VStack {
-                            HStack(alignment: .top) {
-                                ZStack{
-                                    
-                                    Image("meatBalls")
-                                        .resizable()
-                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
-                                    
-                                    
-
-                                    Button(action: {
-                                        
-                                    }, label: {
-                                            RoundedRectangle(cornerRadius: 3)
-                                                  .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                                            .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
-                                                              
-
-                                }
-                                Spacer()
-                                VStack {
-                                    ZStack{
-                                        HStack {
-                                            Image(systemName: "clock")
-                                                .resizable()
-                                                .frame(width: getScreenBounds().width * 0.06, height: getScreenBounds().height * 0.027)
-                                                .foregroundColor(Color(.systemOrange))
-                                                    
-                                            TextHelvetica(content: "1:20", size: 20)
-                                                .foregroundColor(Color(.systemOrange))
-                                        }
-                                        
-                                        
-                                        
-
-                                        Button(action: {}, label: {
-                                                RoundedRectangle(cornerRadius: 3)
-                                                .stroke(Color(.systemOrange), lineWidth: borderWeight)
-                                                .frame(width: getScreenBounds().width * 0.21, height: getScreenBounds().height * 0.04)})
-                                                                  
-
-                                    }
-                                    ZStack{
-                                        
-                                        TextHelvetica(content: "13 sets", size: 20)
-                                            .foregroundColor(Color(.systemGreen))
-                                        
-
-                                        Button(action: {}, label: {
-                                                RoundedRectangle(cornerRadius: 3)
-                                                .stroke(Color(.systemGreen), lineWidth: borderWeight)
-                                                .frame(width: getScreenBounds().width * 0.21, height: getScreenBounds().height * 0.04)})
-                                                                  
-
-                                    }
-                                }
-                            }
-
+// del
                             Spacer()
                             HStack {
                                 if let workout = homePageViewModel.upcomingWorkout() {
@@ -246,11 +190,11 @@ struct P1View: View {
                     }
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
-                        if let workout = homePageViewModel.upcomingWorkout() {
-                            let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: workout.name, exercises: workout.exercises, category: "not Important")
+                        if let workout = homePageViewModel.upcomingWorkoutAndRemove() {
+                            let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: workout.name, exercises: workout.exercises, category: "not Important", competionDate: Date())
                             self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
                         } else {
-                            let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: "New Workout", exercises: [], category: "not Important")
+                            let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: "New Workout", exercises: [], category: "not Important", competionDate: Date())
                             self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
                         }
                        
@@ -381,12 +325,17 @@ struct P1View: View {
                                 .foregroundColor(Color("MainGray"))
                             VStack(alignment: .leading) {
                                 Spacer()
-                                TextHelvetica(content: "Stats", size: 20)
+                                TextHelvetica(content: "Profile", size: 20)
                   
                                     .padding(.vertical, 5)
                                     .padding(.leading, -48)
                                     .foregroundColor(Color("WhiteFontOne"))
                             }
+                        }
+                        
+                        .onTapGesture {
+                            HapticManager.instance.impact(style: .rigid)
+                            self.selectedDestination = AnyView(MyExercisesPage(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
                         }
                     }
                     .frame(height: getScreenBounds().width/3.4)

@@ -1,5 +1,7 @@
 import Foundation
 import SwiftUI
+
+
 struct WorkoutLogModel {
 
     
@@ -59,6 +61,15 @@ struct WorkoutLogModel {
         var id: String
     }
     
+    enum moduleType: Int, Codable {
+        case weightReps = 0
+        case reps = 1
+        case weightedReps = 2
+        case assistedReps = 3
+        case duration = 4
+        case cardio = 5
+    }
+    
     struct ExersiseLogModule: Identifiable, Codable, Equatable {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
@@ -70,6 +81,8 @@ struct WorkoutLogModel {
         var ExersiseEquipment: String
         var restTime: Int
         var isLast: Bool = false
+        var DateCompleted: Date?
+        var moduleType: moduleType
 
     }
     
@@ -168,9 +181,9 @@ struct WorkoutLogModel {
         exersiseModules[exersiseModuleID].setRows[RowID].prevouslyChecked  = state
     }
     
-    mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String, restTime: Int) {
+    mutating func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String, restTime: Int, moduleType: moduleType) {
 
-        exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment, restTime: restTime))
+        exersiseModules.append(ExersiseLogModule(exersiseName: exerciseName, setRows: [addEmptySetHelper(lastRowID: 0)], id: UUID(), ExersiseID: exerciseID, ExersiseEquipment: ExersiseEquipment, restTime: restTime, moduleType: moduleType))
     }
     
     mutating func toggleCompletedSet(ExersiseModuleID: Int, RowID: Int) {

@@ -85,13 +85,15 @@ class WorkoutLogViewModel: ObservableObject {
     }
     
     func setLastModule(index: Int) {
-
+        print(index)
         workoutLogModel.setLastModule(index: index)
     }
     
     func setLastRow(index: Int) {
+        print(index)
         workoutLogModel.setLastRow(index: index)
     }
+    
 
     
     func getPopUp(popUpId: String) -> WorkoutLogModel.PopUpData {
@@ -105,6 +107,8 @@ class WorkoutLogViewModel: ObservableObject {
         }
 
     }
+    
+
     
 
     
@@ -124,8 +128,8 @@ class WorkoutLogViewModel: ObservableObject {
         workoutLogModel.addEmptySet(moduleID: moduleID)
     }
     
-    func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String, restTime: Int) {
-        workoutLogModel.addEmptyWorkoutModule(exerciseName: exerciseName, exerciseID: exerciseID, ExersiseEquipment: ExersiseEquipment, restTime: restTime)
+    func addEmptyWorkoutModule(exerciseName: String, exerciseID: Int, ExersiseEquipment: String, restTime: Int, moduleType: WorkoutLogModel.moduleType) {
+        workoutLogModel.addEmptyWorkoutModule(exerciseName: exerciseName, exerciseID: exerciseID, ExersiseEquipment: ExersiseEquipment, restTime: restTime, moduleType: moduleType)
        
         
        
@@ -244,7 +248,8 @@ class WorkoutLogViewModel: ObservableObject {
     
     func addExercisesFromQueue(exercises: [HomePageModel.Exersise]) {
         exercises.forEach { exercise in
-            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
+            print(exercise.moduleType)
+            addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime, moduleType: exercise.moduleType)
         }
 
     }

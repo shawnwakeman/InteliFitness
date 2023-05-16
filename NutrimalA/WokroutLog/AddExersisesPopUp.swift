@@ -176,7 +176,7 @@ struct AddExersisesPopUp: View {
                             searchText = ""
                         }) {
                             
-                            Text("Any Equipment")
+                            Text("Any Category")
                                 
                            
                             
@@ -324,19 +324,19 @@ struct AddExersisesPopUp: View {
                             
                         
                             ForEach(sectionedExercises.keys.sorted(), id: \.self) { key in
-                                    Section(header: TextHelvetica(content: key, size: 22)) {
+                                Section(header: TextHelvetica(content: key, size: 22).foregroundColor(Color("GrayFontOne"))) {
                                         ForEach(sectionedExercises[key]!, id: \.id) { exercise in
                                             ZStack {
                                                 Button(action: {
                                                     if viewModel.replacingExercise.replacing {
                                                    
                                                         let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
-                                                        let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
+                                                        let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime, moduleType: exercise.moduleType)
                                                         viewModel.setExerciseModule(index: viewModel.replacingExercise.indexToReplace!, exerciseModule: module)
                                                         withAnimation(.spring()) {
                                                             viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
                                                         }
-                                                     
+                                                        viewModel.toggleReplacingExercise(state: false, index: 100)
                                                         
                                                     } else {
                                                         if homePageViewModel.exersises[exercise.id].selected == false {
@@ -416,11 +416,12 @@ struct AddExersisesPopUp: View {
                                         if viewModel.replacingExercise.replacing {
                                        
                                             let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
-                                            let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime)
+                                            let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime, moduleType: oldModule.moduleType)
                                             viewModel.setExerciseModule(index: viewModel.replacingExercise.indexToReplace!, exerciseModule: module)
                                             withAnimation(.spring()) {
                                                 viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")
                                             }
+                                            viewModel.toggleReplacingExercise(state: false, index: 100)
                                          
                                             
                                         } else {

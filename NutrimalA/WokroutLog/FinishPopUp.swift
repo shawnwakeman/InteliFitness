@@ -10,6 +10,7 @@ import SwiftUI
 struct FinishPopUp: View {
     @State private var time: Double = 0
     @State private var isToggled = false
+    @ObservedObject var homePageViewModel: HomePageViewModel
     @ObservedObject var viewModel: WorkoutLogViewModel
     var body: some View {
         VStack {
@@ -18,20 +19,24 @@ struct FinishPopUp: View {
 
                 
                 
-                TextHelvetica(content: "Exersise Rest Time", size: 27)
+                TextHelvetica(content: "Workout Completed", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
 
                 
-                    viewModel.setTimeInWorkout(time: Int(time), ModuleID: viewModel.getPopUp(popUpId: "popUpDotsMenu").popUpExersiseModuleIndex)
-                
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.70, blendDuration: 0)) {
-                        viewModel.setPopUpState(state: false, popUpId: "SetTimeSubMenu")
+                    
+                    viewModel.setWorkoutTime(time: 0)
+
+                    withAnimation(.spring()) {
+                        homePageViewModel.setOngoingState(state: false)
+                        homePageViewModel.setWorkoutLogModuleStatus(state: false)
+
                     }
-                  
+
+                    homePageViewModel.saveExersiseHistory()
+                    cancelNotifications()
                    
-                    HapticManager.instance.impact(style: .rigid)
 
 
                 }
@@ -55,42 +60,154 @@ struct FinishPopUp: View {
             .padding(.top, -2)
             .padding(.horizontal)
             .padding(.vertical, 10)
-            
-            let minutes = floor(time/60)
-            let seconds = time.truncatingRemainder(dividingBy: 60).rounded()
-
-            TextHelvetica(content: "\(String(Int(minutes))):\(String(format: "%02d", Int(seconds)))", size: 23)
+            Spacer()
+            TextHelvetica(content: "Good Job", size: 20)
                 .foregroundColor(Color("WhiteFontOne"))
-                .fontWeight(.bold)
             
-            
+            if let workout = homePageViewModel.history.last {
+                VStack(spacing: 0) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            TextHelvetica(content: workout.WorkoutName, size: 27)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            TextHelvetica(content: "Tuesday Feb 12", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                        }
+                        Spacer()
+
+                       
+
+                    }
+
+                    .padding(.all, 12)
+                    .background(Color("MainGray"))
+
+                    Rectangle()
+                        .frame(height: getScreenBounds().height * 0.006)
+                        .foregroundColor(Color("MainGray"))
+
+                    HStack {
+                        TextHelvetica(content: "1 h 30 m", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Spacer()
+                        TextHelvetica(content: "1000 lbs", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Spacer()
+                        TextHelvetica(content: "14 sets", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+                        Spacer()
+                        TextHelvetica(content: "5 PRs", size: 16)
+                            .foregroundColor(Color("GrayFontOne"))
+
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 7)
+                    .background(Color("MainGray"))
+
+                    Divider()
+
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+
+                    VStack {
+                        HStack {
+                            TextHelvetica(content: "Exercise", size: 22)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            Spacer()
+                            TextHelvetica(content: "Best Set", size: 22)
+                                .foregroundColor(Color("WhiteFontOne"))
+                                .offset(x: -10)
+                            Spacer()
+                        }
+                        .padding(.top, 15)
+                        .padding(.bottom, -20)
+                        .padding(.leading, 20)
+
+
+                            VStack(alignment: .leading) {
+                                Rectangle()
+                                    .frame(height: getScreenBounds().height * 0.006)
+                                    .foregroundColor(.clear)
+
+                                ForEach(workout.exercises) {exercise in
+
+
+
+
+                                    HStack {
+
+
+                                        HStack {
+                                            TextHelvetica(content: "\(exercise.setRows.count) x \(exercise.exersiseName)", size: 16)
+                                                .foregroundColor(Color("GrayFontOne"))
+                                                .lineLimit(1)
+
+                                                .padding(.leading, 10)
+                                            Spacer()
+                                        }.frame(width: getScreenBounds().width * 0.4)
+
+
+                                        let rows = exercise.setRows
+                                        if let bestRow = calculateBestSet(rows: rows) {
+                                            HStack(spacing: 0){
+                                                TextHelvetica(content: "\(bestRow.weight.clean) lbs x \(bestRow.reps)", size: 16)
+
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                                if bestRow.repMetric != 0 {
+                                                    TextHelvetica(content: " @ \(bestRow.repMetric.clean)", size: 16)
+                                                        .foregroundColor(Color("GrayFontOne"))
+                                                }
+                                            }
+                                            Spacer()
+                                        }
+
+
+
+                                    }
+                                    Divider()
+                                        .frame(height: borderWeight)
+                                        .overlay(Color("BorderGray"))
+
+                                }
+
+
+
+
+                            }
+
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                            .padding(.vertical, 20)
+                        .padding(.horizontal, 15)
+
+
+
+                    }
+
+                }
+
+                .background(Color("DBblack"))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+
+                .padding(.vertical)
+                .padding(.horizontal, 18)
+            }
+            Spacer()
          
 
                         
            
-           
-            Slider(value: $time, in: 0...360, step: 15).padding(.all).offset(y: -10)
-            HStack(spacing: 0) {
-                TextHelvetica(content: "Exersise Rest Timer", size: 18)
-                    .foregroundColor(Color("GrayFontOne"))
-                    .padding(.trailing, 9)
-
-                Toggle("", isOn: $isToggled)
-                    .frame(maxWidth: 52)
-                    .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
-             
-                
-            }.offset(y: -10)
+   
 
         }
-        .onAppear {
-            time = Double(viewModel.restTime.timePreset)
-        }
-        .onChange(of: viewModel.restTime.timePreset) { newValue in
-            time = Double(newValue)
-        }
 
-        .frame(height: getScreenBounds().height * 0.25)
+
+        .frame(height: getScreenBounds().height * 0.7)
         .background(Color("DBblack"))
         .cornerRadius(10)
         .overlay(

@@ -78,23 +78,59 @@ struct WorkoutSetRowView: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         @ObservedObject var viewModel: WorkoutLogViewModel
         var body: some View {
-            TextHelvetica(content: String(rowObject.setIndex), size: 20)
-                       .padding()
-                       .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
-                       .foregroundColor(Color("LinkBlue"))
-                       .background(.clear)
-                       .onTapGesture {
-                           withAnimation(.spring()) {
-                               UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                               HapticManager.instance.impact(style: .rigid)
-                               viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
-                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: moduleUUID) // need to change later
+            if rowObject.setType == "N" {
+                TextHelvetica(content: String(rowObject.setIndex), size: 20)
+                           .padding()
+                           .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
+                           .foregroundColor(Color("LinkBlue"))
+                           .background(.clear)
+                           .onTapGesture {
+                               withAnimation(.spring()) {
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                   HapticManager.instance.impact(style: .rigid)
+                                   viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
+                                   viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: moduleUUID) // need to change later
+                               }
+                              
                            }
-                          
-                       }
+            } else {
+                TextHelvetica(content: rowObject.setType, size: 20)
+                           .padding()
+                           .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
+                           .foregroundColor(getTextColor(string: rowObject.setType))
+                           .background(.clear)
+                           .onTapGesture {
+                               withAnimation(.spring()) {
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                   HapticManager.instance.impact(style: .rigid)
+                                   viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
+                                   viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: moduleUUID) // need to change later
+                               }
+                              
+                           }
+            }
+            
                    Divider()
                        .frame(width: borderWeight)
                        .overlay(Color("BorderGray"))
+        }
+        
+        func getTextColor(string: String) -> Color {
+            if string == "W" {
+                return Color(.systemYellow)
+            }else if string == "W" {
+                return Color(.systemPurple)
+            } else if string == "D" {
+                return Color(.systemPurple)
+            } else if string == "R" {
+                return Color(.systemPurple)
+            } else if string == "T" {
+                return Color(.systemPurple)
+            } else if string == "F" {
+                return Color(.systemPurple)
+            } else {
+                return Color("DefaultColor")
+            }
         }
     }
     

@@ -58,6 +58,7 @@
 		D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */; };
 		D0D28F4529FEC76B00857C61 /* createWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4429FEC76B00857C61 /* createWorkout.swift */; };
 		D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */; };
+		D0FF3B0D2A154F58005CC5B9 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FF3B0C2A154F58005CC5B9 /* Profile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +138,7 @@
 		D0D28F4429FEC76B00857C61 /* createWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createWorkout.swift; sourceTree = "<group>"; };
 		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPopUp.swift; sourceTree = "<group>"; };
+		D0FF3B0C2A154F58005CC5B9 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,6 +258,7 @@
 				D008F48929F364E800B1C6EC /* DataModelMain */,
 				D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */,
 				D0C884062A0447820035D66C /* Schedule.swift */,
+				D0FF3B0C2A154F58005CC5B9 /* Profile.swift */,
 				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
 				D050B42029FC8BA400BC5442 /* exercisePage.swift */,
 				D0476C712A10265700D9541E /* Charts.swift */,
@@ -430,6 +433,7 @@
 				D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */,
 				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,
 				D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */,
+				D0FF3B0D2A154F58005CC5B9 /* Profile.swift in Sources */,
 				D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */,
 				D008F48C29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld in Sources */,
 				D074D6542A0C83CD00BAD1C2 /* CancelPopUp.swift in Sources */,

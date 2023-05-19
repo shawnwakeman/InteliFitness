@@ -16,7 +16,7 @@ class HomePageViewModel: ObservableObject {
     
     @Published var showingExercises: Bool = false
     @Published var homePageModel = createHomePageModel()
-    
+    @Published var newViewModel = WorkoutLogViewModel()
     var workoutLogModuleStatus: Bool{
         return homePageModel.displayingWorkoutLogView
     }
@@ -65,8 +65,8 @@ class HomePageViewModel: ObservableObject {
 //    }
     
     
-    func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
-        homePageModel.addToHistory(workoutName: workoutName, exersiseModules: exersiseModules)
+    func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule], workoutTime: Int, workoutNotes: String) {
+        homePageModel.addToHistory(workoutName: workoutName, exersiseModules: exersiseModules, workoutTime: workoutTime, workoutNotes: workoutNotes)
      
     }
     func clearToExersiseQueue() {
@@ -160,6 +160,10 @@ class HomePageViewModel: ObservableObject {
     
         schedule.saveSchedule()
     }
+    
+    func replaceWorkout(workout: ScheduleWorkout) {
+        schedule.replaceWorkout(with: workout)
+    }
 
     
     func loadSchedule() {
@@ -204,7 +208,7 @@ class HomePageViewModel: ObservableObject {
         let oneHourLater = currentDate.addingTimeInterval(3600)
         let startOfDayOneHourLater = startOfDay(for: oneHourLater)
         if let workoutArray2 = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value {
-            print(workoutArray2)
+       
             for workout in workoutArray2 {
                 if workout.time <= oneHourLater {
               
@@ -337,6 +341,7 @@ class HomePageViewModel: ObservableObject {
         return weight * (1 + 0.0333 * Double(reps))
     }
     
+    
     func getVolumeData(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Double]? {
         var volumeByDate: [Date: Double] = [:]
 
@@ -354,14 +359,17 @@ class HomePageViewModel: ObservableObject {
             }
         }
 
-        let volumeArray = Array(volumeByDate.values)
-        print(volumeArray)
-        if volumeArray.count > 1 { // needs to be one in the future
-            return volumeArray
+        // Sort the dictionary by date
+        let sortedVolumeByDate = volumeByDate.sorted { $0.key < $1.key }
+        
+        // Get the volume values from the sorted array of tuples
+        let sortedVolumeArray = sortedVolumeByDate.map { $0.value }
+
+        if sortedVolumeArray.count > 1 { // needs to be one in the future
+            return sortedVolumeArray
         }
         
         return nil
-
     }
     
     
@@ -388,16 +396,18 @@ class HomePageViewModel: ObservableObject {
             }
         }
 
-        let heaviestWeightArray = Array(heaviestWeightData.values)
+        // Sort the dictionary by date
+        let sortedHeaviestWeightData = heaviestWeightData.sorted { $0.key < $1.key }
+        
+        // Get the weight values from the sorted array of tuples
+        let sortedHeaviestWeightArray = sortedHeaviestWeightData.map { $0.value }
 
-        if !heaviestWeightArray.isEmpty {
-            return heaviestWeightArray
+        if !sortedHeaviestWeightArray.isEmpty {
+            return sortedHeaviestWeightArray
         }
         return nil
-
-        
     }
-    
+
     func getProjected1RM(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Double]? {
         var heaviestSetData: [Date: (weight: Double, reps: Int)] = [:]
 
@@ -424,19 +434,21 @@ class HomePageViewModel: ObservableObject {
             }
         }
 
-        let projected1RMArray = heaviestSetData.values.map { set in
-            return set.weight * (1 + 0.0333 * Double(set.reps))
+        // Sort the dictionary by date
+        let sortedHeaviestSetData = heaviestSetData.sorted { $0.key < $1.key }
+        
+        // Get the 1RM values from the sorted array of tuples
+        let sortedProjected1RMArray = sortedHeaviestSetData.map { set in
+            return set.value.weight * (1 + 0.0333 * Double(set.value.reps))
         }
 
-        if !projected1RMArray.isEmpty {
-            return projected1RMArray
+        if !sortedProjected1RMArray.isEmpty {
+            return sortedProjected1RMArray
         }
 
         return nil
-        
-
     }
-    
+
     func getBestVolumeSet(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Double]? {
         var bestVolumeSetData: [Date: Double] = [:]
 
@@ -460,17 +472,19 @@ class HomePageViewModel: ObservableObject {
             }
         }
 
-        let bestVolumeSetArray = Array(bestVolumeSetData.values)
+        // Sort the dictionary by date
+        let sortedBestVolumeSetData = bestVolumeSetData.sorted { $0.key < $1.key }
+        
+        // Get the volume values from the sorted array of tuples
+        let sortedBestVolumeSetArray = sortedBestVolumeSetData.map { $0.value }
 
-        if !bestVolumeSetArray.isEmpty {
-            return bestVolumeSetArray
+        if !sortedBestVolumeSetArray.isEmpty {
+            return sortedBestVolumeSetArray
         }
         return nil
-
-        
-       
     }
-    
+
+
     func getTotalReps(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Double]? {
         var totalRepsData: [Date: Double] = [:]
 
@@ -486,14 +500,16 @@ class HomePageViewModel: ObservableObject {
             totalRepsData[exerciseDay] = totalRepsForDate
         }
 
-        let totalRepsArray = Array(totalRepsData.values)
+        // Sort the dictionary by date
+        let sortedTotalRepsData = totalRepsData.sorted { $0.key < $1.key }
+        
+        // Get the reps values from the sorted array of tuples
+        let sortedTotalRepsArray = sortedTotalRepsData.map { $0.value }
 
-        if !totalRepsArray.isEmpty {
-            return totalRepsArray
+        if !sortedTotalRepsArray.isEmpty {
+            return sortedTotalRepsArray
         }
         return nil
-        
-      
     }
 
 
@@ -516,16 +532,19 @@ class HomePageViewModel: ObservableObject {
             weightPerRepData[exerciseDay] = weightPerRepForDate
         }
 
-        let weightPerRepArray = Array(weightPerRepData.values)
+        // Sort the dictionary by date
+        let sortedWeightPerRepData = weightPerRepData.sorted { $0.key < $1.key }
+        
+        // Get the weight per rep values from the sorted array of tuples
+        let sortedWeightPerRepArray = sortedWeightPerRepData.map { $0.value }
 
-        if !weightPerRepArray.isEmpty {
-            return weightPerRepArray
+        if !sortedWeightPerRepArray.isEmpty {
+            return sortedWeightPerRepArray
         }
 
-
         return nil
-       
     }
+
     
     func getWorkoutFrequency(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Double] {
 //        let calendar = Calendar.current
@@ -579,5 +598,43 @@ class HomePageViewModel: ObservableObject {
 //        var exercises: [WorkoutLogModel.ExersiseLogModule]
 //        var category: String
 //    }
+    
+    func returnWorkoutMetrics(workout: HomePageModel.Workout) -> [Int] {
+        var volume = 0
+        var setCount = 0
+        for exersise in workout.exercises {
+            for workoutSet in exersise.setRows {
+                volume += Int(workoutSet.weight) * workoutSet.reps
+                setCount += 1
+                
+            }
+        }
+        let nums = [volume, setCount]
+        return nums
+    }
+    
+    func returnWorkoutMetrics(workout: WorkoutLogModel.ExersiseLogModule) -> [Int] {
+        var volume = 0
+        var setCount = 0
+        for workoutSet in workout.setRows {
+            
+            volume += Int(workoutSet.weight) * workoutSet.reps
+            setCount += workoutSet.reps
+                
+            
+        }
+        let nums = [volume, setCount]
+        return nums
+    }
+    
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE dd"
+        return dateFormatter.string(from: date)
+    }
+    
+
+    
+
     
 }

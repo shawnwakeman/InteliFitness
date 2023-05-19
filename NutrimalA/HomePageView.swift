@@ -40,7 +40,7 @@ struct HomePageView: View {
 
             let offset = homePageViewModel.ongoingWorkout ? 0: 0.5
       
-                WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
+            WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
                     .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * (1.49 + offset))
                                .ignoresSafeArea()
                               
@@ -193,9 +193,13 @@ struct P1View: View {
                         if let workout = homePageViewModel.upcomingWorkoutAndRemove() {
                             let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: workout.name, exercises: workout.exercises, category: "not Important", competionDate: Date())
                             self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
+                            workoutLogViewModel.workoutName = formattedData.WorkoutName
+                        
                         } else {
                             let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: "New Workout", exercises: [], category: "not Important", competionDate: Date())
                             self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
+                            workoutLogViewModel.workoutName = formattedData.WorkoutName
+                           
                         }
                        
                       
@@ -335,7 +339,7 @@ struct P1View: View {
                         
                         .onTapGesture {
                             HapticManager.instance.impact(style: .rigid)
-                            self.selectedDestination = AnyView(MyExercisesPage(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                            self.selectedDestination = AnyView(Profile(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
                         }
                     }
                     .frame(height: getScreenBounds().width/3.4)

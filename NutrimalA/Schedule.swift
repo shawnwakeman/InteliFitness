@@ -33,6 +33,7 @@ struct WorkoutView: View {
     @Binding var workout: ScheduleWorkout
     var HasBeenDone: Bool
     @Binding var showingScheduleView: Bool
+    @Binding var currentWorkout: ScheduleWorkout
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
@@ -45,6 +46,8 @@ struct WorkoutView: View {
                     withAnimation(.spring()) {
                         showingScheduleView.toggle()
                     }
+                    currentWorkout = workout
+                    
               
                     
                 } label: {
@@ -138,6 +141,8 @@ struct MainWokroutView: View {
     
     @State private var showingScheduleView: Bool = false
     
+    @State private var selectedWorkout: ScheduleWorkout = ScheduleWorkout(id: 10201, name: "Asd", exercises: [], time: Date(), HasBeenDone: false)
+    
     
 
     private var weeksWithWorkouts: Set<Int> {
@@ -184,7 +189,7 @@ struct MainWokroutView: View {
                             workouts[index]
                         }, set: { newValue in
                             workouts[index] = newValue
-                        }), HasBeenDone: workouts[index].HasBeenDone, showingScheduleView: $showingScheduleView)
+                        }), HasBeenDone: workouts[index].HasBeenDone, showingScheduleView: $showingScheduleView, currentWorkout: $selectedWorkout)
                     
                         Spacer()
                         
@@ -440,7 +445,7 @@ struct MainWokroutView: View {
                     .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
                 
                 let offset = schedule.ongoingWorkout ? 0 : 0.12
-                scheduleMenu(showingScheduleView: $showingScheduleView)
+                scheduleMenu(viewModel: schedule, showingScheduleView: $showingScheduleView, currentWorkout: $selectedWorkout, isNavigationBarHidden: $isNavigationBarHidden)
                     .shadow(radius: 10)
 
                     .position(x: getScreenBounds().width/2, y: showingScheduleView ? getScreenBounds().height * (0.52 + offset) : getScreenBounds().height * 1.5)
@@ -738,7 +743,11 @@ struct AddWorkoutView: View {
 
 }
 struct scheduleMenu: View {
+    @ObservedObject var viewModel: HomePageViewModel
     @Binding var showingScheduleView: Bool
+    @Binding var currentWorkout: ScheduleWorkout
+    @Binding var isNavigationBarHidden : Bool
+    @State private var isLinkActive = false
     var body: some View {
         // Add a blur effect to the background
         VStack{
@@ -789,49 +798,11 @@ struct scheduleMenu: View {
                    
 
                         
-                    Group {
+                  
 
                                         
   
-                    Button {
-                      
-                      
-                       
-                    }
-                    label: {
-                        HStack{
-                            
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                                .foregroundColor(Color("LinkBlue"))
-                                .imageScale(.large)
-                                .bold()
-                                .multilineTextAlignment(.leading)
-                            
-                            TextHelvetica(content: "Replace exersise", size: 18)
-                                .foregroundColor(Color("WhiteFontOne"))
-                            
-                            Spacer()
-
-                                
-                      
-                          
-                                  
-                           
-                           
-                            Image("sidwaysArrow")
-                                .resizable()
-                            
-                                .aspectRatio(24/48, contentMode: .fit)
-                                .frame(maxHeight: 22)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxHeight: 22)
-                    }
-                    
-                    Divider()
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
-                    
+                  
                     
 //                    Button {
 //                        withAnimation(.spring()) {
@@ -868,146 +839,37 @@ struct scheduleMenu: View {
 //                        .padding(.horizontal)
 //                        .frame(maxHeight: 22)
 //                    }
-            
-                        Button {
-                            
-                         
-                            
-                
 
-                        }
-                        label: {
-                            HStack{
-                                
-                                Image(systemName: "clock")
-                                    .foregroundColor(Color("LinkBlue"))
-                                    .imageScale(.large)
-                                    .bold()
-                                    .multilineTextAlignment(.leading)
-                                
-                                TextHelvetica(content: "Set auto rest time", size: 18)
-                                    .foregroundColor(Color("WhiteFontOne"))
-                                
-                                Spacer()
-
-                                
-                           
-                              
-                            }
-                            .padding(.horizontal)
-                            .frame(maxHeight: 22)
-                        }
-                     
-                        
-                        Divider()
-                            .frame(height: borderWeight)
-                            .overlay(Color("BorderGray"))
-                    }
-                 
-                    Button {
-                       
-
-                    }
-                    label: {
-                        HStack{
-                            
-                            Image(systemName: "scalemass")
+                    
+                    
+                    HStack{
+                            Image(systemName: "pencil")
                                 .foregroundColor(Color("LinkBlue"))
                                 .imageScale(.large)
                                 .bold()
                                 .multilineTextAlignment(.leading)
-                            
-                            TextHelvetica(content: "Weight Unit", size: 18)
+
+                            TextHelvetica(content: "Edit Workout", size: 18)
                                 .foregroundColor(Color("WhiteFontOne"))
-                            
                             Spacer()
-                            TextHelvetica(content: "Lbs", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
-                            Image("sidwaysArrow")
-                                .resizable()
-                            
-                                .aspectRatio(24/48, contentMode: .fit)
-                                .frame(maxHeight: 22)
                         }
                         .padding(.horizontal)
                         .frame(maxHeight: 22)
-                        
-                        
-                    }
-                    Divider()
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
-                    
-                    HStack{
-                       
-                        TextHelvetica(content: "RPE", size: 20)
-                            .foregroundColor(Color("LinkBlue"))
-                    
-                        TextHelvetica(content: "Enable/Disable RPE", size: 18)
-                            .foregroundColor(Color("WhiteFontOne"))
-                      
-                        Spacer()
-                        
-                         
-                                
-                   
-                        
+                        .background(
+                            NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel, workoutLogViewModel: viewModel.newViewModel, isNavigationBarHidden: $isNavigationBarHidden, currentWorkout: currentWorkout), isActive: $isLinkActive) {
+                                EmptyView()
+                            }
+                        )
+                        .onTapGesture {
+                            showingScheduleView = false
+                            print(currentWorkout)
+                            viewModel.newViewModel.setExerciseModules(exericiesModules: currentWorkout.exercises, name: currentWorkout.name)
+                            isLinkActive = true
+                        }
                 
-                        Image("sidwaysArrow")
-                            .resizable()
-                        
-                            .aspectRatio(24/48, contentMode: .fit)
-                            .frame(maxHeight: 22)
-                        
                     
-                        .labelsHidden()
-                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
-                    }
-                   
-                    .padding(.horizontal)
-                    .frame(maxHeight: 22)
 
                     
-                    Divider()
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
-                    
-                    HStack{
-                        
-                        Image(systemName: "note.text")
-                            .foregroundColor(Color("LinkBlue"))
-                            .imageScale(.large)
-                            .bold()
-                            .multilineTextAlignment(.leading)
-                        
-                        TextHelvetica(content: "Display Exersise Notes", size: 18)
-                            .foregroundColor(Color("WhiteFontOne"))
-                        Spacer()
-                        
-                        
-                              
-                    
-                      
-                        Image("sidwaysArrow")
-                            .resizable()
-                        
-                            .aspectRatio(24/48, contentMode: .fit)
-                            .frame(maxHeight: 22)
-                        
-                        
-                        .labelsHidden()
-                        .toggleStyle(SwitchToggleStyle(tint: Color("LinkBlue")))
-                        
-                        
-                    }
-                   
-                    .padding(.horizontal)
-                    .frame(maxHeight: 22)
-
-                    .onTapGesture {
-                        // Call your function here
-                     
-                    }
                     
                     
                     

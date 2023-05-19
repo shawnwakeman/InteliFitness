@@ -18,6 +18,7 @@ struct createWorkout: View {
         @State private var workoutName: String = ""
         @State private var NamePopUp: Bool = false
         @Binding var isNavigationBarHidden: Bool
+        var currentWorkout: ScheduleWorkout
         @Environment(\.presentationMode) private var presentationMode
         @Environment(\.scenePhase) private var scenePhase
         
@@ -48,17 +49,7 @@ struct createWorkout: View {
                                           }
                                         
                                           
-                                          Button {
-                      
-                                              homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
-                                              presentationMode.wrappedValue.dismiss()
-                                           
-                                             
-                                          }
-                                      label: {
-                                          TextHelvetica(content: "Create", size: 19)
-                                               .foregroundColor(Color("WhiteFontOne"))
-                                      }
+                                          
                                           
                                       
                                           
@@ -82,10 +73,13 @@ struct createWorkout: View {
                                     
                                         TextField("", text: $workoutName, prompt: Text("").foregroundColor(Color("GrayFontOne")))
                                             .font(.custom("SpaceGrotesk-Medium", size: 40))
-                                            .foregroundColor(Color("WhiteFontOne"))
+                                            .foregroundColor((workoutName == "Workout Name") ? Color("GrayFontOne") : Color("WhiteFontOne"))
                                             .bold()
                                             .multilineTextAlignment(.leading)
                                             .scaledToFit()
+                                            .onTapGesture {
+                                                workoutName = ""
+                                            }
                                             
                                         
                                         
@@ -287,7 +281,7 @@ struct createWorkout: View {
                 
                 SetMenu( viewModel: workoutLogViewModel)
                     .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * (0.75 - offset) : getScreenBounds().height * 1.3)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * (0.68 - offset) : getScreenBounds().height * 1.3)
                 
                 restTimeSet(viewModel: workoutLogViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
@@ -330,48 +324,93 @@ struct createWorkout: View {
                                 .frame(width: 100)
                             }
                             Spacer()
-                            TextHelvetica(content: "Create", size: 20)
-                                .foregroundColor(Color("WhiteFontOne"))
-                                .bold()
+                            if currentWorkout.id != 0 {
+                                TextHelvetica(content: "Edit", size: 20)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                    .bold()
+                            } else {
+                                TextHelvetica(content: "Create", size: 20)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                    .bold()
+                            }
+                            
                           
                             Spacer()
-                            
-
-                            
-                                Button {
-            
-                                    homePageVeiwModel.addToMyWorkouts(workoutName: workoutName, exersiseModules: workoutLogViewModel.exersiseModules)
-                                    presentationMode.wrappedValue.dismiss()
-                                 
-                                   
-                                } label: {
-                                    ZStack{
-                                                                           
+                                if currentWorkout.id == 0 {
                                     
-                                       RoundedRectangle(cornerRadius: 6)
-                                               .foregroundColor(Color("LinkBlue"))
-
-                                           
-                                        TextHelvetica(content: "Create", size: 19)
-                                             .foregroundColor(Color("WhiteFontOne"))
-                                       
+                                    Button {
+                   
+                                        homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
+                                        presentationMode.wrappedValue.dismiss()
                                      
                                        
+                                    }
+                                    label: {
+                                        ZStack{
+                                                                               
+                                        
+                                           RoundedRectangle(cornerRadius: 6)
+                                                   .foregroundColor(Color("LinkBlue"))
+
+                                               
+                                            TextHelvetica(content: "Create", size: 19)
+                                                 .foregroundColor(Color("WhiteFontOne"))
+                                           
+                                         
+                                           
+                                           
+                              
+                                     
+                                           
                                        
-                          
-                                 
-                                       
-                                   
-                                       
-                                       
-                                   }
-                                   .frame(width: 100 ,height: getScreenBounds().height * 0.048)
+                                           
+                                           
+                                       }
+                                       .frame(width: 100 ,height: getScreenBounds().height * 0.048)
+                                        
+                            
+                                       .aspectRatio(2.5, contentMode: .fit)
+                                    }
                                     
-                        
-                                   .aspectRatio(2.5, contentMode: .fit)
+                                } else  {
+                                    Button {
+                             
+                                        let newWorkout = ScheduleWorkout(id: currentWorkout.id, name: workoutName, exercises: workoutLogViewModel.exersiseModules, time: currentWorkout.time, HasBeenDone: currentWorkout.HasBeenDone)
+                                        homePageVeiwModel.replaceWorkout(workout: newWorkout)
+                                        presentationMode.wrappedValue.dismiss()
+                                     
+                                       
+                                    }
+                                    label: {
+                                        ZStack{
+                                                                               
+                                        
+                                           RoundedRectangle(cornerRadius: 6)
+                                                   .foregroundColor(Color("LinkBlue"))
+
+                                               
+                                            TextHelvetica(content: "Save", size: 19)
+                                                 .foregroundColor(Color("WhiteFontOne"))
+                                           
+                                         
+                                           
+                                           
+                              
+                                     
+                                           
+                                       
+                                           
+                                           
+                                       }
+                                       .frame(width: 100 ,height: getScreenBounds().height * 0.048)
+                                        
+                            
+                                       .aspectRatio(2.5, contentMode: .fit)
+                                    }
                                 }
-                                
-                                  
+
+                            
+                               
                                
                         
                             

@@ -124,7 +124,7 @@ struct NameAndCategoryView: View {
                             showingNew = false
                         }
                         var exercisesToBeSaved = viewModel.exersises
-                        print(exercisesToBeSaved)
+               
                         if selectedCategory == "Reps Only" {
                             exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.reps))
                         }
@@ -144,7 +144,6 @@ struct NameAndCategoryView: View {
                             exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.weightReps))
                         }
                         
-                        print(exercisesToBeSaved)
                         viewModel.saveExercisesToUserDefaults(exercisesToBeSaved)
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         name = ""

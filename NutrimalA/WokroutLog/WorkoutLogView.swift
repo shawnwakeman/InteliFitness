@@ -23,6 +23,7 @@ struct WorkoutLogView: View {
     @State private var workoutName: String = ""
     @State private var NamePopUp: Bool = false
     @State private var isFocused: Bool = false
+
  
  
 
@@ -40,14 +41,15 @@ struct WorkoutLogView: View {
                     ZStack {
                         HStack {
                             
-                                TextField("", text: $workoutName, prompt: Text("").foregroundColor(Color("GrayFontOne")))
+                            TextField("", text: $workoutLogViewModel.workoutName, prompt: Text("").foregroundColor(Color("GrayFontOne")))
                                     .font(.custom("SpaceGrotesk-Medium", size: 40))
-                                    .foregroundColor(Color("WhiteFontOne"))
+                            
+                                    .foregroundColor((workoutLogViewModel.workoutName == "Workout Name") ? Color("GrayFontOne") : Color("WhiteFontOne"))
                                     .bold()
                                     .multilineTextAlignment(.leading)
                                     .scaledToFit()
                                     .onTapGesture {
-                                        workoutName = ""
+                                        workoutLogViewModel.workoutName = ""
                                     }
                                     
                                 
@@ -100,7 +102,7 @@ struct WorkoutLogView: View {
                 
                      
 
-                    TextField("", text: $exersiseNotes, prompt: Text("Notes").foregroundColor(Color("GrayFontTwo")), axis: .vertical)
+                    TextField("", text: $workoutLogViewModel.workoutNotes, prompt: Text("Notes").foregroundColor(Color("GrayFontTwo")), axis: .vertical)
                         .lineLimit(1...5)
                         .font(.custom("SpaceGrotesk-Medium", size: 19))
                         .foregroundColor(Color("GrayFontTwo"))
@@ -246,7 +248,7 @@ struct WorkoutLogView: View {
                 
                 SetMenu( viewModel: workoutLogViewModel)
                     .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.75 : getScreenBounds().height * 1.3)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.68 : getScreenBounds().height * 1.3)
                 
                 restTimeSet(viewModel: workoutLogViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
@@ -451,7 +453,8 @@ struct WorkoutLogView: View {
             }
         }
         .onAppear {
-            workoutName = "Workout Name"
+
+            workoutLogViewModel.workoutName = "Workout Name"
 
             requestNotificationPermission()
             
@@ -738,37 +741,32 @@ struct SetMenu: View {
                 .overlay(Color("BorderGray"))
             
             VStack {
+                let popUpData = viewModel.getPopUp(popUpId: "SetMenuPopUp")
                 Button {
-                    withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: true, popUpId: "ReorderSets")
-                    }
-
-                    withAnimation(.linear(duration: 0.9)){
+                    
                    
-                        viewModel.setPopUpState(state: false, popUpId: "TitlePagePopUp")
+                    viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "N")
+                    withAnimation(.spring()){
+                   
+                        viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
                     }
 
                 }
                 label: {
                     HStack{
                         
-                        Image(systemName: "scalemass")
-                            .foregroundColor(Color("LinkBlue"))
-                            .imageScale(.large)
+                        TextHelvetica(content: "N", size: 18)
+                            .foregroundColor(Color(.systemGray))
                             .bold()
                             .multilineTextAlignment(.leading)
                         
-                        TextHelvetica(content: "Reorder Exercises", size: 18)
+                        TextHelvetica(content: "Normal Set", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()
-                        TextHelvetica(content: "", size: 17)
+                        TextHelvetica(content: "?", size: 17)
                             .foregroundColor(Color("GrayFontOne"))
-                        Image("sidwaysArrow")
-                            .resizable()
-                        
-                            .aspectRatio(24/48, contentMode: .fit)
-                            .frame(maxHeight: 22)
+                   
                     }
                     .padding(.horizontal)
                     .frame(maxHeight: 22)
@@ -779,75 +777,200 @@ struct SetMenu: View {
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 Button {
-                    withAnimation(.spring()) {
-                        viewModel.setPopUpState(state: true, popUpId: "SetUnitSubMenu")
-                    }
-
-                    withAnimation(.linear(duration: 0.9)){
+                    viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "W")
+                    withAnimation(.spring()){
                    
-                        viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
+                        viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
                     }
 
                 }
                 label: {
                     HStack{
                         
-                        Image(systemName: "scalemass")
-                            .foregroundColor(Color("LinkBlue"))
-                            .imageScale(.large)
+                        TextHelvetica(content: "W", size: 18)
+                            .foregroundColor(Color(.systemYellow))
                             .bold()
                             .multilineTextAlignment(.leading)
                         
-                        TextHelvetica(content: "Add Warm Up Sets", size: 18)
+                        TextHelvetica(content: "Warm Up Set", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()
-                        TextHelvetica(content: "", size: 17)
+                        TextHelvetica(content: "?", size: 17)
                             .foregroundColor(Color("GrayFontOne"))
-                        Image("sidwaysArrow")
-                            .resizable()
-                        
-                            .aspectRatio(24/48, contentMode: .fit)
-                            .frame(maxHeight: 22)
+                   
                     }
                     .padding(.horizontal)
                     .frame(maxHeight: 22)
+                    
+                    
                 }
-                    Divider()
-                        .frame(height: borderWeight)
-                        .overlay(Color("BorderGray"))
-                
-                
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
                 Button {
-  
-                    HapticManager.instance.impact(style: .rigid)
-                    let index = viewModel.getPopUp(popUpId: "SetMenuPopUp")
-
-                    viewModel.deleteSet(moduleID: index.popUpExersiseModuleIndex, rowID: index.popUpRowIndex, moduleUUID: index.popUPUUID)
-                    withAnimation(.spring()) {
+                    viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "D")
+                    withAnimation(.spring()){
+                   
                         viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
                     }
-              
+
+
                 }
                 label: {
                     HStack{
                         
-                        Image(systemName: "xmark")
-                            .foregroundColor(Color("MainRed"))
-                            .imageScale(.large)
+                        TextHelvetica(content: "D", size: 18)
+                            .foregroundColor(Color(.systemPurple))
                             .bold()
-                    
-                        TextHelvetica(content: "Remove Exersise", size: 18)
+                            .multilineTextAlignment(.leading)
+                        
+                        TextHelvetica(content: "Drop Set", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
+                        
                         Spacer()
-
+                        TextHelvetica(content: "?", size: 17)
+                            .foregroundColor(Color("GrayFontOne"))
                         
                     }
-                    .offset(y: -5)
                     .padding(.horizontal)
-                    .frame(maxHeight: 30)
+                    .frame(maxHeight: 22)
+                    
                     
                 }
+                Divider()
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
+                Group {
+                    Button {
+                        viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "R")
+                        withAnimation(.spring()){
+                       
+                            viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                        }
+
+                    }
+                    label: {
+                        HStack{
+                            
+                            TextHelvetica(content: "R", size: 18)
+                                .foregroundColor(Color(.systemOrange))
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Rest-Pause Sets", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+                            TextHelvetica(content: "?", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                            
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                        
+                        
+                    }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    Button {
+                        viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "T")
+                        withAnimation(.spring()){
+                       
+                            viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                        }
+
+                    }
+                    label: {
+                        HStack{
+                            
+                            TextHelvetica(content: "T", size: 18)
+                                .foregroundColor(Color(.systemTeal))
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Time-Under Tension Set", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+                            TextHelvetica(content: "?", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                            
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                        
+                        
+                    }
+                    Divider()
+                        .frame(height: borderWeight)
+                        .overlay(Color("BorderGray"))
+                    Button {
+                        viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "F")
+                        withAnimation(.spring()){
+                       
+                            viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                        }
+
+                    }
+                    label: {
+                        HStack{
+                            
+                            TextHelvetica(content: "F", size: 18)
+                                .foregroundColor(Color(.systemRed))
+                                .bold()
+                                .multilineTextAlignment(.leading)
+                            
+                            TextHelvetica(content: "Failure Set", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                            Spacer()
+                            TextHelvetica(content: "?", size: 17)
+                                .foregroundColor(Color("GrayFontOne"))
+                            
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: 22)
+                        
+                    }
+                        Divider()
+                            .frame(height: borderWeight)
+                            .overlay(Color("BorderGray"))
+                    
+                    
+                    Button {
+      
+                        HapticManager.instance.impact(style: .rigid)
+                        let index = viewModel.getPopUp(popUpId: "SetMenuPopUp")
+
+                        viewModel.deleteSet(moduleID: index.popUpExersiseModuleIndex, rowID: index.popUpRowIndex, moduleUUID: index.popUPUUID)
+                        withAnimation(.spring()) {
+                            viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
+                        }
+                  
+                    }
+                    label: {
+                        HStack{
+                            
+                            Image(systemName: "xmark")
+                                .foregroundColor(Color("MainRed"))
+                                .imageScale(.large)
+                                .bold()
+                        
+                            TextHelvetica(content: "Remove Exersise", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            Spacer()
+
+                            
+                        }
+                        .offset(y: -5)
+                        .padding(.horizontal)
+                        .frame(maxHeight: 30)
+                        
+                    }
+                }
+                
                 
 
             }
@@ -1794,16 +1917,35 @@ struct ContentGrid: View {
                                 if prevRow.repMetric != 0 {
                                     
                                     let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
-                                    WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                 
+                                    if module.moduleType == WorkoutLogModel.moduleType.reps {
+                                        WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    }
+                                   
+                                    else {
+                                        WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    }
                                     
                                 } else {
                                     let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps)"
-                                    WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    if module.moduleType == WorkoutLogModel.moduleType.reps {
+                                        WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    }
+                                   
+                                    else {
+                                        WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                                    }
                                     
                                 }
                                 
                             } else {
-                                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                                if module.moduleType == WorkoutLogModel.moduleType.reps {
+                                    WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                                }
+                               
+                                else {
+                                    WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                                }
                             }
                             
                       

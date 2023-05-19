@@ -117,6 +117,7 @@ struct MyWorkoutsPageMain: View {
                                         
                                         withAnimation(.spring()) {
                                             viewModel.setOngoingState(state: true)
+                                            
                                             viewModel.setWorkoutLogModuleStatus(state: true)
                                             
                                         }
@@ -161,7 +162,7 @@ struct MyWorkoutsPageMain: View {
                                 
                                 TextHelvetica(content: "Templates", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
                                 Spacer()
-                                NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden)) {
+                                NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, currentWorkout: ScheduleWorkout(id: 0, name: "1", exercises: [], time: Date(), HasBeenDone: false))) {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 4)
                                             .overlay(
@@ -449,6 +450,8 @@ struct workoutLauncher: View {
                                 presentationMode.wrappedValue.dismiss()
                                 viewModel.addToWorkoutQueue(workout: workout)
                                 viewModel.showingExercises = false
+                         
+                     
                             }) {
                                 ZStack {
 //                                    NavigationLink("", destination: WeeklyScheduleView(schedule: viewModel, viewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingWorkout: true), isActive: $isLinkActive)
@@ -487,8 +490,9 @@ struct workoutLauncher: View {
                         
                                 viewModel.setOngoingState(state: false)
                                 workoutLogViewModel.loadWorkout(workout: workout)
-                                
+                                workoutLogViewModel.workoutName = workout.WorkoutName
                                 withAnimation(.spring()) {
+                                    
                                     viewModel.setOngoingState(state: true)
                                     viewModel.setWorkoutLogModuleStatus(state: true)
                            

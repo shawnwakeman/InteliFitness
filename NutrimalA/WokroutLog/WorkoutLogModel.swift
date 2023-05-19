@@ -97,7 +97,7 @@ struct WorkoutLogModel {
     
     
     
-
+    
     struct ExersiseSetRow: Identifiable, Codable, Equatable {
         var setIndex: Int
         var previousSet: String = "0"
@@ -110,6 +110,7 @@ struct WorkoutLogModel {
         var repMetric: Float = 0
         var rpeTarget: Float = 0
         var prevouslyChecked: Bool = false
+        var setType: String = "N"
         var id: Int
         
         
@@ -211,6 +212,10 @@ struct WorkoutLogModel {
         exersiseModules[exersiseModuleID].setRows[RowID].weight = value
     }
     
+    mutating func setExerciseModules(exericiesModules: [WorkoutLogModel.ExersiseLogModule]) {
+        self.exersiseModules = exericiesModules
+    }
+    
     mutating func setWeightValuePlaceHolder(exersiseModuleID : Int, RowID: Int, value: String) {
         
         exersiseModules[exersiseModuleID].setRows[RowID].weightPlaceholder = value
@@ -220,6 +225,10 @@ struct WorkoutLogModel {
 
 
         
+    }
+    
+    mutating func setSetType(moduleId: Int, rowId: Int, setType: String) {
+        exersiseModules[moduleId].setRows[rowId].setType = setType
     }
 
 

@@ -503,7 +503,7 @@ struct Graph: View {
 
         })
         .frame(height: 250)
-
+      
         .onAppear {
             animateGraph()
             

@@ -76,6 +76,7 @@ struct WorkoutSetRowViewForCreator: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         @ObservedObject var viewModel: WorkoutLogViewModel
         var body: some View {
+           
             TextHelvetica(content: String(rowObject.setIndex), size: 20)
                        .padding()
                        .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)

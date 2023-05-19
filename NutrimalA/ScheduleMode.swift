@@ -84,6 +84,15 @@ struct Schedule {
             workouts[date] = [workout]
         }
     }
+    
+    mutating func replaceWorkout(with newWorkout: ScheduleWorkout) {
+        for (date, workoutList) in workouts {
+            if let workoutIndex = workoutList.firstIndex(where: { $0.id == newWorkout.id }) {
+                workouts[date]?[workoutIndex] = newWorkout
+                break
+            }
+        }
+    }
 
     mutating func removeWorkout(from date: Date, workoutID: Int) {
         let dateKey = startOfDay(for: date)

@@ -10,8 +10,8 @@ import SwiftUI
 
 class WorkoutLogViewModel: ObservableObject {
     
-    
- 
+    @Published var workoutName: String = ""
+    @Published var workoutNotes: String = ""
     private static func createWorkoutLogModel() -> WorkoutLogModel{
         WorkoutLogModel()
     }
@@ -64,7 +64,11 @@ class WorkoutLogViewModel: ObservableObject {
 //    }
 //    
 
+    func setExerciseModules(exericiesModules: [WorkoutLogModel.ExersiseLogModule], name: String) {
+        workoutName = name
 
+        workoutLogModel.setExerciseModules(exericiesModules: exericiesModules)
+    }
     
     var workoutTime: WorkoutLogModel.WorkoutTime {
         return workoutLogModel.workoutTime
@@ -267,6 +271,10 @@ class WorkoutLogViewModel: ObservableObject {
     
     func loadTimers() {
         workoutLogModel.loadTimers()
+    }
+    
+    func setSetType(moduleId: Int, rowId: Int, setType: String) {
+        workoutLogModel.setSetType(moduleId: moduleId, rowId: moduleId, setType: setType)
     }
     
 

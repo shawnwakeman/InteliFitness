@@ -56,6 +56,7 @@ struct Home: View {
     @State private var showingHistoryMenu: Bool = false
     @State private var selectedWorkout: HomePageModel.Workout?
     private let scrollId = "scrollId"
+    
 
     var body: some View {
         ZStack {
@@ -112,9 +113,8 @@ struct Home: View {
 
                             ForEach(viewModel.history.reversed()) { workout in
 
-
-
-
+                                
+          
 
                                 Button {
                                     selectedWorkout = workout
@@ -132,7 +132,8 @@ struct Home: View {
                                                 VStack(alignment: .leading) {
                                                     TextHelvetica(content: workout.WorkoutName, size: 27)
                                                         .foregroundColor(Color("WhiteFontOne"))
-                                                    TextHelvetica(content: "Tuesday Feb 12", size: 17)
+                                                    
+                                                    TextHelvetica(content: viewModel.formatDate(workout.competionDate), size: 17)
                                                         .foregroundColor(Color("GrayFontOne"))
                                                 }
                                                 Spacer()
@@ -171,17 +172,24 @@ struct Home: View {
                                                 .foregroundColor(Color("MainGray"))
 
                                             HStack {
-                                                TextHelvetica(content: "1 h 30 m", size: 16)
+                                                let workoutTimeInSeconds = workout.workoutTime  // assuming this is your integer value
+                                                let hours = workoutTimeInSeconds / 3600
+                                                let minutes = (workoutTimeInSeconds % 3600) / 60
+
+                                                let workoutTimeFormatted = hours > 0 ?  "\(hours) hr \(minutes) mins" :  "\(minutes) mins"
+                                                TextHelvetica(content: workoutTimeFormatted, size: 16)
                                                     .foregroundColor(Color("GrayFontOne"))
                                                 Spacer()
-                                                TextHelvetica(content: "1000 lbs", size: 16)
+                                                let metrics = viewModel.returnWorkoutMetrics(workout: workout)
+                                                let volume = metrics[0]
+                                                let reps = metrics[1]
+                                                TextHelvetica(content: Double(volume).stringFormat + " lbs", size: 16)
                                                     .foregroundColor(Color("GrayFontOne"))
                                                 Spacer()
-                                                TextHelvetica(content: "14 sets", size: 16)
+                                                TextHelvetica(content: Double(reps).stringFormat + " sets", size: 16)
                                                     .foregroundColor(Color("GrayFontOne"))
                                                 Spacer()
-                                                TextHelvetica(content: "5 PRs", size: 16)
-                                                    .foregroundColor(Color("GrayFontOne"))
+                                               
 
                                             }
                                             .padding(.horizontal, 20)
@@ -233,6 +241,8 @@ struct Home: View {
 
                                                                 let rows = exercise.setRows
                                                                 if let bestRow = calculateBestSet(rows: rows) {
+                                                                    
+                                                                   
                                                                     HStack(spacing: 0){
                                                                         TextHelvetica(content: "\(bestRow.weight.clean) lbs x \(bestRow.reps)", size: 16)
 
@@ -365,7 +375,7 @@ struct Home: View {
               
                 if let workoutToUse = selectedWorkout {
                     let offset = viewModel.ongoingWorkout ? 0 : 0.07
-                    ExpandedHistory(workout: workoutToUse, showingExpandedExercise: $showingExpandedExercise)
+                    ExpandedHistory(workout: workoutToUse, viewModel: viewModel, showingExpandedExercise: $showingExpandedExercise)
                         .position(x: getScreenBounds().width/2, y: showingExpandedExercise ? getScreenBounds().height * (0.47 + offset) : getScreenBounds().height * 1.5)
                 }
                 
@@ -391,14 +401,18 @@ struct Home: View {
 
     struct ExpandedHistory: View {
         var workout: HomePageModel.Workout
+        @ObservedObject var viewModel: HomePageViewModel
+
         @Binding var showingExpandedExercise: Bool
+        
         var body: some View {
             VStack(spacing: 0) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         TextHelvetica(content: workout.WorkoutName, size: 27)
                             .foregroundColor(Color("WhiteFontOne"))
-                        TextHelvetica(content: "Tuesday Feb 12", size: 17)
+                        
+                        TextHelvetica(content: viewModel.formatDate(workout.competionDate), size: 17)
                             .foregroundColor(Color("GrayFontOne"))
                     }
                     Spacer()
@@ -443,17 +457,24 @@ struct Home: View {
                     .foregroundColor(Color("MainGray"))
 
                 HStack {
-                    TextHelvetica(content: "1 h 30 m", size: 16)
+                    let workoutTimeInSeconds = workout.workoutTime  // assuming this is your integer value
+                    let hours = workoutTimeInSeconds / 3600
+                    let minutes = (workoutTimeInSeconds % 3600) / 60
+
+                    let workoutTimeFormatted = hours > 0 ?  "\(hours) hr \(minutes) mins" :  "\(minutes) mins"
+                    TextHelvetica(content: workoutTimeFormatted, size: 16)
                         .foregroundColor(Color("GrayFontOne"))
                     Spacer()
-                    TextHelvetica(content: "1000 lbs", size: 16)
+                    let metrics = viewModel.returnWorkoutMetrics(workout: workout)
+                    let volume = metrics[0]
+                    let reps = metrics[1]
+                    TextHelvetica(content: Double(volume).stringFormat + " lbs", size: 16)
                         .foregroundColor(Color("GrayFontOne"))
                     Spacer()
-                    TextHelvetica(content: "14 sets", size: 16)
+                    TextHelvetica(content: Double(reps).stringFormat + " sets", size: 16)
                         .foregroundColor(Color("GrayFontOne"))
                     Spacer()
-                    TextHelvetica(content: "5 PRs", size: 16)
-                        .foregroundColor(Color("GrayFontOne"))
+                   
 
                 }
                 .padding(.horizontal, 20)
@@ -516,7 +537,8 @@ struct Home: View {
                                                         .foregroundColor(Color("GrayFontOne"))
                                                 }
                                                 Spacer()
-                                                Text("12")
+                                                let RepMax = viewModel.calculateOneRepMax(weight: Double(sets.weight), reps: sets.reps)
+                                                Text(RepMax.stringFormat)
                                                     .font(.custom("SpaceGrotesk-Medium", size: 18))
                                                     .foregroundColor(Color("GrayFontOne"))
 
@@ -554,7 +576,7 @@ struct Home: View {
                         Spacer()
                     }       .padding(.horizontal)
                     ScrollView {
-                        TextHelvetica(content: "thUASIHkdjhaslkj sklajh dklasjhklashd ah ahsdjk haslk dhakl hk h haklsh d", size: 20)
+                        TextHelvetica(content: workout.notes, size: 20)
                             .foregroundColor(Color("GrayFontOne"))
 
                     }
@@ -616,7 +638,9 @@ struct Home: View {
 }
 
 
-
+func calculateOneRepMax(weight: Double, reps: Int) -> Double {
+    return weight + (weight * Double(reps) * 0.0333)
+}
 
 
 struct CalendarView: View {

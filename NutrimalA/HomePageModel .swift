@@ -12,6 +12,7 @@ struct HomePageModel {
         private(set) var exerciseQueue: [Exersise] = []
     
         private(set) var workouts = [Date: [ScheduleWorkout]]()
+    
 
         var currentExervice: Exersise?
     
@@ -62,6 +63,7 @@ struct HomePageModel {
         var exercises: [WorkoutLogModel.ExersiseLogModule]
         var category: String
         var competionDate: Date
+        var workoutTime: Int = 0
     }
     
     
@@ -99,7 +101,7 @@ struct HomePageModel {
     }
     
 
-    mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+    mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule], workoutTime: Int, workoutNotes: String) {
         
 
         // needs to be cleaned
@@ -112,7 +114,7 @@ struct HomePageModel {
             updatedExercise.DateCompleted = Date()
             exercises[exerciseID].exerciseHistory.append(updatedExercise)
         }
-        history.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: removedBlankRows, category: "", competionDate: Date()))
+        history.append(Workout(id: UUID(), WorkoutName: workoutName, notes: workoutNotes, exercises: removedBlankRows, category: "", competionDate: Date(), workoutTime: workoutTime))
     }
     
     mutating func addToMyExercises(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {

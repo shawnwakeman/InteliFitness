@@ -119,7 +119,7 @@ struct ExercisePage: View {
                     case .page1:
                         Page1View(exercise: exercise)
                     case .page2:
-                        Page2View(exercise: exercise)
+                        Page2View(exercise: exercise, viewModel: viewModel)
                     case .page3:
                         Page3View(exercise: exercise, viewModel: viewModel)
                  
@@ -129,7 +129,7 @@ struct ExercisePage: View {
                 else {
                     switch selectedPage {
                     case .page1:
-                        Page2View(exercise: exercise)
+                        Page2View(exercise: exercise, viewModel: viewModel)
                     case .page2:
                         Page3View(exercise: exercise, viewModel: viewModel)
                     case .page3:
@@ -268,6 +268,7 @@ struct Page1View: View {
 
 struct Page2View: View {
     var exercise: HomePageModel.Exersise
+    @ObservedObject var viewModel: HomePageViewModel
     var body: some View {
      
         ScrollView {
@@ -291,7 +292,8 @@ struct Page2View: View {
                         VStack(spacing: 0) {
                             HStack(alignment: .top) {
                                 VStack(alignment: .leading) {
-                                    TextHelvetica(content: "Tuesday Feb 12" , size: 27)
+                                    
+                                    TextHelvetica(content: viewModel.formatDate(workout.DateCompleted!) , size: 27)
                                         .foregroundColor(Color("WhiteFontOne"))
                                     
                                 }
@@ -320,23 +322,7 @@ struct Page2View: View {
                                 .frame(height: getScreenBounds().height * 0.006)
                                 .foregroundColor(Color("MainGray"))
                             
-                            HStack {
-                                TextHelvetica(content: "1000 lbs", size: 16)
-                                    .foregroundColor(Color("GrayFontOne"))
-                                Spacer()
-                                TextHelvetica(content: "1000 sets", size: 16)
-                                    .foregroundColor(Color("GrayFontOne"))
-                                Spacer()
-                                TextHelvetica(content: "14 reps", size: 16)
-                                    .foregroundColor(Color("GrayFontOne"))
-                                Spacer()
-                                TextHelvetica(content: "5 PRs", size: 16)
-                                    .foregroundColor(Color("GrayFontOne"))
-                                              
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 7)
-                            .background(Color("MainGray"))
+
                             
                             Divider()
                                 
@@ -377,9 +363,13 @@ struct Page2View: View {
                                                             .foregroundColor(Color("GrayFontOne"))
                                                     }
                                                     Spacer()
-                                                    TextHelvetica(content: "120", size: 19)
-                                              
+                                                    
+                                                    let RepMax = viewModel.calculateOneRepMax(weight: Double(row.weight), reps: row.reps)
+                                                    Text(RepMax.stringFormat)
+                                                        .font(.custom("SpaceGrotesk-Medium", size: 19))
                                                         .foregroundColor(Color("GrayFontOne"))
+
+                                                    
                                                     
                                                 }.padding(.horizontal)
                                            
@@ -474,7 +464,7 @@ struct Page3View: View {
                 }
                 // reps/set - line
                
-
+                FreqencyChart()
                 // freq chart
 
 

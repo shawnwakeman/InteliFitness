@@ -21,8 +21,8 @@ struct CategorySelectionMenu: View {
                 }
             }
         } label: {
-            Text(selectedCategory)
-                .foregroundColor(.blue)
+            TextHelvetica(content: selectedCategory, size: 18)
+                .foregroundColor(Color("LinkBlue"))
         }
     }
 }
@@ -49,8 +49,8 @@ struct BodyPartSelectionMenu: View {
         "Hamstrings",
 
         "Other",
-        "Full Body",
-        "Cardio"
+        "Full Body"
+     
     ]
 
     var body: some View {
@@ -63,8 +63,9 @@ struct BodyPartSelectionMenu: View {
                 }
             }
         } label: {
-            Text(selectedBodyPart)
-                .foregroundColor(.blue)
+            TextHelvetica(content: selectedBodyPart, size: 18)
+                .foregroundColor(Color("LinkBlue"))
+
         }
     }
 }
@@ -107,6 +108,7 @@ struct NameAndCategoryView: View {
                             .foregroundColor(Color("MainGray"))
                         Image(systemName: "xmark")
                             .bold()
+                            .foregroundColor(Color("LinkBlue"))
                     }
                     
                         
@@ -123,9 +125,13 @@ struct NameAndCategoryView: View {
                         withAnimation(.spring()) {
                             showingNew = false
                         }
+                        HapticManager.instance.impact(style: .rigid)
                         var exercisesToBeSaved = viewModel.exersises
                
                         if selectedCategory == "Reps Only" {
+                            exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.reps))
+                        }
+                        else if selectedCategory == "Bodyweight" {
                             exercisesToBeSaved.append(HomePageModel.Exersise(exerciseName: name, exerciseCategory: [selectedBodyPart], exerciseEquipment: selectedCategory, id: exercisesToBeSaved.count, restTime: 120, instructions: [], moduleType: WorkoutLogModel.moduleType.reps))
                         }
                         else if selectedCategory == "Weighted Bodyweight" {
@@ -148,7 +154,8 @@ struct NameAndCategoryView: View {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         name = ""
                     }
-            
+                    
+                   
                     
                     
                 }

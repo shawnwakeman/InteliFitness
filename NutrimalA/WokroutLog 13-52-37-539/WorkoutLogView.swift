@@ -8,6 +8,7 @@
 import SwiftUI
 
 import AVFoundation
+
 let borderWeight: CGFloat = 0.75
 
 
@@ -24,7 +25,7 @@ struct WorkoutLogView: View {
     @State private var NamePopUp: Bool = false
     @State private var isFocused: Bool = false
 
- 
+    @State private var enteredBackground = false
  
 
     @Environment(\.scenePhase) private var scenePhase
@@ -55,10 +56,17 @@ struct WorkoutLogView: View {
                                 
                                 
                                 ZStack{
-                                    
-                                    Image("meatBalls")
-                                        .resizable()
-                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                    HStack(spacing: 4) {
+                                        Circle()
+                                        Circle()
+                                        Circle()
+                                        
+                                    }
+                                    .scaleEffect(0.76)
+                                    .foregroundColor(Color("BorderGray"))
+                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                   
+                                  
                                     
                                     
                                 
@@ -280,7 +288,7 @@ struct WorkoutLogView: View {
                 
                 DropDownMenuView(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
                     .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.24)
-                    .shadow(color: .black, radius: 12)
+                   
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -365,15 +373,20 @@ struct WorkoutLogView: View {
                 
                 
             }
-            Group {
+
+            
+            ZStack {
                 VisualEffectView(effect: UIBlurEffect(style: .dark))
                     .edgesIgnoringSafeArea(.all)
-                    .opacity(workoutLogViewModel.displayingExerciseView ? 1 : 0)
+                    .opacity(workoutLogViewModel.displayingExerciseViewOnWorkout ? 1 : 0)
                     .offset(y: getScreenBounds().height * -0.07)
-                ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.45 : getScreenBounds().height * 1.3)
-                
+                ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseViewOnWorkout, ignoringOffset: true)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseViewOnWorkout ? getScreenBounds().height * 0.4 : getScreenBounds().height * 1.3)
+            
+       
             }
+            
+
             
          
           
@@ -397,21 +410,18 @@ struct WorkoutLogView: View {
         .background(
             LinearGradient(
             gradient: Gradient(colors: [
-                Color(red: 15/255, green: 18/255, blue: 23/255),
-                Color(red: 15/255, green: 18/255, blue: 29/255)
+                Color("DBblack"),
+                
+                Color("MainGrayLight")
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
+            
+            
         )
-            .overlay(
-                Image("noisy-background")
-                    .resizable()
-                    .scaleEffect(1)
-                    .opacity(0.2)
-                    .blendMode(.overlay)
-                    .ignoresSafeArea()
-            ))
+            )
         
+       
         .onChange(of: scenePhase) { newScenePhase in
             switch newScenePhase {
             case .active:
@@ -419,17 +429,19 @@ struct WorkoutLogView: View {
                     homePageVeiwModel.loadOngoingWorkoutStatus()
                 }
                 homePageVeiwModel.loadMyExercises()
-                workoutLogViewModel.loadExersiseModules()
+                if enteredBackground {
+                    workoutLogViewModel.loadTimers()
+                    enteredBackground = false
+                }
                 homePageVeiwModel.loadHistory()
-                workoutLogViewModel.loadTimers()
+                workoutLogViewModel.loadExersiseModules()
                 homePageVeiwModel.loadSchedule()
                 cancelSpecificNotification()
-             
+
                 print("for")
             case .inactive:
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
-            
 
                 print("in")
             case .background:
@@ -437,16 +449,14 @@ struct WorkoutLogView: View {
                 workoutLogViewModel.saveTimers()
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
-
+                workoutLogViewModel.setPopUpState(state: false, popUpId: "TimerPopUp")
                 homePageVeiwModel.saveMyWorkouts()
                 if homePageVeiwModel.ongoingWorkout {
-                    
-                
                     let timeInterval: TimeInterval = 30 * 60
-
                     scheduleSpecificNotification(title: "Ongoing Workout", body: "You still have an ongoing workout, Did you mean to finish it.", interval: timeInterval)
-             
                 }
+                enteredBackground = true
+
                 print("back")
             @unknown default:
                 fatalError("Unknown scene phase")
@@ -523,6 +533,7 @@ struct NamePopUP: View {
                             .foregroundColor(Color("MainGray"))
                         Image(systemName: "xmark")
                             .bold()
+                            .foregroundColor(Color("LinkBlue"))
                     }
                     
                         
@@ -566,7 +577,7 @@ struct NamePopUP: View {
                             .foregroundColor(Color("GrayFontOne"))
                         Image("sidwaysArrow")
                             .resizable()
-                        
+                            .foregroundColor(Color("LinkBlue"))
                             .aspectRatio(24/48, contentMode: .fit)
                             .frame(maxHeight: 22)
                     }
@@ -726,6 +737,7 @@ struct SetMenu: View {
                             .foregroundColor(Color("MainGray"))
                         Image(systemName: "xmark")
                             .bold()
+                            .foregroundColor(Color("LinkBlue"))
                     }
                     
                         
@@ -742,6 +754,7 @@ struct SetMenu: View {
             
             VStack {
                 let popUpData = viewModel.getPopUp(popUpId: "SetMenuPopUp")
+              
                 Button {
                     
                    
@@ -777,6 +790,7 @@ struct SetMenu: View {
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 Button {
+                    print(popUpData)
                     viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "W")
                     withAnimation(.spring()){
                    
@@ -1392,7 +1406,7 @@ struct LogModuleHeader: View{
                     let exercise = homePageViewModel.exersises[viewModel.exersiseModules[parentModuleID].ExersiseID]
                     homePageViewModel.setCurrentExercise(exercise: exercise)
                     withAnimation(.spring()) {
-                        viewModel.displayingExerciseView.toggle()
+                        viewModel.displayingExerciseViewOnWorkout.toggle()
                     }
                    
                  
@@ -1417,9 +1431,15 @@ struct LogModuleHeader: View{
 
                 ZStack{
                     
-                    Image("meatBalls")
-                        .resizable()
-                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                    HStack(spacing: 4) {
+                        Circle()
+                        Circle()
+                        Circle()
+                        
+                    }
+                    .scaleEffect(0.76)
+                    .foregroundColor(Color("BorderGray"))
+                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
                     
                     
 
@@ -1526,21 +1546,21 @@ struct CoreLogModule: View {
 //                        let _ = print(module.moduleType)
 
                         if module.moduleType == WorkoutLogModel.moduleType.reps {
-                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID, TitleText: "Reps")
                         }
                         else if module.moduleType == WorkoutLogModel.moduleType.weightedReps {
                             Header(viewModel: viewModel, parentModuleID: ModuleID, plusOrMinus: "+")
-                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                            
                         }
                         else if module.moduleType == WorkoutLogModel.moduleType.assistedReps {
                             Header(viewModel: viewModel, parentModuleID: ModuleID, plusOrMinus: "-")
-                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                            
                         }
                         else if module.moduleType == WorkoutLogModel.moduleType.duration {
-                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID, TitleText: "Time")
                         }
                         else if module.moduleType == WorkoutLogModel.moduleType.cardio {
-                            HeaderRepsOnly(viewModel: viewModel, parentModuleID: ModuleID)
+                            Header(viewModel: viewModel, parentModuleID: ModuleID, text1: "Mi", text2: "Time")
                         }
                         else {
                             Header(viewModel: viewModel, parentModuleID: ModuleID)
@@ -1686,6 +1706,7 @@ struct PopupView: View {
                                 
                         } else {
                             Image("checkMark")
+                           
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 17, height: 17)
@@ -1833,15 +1854,19 @@ struct PopupView: View {
                 .stroke(Color("BorderGray"), lineWidth: borderWeight))
 
             HStack {
+                
+
                 HStack {
+                  
                     TextHelvetica(content: "Target", size: 19)
-                            .foregroundColor(Color("GrayFontOne"))
+                        .foregroundColor(Color(.clear))
                         Divider()
                         .frame(width: borderWeight, height: 20)
-                        .overlay(Color("BorderGray"))
+                        .overlay(Color(.clear))
+                        
 
                         TextHelvetica(content: "10.5", size: 18)
-                            .foregroundColor(Color("GrayFontOne"))
+                        .foregroundColor(Color(.clear))
                           
     
                 }
@@ -1909,86 +1934,40 @@ struct ContentGrid: View {
                 ForEach(module.setRows){
                     row in
                     if isLive {
-                        if let mostRecent = exercise.exerciseHistory.last {
-                           
-                            if row.id < mostRecent.setRows.count {
-                                    let prevRow = mostRecent.setRows[row.id]
-                               
-                                if prevRow.repMetric != 0 {
-                                    
-                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
-                                 
-                                    if module.moduleType == WorkoutLogModel.moduleType.reps {
-                                        WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
-                                    }
-                                   
-                                    else {
-                                        WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
-                                    }
-                                    
-                                } else {
-                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps)"
-                                    if module.moduleType == WorkoutLogModel.moduleType.reps {
-                                        WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
-                                    }
-                                   
-                                    else {
-                                        WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
-                                    }
-                                    
-                                }
-                                
-                            } else {
-                                if module.moduleType == WorkoutLogModel.moduleType.reps {
-                                    WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
-                                }
-                               
-                                else {
-                                    WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
-                                }
-                            }
-                            
-                      
-                            
-                        } else {
+                        let prevoiseString = viewModel.getPreviousSetString(for: row, in: exercise)
+                       
+                        ZStack {
                             if module.moduleType == WorkoutLogModel.moduleType.reps {
-                                WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
-                            }
-                           
-                            else {
-                                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
-                            }
-                            
-                        }
-                    } else {
-                        if let mostRecent = exercise.exerciseHistory.last {
-                           
-                            if row.id < mostRecent.setRows.count {
-                                    let prevRow = mostRecent.setRows[row.id]
-                               
-                                if prevRow.repMetric != 0 {
-                                    
-                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
-                                    WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
-                                    
-                                } else {
-                                    let prevoiseString = "\(prevRow.weight.clean) x \(prevRow.reps)"
-                                    WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
-                                    
-                                }
-                                
+                                WorkoutSetRowViewRepsOnly(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                            } else if (module.moduleType == WorkoutLogModel.moduleType.cardio) {
+                                WorkoutSetRowViewCardio(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                            } else if (module.moduleType == WorkoutLogModel.moduleType.duration) {
+                                WorkoutSetRowViewDuration(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
                             } else {
-                                
-                                WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                                WorkoutSetRowView(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
                             }
+                        }
+                        .onAppear {
+                            viewModel.SetPlaceHolders(for: row, in: exercise, moduleId: ModuleID)
+                        }
+                    
                             
                       
-                            
+                    } else {
+                        let prevoiseString = viewModel.getPreviousSetString(for: row, in: exercise)
+                        
+                        if module.moduleType == WorkoutLogModel.moduleType.reps {
+                            WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                        } else if (module.moduleType == WorkoutLogModel.moduleType.cardio) {
+                            WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
+                        } else if (module.moduleType == WorkoutLogModel.moduleType.duration) {
+                            WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
                         } else {
-                            WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: "0")
+                            WorkoutSetRowViewForCreator(viewModel: viewModel, rowObject: row, moduleID: ModuleID, moduleUUID: moduleUUID, previous: prevoiseString)
                         }
+                        
                     }
-                   
+                    
                    
                     
                     //            if row.id != module.setRows.count - 1 {
@@ -1999,6 +1978,7 @@ struct ContentGrid: View {
                     //            }
                     
                 }
+            
           
           
            
@@ -2013,6 +1993,8 @@ struct Header: View {
     @ObservedObject var viewModel: WorkoutLogViewModel
     var parentModuleID: Int
     var plusOrMinus: String = ""
+    var text1: String = "Lbs"
+    var text2: String = "Reps"
     var body: some View{
         ZStack{
             Rectangle()
@@ -2032,12 +2014,12 @@ struct Header: View {
                         .offset(x: -5)
                     Spacer()
                     
-                    TextHelvetica(content: plusOrMinus + "Lbs", size: 20)
+                    TextHelvetica(content: plusOrMinus + text1, size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
 
-                    TextHelvetica(content: "Reps", size: 20)
+                    TextHelvetica(content: text2, size: 20)
                         .padding(.trailing)
                         .foregroundColor(Color("WhiteFontOne"))
                       
@@ -2123,7 +2105,7 @@ extension Float {
 
 
 
-extension View{
+extension View {
    func getScreenBounds() -> CGRect{
    return UIScreen.main.bounds
    }

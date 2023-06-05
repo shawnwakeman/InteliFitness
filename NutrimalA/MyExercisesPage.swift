@@ -25,7 +25,7 @@ struct MyExercisesPage: View {
             
             let topEdge = proxy.safeAreaInsets.top
             MyExercisesPageMain(viewModel: viewModel, topEdge: topEdge)
-                .navigationBarTitle("back")
+                .navigationBarTitle(" ")
                 .navigationBarHidden(self.isNavigationBarHidden)
                 .onAppear {
                     self.isNavigationBarHidden = true
@@ -58,6 +58,9 @@ struct MyExercisesPageMain: View {
     
     private var filteredExercises: [HomePageModel.Exersise] {
         var filtered = viewModel.exersises
+
+        // Filter out deleted exercises
+        filtered = filtered.filter { !$0.isDeleted }
         
         if !searchText.isEmpty {
             filtered = filtered.filter { $0.exerciseName.localizedCaseInsensitiveContains(searchText) }
@@ -87,19 +90,7 @@ struct MyExercisesPageMain: View {
     
     func exerciseRow(viewModel: HomePageViewModel, exercise: HomePageModel.Exersise, displayingExerciseView: Binding<Bool>) -> some View {
         ZStack {
-            Button(action: {
-                HapticManager.instance.impact(style: .rigid)
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                viewModel.setCurrentExercise(exercise: exercise)
-                withAnimation(.spring()) {
-                    displayingExerciseView.wrappedValue = true
-                }
-            }, label: {
-                Rectangle()
-                    .opacity(0.0001)
-                    .foregroundColor(.black)
-            })
-            .buttonStyle(.plain)
+            
 
             HStack {
                 VStack(alignment: .leading) {
@@ -113,6 +104,21 @@ struct MyExercisesPageMain: View {
             .padding()
             .padding(.leading, 15)
             .frame(minWidth: 0, maxWidth: .infinity)
+            
+            
+            Button(action: {
+                HapticManager.instance.impact(style: .rigid)
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                viewModel.setCurrentExercise(exercise: exercise)
+                withAnimation(.spring()) {
+                    displayingExerciseView.wrappedValue = true
+                }
+            }, label: {
+                Rectangle()
+                    .opacity(0.0001)
+                    .foregroundColor(.black)
+            })
+            .buttonStyle(.plain)
         }
         .background(Color("MainGray"))
     }
@@ -162,6 +168,7 @@ struct MyExercisesPageMain: View {
                                             withAnimation(.spring()) {
                                                 showingNew = true
                                             }
+                                            HapticManager.instance.impact(style: .rigid)
                                         } label: {
                                             ZStack {
                                                 RoundedRectangle(cornerRadius: 4)
@@ -245,8 +252,11 @@ struct MyExercisesPageMain: View {
                                                 
                                                 TextHelvetica(content: selectedType ?? "Any Equipment", size: 18)
                                                     .font(.largeTitle)
+                                                    .foregroundColor(Color("LinkBlue"))
                                                     .frame(width: getScreenBounds().width / 2.22)
-                                                
+                                                    .onTapGesture {
+                                                        HapticManager.instance.impact(style: .rigid)
+                                                    }
                                                 
                                                 
                                             }
@@ -287,8 +297,11 @@ struct MyExercisesPageMain: View {
                                                 
                                                 TextHelvetica(content: selectedColor ?? "Any Muscle Group", size: 18)
                                                     .font(.largeTitle)
+                                                    .foregroundColor(Color("LinkBlue"))
                                                     .frame(width: getScreenBounds().width / 2.22)
-                                                
+                                                    
+                                                       
+                                                    
                                                 
                                             }
                                             
@@ -332,19 +345,20 @@ struct MyExercisesPageMain: View {
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: getHeaderHeight() - 20, alignment: .bottom)
+               
                             .background(
                                 Color("MainGray")
+                                    .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 7, x: 0, y: 0)
                                     
-                                    .clipShape(CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
-                                    .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
+                                    
                             )
                             
                             
                             .overlay(
                                 GeometryReader { geoProxy in
-                                    CustomCornerBorder(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius(), lineWidth: borderWeight)
+                                    CustomCornerBorder(corners: [.bottomLeft, .bottomRight], radius: 0, lineWidth: borderWeight)
                                         .stroke(Color("BorderGray"), lineWidth: borderWeight)
-                                        .clipShape(CustomCornerBorder(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius(), lineWidth: 0))
+                                        .clipShape(CustomCornerBorder(corners: [.bottomLeft, .bottomRight], radius: 0, lineWidth: 0))
                                         .frame(height: geoProxy.size.height + 100) // Increase the height by adding an arbitrary value, e.g., 10
                                         .offset(y: -100)
                                         .opacity((-1 * topBarTitleOpacityForBorder()))// Move the overlay up by the same value
@@ -440,6 +454,7 @@ struct MyExercisesPageMain: View {
                                         VStack(spacing: 0) {
                                             ForEach(Array(sectionedExercises[key]!.indices), id: \.self) { index in
                                                 let exercise = sectionedExercises[key]![index]
+                                                
                                                 exerciseRow(viewModel: viewModel, exercise: exercise, displayingExerciseView: $displayingExerciseView)
 
                                                 if index < sectionedExercises[key]!.count - 1 {
@@ -582,7 +597,7 @@ struct MyExercisesPageMain: View {
                             }) {
                                 
                                 Text("Any Equipment")
-                                
+                                    .foregroundColor(Color("LinkBlue"))
                                 
                                 
                             }
@@ -604,7 +619,7 @@ struct MyExercisesPageMain: View {
                             TextHelvetica(content: selectedType ?? "Any Equipment", size: 18)
                                 .font(.largeTitle)
                                 .frame(width: getScreenBounds().width / 2.22)
-                            
+                                .foregroundColor(Color("LinkBlue"))
                             
                             
                         }
@@ -622,6 +637,7 @@ struct MyExercisesPageMain: View {
                             }) {
                                 
                                 Text("Any Muscle Group")
+                                    .foregroundColor(Color("LinkBlue"))
                             }
                             
                             // Add a separator
@@ -639,6 +655,7 @@ struct MyExercisesPageMain: View {
                             
                             TextHelvetica(content: selectedColor ?? "Any Muscle Group", size: 18)
                                 .font(.largeTitle)
+                                .foregroundColor(Color("LinkBlue"))
                                 .frame(width: getScreenBounds().width / 2.22)
                             
                             
@@ -680,6 +697,19 @@ struct MyExercisesPageMain: View {
             }
             
         }
+        .background(
+            LinearGradient(
+            gradient: Gradient(colors: [
+                Color("DBblack"),
+                
+                Color("MainGrayLight")
+            ]),
+            startPoint: .top,
+            endPoint: .bottomTrailing
+            
+            
+        ))
+        
         .onChange(of: selectedType) { newVaule in
             searchText = ""
         }
@@ -754,6 +784,7 @@ struct MyExercisesPageMain: View {
                                 .foregroundColor(Color("MainGray"))
                             Image(systemName: "xmark")
                                 .bold()
+                                .foregroundColor(Color("LinkBlue"))
                         }
                         
                             
@@ -794,6 +825,7 @@ struct MyExercisesPageMain: View {
                    
                     HStack {
                         TextHelvetica(content: "Body Part", size: 12)
+                            
                         Menu {
                             
                         }

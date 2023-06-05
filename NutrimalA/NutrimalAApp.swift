@@ -12,10 +12,13 @@ import WidgetKit
 
 @main
 struct NutrimalAApp: App {
-
+    @AppStorage("hasOnboarded") var hasOnboarded = false
     var body: some Scene {
         WindowGroup {
             HomePageView()
+                .fullScreenCover(isPresented: .constant(!hasOnboarded)) {
+                    OnboardingView(hasOnboarded: $hasOnboarded)
+                }
         }
     }
 }

@@ -49,6 +49,7 @@ struct ReorderSets: View {
                                 .foregroundColor(Color("MainGray"))
                             Image(systemName: "xmark")
                                 .bold()
+                                .foregroundColor(Color("LinkBlue"))
                         }
                         
                         

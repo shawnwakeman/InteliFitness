@@ -22,20 +22,23 @@ struct AddExersisesPopUp: View {
     private var filteredExercises: [HomePageModel.Exersise] {
         var filtered = homePageViewModel.exersises
 
-            if !searchText.isEmpty {
-                filtered = filtered.filter { $0.exerciseName.localizedCaseInsensitiveContains(searchText) }
-            }
-
-            if let type = selectedType {
-                filtered = filtered.filter { $0.exerciseEquipment == type }
-            }
-
-            if let color = selectedColor {
-                filtered = filtered.filter { $0.exerciseCategory.contains(color) }
-            }
-
-            return filtered
+        // Filter out deleted exercises
+        filtered = filtered.filter { !$0.isDeleted }
+        
+        if !searchText.isEmpty {
+            filtered = filtered.filter { $0.exerciseName.localizedCaseInsensitiveContains(searchText) }
         }
+        
+        if let type = selectedType {
+            filtered = filtered.filter { $0.exerciseEquipment == type }
+        }
+        
+        if let color = selectedColor {
+            filtered = filtered.filter { $0.exerciseCategory.contains(color) }
+        }
+        
+        return filtered
+    }
     
     private var sectionedExercises: [String: [HomePageModel.Exersise]] {
             Dictionary(grouping: filteredExercises) { $0.exerciseName.prefix(1).uppercased() }
@@ -134,8 +137,10 @@ struct AddExersisesPopUp: View {
                             
                       
                             Image("checkMark")
+                       
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
+                                .foregroundColor(Color("LinkBlue"))
                                 .frame(width: 17, height: 17)
                             
                         }
@@ -198,6 +203,7 @@ struct AddExersisesPopUp: View {
                   
                         TextHelvetica(content: selectedType ?? "Any Equipment", size: 18)
                             .font(.largeTitle)
+                            .foregroundColor(Color("LinkBlue"))
                             .frame(width: getScreenBounds().width / 2.165)
                             
                    
@@ -238,6 +244,7 @@ struct AddExersisesPopUp: View {
                         
                             TextHelvetica(content: selectedColor ?? "Any Muscle Group", size: 18)
                                 .font(.largeTitle)
+                                .foregroundColor(Color("LinkBlue"))
                             .frame(width: getScreenBounds().width / 2.165)
                             
                        
@@ -291,7 +298,7 @@ struct AddExersisesPopUp: View {
                         
                                 
                             }
-                            
+                            HapticManager.instance.impact(style: .rigid)
                         }
                         label: {
                             ZStack {
@@ -327,7 +334,51 @@ struct AddExersisesPopUp: View {
                                 Section(header: TextHelvetica(content: key, size: 22).foregroundColor(Color("GrayFontOne"))) {
                                         ForEach(sectionedExercises[key]!, id: \.id) { exercise in
                                             ZStack {
+                                                
+                                                HStack {
+                                                    VStack(alignment: .leading) {
+                                                        if homePageViewModel.exersises[exercise.id].selected == false {
+                                                            TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                                  .foregroundColor(Color("WhiteFontOne"))
+                                                            TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        else {
+                                                            TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                                  .foregroundColor(Color("LinkBlue"))
+                                                                  .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
+                                                                  
+                                                            TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        
+                                                    }
+                                                    Spacer()
+                                                    
+                                                    Button {}
+                                                   label: {
+                                                       ZStack {
+                                                           
+                                                               
+                                                               Image("checkMark")
+                                                                   .resizable()
+                                                                   .aspectRatio(contentMode: .fit)
+                                                                   .foregroundColor(Color("LinkBlue"))
+                                                                   .frame(width: 17, height: 17)
+                                                                   .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
+                                                           
+                                                         
+                                                         
+                                                           
+                                                       }
+                                                   }
+                                                   .frame(width: getScreenBounds().width * 0.12, height: getScreenBounds().height * 0.04)
+                                                    
+                                                    
+                                                }
+                                                
                                                 Button(action: {
+                                                    HapticManager.instance.impact(style: .rigid)
                                                     if viewModel.replacingExercise.replacing {
                                                    
                                                         let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
@@ -346,7 +397,7 @@ struct AddExersisesPopUp: View {
                                                            } else {
                                                                homePageViewModel.removeExersiseFromQueue(ExersiseID: exercise.id)
                                                            }
-                                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
+                                                        withAnimation(.spring(response: 0.2, dampingFraction: 0.7, blendDuration: 0)) {
                                                                 homePageViewModel.setSelectionState(ExersiseID: exercise.id)
                                                             }
                                                     }
@@ -357,44 +408,6 @@ struct AddExersisesPopUp: View {
                                                         .opacity(0.0001)
                                                         .foregroundColor(.black)
                                                 }).buttonStyle(.plain)
-                                                HStack {
-                                                    VStack(alignment: .leading) {
-                                                        if homePageViewModel.exersises[exercise.id].selected == false {
-                                                            TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
-                                                                  .foregroundColor(Color("WhiteFontOne"))
-                                                            TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
-                                                                .foregroundColor(Color("GrayFontOne"))
-                                                        }
-                                                        else {
-                                                            TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
-                                                                  .foregroundColor(Color("WhiteFontOne"))
-                                                            TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
-                                                                .foregroundColor(Color("GrayFontOne"))
-                                                        }
-                                                        
-                                                    }
-                                                    Spacer()
-                                                    
-                                                    Button {}
-                                                   label: {
-                                                       ZStack {
-                                                           
-                                                               
-                                                               Image("checkMark")
-                                                                   .resizable()
-                                                                   .aspectRatio(contentMode: .fit)
-                                                                   .frame(width: 17, height: 17)
-                                                                   .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
-                                                           
-                                                         
-                                                         
-                                                           
-                                                       }
-                                                   }
-                                                   .frame(width: getScreenBounds().width * 0.12, height: getScreenBounds().height * 0.04)
-                                                    
-                                                    
-                                                }
                                                
                                          
                                                 
@@ -412,7 +425,52 @@ struct AddExersisesPopUp: View {
                         } else {
                             ForEach(filteredExercises, id: \.id) { exercise in
                                 ZStack {
+                                    
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            if homePageViewModel.exersises[exercise.id].selected == false {
+                                                TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                      .foregroundColor(Color("WhiteFontOne"))
+                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                            }
+                                            else {
+                                              TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
+                                                    .foregroundColor(Color("LinkBlue"))
+                                                    .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
+                                  
+                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
+                                                    .foregroundColor(Color("GrayFontOne"))
+                                            }
+                                            
+                                        }
+                                        Spacer()
+                                        
+                                        Button {}
+                                       label: {
+                                           ZStack {
+                                               
+                                                   
+                                                   Image("checkMark")
+                                                       .resizable()
+                                                       .aspectRatio(contentMode: .fit)
+                                                       .frame(width: 17, height: 17)
+                                                       .foregroundColor(Color("LinkBlue"))
+                                                       .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
+                                                       .scaleEffect(homePageViewModel.exersises[exercise.id].selected ? 0.9 : 0.7)
+                                               
+                                             
+                                             
+                                               
+                                           }
+                                       }
+                                       .frame(width: getScreenBounds().width * 0.12, height: getScreenBounds().height * 0.04)
+                                        
+                                        
+                                    }
+                                   
                                     Button(action: {
+                                        HapticManager.instance.impact(style: .rigid)
                                         if viewModel.replacingExercise.replacing {
                                        
                                             let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
@@ -441,46 +499,6 @@ struct AddExersisesPopUp: View {
                                             .opacity(0.0001)
                                             .foregroundColor(.black)
                                     }).buttonStyle(.plain)
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            if homePageViewModel.exersises[exercise.id].selected == false {
-                                                TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
-                                                      .foregroundColor(Color("WhiteFontOne"))
-                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
-                                                    .foregroundColor(Color("GrayFontOne"))
-                                            }
-                                            else {
-                                              TextHelvetica(content: "\(exercise.exerciseName) (\(exercise.exerciseEquipment))", size: 18)
-                                                    .foregroundColor(Color("WhiteFontOne"))
-                                                TextHelvetica(content: exercise.exerciseCategory[0], size: 18)
-                                                    .foregroundColor(Color("GrayFontOne"))
-                                            }
-                                            
-                                        }
-                                        Spacer()
-                                        
-                                        Button {}
-                                       label: {
-                                           ZStack {
-                                               
-                                                   
-                                                   Image("checkMark")
-                                                       .resizable()
-                                                       .aspectRatio(contentMode: .fit)
-                                                       .frame(width: 17, height: 17)
-                                                       .opacity(homePageViewModel.exersises[exercise.id].selected ? 1: 0)
-                                               
-                                             
-                                             
-                                               
-                                           }
-                                       }
-                                       .frame(width: getScreenBounds().width * 0.12, height: getScreenBounds().height * 0.04)
-                                        
-                                        
-                                    }
-                                   
-                             
                                     
                                 }
                                 .listRowBackground(Color("MainGray"))
@@ -522,7 +540,7 @@ struct AddExersisesPopUp: View {
                     }
                 }
             NameAndCategoryView(viewModel: homePageViewModel, showingNew: $showingNew)
-                .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.3)
+                .position(x: getScreenBounds().width/2, y: showingNew ? getScreenBounds().height * 0.4 : getScreenBounds().height * 1.3)
         }
         .onChange(of: selectedType) { newVaule in
             searchText = ""

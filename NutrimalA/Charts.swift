@@ -41,34 +41,47 @@ struct PolynomialRegressionGraph: View {
         VStack {
             
             VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text("Views")
+                HStack(alignment: .top) {
+                    TextHelvetica(content: "Predicted 1RM", size: 22)
+                        .lineLimit(2)
+                        .bold()
+                        .foregroundColor(Color("LinkBlue"))
                         .onTapGesture {
                             showingAve.toggle()
                         }
+                        .padding(.trailing, 5)
                     
-                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
+                    Spacer()
+                        
+//
+//                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
                 }
                 
-                let totalValue = sampleAnalytics.reduce(0.0) { partialResult, item in
-                    item.views + partialResult
+                if let maxViews = sampleAnalytics.map({ $0.views }).max() {
+                   
+                
+                    if let item = currentActiveItem {
+                        
+                        
+                        TextHelvetica(content: "\(item.views.stringFormat) lbs", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                    } else {
+                        TextHelvetica(content: "\(maxViews.stringFormat) lbs", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                    }
                 }
-                if let item = currentActiveItem {
-                    Text(item.views.stringFormat)
-                    
-                } else {
-                    Text(totalValue.stringFormat)
-                }
-              
                 
                 AnimatedChart()
 
             }
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(.white.shadow(.drop(radius: 2)))
-            )
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
 
             
             
@@ -77,17 +90,18 @@ struct PolynomialRegressionGraph: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding()
         .navigationTitle("cume")
-        .onChange(of: currentTab) { newValue in
-      
-            if newValue != "7 Days" {
-                for (index,_) in sampleAnalytics.enumerated() {
-                    sampleAnalytics[index].views = .random(in: 1500...10000)
-                }
-            }
-            
-            animatePlot(fromChange: true)
-        }
-            
+//        .onChange(of: selectedTab) { newValue in
+//
+//            if newValue != .page1 {
+//                for (index,_) in sampleAnalytics.enumerated() {
+//                    print(sampleAnalytics[index].views)
+//                    sampleAnalytics[index].views = .random(in: 1500...10000)
+//                }
+//            }
+//
+//            animatePlot(fromChange: true)
+//        }
+//
             
 
             
@@ -98,19 +112,8 @@ struct PolynomialRegressionGraph: View {
     @ViewBuilder
     func AnimatedChart() -> some View {
         
-        let curColor = Color(hue: 0.33, saturation: 0.81, brightness: 0.76)
-              
-        let curGradient = LinearGradient(
-                    gradient: Gradient (
-                        colors: [
-                            curColor.opacity(0.5),
-                            curColor.opacity(0.2),
-                            curColor.opacity(0.05),
-                        ]
-                    ),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+        
+
         let max = sampleAnalytics.max { item1, item2 in
             return item2.views > item1.views
             
@@ -119,6 +122,26 @@ struct PolynomialRegressionGraph: View {
         }?.views ?? 0
   
             Chart {
+                
+                ForEach(lineOfBestFitDataFormatted) { item in
+
+                        LineMark (
+                            x: .value("Hour", item.day, unit: .day),
+                            y: .value("New View", item.animate ? item.views : 0)
+
+                        )
+                        .lineStyle(StrokeStyle(dash: [5, 2]))
+                        .foregroundStyle(Color("WhiteFontOne"))
+                       
+                        
+                       
+                        
+
+
+
+                }
+                
+                
                 ForEach(sampleAnalytics) { item in
                     
 
@@ -128,60 +151,85 @@ struct PolynomialRegressionGraph: View {
                         y: .value("Views", item.animate ? item.views : 0)
                     )
                     .symbol() {
-                        Circle()
-                            .stroke(Color.red, lineWidth: 2.5)
-                            .frame(width: 10, height: 10)
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                            Circle()
+                                .stroke(Color("LinkBlue"), lineWidth: 2)
+                        }
+                        .frame(width: 10, height: 10)
                     }
                     .symbolSize(30)
-
-                   
-
-                    RuleMark(y: .value("Limit", 200))
-                        .foregroundStyle(.cyan)
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .annotation(alignment: .leading) {
-                            Text("Goal")
-                                .background(.green)
-                        }
-
+                    
                     if let currentActiveItem,currentActiveItem.id == item.id {
+                        let _ = print(sampleAnalytics.count)
                         RuleMark(x: .value("Hour", currentActiveItem.day))
                             .lineStyle(.init(lineWidth: 2))
-                            .offset(x: (plotWidth / CGFloat(sampleAnalytics.count)) / 2)
-                            .foregroundStyle(.red)
+                            .offset(x: (plotWidth / CGFloat(sampleAnalytics.count)))
+                            .foregroundStyle(Color("WhiteFontOne"))
 
                         PointMark(
                             x: .value("Hour", item.day, unit: .day),
                             y: .value("Views", item.animate ? item.views : 0)
                         )
 
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color("LinkBlue"))
 
 
 
                     }
-                }
-            
-                ForEach(lineOfBestFitDataFormatted) { item in
 
-                        LineMark (
-                            x: .value("Hour", item.day, unit: .day),
-                            y: .value("New View", item.animate ? item.views : 0)
-
-                        )
                    
-                        .foregroundStyle(.red)
-                       
-                        
-                       
-                        
 
+//                    RuleMark(y: .value("Limit", 200))
+//                        .foregroundStyle(.cyan)
+//                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+//                        .annotation(alignment: .leading) {
+//                            Text("Goal")
+//                                .background(.green)
+//                        }
 
-
+                    
                 }
-        }
             
-         
+               
+        }
+            .chartPlotStyle { plotContent in
+              plotContent
+                   
+               
+            }
+   
+            
+            .chartXAxis {
+            
+                AxisMarks(values: .automatic) { _ in
+                  AxisGridLine()
+                    .foregroundStyle(Color("GrayFontOne"))
+                    AxisTick(stroke: StrokeStyle())
+                    
+                        .foregroundStyle(Color("GrayFontOne"))
+                    AxisGridLine(centered: true, stroke: StrokeStyle())
+                    .foregroundStyle(Color("GrayFontOne"))
+                  AxisValueLabel()
+                      
+                      .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (10 * 0.0025)))
+                        .foregroundStyle(Color("WhiteFontOne"))
+              }
+            }
+            .chartYAxis {
+              AxisMarks(values: .automatic) { value in
+               
+                  AxisGridLine(centered: true, stroke: StrokeStyle(dash: [2]))
+                  .foregroundStyle(Color("GrayFontOne"))
+
+                AxisValueLabel()
+                      .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (11 * 0.0025)))
+                      .foregroundStyle(Color("WhiteFontOne"))
+              }
+            }
+        
+            
 
 
             .chartYScale(domain: 0...(max + max * 0.3))
@@ -201,7 +249,7 @@ struct PolynomialRegressionGraph: View {
                                             calendar.component(.day, from: item.day) == hour
                                         }) {
                                             self.currentActiveItem = currentItem
-                                            self.plotWidth = proxy.plotAreaSize.width - 440
+                                            self.plotWidth = proxy.plotAreaSize.width * 0.18
                                         }
                                     }
                                 }
@@ -246,7 +294,9 @@ struct PolynomialRegressionGraph: View {
 enum chartType: Int {
     case volume = 0
     case heaviestSet
-    case page3
+    case bestSetVolume
+    case totalReps
+    case wightperRep
 
 }
 
@@ -261,7 +311,7 @@ struct Graph: View {
     
     @State var selectedTab: chartTab = .page1
     
-    var currentChart: chartType = .heaviestSet
+    var currentChart: chartType
     
 
     
@@ -272,93 +322,212 @@ struct Graph: View {
         )
     }
     var body: some View {
-        NavigationStack {
-            VStack {
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        switch currentChart {
-                        case .volume:
-                            TextHelvetica(content: "Volume", size: 20)
-                                .bold()
-                            
-                             .onTapGesture {
-                                 showingAve.toggle()
-                             }
-                        case .heaviestSet:
-                            TextHelvetica(content: "Heaviest Weight", size: 20)
-                                .bold()
-                            
-                             .onTapGesture {
-                                 showingAve.toggle()
-                             }
-                        case .page3:
-                            TextHelvetica(content: "Volume", size: 20)
-                                .bold()
-                            
-                             .onTapGesture {
-                                 showingAve.toggle()
-                             }
-                        }
-                       
-          
-                            
-                        Spacer()
-                        CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
-                    }
+ 
+        VStack {
+            
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
                     
+                    switch currentChart {
+                    case .volume:
+                        TextHelvetica(content: "Volume", size: 22)
+                            .lineLimit(2)
+                            .bold()
+                            .foregroundColor(Color("LinkBlue"))
+//                            .onTapGesture {
+//                                showingAve.toggle()
+//                            }
+                            .padding(.trailing, 5)
+                        
+                        
+                         
+                    case .heaviestSet:
+                        TextHelvetica(content: "Heaviest Weight", size: 22)
+                            .lineLimit(2)
+                            .bold()
+                            .foregroundColor(Color("LinkBlue"))
+//                            .onTapGesture {
+//                                showingAve.toggle()
+//                            }
+                    case .bestSetVolume:
+                        TextHelvetica(content: "Best Set Volume", size: 22)
+                            .lineLimit(2)
+                            .bold()
+                            .foregroundColor(Color("LinkBlue"))
+//                            .onTapGesture {
+//                                showingAve.toggle()
+//                            }
+                        
+                        
+                        
+                        
+                    case .wightperRep:
+                        TextHelvetica(content: "Weight/Rep", size: 22)
+                            .lineLimit(2)
+                            .bold()
+                            .foregroundColor(Color("LinkBlue"))
+//                            .onTapGesture {
+//                                showingAve.toggle()
+//                            }
+                      
+                        
+                    case .totalReps:
+                        TextHelvetica(content: "Total Reps", size: 22)
+                            .lineLimit(2)
+                            .bold()
+                            .foregroundColor(Color("LinkBlue"))
+//                            .onTapGesture {
+//                                showingAve.toggle()
+//                            }
+                       
+                    }
+                   
+                    
+                    
+                    
+                        
+                    Spacer()
+//                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
+                }
+                
+                switch currentChart {
+                case .volume:
                     let totalValue = sampleAnalytics.reduce(0.0) { partialResult, item in
                         item.views + partialResult
                     }
+                    
                     if let item = currentActiveItem {
-                        Text(item.views.stringFormat)
+                        TextHelvetica(content: "\(item.views.stringFormat) lbs", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
                         
                     } else {
-                        Text(totalValue.stringFormat)
-                    }
-                  
                     
-                    AnimatedChart()
-  
+                        TextHelvetica(content: "\(totalValue.stringFormat) lbs", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                    }
+                    
+                    
+                     
+                case .heaviestSet:
+                    
+                    if let maxViews = sampleAnalytics.map({ $0.views }).max() {
+                       
+                    
+                        if let item = currentActiveItem {
+                            
+                            
+                            TextHelvetica(content: "\(item.views.stringFormat) lbs", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                        } else {
+                            TextHelvetica(content: "\(maxViews.stringFormat) lbs", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                        }
+                    }
+                case .bestSetVolume:
+                    if let maxViews = sampleAnalytics.map({ $0.views }).max() {
+                       
+                    
+                        if let item = currentActiveItem {
+                            
+                            
+                            TextHelvetica(content: "\(item.views.stringFormat) lbs", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                        } else {
+                            TextHelvetica(content: "\(maxViews.stringFormat) lbs", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                        }
+                    }
+                    
+                case .wightperRep:
+                    if let maxViews = sampleAnalytics.map({ $0.views }).max() {
+                       
+                    
+                        if let item = currentActiveItem {
+                            
+                            
+                            TextHelvetica(content: "\(item.views.stringFormat) lbs", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                        } else {
+                            TextHelvetica(content: "\(maxViews.stringFormat) lbs", size: 18)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            
+                        }
+                    }
+                    
+                case .totalReps:
+                    let totalValue = sampleAnalytics.reduce(0.0) { partialResult, item in
+                        item.views + partialResult
+                    }
+                    
+                    if let item = currentActiveItem {
+                        TextHelvetica(content: "\(item.views.stringFormat) reps", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        
+                        
+                    } else {
+                    
+                        TextHelvetica(content: "\(totalValue.stringFormat) reps", size: 18)
+                            .foregroundColor(Color("WhiteFontOne"))
+                    }
+                   
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(.white.shadow(.drop(radius: 2)))
-                )
+                
 
                 
+
+              
                 
-               
+                AnimatedChart()
+
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding()
-            .navigationTitle("cume")
-            .onChange(of: currentTab) { newValue in
-     
-                if newValue != "7 Days" {
-                    for (index,_) in sampleAnalytics.enumerated() {
-                        sampleAnalytics[index].views = .random(in: 1500...10000)
-                    }
-                }
-                
-                animateGraph(fromChange: true)
-            }
+            .background(Color("DBblack"))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+
             
+            
+           
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding()
+        .navigationTitle("cume")
+//        .onChange(of: selectedTab) { newValue in
+//
+//            if newValue != .page1 {
+//                for (index,_) in sampleAnalytics.enumerated() {
+//                    print(sampleAnalytics[index].views)
+//                    sampleAnalytics[index].views = .random(in: 1500...10000)
+//                }
+//                animateGraph(fromChange: true)
+//            }
+//
+//
+//        }
+//
 
             
           
-        }
+        
     }
     
     @ViewBuilder
     func AnimatedChart() -> some View {
         
-        let curColor = Color(hue: 0.33, saturation: 0.81, brightness: 0.76)
+        let curColor = Color("LinkBlue")
               
         let curGradient = LinearGradient(
                     gradient: Gradient (
                         colors: [
+                            
                             curColor.opacity(0.5),
                             curColor.opacity(0.2),
                             curColor.opacity(0.05),
@@ -400,36 +569,48 @@ struct Graph: View {
                             .frame(width: 10, height: 10)
                     }
                     .symbolSize(30)
-                    .foregroundStyle(Color(.blue).gradient)
+                    .foregroundStyle(Color("LinkBlue"))
 
                     
                     PointMark(
                         x: .value("Hour", item.day, unit: .day),
                         y: .value("Views", item.animate ? item.views : 0)
                     )
-
-                    .foregroundStyle(.white)
-
-                    RuleMark(y: .value("Limit", 200))
-                        .foregroundStyle(.cyan)
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .annotation(alignment: .leading) {
-                            Text("Goal")
-                                .background(.green)
+                    .symbol() {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                            Circle()
+                                .stroke(Color("LinkBlue"), lineWidth: 2)
                         }
+                        .frame(width: 10, height: 10)
+                    }
+                    .symbolSize(30)
+
+
+               
+
+//                    RuleMark(y: .value("Limit", 200))
+//                        .foregroundStyle(.cyan)
+//                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+//                        .annotation(alignment: .leading) {
+//                            Text("Goal")
+//                                .background(.green)
+//                        }
 
                     if let currentActiveItem,currentActiveItem.id == item.id {
+                        let _ = print(sampleAnalytics.count)
                         RuleMark(x: .value("Hour", currentActiveItem.day))
                             .lineStyle(.init(lineWidth: 2))
-                            .offset(x: (plotWidth / CGFloat(sampleAnalytics.count)) / 2)
-                            .foregroundStyle(.red)
+                            .offset(x: (plotWidth / CGFloat(sampleAnalytics.count)))
+                            .foregroundStyle(Color("WhiteFontOne"))
 
                         PointMark(
                             x: .value("Hour", item.day, unit: .day),
                             y: .value("Views", item.animate ? item.views : 0)
                         )
 
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color("LinkBlue"))
 
 
 
@@ -442,16 +623,18 @@ struct Graph: View {
                     )
 
                 
-                    .foregroundStyle(currentActiveItem?.id == item.id ? Color(.blue).gradient: Color(.red).gradient)
+                    .foregroundStyle(currentActiveItem?.id == item.id ? Color("WhiteFontOne").gradient: Color("LinkBlue").gradient)
                     .lineStyle(.init(lineWidth: 1))
 
-                    RuleMark(y: .value("Limit", 100))
-                        .foregroundStyle(.cyan)
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .annotation(alignment: .leading) {
-                            Text("Goal")
-                                .background(.green)
-                        }
+//                    RuleMark(y: .value("Limit", 100))
+//                        .foregroundStyle(.cyan)
+//                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+//                        .annotation(alignment: .leading) {
+//                            Text("Goal")
+//                                .background(.green)
+//                        }
+                    
+                    
 
                     if showingAve {
                         RuleMark(y: .value("average", 100))
@@ -467,6 +650,42 @@ struct Graph: View {
                 
             }
         }
+        
+        .chartPlotStyle { plotContent in
+          plotContent
+               
+           
+        }
+
+        
+        .chartXAxis {
+        
+            AxisMarks(values: .automatic) { _ in
+              AxisGridLine()
+                .foregroundStyle(Color("GrayFontOne"))
+                AxisTick(stroke: StrokeStyle())
+                
+                    .foregroundStyle(Color("GrayFontOne"))
+                AxisGridLine(centered: true, stroke: StrokeStyle())
+                .foregroundStyle(Color("GrayFontOne"))
+              AxisValueLabel()
+                  
+                  .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (10 * 0.0025)))
+                    .foregroundStyle(Color("WhiteFontOne"))
+          }
+        }
+        .chartYAxis {
+          AxisMarks(values: .automatic) { value in
+           
+              AxisGridLine(centered: true, stroke: StrokeStyle(dash: [2]))
+              .foregroundStyle(Color("GrayFontOne"))
+
+            AxisValueLabel()
+                  .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (11 * 0.0025)))
+                  .foregroundStyle(Color("WhiteFontOne"))
+          }
+        }
+    
 
 
 
@@ -487,7 +706,7 @@ struct Graph: View {
                                         calendar.component(.day, from: item.day) == hour
                                     }) {
                                         self.currentActiveItem = currentItem
-                                        self.plotWidth = proxy.plotAreaSize.width - 440
+                                        self.plotWidth = proxy.plotAreaSize.width * 0.18
                                     }
                                 }
                             }
@@ -547,41 +766,41 @@ struct Graph: View {
 
 
 
-struct FreqencyChart: View {
-    let eventFrequency: [Int] = [4, 7, 3, 12, 8, 5, 10, 2, 1, 3, 9, 6, 4, 5, 7, 8, 2, 1, 10, 4, 6, 8, 4, 3, 7, 5, 10, 3, 9, 2]
 
+
+
+
+struct MonthlyWorkoutFrequencyView: View {
+    let monthlyWorkoutFrequencyData: [Int]
+    
     func frequencyColor(frequency: Int) -> Color {
         if frequency == 0 {
             return Color.clear
         } else {
-            let intensity = Double(frequency) / Double(eventFrequency.max() ?? 1)
-            return Color.red.opacity(intensity)
+            let intensity = Double(frequency) / Double(monthlyWorkoutFrequencyData.max() ?? 1)
+            return Color("LinkBlue").opacity(intensity)
         }
     }
-
+    
     var body: some View {
         VStack {
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 4) {
-                ForEach(eventFrequency.indices, id: \.self) { index in
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 6) {
+                ForEach(monthlyWorkoutFrequencyData.indices, id: \.self) { index in
                     VStack {
+                        Circle()
+                            .fill(frequencyColor(frequency: monthlyWorkoutFrequencyData[index]))
+                            .frame(width: 20, height: 20)
                         Text("\(index + 1)")
                             .font(.caption)
-                        Circle()
-                            .fill(frequencyColor(frequency: eventFrequency[index]))
-                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color("GrayFontOne"))
+                        
                     }
                 }
             }
             .padding()
-            Text("Calendar View with Event Frequency")
-                .font(.title)
         }
     }
 }
-
-
-
-
 
 
 

@@ -11,6 +11,7 @@ struct createWorkout: View {
 
         @ObservedObject var homePageVeiwModel: HomePageViewModel
         @StateObject var workoutLogViewModel = WorkoutLogViewModel()
+        @StateObject var timeViewModel = TimeViewModel()
         @State private var progressValue: Float = 0.5
         @State private var blocked = false
         @State private var exersiseNotes: String = ""
@@ -85,9 +86,15 @@ struct createWorkout: View {
                                         
                                         ZStack{
                                             
-                                            Image("meatBalls")
-                                                .resizable()
-                                                .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                            HStack(spacing: 4) {
+                                                Circle()
+                                                Circle()
+                                                Circle()
+                                                
+                                            }
+                                            .scaleEffect(0.76)
+                                            .foregroundColor(Color("BorderGray"))
+                                            .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
                                             
                                             
                                         
@@ -120,10 +127,7 @@ struct createWorkout: View {
                                
 
 
-                            TextField("", text: $exersiseNotes, prompt: Text("Notes").foregroundColor(Color("GrayFontTwo")), axis: .vertical)
-                                .lineLimit(1...5)
-                                .font(.custom("SpaceGrotesk-Medium", size: 19))
-                                .foregroundColor(Color("GrayFontTwo"))
+                       
 
 
                             Rectangle()
@@ -154,7 +158,8 @@ struct createWorkout: View {
 
                                 if workoutModule.isLast == false {
                                     let exerciseID = workoutLogViewModel.getUUIDindex(index: workoutModule.id)
-                                    ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id, isLive: false)
+                                    ExersiseLogModule(workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, timeViewModel: timeViewModel, blocked: $blocked, parentModuleID: exerciseID, moduleUUID: workoutModule.id, isLive: false)
+                                    
 
                                 }
                          
@@ -192,7 +197,7 @@ struct createWorkout: View {
                         .frame(height: getScreenBounds().height * 0.51)
                      
                         .foregroundColor(Color("MainGray"))
-                        .shadow(radius: 10)
+                    
                    
                  
                 }.position(x: getScreenBounds().width/2, y: getScreenBounds().height * -0.12)
@@ -204,13 +209,14 @@ struct createWorkout: View {
 
          
                 let popUps = workoutLogViewModel.workoutLogModel.popUps
-                let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState || popUps[8].RPEpopUpState || popUps[9].RPEpopUpState || popUps[10].RPEpopUpState
+                let displayStats  = popUps[0].RPEpopUpState || popUps[1].RPEpopUpState || popUps[2].RPEpopUpState || popUps[4].RPEpopUpState || popUps[5].RPEpopUpState || popUps[7].RPEpopUpState || popUps[8].RPEpopUpState || popUps[9].RPEpopUpState || popUps[10].RPEpopUpState || workoutLogViewModel.displayingExerciseViewForCreator
                 
 
                 Rectangle()
                     .edgesIgnoringSafeArea(.all)
                     .foregroundColor(.black)
                     .opacity(displayStats ? 0.4 : 0)
+                    .scaleEffect(1.7)
                     .onTapGesture {
                         withAnimation(.spring()) {
                             workoutLogViewModel.setPopUpState(state: false, popUpId: "popUpRPE")
@@ -234,29 +240,24 @@ struct createWorkout: View {
                     TimerCompletedPopUp(viewModel: workoutLogViewModel)
                         .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState ? 1 : 0)
                         .allowsHitTesting(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState)
-                    
-                    
                  
-                    
-                   
-                    
-                    PopupView(viewModel: workoutLogViewModel, isLive: false)
+                    PopupView(viewModel: workoutLogViewModel, timeViewModel: timeViewModel, isLive: false)
                         .shadow(radius: 10)
                         .position(x: UIScreen.main.bounds.width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpRPE").RPEpopUpState ? UIScreen.main.bounds.height * (0.69 - offset) : UIScreen.main.bounds.height * 1.5)
-
-
-                    DotsMenuView(viewModel: workoutLogViewModel)
+                    
+                    
+                   
+                   
+                    DotsMenuView(viewModel: workoutLogViewModel, timerViewModel: timeViewModel)
                         .shadow(radius: 10)
 
                         .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDotsMenu").RPEpopUpState ? getScreenBounds().height * (0.52 - offset) : getScreenBounds().height * 1.5)
 
 
 
-                    DataMetricsPopUp(viewModel: workoutLogViewModel)
-                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "popUpDataMetrics").RPEpopUpState ? getScreenBounds().height * (0.7 - offset) : getScreenBounds().height * 1.3)
                     
                     ReorderSets(viewModel: workoutLogViewModel)
-                        .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+                        .position(x: getScreenBounds().width/2, y: getScreenBounds().height * (0.35 - offset))
                         .opacity(workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? 1 : 0)
                         
                         .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "ReorderSets").RPEpopUpState ? 1 : 0.5, anchor: .top)
@@ -270,7 +271,7 @@ struct createWorkout: View {
                 
               
 
-                NamePopUP( viewModel: workoutLogViewModel)
+                NamePopUP( viewModel: workoutLogViewModel, timeViewModel: timeViewModel, isForCreator: true)
 
     //                .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
     //                .position(x: getScreenBounds().width / 2, y: getScreenBounds().height * 0.2)
@@ -283,21 +284,26 @@ struct createWorkout: View {
                     .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
                     .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * (0.68 - offset) : getScreenBounds().height * 1.3)
                 
-                restTimeSet(viewModel: workoutLogViewModel)
+                restTimeSet(viewModel: workoutLogViewModel, timerViewModel: timeViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
 
                     .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
                 
-                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * (0.35 - offset))
                 
+
                 
              
+                
                 
                 weightUnitSet(viewModel: workoutLogViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0)
 
                     .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "SetUnitSubMenu").RPEpopUpState ? 1 : 0.5, anchor: .top)
-                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * 0.35)
+                    .position(x: getScreenBounds().width/2, y: getScreenBounds().height * (0.35 - offset))
+                
+                
+          
                 
                 
                 Group {
@@ -312,6 +318,7 @@ struct createWorkout: View {
                             
                             Button {
                                 presentationMode.wrappedValue.dismiss()
+                                HapticManager.instance.impact(style: .rigid)
                             } label: {
                                 HStack {
                                     Image(systemName: "chevron.left")
@@ -340,7 +347,7 @@ struct createWorkout: View {
                                     
                                     Button {
                    
-                                        homePageVeiwModel.addToMyWorkouts(workoutName: "Put name Here", exersiseModules: workoutLogViewModel.exersiseModules)
+                                        homePageVeiwModel.addToMyWorkouts(workoutName: workoutName, exersiseModules: workoutLogViewModel.exersiseModules)
                                         presentationMode.wrappedValue.dismiss()
                                      
                                        
@@ -433,9 +440,10 @@ struct createWorkout: View {
                         .edgesIgnoringSafeArea(.all)
                         .opacity(workoutLogViewModel.workoutLogModel.popUps[11].RPEpopUpState ? 1 : 0)
                         .scaleEffect(1.2)
-                    
-                    TimerPopUp(viewModel: workoutLogViewModel)
-                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TimerPopUp").RPEpopUpState ? getScreenBounds().height * 0.42 : getScreenBounds().height * 2) // shout be two
+                        
+                    TimerPopUp(viewModel: workoutLogViewModel, timeViewModel: timeViewModel)
+             
+                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TimerPopUp").RPEpopUpState ? getScreenBounds().height * (0.42 - offset) : getScreenBounds().height * 2) // shout be two
 
                
                 
@@ -453,14 +461,14 @@ struct createWorkout: View {
                         .edgesIgnoringSafeArea(.all)
                         .opacity(workoutLogViewModel.displayingExerciseView ? 1 : 0)
                       
-                    ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseView)
-                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseView ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
+                    ExercisePage(viewModel: homePageVeiwModel, showingExrcisePage: $workoutLogViewModel.displayingExerciseViewForCreator)
+                        .position(x: getScreenBounds().width/2, y: workoutLogViewModel.displayingExerciseViewForCreator ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
                 }
              
               
             }
             .offset(y: homePageVeiwModel.showingExercises ? -1 * getScreenBounds().height * 0.05: 0)
-            .navigationBarTitle("back")
+            .navigationBarTitle(" ")
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
                 self.isNavigationBarHidden = true
@@ -480,17 +488,22 @@ struct createWorkout: View {
                    
                 }
 
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+               
             }
             .background(
                 LinearGradient(
                 gradient: Gradient(colors: [
-                    Color(red: 15/255, green: 18/255, blue: 23/255),
-                    Color(red: 15/255, green: 18/255, blue: 29/255)
+                    Color("DBblack"),
+                    
+                    Color("MainGrayLight")
                 ]),
-                startPoint: .topLeading,
+                startPoint: .top,
                 endPoint: .bottomTrailing
+                
+                
             ))
+            
+
 
             .onAppear {
                 workoutName = "Workout Name"
@@ -554,6 +567,7 @@ struct createWorkoutDropDown: View {
                    
                     Rectangle()
                         .aspectRatio(1, contentMode: .fit)
+                        .foregroundColor(.clear)
                         .foregroundColor(.clear)
                         .padding(.horizontal, 50)
                     

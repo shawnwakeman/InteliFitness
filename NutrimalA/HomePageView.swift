@@ -13,6 +13,26 @@ enum PageToLoad {
     case myExercises
 }
 
+struct LeftRoundedRectangle: Shape {
+    var radius: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY + radius))
+        path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.minY + radius), radius: radius, startAngle: Angle(degrees: 180), endAngle: Angle(degrees: 90), clockwise: true)
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX + radius, y: rect.maxY))
+        path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.maxY - radius), radius: radius, startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 90), clockwise: true)
+        
+        return path
+    }
+}
+
+
+
+
 struct HomePageView: View {
     @State private var displayingWorkoutTHing = false
     @StateObject var homePageViewModel = HomePageViewModel()
@@ -30,8 +50,10 @@ struct HomePageView: View {
            
 
 
-            
-                P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageViewModel)
+                if homePageViewModel.workoutLogModuleStatus == false {
+                    P1View(loadedPage: $loadedPage, isNavigationBarHidden: $isNavigationBarHidden, workoutLogViewModel: workoutLogViewModel, homePageViewModel: homePageViewModel)
+                }
+               
                    
                             
                 
@@ -39,11 +61,11 @@ struct HomePageView: View {
           
 
             let offset = homePageViewModel.ongoingWorkout ? 0: 0.5
-      
+                  
             WorkoutLogView(homePageVeiwModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel)
-                    .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * (1.49 + offset))
-                               .ignoresSafeArea()
-                              
+                .position(x: getScreenBounds().width/2, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.6 : getScreenBounds().height * (1.49 + offset))
+                .ignoresSafeArea()
+
            
        
          
@@ -68,46 +90,6 @@ struct HomePageView: View {
 }
 
 
-// MARK: - Functions
-func startDeliveryPizza() {
-    
-    let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
-
-    let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15))
-                                              
-    do {
-        let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
-            attributes: pizzaDeliveryAttributes,
-            contentState: initialContentState,
-            pushType: nil)
-        print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
-    } catch (let error) {
-        print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
-    }
-}
-func updateDeliveryPizza() {
-    Task {
-        let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
-        
-        for activity in Activity<PizzaDeliveryAttributes>.activities{
-            await activity.update(using: updatedDeliveryStatus)
-        }
-    }
-}
-func stopDeliveryPizza() {
-    Task {
-        for activity in Activity<PizzaDeliveryAttributes>.activities{
-            await activity.end(dismissalPolicy: .immediate)
-        }
-    }
-}
-func showAllDeliveries() {
-    Task {
-        for activity in Activity<PizzaDeliveryAttributes>.activities {
-            print("Pizza delivery details: \(activity.id) -> \(activity.attributes)")
-        }
-    }
-}
 
 
 struct P1View: View {
@@ -149,12 +131,29 @@ struct P1View: View {
                         .frame(height: getScreenBounds().height * 0.00)
                         .foregroundColor(.clear)
                     ZStack {
+                        let curColor = Color("LinkBlue")
+                              
+                        let curGradient = LinearGradient(
+                                    gradient: Gradient (
+                                        colors: [
+                                            
+                                            curColor.opacity(0.5),
+                                            curColor.opacity(0.2),
+                                            curColor.opacity(0.05),
+                                        ]
+                                    ),
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
                         RoundedRectangle(cornerRadius: 13)
-                         
+                            .fill(
+                                curGradient
+                            )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 13)
-                                    .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight))
-                            .foregroundColor(Color("MainGray"))
+                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight + 0.5)
+                            )
+                          
                         
                         VStack {
 // del
@@ -174,7 +173,7 @@ struct P1View: View {
                                         TextHelvetica(content: "Up Next", size: 28)
                                             .foregroundColor(Color("GrayFontOne"))
                                         
-                                        TextHelvetica(content: "Start New Workout", size: 43)
+                                        TextHelvetica(content: "New Workout", size: 43)
                                             .foregroundColor(Color("WhiteFontOne"))
                                             .bold()
                                     }
@@ -185,20 +184,29 @@ struct P1View: View {
                        
 
                         }
+                        
                         .padding(.all)
                         
                     }
+                   
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
-                        if let workout = homePageViewModel.upcomingWorkoutAndRemove() {
+                        if let workout = homePageViewModel.upcomingWorkout() {
                             let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: workout.name, exercises: workout.exercises, category: "not Important", competionDate: Date())
                             self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
                             workoutLogViewModel.workoutName = formattedData.WorkoutName
                         
                         } else {
                             let formattedData = HomePageModel.Workout(id: UUID(), WorkoutName: "New Workout", exercises: [], category: "not Important", competionDate: Date())
-                            self.selectedDestination = AnyView(workoutLauncher(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: formattedData, isForAddingToSchedule: false))
+                            homePageViewModel.setOngoingState(state: false)
+                            workoutLogViewModel.loadWorkout(workout: formattedData)
                             workoutLogViewModel.workoutName = formattedData.WorkoutName
+                            withAnimation(.spring()) {
+                                
+                                homePageViewModel.setOngoingState(state: true)
+                                homePageViewModel.setWorkoutLogModuleStatus(state: true)
+                       
+                            }
                            
                         }
                        
@@ -207,32 +215,39 @@ struct P1View: View {
                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 13)
-                            .foregroundColor(Color("MainGray"))
+                            .foregroundColor(Color("MainGray").opacity(0.4))
                             .frame(height: getScreenBounds().height * 0.08)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 13)
-                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                        HStack {
-                            Image(systemName: "calendar")
-                                .resizable()
-                                .foregroundColor(Color("LinkBlue"))
-                                .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().width * 0.1)
-                                .padding(.horizontal)
-                            
-                                .padding(.leading, 10)
-                     
+                         
+                        HStack(spacing: -0) {
+                            ZStack {
+                             
+                                Rectangle()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .cornerRadius(13, corners: [.topLeft, .bottomLeft])
+                                    .foregroundColor(Color("MainGray"))
+                                    
+                                
+                                    
+                            }
+                            .frame(width: getScreenBounds().width * 0.23)
+                      
                             Divider()
                             
                                 .frame(width: borderWeight)
                                 .overlay(Color("BorderGray"))
                             TextHelvetica(content: "Schedule", size: 27)
-                                .padding(.horizontal, 8)
+                                .padding(.horizontal, 15)
                                 .foregroundColor(Color("WhiteFontOne"))
                             
                             Spacer()
                           
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
+                    
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 13)
+                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                   
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
              
@@ -243,19 +258,21 @@ struct P1View: View {
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 13)
-                            .foregroundColor(Color("MainGray"))
+                            .foregroundColor(Color("MainGray").opacity(0.4))
                             .frame(height: getScreenBounds().height * 0.08)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 13)
-                                    .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-                        HStack {
-                            Image(systemName: "dumbbell")
-                                .resizable()
-                                .foregroundColor(Color("LinkBlue"))
-                                .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().width * 0.07)
-                                .padding(.horizontal)
+                         
+                        HStack(spacing: 0) {
                             
-                                .padding(.leading, 10)
+                            ZStack {
+                             
+                                Rectangle()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .cornerRadius(13, corners: [.topLeft, .bottomLeft])
+                                    .foregroundColor(Color("MainGray"))
+                                    
+                                
+                            }
+                            .frame(width: getScreenBounds().width * 0.23)
                      
                             Divider()
                             
@@ -263,12 +280,15 @@ struct P1View: View {
                                 .overlay(Color("BorderGray"))
                             TextHelvetica(content: "My Workouts", size: 27)
                                 .foregroundColor(Color("WhiteFontOne"))
-                                .padding(.horizontal, 8)
+                                .padding(.horizontal, 15)
                             
                             Spacer()
                           
                         }.frame(height: getScreenBounds().height * 0.08)
                     }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 13)
+                            .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
                         self.selectedDestination = AnyView(MyWorkoutsPage(viewModel: homePageViewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: false))
@@ -297,11 +317,13 @@ struct P1View: View {
                             self.selectedDestination = AnyView(HistoryPage(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
                         }
                         ZStack {
+
                             RoundedRectangle(cornerRadius: 13)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 13)
                                         .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                                 .foregroundColor(Color("MainGray"))
+
                             VStack(alignment: .leading) {
                                 Spacer()
 
@@ -332,22 +354,26 @@ struct P1View: View {
                                 TextHelvetica(content: "Profile", size: 20)
                   
                                     .padding(.vertical, 5)
-                                    .padding(.leading, -48)
+                                    .padding(.leading, -40)
                                     .foregroundColor(Color("WhiteFontOne"))
                             }
                         }
                         
                         .onTapGesture {
                             HapticManager.instance.impact(style: .rigid)
-                            self.selectedDestination = AnyView(Profile(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden))
+                            let data = homePageViewModel.calculateStats()
+                            let asd = homePageViewModel.calculateCategoryVolumes(for: homePageViewModel.exersises)
+                            let _ = print(asd)
+                            self.selectedDestination = AnyView(Profile(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden, profileData: data))
                         }
                     }
                     .frame(height: getScreenBounds().width/3.4)
                     .padding(.bottom, 14)
                 }
+
                 if homePageViewModel.ongoingWorkout {
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.07)
+                        .frame(height: getScreenBounds().height * 0.0725)
                         .foregroundColor(.clear)
                 }
              
@@ -355,6 +381,8 @@ struct P1View: View {
             } .padding(.all)
                 .background(Color("DBblack"))
         }
+
+        
         .background(
             NavigationLink(
                 "",
@@ -363,7 +391,7 @@ struct P1View: View {
             )
             .opacity(0)
         )
-        .navigationBarTitle("back")
+        .navigationBarTitle(" ")
         .navigationBarHidden(self.isNavigationBarHidden)
         .onAppear {
             self.isNavigationBarHidden = true
@@ -399,5 +427,61 @@ struct HomePage_Previews: PreviewProvider {
             .previewDevice("iPhone 14")
         HomePageView()
             .previewDevice("iPhone 14 Pro Max")
+    }
+}
+
+
+struct OnboardingView: View {
+    @Environment(\.dismiss) var dismiss
+    @Binding var hasOnboarded: Bool
+
+    var body: some View {
+        TabView {
+            OnboardingViewPage(image: "1.circle", title: "Welcome", description: "This is the first page of our onboarding process.")
+            OnboardingViewPage(image: "2.circle", title: "Learn", description: "This is the second page, where you will learn something new.")
+            VStack {
+                OnboardingViewPage(image: "3.circle", title: "Get Started", description: "This is the final page. You're ready to start using our app.")
+                Button(action: {
+                    dismiss()
+                    hasOnboarded = true
+                }) {
+                    Text("Get Started")
+                        .bold()
+                        .frame(width: 280, height: 45)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(15)
+                }
+                .padding(.top, 50)
+            }
+        }
+        .tabViewStyle(PageTabViewStyle())
+        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+    }
+}
+
+struct OnboardingViewPage: View {
+    var image: String
+    var title: String
+    var description: String
+
+    var body: some View {
+        VStack {
+            Image(systemName: image)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 200)
+                .padding(.bottom, 50)
+
+            Text(title)
+                .font(.title)
+                .fontWeight(.bold)
+
+            Text(description)
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 50)
+                .padding(.top, 20)
+        }
     }
 }

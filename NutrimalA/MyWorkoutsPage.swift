@@ -22,7 +22,7 @@ struct MyWorkoutsPage: View {
             
             let topEdge = proxy.safeAreaInsets.top
             MyWorkoutsPageMain(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, topEdge: topEdge, isForAddingToSchedule: isForAddingToSchedule, isNavigationBarHidden: $isNavigationBarHidden)
-                .navigationBarTitle("back")
+                .navigationBarTitle(" ")
                 .navigationBarHidden(self.isNavigationBarHidden)
                 .onAppear {
                     self.isNavigationBarHidden = true
@@ -83,7 +83,7 @@ struct MyWorkoutsPageMain: View {
 
                             
                                 .background(Color("MainGray"), in: CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
-                                .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
+                             
                             
                         }
                         .frame(height: maxHeight)
@@ -112,9 +112,11 @@ struct MyWorkoutsPageMain: View {
                                     }
                                     
                                     Button {
+                                        HapticManager.instance.impact(style: .rigid)
+                                        presentationMode.wrappedValue.dismiss()
                                         viewModel.setOngoingState(state: false)
                                         workoutLogViewModel.resetWorkoutModel()
-                                        
+                                        workoutLogViewModel.workoutName = ""
                                         withAnimation(.spring()) {
                                             viewModel.setOngoingState(state: true)
                                             
@@ -153,7 +155,35 @@ struct MyWorkoutsPageMain: View {
                         VStack(alignment: .leading, spacing: 20) {
 
                             
-
+                            Section(header:
+                                        
+                                        HStack {
+                                
+                                TextHelvetica(content: "Recents", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
+                                Spacer()
+                                
+                            }) {
+                                if viewModel.myWorkoutsRecent.count > 0 {
+                                    ScrollView {
+                                        LazyVGrid(columns: columns, spacing: -20) {
+                                            ForEach(viewModel.myWorkoutsRecent.reversed()) { workout in
+                                                NavigationLink(destination: workoutLauncher(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: workout, isForAddingToSchedule: isForAddingToSchedule)) {
+                                                    
+                                                    WorkoutModuleForMyExercises(title: workout.WorkoutName, workout: workout, viewModel: viewModel, description: "Module Description", isRecent: true)
+                                                    
+                                                }
+                                            }
+                                        }
+                                        .padding(.horizontal)
+                                    }
+                                } else {
+                                    TextHelvetica(content: "Recently completed workouts will apear here", size: 18)
+                                        .foregroundColor(Color("GrayFontOne"))
+                                        .padding()
+                                        .multilineTextAlignment(.center)
+                                }
+                                
+                            }
                             
                             
                             Section(header:
@@ -188,7 +218,8 @@ struct MyWorkoutsPageMain: View {
                                         LazyVGrid(columns: columns, spacing: -20) {
                                             ForEach(viewModel.myWorkouts.reversed()) { workout in
                                                 NavigationLink(destination: workoutLauncher(viewModel: viewModel, workoutLogViewModel: workoutLogViewModel, isNavigationBarHidden: $isNavigationBarHidden, workout: workout, isForAddingToSchedule: isForAddingToSchedule)) {
-                                                    WorkoutModule(title: workout.WorkoutName, description: "Module Description")
+                                                    
+                                                    WorkoutModuleForMyExercises(title: workout.WorkoutName, workout: workout, viewModel: viewModel, description: "Module Description")
                                                     
                                                 }
                                             }
@@ -196,8 +227,10 @@ struct MyWorkoutsPageMain: View {
                                         .padding(.horizontal)
                                     }
                                 } else {
-                                    TextHelvetica(content: "Created workouts will apear here", size: 22)
+                                    TextHelvetica(content: "Created workouts will apear here", size: 18)
                                         .foregroundColor(Color("GrayFontOne"))
+                                        .padding()
+                                        .multilineTextAlignment(.center)
                                 }
                                 
                             }
@@ -207,6 +240,7 @@ struct MyWorkoutsPageMain: View {
                             
                             Spacer()
                         }
+                        .padding(.bottom, 100)
                         
                         .padding(.horizontal)
                         
@@ -256,9 +290,14 @@ struct MyWorkoutsPageMain: View {
                         }
                         
                     }
-                        .padding(.horizontal)
-                        .frame(height: 60)
-                        .padding(.top, topEdge)
+                    .frame(height: 60)
+                    .padding(.top, topEdge)
+                    .padding(.bottom, 20)
+                    .padding(.horizontal)
+                    .background(Color("MainGray")
+                                .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.1), radius: 10, x: 0, y: 0)
+                                .edgesIgnoringSafeArea(.all)
+                                .padding(.all, UIScreen.main.bounds.width * 0.005))
                     
                     Spacer()
                 }
@@ -272,26 +311,7 @@ struct MyWorkoutsPageMain: View {
     }
     
     
-    func workoutSection(title: String) -> some View {
-        Section(header: TextHelvetica(content: title, size: 20).foregroundColor(Color("WhiteFontOne"))) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    ForEach(0..<5) { _ in
-                        
-                        
-                        
-                        //                        NavigationLink(destination: workoutLauncher()) {
-                        WorkoutModule(title: "Module Title", description: "Module Description")
-                        
-                        //                        }
-                        
-                        
-                        
-                    }
-                }
-            }
-        }
-    }
+
     
     
     func getHeaderHeight() -> CGFloat {
@@ -327,6 +347,87 @@ struct MyWorkoutsPageMain: View {
     }
 }
 
+struct WorkoutModuleForMyExercises: View {
+    let title: String
+    let workout: HomePageModel.Workout
+    @ObservedObject var viewModel: HomePageViewModel
+    let description: String
+    var isRecent = false
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            
+            HStack {
+                TextHelvetica(content: title, size: 15)
+                    .foregroundColor(Color("WhiteFontOne"))
+                Spacer()
+                if isRecent {
+                    Button(action: {
+                        HapticManager.instance.impact(style: .rigid)
+                        viewModel.deleteMyWorkoutRecent(workoutID: workout.id)
+               
+                        viewModel.saveMyWorkouts()
+                        HapticManager.instance.impact(style: .rigid)
+                        
+                    }, label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                            .frame(width: 50)
+                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                } else {
+                    Button(action: {
+                        HapticManager.instance.impact(style: .rigid)
+                        viewModel.deleteMyWorkouts(workoutID: workout.id)
+                        viewModel.saveMyWorkouts()
+                        HapticManager.instance.impact(style: .rigid)
+                        
+                    }, label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                            .frame(width: 50)
+                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)})
+                }
+        
+            }.padding(.all, 10)
+                .frame(height: getScreenBounds().height * 0.05)
+                .background(Color("MainGray"))
+       
+            
+            
+            Divider()
+                                
+            .frame(height: borderWeight)
+            .overlay(Color("BorderGray"))
+            VStack(alignment: .leading) {
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.000)
+                let exerciseNames = workout.exercises.map { $0.exersiseName }.joined(separator: ", ")
+                
+                TextHelvetica(content: exerciseNames.isEmpty ? "Empty Workout" : exerciseNames, size: 12)
+
+                    .foregroundColor(Color("GrayFontOne"))
+                    .multilineTextAlignment(.leading)
+              
+               
+                
+               
+            }.padding(.horizontal, 10)
+               
+            
+            Spacer()
+
+        }
+        .frame(width: getScreenBounds().width * 0.443, height: getScreenBounds().height * 0.15)
+        .background(Color("DBblack"))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("BorderGray"), lineWidth: borderWeight))
+        .padding(.vertical)
+        .padding(.horizontal, 2)
+        
+    }
+}
+
 struct WorkoutModule: View {
     let title: String
     let description: String
@@ -338,13 +439,7 @@ struct WorkoutModule: View {
                 TextHelvetica(content: title, size: 17)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
-                ZStack{
-                    
-                    Image("meatBalls")
-                        .resizable()
-                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
 
-                }
             }.padding(.all, 10)
                 
                 .background(Color("MainGray"))
@@ -416,12 +511,7 @@ struct workoutLauncher: View {
                             .bold()
                             .foregroundColor(Color("WhiteFontOne"))
                         Spacer()
-                        Button {
-                            
-                        }
-                        label: {
-                            TextHelvetica(content: "edit", size: 18)
-                        }
+                        
                     }
                     
                     HStack {
@@ -450,6 +540,7 @@ struct workoutLauncher: View {
                                 presentationMode.wrappedValue.dismiss()
                                 viewModel.addToWorkoutQueue(workout: workout)
                                 viewModel.showingExercises = false
+                                HapticManager.instance.impact(style: .rigid)
                          
                      
                             }) {
@@ -486,20 +577,23 @@ struct workoutLauncher: View {
                                 
                                     
                                    
-                                    
-                        
+                                workoutLogViewModel.resetWorkoutModel()
+                                
                                 viewModel.setOngoingState(state: false)
+                       
                                 workoutLogViewModel.loadWorkout(workout: workout)
+                               
                                 workoutLogViewModel.workoutName = workout.WorkoutName
                                 withAnimation(.spring()) {
-                                    
+                                   
                                     viewModel.setOngoingState(state: true)
                                     viewModel.setWorkoutLogModuleStatus(state: true)
                            
                                 }
                                 presentationMode.wrappedValue.dismiss()
                                 
-                                
+                                HapticManager.instance.impact(style: .rigid)
+                                viewModel.upcomingWorkoutAndRemove()
                             }
                             label: {
                                 ZStack{
@@ -585,11 +679,11 @@ struct workoutLauncher: View {
                         
                         
                         
-                        Spacer()
+                       
                         
                     }
-                    .scaledToFit()
-                    .frame(width: getScreenBounds().width * 0.95)
+   
+                    .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.35)
                     .background(Color("DBblack"))
                     .cornerRadius(10)
                     .overlay(
@@ -622,6 +716,7 @@ struct workoutLauncher: View {
                     
                     Button {
                         presentationMode.wrappedValue.dismiss()
+                        HapticManager.instance.impact(style: .rigid)
                     } label: {
                         HStack {
                             Image(systemName: "chevron.left")
@@ -631,7 +726,7 @@ struct workoutLauncher: View {
                                 .foregroundColor(Color("LinkBlue"))
                             Spacer()
                         }
-                        .frame(width: getScreenBounds().width * 0.17)
+                        .frame(width: getScreenBounds().width * 0.19)
                     }
                     Spacer()
                

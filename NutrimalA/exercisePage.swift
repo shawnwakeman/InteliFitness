@@ -12,6 +12,7 @@ enum Page: Int {
     case page1 = 0
     case page2
     case page3
+    case page4
 
 }
 
@@ -21,6 +22,8 @@ struct ExercisePage: View {
     @State private var selectedPage: Page = .page1
     @ObservedObject var viewModel: HomePageViewModel
     @Binding var showingExrcisePage: Bool
+    @State var exerciseName = ""
+    var ignoringOffset: Bool = false
     
 
 
@@ -30,9 +33,18 @@ struct ExercisePage: View {
             set: { selectedPage = $0 }
         )
     }
+    
+    var offset: CGFloat {
+        if ignoringOffset {
+            return 0.13
+        } else {
+           
+            return viewModel.ongoingWorkout ? 0 : 0.13
+        }
+    }
 
     var body: some View {
-        let offset = viewModel.ongoingWorkout ? 0 : 0.13
+
         if let exercise = viewModel.homePageModel.currentExervice {
             VStack {
                 HStack {
@@ -40,6 +52,7 @@ struct ExercisePage: View {
                         withAnimation(.spring()) {
                             showingExrcisePage = false
                         }
+                        viewModel.setExerciseName(exerciseID: exercise.id, newName: exerciseName)
                     }
                     label: {
                         ZStack {
@@ -50,16 +63,17 @@ struct ExercisePage: View {
                                 .foregroundColor(Color("MainGray"))
                             Image(systemName: "xmark")
                                 .bold()
+                                .foregroundColor(Color("LinkBlue"))
                         }
                     }.frame(width: 50, height: 30)
                     
                     Spacer()
-                    TextHelvetica(content: exercise.exerciseName, size: 20)
+                    TextHelvetica(content: exerciseName, size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                     
                     Spacer()
                     Button {
-                       
+                        selectedPage = .page4
                     }
                     label: {
                         TextHelvetica(content: "Edit", size: 18)
@@ -68,8 +82,8 @@ struct ExercisePage: View {
                 }
                 .onChange(of: showingExrcisePage) { newValue in
                     if newValue == true {
-                        print("called")
-                        
+                        print(exercise.id)
+                        exerciseName = exercise.exerciseName
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             if exercise.exerciseHistory.count > 1 {
                                 if let volume = viewModel.getVolumeData(exerciseHistory: exercise.exerciseHistory) {
@@ -79,7 +93,7 @@ struct ExercisePage: View {
                                                 if let totalReps = viewModel.getTotalReps(exerciseHistory: exercise.exerciseHistory) {
                                                     if let WeightPerRep = viewModel.getWeightPerRep(exerciseHistory: exercise.exerciseHistory) {
 
-                                                        viewModel.setExerciseChartData(volume: volume, heaviestWeight: heaviestWeight, Projected1RM: Projected1RM, BestSetVolume: BestSetVolume, TotalReps: totalReps, WeightPerRep: WeightPerRep, WorkoutFrequency: viewModel.getWorkoutFrequency(exerciseHistory: exercise.exerciseHistory), exercise: exercise)
+                                                        viewModel.setExerciseChartData(volume: volume, heaviestWeight: heaviestWeight, Projected1RM: Projected1RM, BestSetVolume: BestSetVolume, TotalReps: totalReps, WeightPerRep: WeightPerRep, exercise: exercise)
                                                        
                                                     }
                                                 }
@@ -122,8 +136,11 @@ struct ExercisePage: View {
                         Page2View(exercise: exercise, viewModel: viewModel)
                     case .page3:
                         Page3View(exercise: exercise, viewModel: viewModel)
-                 
+                    
+                    case .page4:
+                        Page4View(exercise: exercise, viewModel: viewModel, exerciseName: $exerciseName, showingExrcisePage: $showingExrcisePage)
                     }
+                
 
                 }
                 else {
@@ -133,14 +150,18 @@ struct ExercisePage: View {
                     case .page2:
                         Page3View(exercise: exercise, viewModel: viewModel)
                     case .page3:
-                        Page4View()
+                        Page4View(exercise: exercise, viewModel: viewModel, exerciseName: $exerciseName, showingExrcisePage: $showingExrcisePage)
+                    case .page4:
+                        Page4View(exercise: exercise, viewModel: viewModel, exerciseName: $exerciseName, showingExrcisePage: $showingExrcisePage)
                             // deleted
                     }
+                    
                 }
               
                 Spacer()
               
             }
+
             .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * (0.7 + offset))
             .background(Color("DBblack"))
             .cornerRadius(10)
@@ -164,9 +185,10 @@ struct CustomSegmentedPickerChart: View {
                         withAnimation(.easeInOut) {
                             selection = chartTab(rawValue: index)!
                         }
+                        HapticManager.instance.impact(style: .rigid)
                     }) {
-                        TextHelvetica(content: labels[index], size: 15)
-                       
+                        TextHelvetica(content: labels[index], size: 13)
+                            .padding(.horizontal, 1)
                             .padding(.vertical, 5)
                             
                             .frame(maxWidth: .infinity)
@@ -180,13 +202,16 @@ struct CustomSegmentedPickerChart: View {
             GeometryReader { geometry in
                 RoundedRectangle(cornerRadius: slidingBarHeight / 2)
                     .frame(width: geometry.size.width / CGFloat(labels.count), height: slidingBarHeight)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color("LinkBlue"))
                     .offset(x: (geometry.size.width / CGFloat(labels.count)) * CGFloat(selection.rawValue))
                     .animation(.easeInOut, value: selection)
             }
             .frame(height: slidingBarHeight)
         }
+        .frame(width: getScreenBounds().width * 0.45)
+        .background(Color("MainGray"))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+       
     }
 }
 
@@ -203,6 +228,7 @@ struct CustomSegmentedPicker: View {
                         withAnimation(.easeInOut) {
                             selection = Page(rawValue: index)!
                         }
+                        HapticManager.instance.impact(style: .rigid)
                     }) {
                         TextHelvetica(content: labels[index], size: 15)
                        
@@ -219,7 +245,7 @@ struct CustomSegmentedPicker: View {
             GeometryReader { geometry in
                 RoundedRectangle(cornerRadius: slidingBarHeight / 2)
                     .frame(width: geometry.size.width / CGFloat(labels.count), height: slidingBarHeight)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color("LinkBlue"))
                     .offset(x: (geometry.size.width / CGFloat(labels.count)) * CGFloat(selection.rawValue))
                     .animation(.easeInOut, value: selection)
             }
@@ -281,7 +307,12 @@ struct Page2View: View {
                     .foregroundColor(.clear)
                 
             
-                
+                if exercise.exerciseHistory.count > 0 {
+                    
+                } else {
+                    TextHelvetica(content: "Exercise history will apear here", size: 18)
+                        .foregroundColor(Color("GrayFontOne"))
+                }
                 ForEach(exercise.exerciseHistory.reversed()) { workout in
                  
                         
@@ -301,9 +332,15 @@ struct Page2View: View {
                                 
                                 ZStack{
                                     
-                                    Image("meatBalls")
-                                        .resizable()
-                                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                                    HStack(spacing: 4) {
+                                        Circle()
+                                        Circle()
+                                        Circle()
+                                        
+                                    }
+                                    .scaleEffect(0.76)
+                                    .foregroundColor(Color("BorderGray"))
+                                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
                                     
                                     
 
@@ -335,9 +372,24 @@ struct Page2View: View {
                                         .foregroundColor(Color("WhiteFontOne"))
                                    
                                     Spacer()
-                                    
-                                    TextHelvetica(content: "1 RM", size: 20)
-                                        .foregroundColor(Color("WhiteFontOne"))
+                                    if exercise.moduleType == WorkoutLogModel.moduleType.reps {
+                                        
+                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.weightedReps) {
+//                                        TextHelvetica(content: "1 RM", size: 20)
+//                                            .foregroundColor(Color("WhiteFontOne"))
+                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.assistedReps) {
+//                                        TextHelvetica(content: "1 RM", size: 20)
+//                                            .foregroundColor(Color("WhiteFontOne"))
+                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.duration) {
+                                        
+                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.cardio) {
+                                        
+                                    } else {
+                                        TextHelvetica(content: "1 RM", size: 20)
+                                            .foregroundColor(Color("WhiteFontOne"))
+                                    }
+
+                                
                                 }
                                 .padding(.top, 15)
                                 .padding(.bottom, -20)
@@ -353,23 +405,85 @@ struct Page2View: View {
                                             VStack {
                                                 
                                                 HStack(spacing: 0){
-                                                    TextHelvetica(content: "\(row.setIndex) ", size: 19)
-                                                        .foregroundColor(Color("LinkBlue"))
-                                                    TextHelvetica(content: "- \(row.weight.clean) lbs x \(row.reps)", size: 19)
-                                              
-                                                        .foregroundColor(Color("GrayFontOne"))
-                                                    if row.repMetric != 0 {
-                                                        TextHelvetica(content: " @ \(row.repMetric.clean)", size: 19)
+                                                    
+                                                    if row.setType == "N" {
+                                                        TextHelvetica(content: String(row.setIndex) + " - ", size: 18)
+                                                             
+                                               
+                                                                   .foregroundColor(Color("LinkBlue"))
+                                                                   
+                                                                   
+                                                    } else {
+                                                        TextHelvetica(content: row.setType + " - ", size: 18)
+                                                                  
+                                                                   
+                                                                   .foregroundColor(getTextColor(string: row.setType))
+                                                                 
+                                                                   
+                                                    }
+                                                  
+                                                    if exercise.moduleType == WorkoutLogModel.moduleType.reps {
+                                                        TextHelvetica(content: "\(row.reps) reps", size: 18)
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                        
+                                                        if row.repMetric != 0 {
+                                                            TextHelvetica(content: " @ \(row.repMetric.clean)", size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        Spacer()
+                                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.weightedReps) {
+                                                        TextHelvetica(content: "\(row.reps) reps", size: 18)
+
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                        if row.weight != 0 {
+                                                            TextHelvetica(content: " + \(row.weight) lbs", size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        if row.repMetric != 0 {
+                                                            TextHelvetica(content: " @ \(row.repMetric.clean)", size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        Spacer()
+                                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.assistedReps) {
+                                                        TextHelvetica(content: "\(row.reps) reps", size: 18)
+
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                        if row.weight != 0 {
+                                                            TextHelvetica(content: " - \(row.weight) lbs", size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        if row.repMetric != 0 {
+                                                            TextHelvetica(content: " @ \(row.repMetric.clean)", size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        Spacer()
+                                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.duration) {
+                                                        TextHelvetica(content: "\(formatTime(minutesSeconds: row.reps))", size: 18)
+                                                            .foregroundColor(Color("GrayFontOne"))
+
+                                                        Spacer()
+                                                        
+                                                    } else if (exercise.moduleType == WorkoutLogModel.moduleType.cardio) {
+                                                        TextHelvetica(content: "\(row.weight.clean) mi in \(formatTime(minutesSeconds: row.reps))", size: 18)
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                        Spacer()
+                                                    } else {
+                                                        TextHelvetica(content: "\(row.weight.clean) lbs x \(row.reps)", size: 18)
+
+                                                            .foregroundColor(Color("GrayFontOne"))
+                                                        if row.repMetric != 0 {
+                                                            TextHelvetica(content: " @ \(row.repMetric.clean)", size: 18)
+                                                                .foregroundColor(Color("GrayFontOne"))
+                                                        }
+                                                        
+                                                        Spacer()
+                                                        let RepMax = viewModel.calculateOneRepMax(weight: Double(row.weight), reps: row.reps)
+                                                        Text(RepMax.stringFormat)
+                                                            .font(.custom("SpaceGrotesk-Medium", size: 18))
                                                             .foregroundColor(Color("GrayFontOne"))
                                                     }
-                                                    Spacer()
-                                                    
-                                                    let RepMax = viewModel.calculateOneRepMax(weight: Double(row.weight), reps: row.reps)
-                                                    Text(RepMax.stringFormat)
-                                                        .font(.custom("SpaceGrotesk-Medium", size: 19))
-                                                        .foregroundColor(Color("GrayFontOne"))
 
-                                                    
+                                                 
                                                     
                                                 }.padding(.horizontal)
                                            
@@ -429,51 +543,91 @@ struct Page3View: View {
 
     var body: some View {
         ScrollView {
-            VStack {
-                // heaveyist set - line x
+            let _ = print(exercise.moduleType)
+            if exercise.moduleType == WorkoutLogModel.moduleType.weightReps {
                 if viewModel.chartData.volume.count > 0 {
-                    Graph(sampleAnalytics: viewModel.chartData.heaviestWeight, currentTab: "7 Days", isLine: true)
-                }
-//                 volume - bar x
-             
-                if viewModel.chartData.volume.count > 0 {
-                  
-                    Graph(sampleAnalytics: viewModel.chartData.volume, currentTab: "7 Days", isLine: false)
-
-                }
-
-                // predicted one rep max - line x
-                if viewModel.chartData.volume.count > 0 {
-                  
+                VStack {
+                    Graph(sampleAnalytics: viewModel.chartData.heaviestWeight, currentTab: "7 Days", isLine: true, currentChart: .heaviestSet)
+                    // volume - bar x
+                    Graph(sampleAnalytics: viewModel.chartData.volume, currentTab: "7 Days", isLine: false, currentChart: .volume)
+                    
+                    // predicted one rep max - line x
+                    
+                    
                     PolynomialRegressionGraph(sampleAnalytics: viewModel.chartData.Projected1RM, lineOfBestFitDataFormatted: viewModel.GetBestFitLine(data: viewModel.chartData.Projected1RM, exercise: exercise))
+                    
+                    // best set - line x
+                    
+                    Graph(sampleAnalytics: viewModel.chartData.bestSetVolume, currentTab: "7 Days", isLine: true, currentChart: .bestSetVolume)
+                    
+                    // total reps - bar x
+                    
+                    Graph(sampleAnalytics: viewModel.chartData.TotalReps, currentTab: "7 Days", isLine: true, currentChart: .totalReps)
+                    
+                    
+                    // weight/rep - bar
+                    
+                    Graph(sampleAnalytics: viewModel.chartData.WeightPerRep, currentTab: "7 Days", isLine: true, currentChart: .wightperRep)
+                    
+                    // freq chart
+                    VStack {
+                        HStack {
+                            TextHelvetica(content: "Workout Freqency", size: 22)
+                                .foregroundColor(Color("LinkBlue"))
+                                .bold()
+                            Spacer()
+                        }
+                        MonthlyWorkoutFrequencyView(monthlyWorkoutFrequencyData: viewModel.getWorkoutFrequency(exerciseHistory: exercise.exerciseHistory))
+                    }
+                    .padding()
+                    .background(Color("DBblack"))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                    .padding()
                 }
                 
-                // best set - line x
-                if viewModel.chartData.volume.count > 0 {
-                    Graph(sampleAnalytics: viewModel.chartData.bestSetVolume, currentTab: "7 Days", isLine: true)
+            } else {
+                
+                VStack {
+                    Spacer()
+                    TextHelvetica(content: "Data will apear heer when you have two days of this workout logged", size: 18)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                        .offset(y: getScreenBounds().height * 0.04)
+                        .padding()
+                    
+                    
+                    
                 }
-                // total reps - bar x
-                if viewModel.chartData.volume.count > 0 {
-                    Graph(sampleAnalytics: viewModel.chartData.TotalReps, currentTab: "7 Days", isLine: true)
-                }
-      
+            }
             
-                // weight/rep - bar
-                if viewModel.chartData.volume.count > 0 {
-                    Graph(sampleAnalytics: viewModel.chartData.WeightPerRep, currentTab: "7 Days", isLine: true)
+            } else {
+                VStack {
+                    TextHelvetica(content: "charts currently only support normal exercises", size: 18)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .padding()
+                        .multilineTextAlignment(.center)
+                    VStack {
+                        HStack {
+                            TextHelvetica(content: "Workout Freqency", size: 22)
+                                .foregroundColor(Color("LinkBlue"))
+                                .bold()
+                            Spacer()
+                        }
+                        MonthlyWorkoutFrequencyView(monthlyWorkoutFrequencyData: viewModel.getWorkoutFrequency(exerciseHistory: exercise.exerciseHistory))
+                    }
+                    .padding()
+                    .background(Color("DBblack"))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                    .padding()
                 }
-                // reps/set - line
-               
-                FreqencyChart()
-                // freq chart
-
-
-              
                 
             }
-          
-            
-            Spacer()
            
         }
         
@@ -481,8 +635,74 @@ struct Page3View: View {
 }
 
 struct Page4View: View {
+    
+    var exercise: HomePageModel.Exersise
+    @ObservedObject var viewModel: HomePageViewModel
+    @State var exercisePlaceholder = ""
+    @FocusState private var isTextFieldFocused: Bool
+    @Binding var exerciseName: String
+    @Binding var showingExrcisePage: Bool
     var body: some View {
-        Text("Page 4 Content")
+        VStack {
+           
+            TextField("", text: $exerciseName, prompt: Text(exercisePlaceholder).foregroundColor(Color("GrayFontOne")))
+                .frame(width: getScreenBounds().width * 0.82)
+                .font(.custom("SpaceGrotesk-Medium", size: 18))
+               
+                .padding(.vertical, 8)
+                .padding(.horizontal, 10)
+                .background(Color("DBblack"))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+             
+                .padding(.top, 25)
+                .padding(.bottom, 100)
+                .focused($isTextFieldFocused)
+                .onChange(of: isTextFieldFocused) { newValue in
+                    if newValue == false {
+                        // TextField has lost focus
+                        if !exerciseName.isEmpty {
+                            viewModel.setExerciseName(exerciseID: exercise.id, newName: exerciseName)
+                        }
+                        
+                        
+                    }
+                }
+            
+            
+            Button {
+           
+                viewModel.deleteExercise(exerciseID: exercise.id)
+                withAnimation(.spring()) {
+                    showingExrcisePage = false
+                }
+   
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(Color("MainRed"))
+                        .padding(.vertical)
+                        .padding(.horizontal, 10)
+        
+                    
+
+
+                 
+                        
+                 
+                    
+                    
+                    TextHelvetica(content: "Delete Exercise", size: 20)
+                        .foregroundColor(Color("WhiteFontOne"))
+                }
+                .frame(width: getScreenBounds().width * 0.9, height: getScreenBounds().height * 0.1)
+            }
+            
+        }
+
+        
     }
 }
 

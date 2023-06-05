@@ -21,6 +21,8 @@ class HomePageViewModel: ObservableObject {
         return homePageModel.displayingWorkoutLogView
     }
     
+
+    
     
 
     
@@ -41,8 +43,10 @@ class HomePageViewModel: ObservableObject {
     var myWorkouts: [HomePageModel.Workout] {
         return homePageModel.myExercises
     }
-    
-    
+
+    var myWorkoutsRecent: [HomePageModel.Workout] {
+        return homePageModel.myExercisesRecent
+    }
     var exersises: Array<HomePageModel.Exersise> {
         return homePageModel.exercises
     }
@@ -90,7 +94,9 @@ class HomePageViewModel: ObservableObject {
 
     }
     
-    
+    func setNotes(notes: String, moduleID: Int) {
+        homePageModel.setNotes(notes: notes, moduleID: moduleID)
+    }
     
     func setOngoingState(state: Bool) {
         homePageModel.setOngoingWorkoutState(state: state)
@@ -98,6 +104,19 @@ class HomePageViewModel: ObservableObject {
     
     func deleteExerciseHistory(workoutID: UUID) {
         homePageModel.deleteFromHistory(workoutID: workoutID)
+
+    }
+    func deleteMyWorkoutRecent(workoutID: UUID) {
+        homePageModel.deleteMyWorkoutRecent(workoutID: workoutID)
+
+    }
+    
+    func resetID(exerciseID: UUID) {
+        homePageModel.resetID(workoutID: exerciseID)
+    }
+
+    func deleteMyWorkouts(workoutID: UUID) {
+        homePageModel.deleteMyWorkouts(workoutID: workoutID)
 
     }
 
@@ -122,7 +141,9 @@ class HomePageViewModel: ObservableObject {
     func saveMyWorkouts() {
         homePageModel.saveMyWorkouts()
     }
-    
+    func addToMyWorkoutsRecent(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+        homePageModel.addToMyExercisesRecent(workoutName: workoutName, exersiseModules: exersiseModules)
+    }
     func addToMyWorkouts(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
         homePageModel.addToMyExercises(workoutName: workoutName, exersiseModules: exersiseModules)
     }
@@ -156,6 +177,14 @@ class HomePageViewModel: ObservableObject {
         schedule.clearWorkoutQueue()
     }
     
+    func setExerciseName(exerciseID: Int, newName: String) {
+        homePageModel.setExerciseName(exerciseID: exerciseID, newName: newName)
+    }
+    
+    func deleteExercise(exerciseID: Int) {
+        homePageModel.deleteExercise(exerciseID: exerciseID)
+    }
+    
     func saveSchedule() {
     
         schedule.saveSchedule()
@@ -180,109 +209,62 @@ class HomePageViewModel: ObservableObject {
         let currentDate = Date()
         let startOfDayCurrentDate = startOfDay(for: currentDate)
         let sortedWorkouts = schedule.workouts.sorted(by: { $0.key < $1.key })
-    
-        for (date, workoutArray) in sortedWorkouts {
-            if date > startOfDayCurrentDate {
-                for workout in workoutArray {
-                    if workout.HasBeenDone == false {
-                        return workout
-                    }
-                }
-                
-               
-            } else if date == startOfDayCurrentDate {
-                for workout in workoutArray {
-                    if workout.time >= currentDate {
-                  
-                        if workout.HasBeenDone == false {
-                            return workout
-                        }
-                    }
-                    
-                }
         
+        // Check workouts for the current day
+        if let workoutArray = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value {
+            for workout in workoutArray {
+                if workout.time >= currentDate && workout.HasBeenDone == false {
+                    return workout
+                }
             }
         }
 
         // If no upcoming workouts are found, check for a workout within an hour
         let oneHourLater = currentDate.addingTimeInterval(3600)
-        let startOfDayOneHourLater = startOfDay(for: oneHourLater)
         if let workoutArray2 = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value {
-       
             for workout in workoutArray2 {
-                if workout.time <= oneHourLater {
-              
-                    if workout.HasBeenDone == false {
-                        return workout
-                    }
+                if workout.time <= oneHourLater && workout.HasBeenDone == false {
+                    return workout
                 }
-                
             }
         }
-           
-        
-        
 
-
-     
         return nil
     }
-    
+
     func upcomingWorkoutAndRemove() -> ScheduleWorkout? {
         let currentDate = Date()
         let startOfDayCurrentDate = startOfDay(for: currentDate)
         let sortedWorkouts = schedule.workouts.sorted(by: { $0.key < $1.key })
-        
-        for (date, workoutArray) in sortedWorkouts {
-            if date > startOfDayCurrentDate {
-                for (index, workout) in workoutArray.enumerated() {
-                    if workout.HasBeenDone == false {
-                        schedule.workouts[date]?[index].HasBeenDone = true
-                        return workout
-                    }
+            
+        // Check workouts for the current day
+        if let workoutArray = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value {
+            for (index, workout) in workoutArray.enumerated() {
+                if workout.time >= currentDate && workout.HasBeenDone == false {
+                    schedule.workouts[startOfDayCurrentDate]?[index].HasBeenDone = true
+                    return workout
                 }
-                
-               
-            } else if date == startOfDayCurrentDate {
-                for (index, workout) in workoutArray.enumerated() {
-                    if workout.time >= currentDate {
-                  
-                        if workout.HasBeenDone == false {
-                            schedule.workouts[date]?[index].HasBeenDone = true
-                            return workout
-                        }                    }
-                    
-                }
-        
             }
         }
 
-
         // If no upcoming workouts are found, check for a workout within an hour
         let oneHourLater = currentDate.addingTimeInterval(3600)
-        let startOfDayOneHourLater = startOfDay(for: oneHourLater)
-       
-        
-        if let workoutArray = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value {
-          
-            for (index, workout) in workoutArray.enumerated() {
-                if workout.time <= oneHourLater {
-              
-                    if workout.HasBeenDone == false {
-                        schedule.workouts[startOfDayOneHourLater]?[index].HasBeenDone = true
-                        return workout
-                    }
+        if let workoutArray2 = sortedWorkouts.first(where: { $0.key == startOfDayCurrentDate })?.value {
+            for (index, workout) in workoutArray2.enumerated() {
+                if workout.time <= oneHourLater && workout.HasBeenDone == false {
+                    schedule.workouts[startOfDayCurrentDate]?[index].HasBeenDone = true
+                    return workout
                 }
-                
             }
         }
 
         return nil
     }
+
    
     @Published private(set) var chartData: exerciseChartDataModel = exerciseChartDataModel()
     
-    func setExerciseChartData(volume: [Double], heaviestWeight: [Double], Projected1RM: [Double], BestSetVolume: [Double], TotalReps: [Double], WeightPerRep: [Double], WorkoutFrequency: [Double], exercise: HomePageModel.Exersise) {
+    func setExerciseChartData(volume: [Double], heaviestWeight: [Double], Projected1RM: [Double], BestSetVolume: [Double], TotalReps: [Double], WeightPerRep: [Double], exercise: HomePageModel.Exersise) {
         if !volume.isEmpty {
             let preparedVolume = prepareData(viewCounts: volume, exercise: exercise)
             let preparedHeaviestWeight = prepareData(viewCounts: heaviestWeight, exercise: exercise)
@@ -290,8 +272,8 @@ class HomePageViewModel: ObservableObject {
             let preparderBestSetVolume = prepareData(viewCounts: BestSetVolume, exercise: exercise)
             let preparedTotalReps = prepareData(viewCounts: TotalReps, exercise: exercise)
             let preparedWeightPerRep = prepareData(viewCounts: WeightPerRep, exercise: exercise)
-            let preparedFrequency = prepareData(viewCounts: WorkoutFrequency, exercise: exercise)
-            chartData.setData(volume: preparedVolume, heaviestWeight: preparedHeaviestWeight, Projected1RM: preparedProjected1RM, bestSetVolume: preparderBestSetVolume, TotalReps: preparedTotalReps, WeightPerRep: preparedWeightPerRep, LastMonthFreq: preparedFrequency)
+
+            chartData.setData(volume: preparedVolume, heaviestWeight: preparedHeaviestWeight, Projected1RM: preparedProjected1RM, bestSetVolume: preparderBestSetVolume, TotalReps: preparedTotalReps, WeightPerRep: preparedWeightPerRep)
         }
        
     }
@@ -546,34 +528,28 @@ class HomePageViewModel: ObservableObject {
     }
 
     
-    func getWorkoutFrequency(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Double] {
-//        let calendar = Calendar.current
-//        let currentDate = Date()
-//        let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: currentDate) ?? currentDate
-//        let startOfMonth = calendar.startOfDay(for: oneMonthAgo)
-//
-//        var workoutFrequency: [Date: Int] = [:]
-//
-//        for exercise in exerciseHistory {
-//            guard let exerciseDate = exercise.DateCompleted else { continue }
-//            if exerciseDate >= startOfMonth {
-//                let exerciseDay = calendar.startOfDay(for: exerciseDate)
-//                workoutFrequency[exerciseDay] = (workoutFrequency[exerciseDay] ?? 0) + 1
-//            }
-//        }
-//
-//        var dailyWorkoutFrequency: [Int] = []
-//        var currentDateIterator = startOfMonth
-//        while currentDateIterator <= currentDate {
-//            let dayWorkouts = workoutFrequency[currentDateIterator] ?? 0
-//            dailyWorkoutFrequency.append(dayWorkouts)
-//            currentDateIterator = calendar.date(byAdding: .day, value: 1, to: currentDateIterator) ?? currentDate
-//        }
-//
-//        return dailyWorkoutFrequency
+    func getWorkoutFrequency(exerciseHistory: [WorkoutLogModel.ExersiseLogModule]) -> [Int] {
         
-        let testValues: [Double] = [500, 550]
-        return testValues
+        let calendar = Calendar.current
+        let today = Date()
+        let totalDaysInCurrentMonth = calendar.range(of: .day, in: .month, for: today)!.count
+        
+        var monthlyWorkoutFrequencyData = Array(repeating: 0, count: totalDaysInCurrentMonth)
+        
+        for workout in exerciseHistory {
+            if let workoutDate = workout.DateCompleted {
+                if calendar.isDate(workoutDate, equalTo: today, toGranularity: .month) {
+                    let dayOfMonth = calendar.component(.day, from: workoutDate)
+                    monthlyWorkoutFrequencyData[dayOfMonth - 1] += 1
+                }
+            }
+            
+            
+        }
+
+        
+  
+        return monthlyWorkoutFrequencyData
     }
 
 
@@ -633,8 +609,172 @@ class HomePageViewModel: ObservableObject {
         return dateFormatter.string(from: date)
     }
     
+    func formatDate2(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE dd, 'at' h:mm a"
+        return dateFormatter.string(from: date)
+    }
 
     
+    struct ExerciseStats {
+        let exerciseCount: Int
+        let totalVolume: Float
+        let totalReps: Int
+        let totalSets: Int
+        var topExercises: [(Int, Int)] // (exerciseId, frequency)
+        var totalWorkouts: Int
+        var totalWorkoutTime: Int
+        var timeBetweenFirstAndLast: TimeInterval?
+        var groupedSets: [String: Float]
+        var lastThirtyDaysFrequency: [Int]// Will be nil if there are fewer than 2 workouts
+    }
 
+    func calculateStats() -> ExerciseStats {
+        var exerciseCount = 0
+        var totalVolume: Float = 0
+        var totalReps = 0
+        var totalSets = 0
+        var totalWorkouts = 0
+        var totalWorkoutTime = 0
+        var timeBetweenFirstAndLast: TimeInterval? = nil
+        var groupedSets: [String: Float] = [:]
+
+        // Ensure there are at least 2 workouts to calculate time between
+        if history.count >= 2 {
+            let sortedHistory = history.sorted { $0.competionDate < $1.competionDate }
+            timeBetweenFirstAndLast = sortedHistory.last!.competionDate.timeIntervalSince(sortedHistory.first!.competionDate)
+        }
+
+        // Calculate the total stats for all workouts
+        for workout in history {
+            totalWorkouts += 1
+            totalWorkoutTime += workout.workoutTime
+            for exercise in workout.exercises {
+                exerciseCount += 1
+                for setRow in exercise.setRows {
+                    totalVolume += setRow.weight * Float(setRow.reps)
+                    totalReps += setRow.reps
+                    totalSets += 1
+                }
+            }
+        }
+
+        let calendar = Calendar.current
+        let today = Date()
+        let totalDaysInCurrentMonth = calendar.range(of: .day, in: .month, for: today)!.count
+        
+        var monthlyWorkoutFrequencyData = Array(repeating: 0, count: totalDaysInCurrentMonth)
+        
+        for workout in history {
+            let workoutDate = workout.competionDate
+            if calendar.isDate(workoutDate, equalTo: today, toGranularity: .month) {
+                let dayOfMonth = calendar.component(.day, from: workoutDate)
+                monthlyWorkoutFrequencyData[dayOfMonth - 1] += 1
+            }
+        }
+
+        // Calculate the grouped sets
+        let categorySets = calculateCategorySets(for: exersises)
+        groupedSets = groupCategorySets(categorySets)
+
+        let topExercises = getTopExercises()
+
+        return ExerciseStats(exerciseCount: exerciseCount, totalVolume: totalVolume, totalReps: totalReps, totalSets: totalSets, topExercises: topExercises, totalWorkouts: totalWorkouts, totalWorkoutTime: totalWorkoutTime, timeBetweenFirstAndLast: timeBetweenFirstAndLast, groupedSets: groupedSets, lastThirtyDaysFrequency: monthlyWorkoutFrequencyData)
+    }
+
+    
+    func getTopExercises() -> [(Int, Int)] {
+        var exerciseFrequency: [Int: Int] = [:]  // dictionary to hold exercise ID and its frequency
+        
+        for workout in history {
+            for exercise in workout.exercises {
+                exerciseFrequency[exercise.ExersiseID, default: 0] += 1
+            }
+        }
+        
+        // sort the dictionary and convert to array of tuples
+        let sortedExercises = exerciseFrequency.sorted { $0.value > $1.value }
+        
+        return sortedExercises
+    }
+    
+    func calculateCategoryVolumes(for exercises: [HomePageModel.Exersise]) -> [String: Float] {
+        var categoryVolumes: [String: Float] = [:]  // Dictionary to hold category names and their total volumes
+
+        for exercise in exercises {
+            // Calculate the volume for each exercise in the exerciseHistory
+            let exerciseTotalVolume = exercise.exerciseHistory.reduce(0.0) { total, exerciseLogModule in
+                let exerciseVolume = exerciseLogModule.setRows.reduce(0.0) { setTotal, setRow in
+                    setTotal + (setRow.weight * Float(setRow.reps))
+                }
+                return total + Double(exerciseVolume)
+            }
+
+            // Add the exercise's volume to the total volume for each of its categories
+            for category in exercise.exerciseCategory {
+                categoryVolumes[category, default: 0.0] += Float(exerciseTotalVolume)
+            }
+        }
+
+        return categoryVolumes
+    }
+
+    
+    func calculateCategorySets(for exercises: [HomePageModel.Exersise]) -> [String: Int] {
+        var categorySets: [String: Int] = [:]  // Dictionary to hold category names and their total sets
+
+        for exercise in exercises {
+            // Count the sets for each exercise in the exerciseHistory
+            let exerciseTotalSets = exercise.exerciseHistory.reduce(0) { total, exerciseLogModule in
+                return total + exerciseLogModule.setRows.count
+            }
+
+            // Add the exercise's sets to the total sets for each of its categories
+            for category in exercise.exerciseCategory {
+                categorySets[category, default: 0] += exerciseTotalSets
+            }
+        }
+
+        return categorySets
+    }
+    
+    func groupCategorySets(_ categorySets: [String: Int]) -> [String: Float] {
+        var groupedSets: [String: Int] = [:]
+
+        for (category, setCount) in categorySets {
+            switch category {
+            case "Upper Back", "Lower Back":
+                groupedSets["Back", default: 0] += setCount
+            case "Biceps", "Triceps":
+                groupedSets["Arms", default: 0] += setCount
+            case "Glutes", "Quadriceps", "Hamstrings":
+                groupedSets["Legs", default: 0] += setCount
+            case "Abs":
+                groupedSets["Abs", default: 0] += setCount
+            case "Other", "Cardio":
+                break // exclude these categories
+            default:
+                // For all other categories, just copy the sets over without grouping
+                groupedSets[category] = setCount
+            }
+        }
+
+        // Get the maximum number of sets across all categories
+        guard let maxSets = groupedSets.values.max() else {
+            return [:]
+        }
+
+        // Calculate the percentage of sets for each group, relative to the max sets
+        var setPercentages: [String: Float] = [:]
+        for (category, setCount) in groupedSets {
+            setPercentages[category] = (Float(setCount) / Float(maxSets)) * 10
+        }
+
+        return setPercentages
+    }
+    
+    func getExerciseByID(by id: Int) -> HomePageModel.Exersise? {
+        return exersises.first(where: { $0.id == id })
+    }
     
 }

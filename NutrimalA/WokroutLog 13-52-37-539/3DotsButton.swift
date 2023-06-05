@@ -55,6 +55,7 @@ struct DotsMenuView: View {
                                 .foregroundColor(Color("MainGray"))
                             Image(systemName: "xmark")
                                 .bold()
+                                .foregroundColor(Color("LinkBlue"))
                         }
                         
                             
@@ -112,7 +113,7 @@ struct DotsMenuView: View {
                            
                             Image("sidwaysArrow")
                                 .resizable()
-                            
+                                .foregroundColor(Color("LinkBlue"))
                                 .aspectRatio(24/48, contentMode: .fit)
                                 .frame(maxHeight: 22)
                         }
@@ -198,7 +199,7 @@ struct DotsMenuView: View {
                                     .fontWeight(.bold)
                                 Image("sidwaysArrow")
                                     .resizable()
-                                
+                                    .foregroundColor(Color("LinkBlue"))
                                     .aspectRatio(24/48, contentMode: .fit)
                                     .frame(maxHeight: 22)
                             }
@@ -232,7 +233,7 @@ struct DotsMenuView: View {
                 
                         Image("sidwaysArrow")
                             .resizable()
-                        
+                            .foregroundColor(Color("LinkBlue"))
                             .aspectRatio(24/48, contentMode: .fit)
                             .frame(maxHeight: 22)
                         
@@ -278,7 +279,7 @@ struct DotsMenuView: View {
                       
                         Image("sidwaysArrow")
                             .resizable()
-                        
+                            .foregroundColor(Color("LinkBlue"))
                             .aspectRatio(24/48, contentMode: .fit)
                             .frame(maxHeight: 22)
                         
@@ -432,9 +433,13 @@ struct restTimeSet: View {
                                     .stroke(Color("BorderGray"), lineWidth: borderWeight))
                             .foregroundColor(Color("MainGray"))
                         Image("checkMark")
+                         
                             .resizable()
+                      
                             .aspectRatio(contentMode: .fit)
+                            .foregroundColor(Color("LinkBlue"))
                             .frame(width: 17, height: 17)
+                        
                     }
                     
                         
@@ -520,8 +525,10 @@ struct weightUnitSet: View {
                                     .stroke(Color("BorderGray"), lineWidth: borderWeight))
                             .foregroundColor(Color("MainGray"))
                         Image("checkMark")
+                        
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .foregroundColor(Color("LinkBlue"))
                             .frame(width: 17, height: 17)
                     }
                     

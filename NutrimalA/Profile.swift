@@ -11,13 +11,14 @@ import SwiftUI
 struct Profile: View {
     @ObservedObject var viewModel: HomePageViewModel
     @Binding var isNavigationBarHidden: Bool
+    var profileData: HomePageViewModel.ExerciseStats
     var body: some View {
        
         GeometryReader { proxy in
             
             let topEdge = proxy.safeAreaInsets.top
-            ProfileMain(viewModel: viewModel, topEdge: topEdge)
-                .navigationBarTitle("back")
+            ProfileMain(viewModel: viewModel, topEdge: topEdge, profileData: profileData)
+                .navigationBarTitle(" ")
                 .navigationBarHidden(self.isNavigationBarHidden)
                 .onAppear {
                     self.isNavigationBarHidden = true
@@ -43,14 +44,15 @@ struct ProfileMain: View {
     @State private var showingHistoryMenu: Bool = false
     @State private var selectedWorkout: HomePageModel.Workout?
     private let scrollId = "scrollId"
-    
+    var profileData: HomePageViewModel.ExerciseStats
+    @State private var displayingExerciseView: Bool = false
 
     var body: some View {
         ZStack {
             
             
             ScrollView(.vertical, showsIndicators: false) {
-                
+              
                 VStack(spacing: 15) {
                     GeometryReader { proxy in
                         TopBar(topEdge: topEdge, name: "Profile", offset: $offset, maxHeight: maxHeight)
@@ -75,7 +77,7 @@ struct ProfileMain: View {
 
                         
                             .background(Color("MainGray"), in: CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
-                            .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
+                          
                         
                     }
                     .frame(height: maxHeight)
@@ -91,36 +93,217 @@ struct ProfileMain: View {
 
 
                     VStack{
-                        Text("RADAR CHART").font(.system(size: 30, weight: .semibold))
-                        RadarChartView(width: 370, MainColor: Color.init(white: 0.8), SubtleColor: Color.init(white: 0.6), quantity_incrementalDividers: 4, dimensions: dimensions, data: data)
-                        RadarChartView(width: 370, MainColor: Color.init(white: 0.8), SubtleColor: Color.init(white: 0.6), quantity_incrementalDividers: 4, dimensions: dimensions, data: data2)
-                        FreqencyChart()
-                        
-                        VStack {
-                            Text("Wokrouts")
-                            Text("Total Volume")
-                            Text("Total Reps")
-                            Text("12 weeks training")
-                            Text("23 sets")
+                        let _ = print(profileData)
+                        HStack {
+                            TextHelvetica(content: "Muscle Split", size: 25)
+                                .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
+                            Spacer()
                         }
-                        
-                     
-                     
-                        VStack {
-                            Text("goals")
+                        .padding()
+                        .padding(.top, 50)
+               
+//                        enum RayCase:String, CaseIterable {
+//                            case Intelligence = "Back"
+//                            case Funny = "Arms"
+//                            case Empathy = "Shoulders"
+//                            case Veracity = "Legs"
+//                            case Selflessness = "Abs"
+//                            case Authenticity = "Chest"
+//                            case Boldness = "Boldness"
+//                        }
+//
+//                        DataPoint(intelligence: Double(values["Arms"]!), funny: Double(values["Legs"]!), empathy: Double(values["Shoulders"]!), veracity: Double(values["Chest"]!), selflessness: Double(values["Back"]!), authenticity: Double(values["Abs"]!), color: Color("LinkBlue"))
+
+                        let values = profileData.groupedSets
+                        let data = [
+                            DataPoint(intelligence: Double(values["Arms"]!), funny: Double(values["Legs"]!), empathy: Double(values["Shoulders"]!), veracity: Double(values["Chest"]!), selflessness: Double(values["Back"]!), authenticity: Double(values["Abs"]!), color: Color("LinkBlue"))
+                        ]
                        
+                    
+
+                        RadarChartView(width: getScreenBounds().width * 0.83, MainColor: Color("WhiteFontOne"), SubtleColor: Color.init(white: 0.6), quantity_incrementalDividers: 0, dimensions: dimensions, data: data)
+                            .padding(.all)
+                                .background(Color("MainGray"))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .padding()
+                       
+                        
+                        HStack {
+                            TextHelvetica(content: "Last 30 Days", size: 25)
+                                .foregroundColor(Color("WhiteFontOne"))
+                                .bold()
+                            Spacer()
+                        }.padding(.horizontal)
+                            .padding(.top, 50)
+                     
+                        MonthlyWorkoutFrequencyView(monthlyWorkoutFrequencyData: profileData.lastThirtyDaysFrequency)
+                            .padding(.all)
+                                .background(Color("MainGray"))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                .padding()
+                        
+                        HStack {
+                            TextHelvetica(content: "Stats", size: 25)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            Spacer()
+                        }.padding(.horizontal)
+                            .padding(.top, 50)
+                       
+                        VStack(spacing: 10) {
+                            HStack {
+                                TextHelvetica(content: "Workouts", size: 18)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: String(profileData.totalWorkouts), size: 18)
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .bold()
+                            }.padding(.horizontal)
+                            HStack {
+                                TextHelvetica(content: "Hours Working Out", size: 18)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: Float(profileData.totalWorkoutTime / 3600).clean, size: 18)
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .bold()
+                            }.padding(.horizontal)
+                            
+                            if let date = profileData.timeBetweenFirstAndLast {
+                                let secondsPerMinute = 60
+                                let minutesPerHour = 60
+                                let hoursPerDay = 24
+                                let daysPerWeek = 7
+                                let weeks = date / Double(secondsPerMinute * minutesPerHour * hoursPerDay * daysPerWeek)
+                           
+                                HStack {
+                                    TextHelvetica(content: "Weeks Training", size: 18)
+                                        .foregroundColor(Color("GrayFontOne"))
+                                    Spacer()
+                                    TextHelvetica(content: Float(ceil(weeks)).clean, size: 18)
+                                        .foregroundColor(Color("LinkBlue"))
+                                        .bold()
+                                }.padding(.horizontal)
+                            }
+                            
+                            HStack {
+                                TextHelvetica(content: "Volume", size: 18)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: Double(profileData.totalVolume).stringFormat, size: 18)
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .bold()
+                            }.padding(.horizontal)
+                            
+                            HStack {
+                                TextHelvetica(content: "Reps", size: 18)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: String(profileData.totalReps), size: 18)
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .bold()
+                            }.padding(.horizontal)
+                            
+                            HStack {
+                                TextHelvetica(content: "Sets", size: 18)
+                                    .foregroundColor(Color("GrayFontOne"))
+                                Spacer()
+                                TextHelvetica(content: String(profileData.totalSets), size: 18)
+                                    .foregroundColor(Color("LinkBlue"))
+                                    .bold()
+                            }.padding(.horizontal)
+                            
+                      
+                           
                         }
+                        .padding(.all)
+                            .background(Color("MainGray"))
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                            .padding()
+                        
+                     
+                     
+                        HStack {
+                            TextHelvetica(content: "Top Exercises", size: 25)
+                                .foregroundColor(Color("WhiteFontOne"))
+                            Spacer()
+                        }.padding(.horizontal)
+                            .padding(.top, 50)
                         
                         VStack {
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
-                            Text("bench press - 1 time")
+                            ForEach(profileData.topExercises.prefix(7), id: \.0) { exercise in
+                                if let exercice = viewModel.getExerciseByID(by: exercise.0) {
+                                    if exercice.isDeleted == false {
+                                        Button {
+                                            viewModel.setCurrentExercise(exercise: exercice)
+                                            withAnimation(.spring()) {
+                                                displayingExerciseView = true
+                                            }
+                                    
+                                            
+                                           
+                                        } label: {
+                                            HStack {
+                                                VStack {
+                                                    HStack {
+                                                        TextHelvetica(content: exercice.exerciseName, size: 20)
+                                                            .bold()
+                                                            .foregroundColor(Color("LinkBlue"))
+                                                            .multilineTextAlignment(.leading)
+                                                       
+                                                        Spacer()
+                                                    }
+                                                    
+                                                    HStack {
+                                                        TextHelvetica(content: "\(exercise.1) times", size: 17)
+                                                            .multilineTextAlignment(.leading)
+                                                            .foregroundColor(Color("WhiteFontOne"))
+                                                        Spacer()
+                                                    }
+                                                  
+                                                   
+                                                }
+                                                Spacer()
+                                                Image("sidwaysArrow")
+                                                    .resizable()
+                                                
+                                                    .aspectRatio(24/48, contentMode: .fit)
+                                                    .frame(maxHeight: 30)
+                                                    .foregroundColor(Color("LinkBlue"))
+                                                
+                                                .labelsHidden()
+                                                
+                                            }
+                                            .padding(.all)
+                                            .frame(height: getScreenBounds().height * 0.09)
+                                                .background(Color("MainGray"))
+                                                .cornerRadius(10)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                            
+                                                .padding()
+                                          
+                                            
+                                         
+                                        }
+                                    }
+                                    
+                                }
+                                
+                               
+                            }
                         }
+                       
+                        .padding(.bottom, 200)
                         
                         Spacer()
                     }.foregroundColor(.white)
@@ -162,13 +345,14 @@ struct ProfileMain: View {
                                 .foregroundColor(Color("LinkBlue"))
                             Spacer()
                         }
-                        .frame(width: 100)
+                     
                     }
                     Spacer()
-                    TextHelvetica(content: "History", size: 20)
+                    TextHelvetica(content: "Profile", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                         .opacity(topBarTitleOpacity())
+                 
                     Spacer()
                     Button {
                         HapticManager.instance.impact(style: .rigid)
@@ -177,22 +361,22 @@ struct ProfileMain: View {
                             Spacer()
                       
                     
-                            Image(systemName: "ruler.fill")
-                                .font(.body.bold())
-                                .foregroundColor(Color("LinkBlue"))
-                            Image(systemName: "photo.artframe")
-                                .font(.body.bold())
-                                .foregroundColor(Color("LinkBlue"))
+                          
                   
                                 
-                        }.frame(width: 120)
+                        }
                        
                     }
                     
                 }
-                    .padding(.horizontal)
-                    .frame(height: 60)
-                    .padding(.top, topEdge)
+                .frame(height: 60)
+                .padding(.top, topEdge)
+                .padding(.bottom, 20)
+                .padding(.horizontal)
+                .background(Color("MainGray")
+                            .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.1), radius: 10, x: 0, y: 0)
+                            .edgesIgnoringSafeArea(.all)
+                            .padding(.all, UIScreen.main.bounds.width * 0.005))
                 
                 Spacer()
             }
@@ -200,29 +384,28 @@ struct ProfileMain: View {
            
       
             ZStack {
-                VisualEffectView(effect: UIBlurEffect(style: .dark))
-                    .edgesIgnoringSafeArea(.all)
-                    .opacity(showingExpandedExercise ? 1 : 0)
-
-              
-                if let workoutToUse = selectedWorkout {
-                    let offset = viewModel.ongoingWorkout ? 0 : 0.07
-                    ExpandedHistory(workout: workoutToUse, viewModel: viewModel, showingExpandedExercise: $showingExpandedExercise)
-                        .position(x: getScreenBounds().width/2, y: showingExpandedExercise ? getScreenBounds().height * (0.47 + offset) : getScreenBounds().height * 1.5)
-                }
-                
+                let showing = displayingExerciseView
                 Rectangle()
                     .edgesIgnoringSafeArea(.all)
                     .foregroundColor(.black)
-                    .opacity(showingHistoryMenu ? 0.4 : 0)
+                    .opacity(showing ? 0.4 : 0)
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                           
+                            displayingExerciseView = false
+                            
+                        }
+                    }
                 
-                let offset = viewModel.ongoingWorkout ? 0 : 0.12
-                historyMenu(showingHistoryMenu: $showingHistoryMenu)
-                    .shadow(radius: 10)
-
-                    .position(x: getScreenBounds().width/2, y: showingHistoryMenu ? getScreenBounds().height * (0.52 + offset) : getScreenBounds().height * 1.5)
-                
-
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(displayingExerciseView ? 1 : 0)
+                    .scaleEffect(1.3)
+               
+                ExercisePage(viewModel: viewModel, showingExrcisePage: $displayingExerciseView)
+                    .position(x: getScreenBounds().width/2, y: displayingExerciseView ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
+            
+       
             }
         }
         .background(Color("DBblack"))
@@ -272,6 +455,7 @@ struct ProfileMain: View {
                                     .foregroundColor(Color("MainGray"))
                                 Image(systemName: "xmark")
                                     .bold()
+                                    .foregroundColor(Color("LinkBlue"))
                             }.frame(width: 50, height: 30)
                         })
 
@@ -670,22 +854,22 @@ struct RadarChartView: View {
 
 
 enum RayCase:String, CaseIterable {
-    case Intelligence = "Intelligence"
-    case Funny = "Funny"
-    case Empathy = "Empathy"
-    case Veracity = "Veracity"
-    case Selflessness = "Selflessness"
-    case Authenticity = "Authenticity"
+    case Intelligence = "Arms"
+    case Funny = "Legs"
+    case Empathy = "Shoulders"
+    case Veracity = "Chest"
+    case Selflessness = "Back"
+    case Authenticity = "Abs"
     case Boldness = "Boldness"
 }
 
 let dimensions = [
-    Ray(maxVal: 10, rayCase: .Empathy),
-    Ray(maxVal: 10, rayCase: .Funny),
-    Ray(maxVal: 10, rayCase: .Intelligence),
-    Ray(maxVal: 10, rayCase: .Veracity),
-    Ray(maxVal: 10, rayCase: .Selflessness),
-    Ray(maxVal: 10, rayCase: .Authenticity),
+    Ray(maxVal: 10.3, rayCase: .Empathy),
+    Ray(maxVal: 10.3, rayCase: .Funny),
+    Ray(maxVal: 10.3, rayCase: .Intelligence),
+    Ray(maxVal: 10.3, rayCase: .Veracity),
+    Ray(maxVal: 10.3, rayCase: .Selflessness),
+    Ray(maxVal: 10.3, rayCase: .Authenticity),
     
 ]
 
@@ -707,10 +891,4 @@ struct DataPoint:Identifiable {
     }
 }
 
-let data = [
-    DataPoint(intelligence: 0, funny: 1, empathy: 1, veracity: 0, selflessness: 0, authenticity: 0, color: .red)
-]
-let data2 = [
-    DataPoint(intelligence: 1, funny: 3, empathy: 7, veracity: 0, selflessness: 0, authenticity: 0, color: .blue)
-]
 

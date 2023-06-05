@@ -5,7 +5,9 @@
         "exerciseEquipment": "Barbell",
         "id": 0,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 140,
+        "notes": "",
         "instructions": [
         "Lie down on a flat bench with your feet firmly on the ground.",
         "Grip the barbell with your hands slightly wider than shoulder-width apart.",
@@ -21,7 +23,9 @@
         "exerciseEquipment": "Barbell",
         "id": 1,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 121,
+        "notes": "",
         "instructions": [
         "Place the barbell on your upper back, gripping it with hands wider than shoulder-width apart.",
         "Stand with your feet shoulder-width apart and toes pointing slightly outward.",
@@ -37,7 +41,9 @@
         "exerciseEquipment": "Barbell",
         "id": 2,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Stand with your feet hip-width apart and the barbell over your mid-foot.",
         "Bend your knees and hips to lower your body and grip the barbell with an overhand or mixed grip.",
@@ -50,10 +56,12 @@
 {
         "exerciseName": "Pull-up",
         "exerciseCategory": ["Back"],
-        "exerciseEquipment": "",
+        "exerciseEquipment": "Bodyweight",
         "id": 3,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Grip a pull-up bar with your hands shoulder-width apart and palms facing away from your body.",
         "Hang from the bar with your arms fully extended and feet off the ground.",
@@ -61,7 +69,7 @@
         "Lower your body back down to the starting position."
         ],
         "exerciseHistory": [],
-        "moduleType": 0
+        "moduleType": 1
     },
 {
         "exerciseName": "Military Press",
@@ -69,7 +77,9 @@
         "exerciseEquipment": "Barbell",
         "id": 4,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Stand with your feet shoulder-width apart and hold a barbell at your collarbone level with your palms facing forward.",
         "Press the barbell overhead by extending your arms.",
@@ -84,7 +94,9 @@
         "exerciseEquipment": "Machine",
         "id": 5,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Sit on the lat pulldown machine and adjust the thigh pad to secure your legs.",
         "Grip the bar with your hands slightly wider than shoulder-width apart and palms facing away from your body.",
@@ -100,7 +112,9 @@
         "exerciseEquipment": "Machine",
         "id": 6,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Sit on the pec deck machine facing the back pad and adjust the seat height so the handles are at shoulder level.",
         "Grip the handles with your palms facing inward and elbows slightly bent.",
@@ -116,7 +130,9 @@
         "exerciseEquipment": "Machine",
         "id": 7,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Stand facing the cable machine with your feet shoulder-width apart.",
         "Grip the handle with your palms facing up and arms fully extended.",
@@ -132,7 +148,9 @@
         "exerciseEquipment": "Barbell",
         "id": 8,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Stand with your feet shoulder-width apart and hold a barbell with an overhand grip.",
         "Bend your knees slightly and hinge forward at your hips, keeping your back straight.",
@@ -148,7 +166,9 @@
         "exerciseEquipment": "Machine",
         "id": 9,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Sit on the pec deck machine with your back against the pad.",
         "Place your forearms on the padded levers, with your elbows at a 90-degree angle.",
@@ -161,17 +181,19 @@
     {
         "exerciseName": "Dips",
         "exerciseCategory": ["Triceps"],
-        "exerciseEquipment": "BodyWeight",
+        "exerciseEquipment": "Bodyweight",
         "id": 10,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Grip the parallel dip bars with your palms facing inward and arms straight.",
         "Lower your body by bending your elbows until your upper arms are parallel to the ground.",
         "Push through your palms to return to the starting position."
         ],
         "exerciseHistory": [],
-        "moduleType": 0
+        "moduleType": 1
     },
     {
         "exerciseName": "Tricep Pushdowns",
@@ -179,7 +201,9 @@
         "exerciseEquipment": "Machine",
         "id": 11,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Stand facing the cable machine with your feet shoulder-width apart.",
         "Grip the handle with your palms facing down and elbows bent at a 90-degree angle.",
@@ -195,7 +219,9 @@
         "exerciseEquipment": "Dumbbell",
         "id": 12,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Lie down on an incline bench with your feet firmly on the ground.",
         "Hold a dumbbell in each hand at chest level, with your palms facing away from your body.",
@@ -211,7 +237,9 @@
         "exerciseEquipment": "Barbell",
         "id": 13,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Stand with your feet hip-width apart and hold a barbell with an overhand grip.",
         "Keeping your back straight and knees slightly bent, hinge forward at your hips to lower the barbell.",
@@ -226,7 +254,9 @@
         "exerciseEquipment": "Machine",
         "id": 14,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Sit on the leg press machine with your back against the pad and feet on the platform.",
         "Adjust the seat so that your knees form a 90-degree angle.",
@@ -242,7 +272,9 @@
         "exerciseEquipment": "Machine",
         "id": 15,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Sit on the leg extension machine with your back against the pad.",
         "Place your ankles under the padded lever, adjusting the machine as needed.",
@@ -258,7 +290,9 @@
         "exerciseEquipment": "Machine",
         "id": 16,
         "selected": false,
+        "isDeleted" : false,
         "restTime": 120,
+        "notes": "",
         "instructions": [
         "Lie face down on the hamstring curl machine with your knees just off the edge of the pad.",
         "Place your ankles under the padded lever, adjusting the machine as needed.",
@@ -267,5 +301,113 @@
         ],
         "exerciseHistory": [],
         "moduleType": 1
+    },
+    {
+        "exerciseName": "Lunges",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 17,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Stand upright with your feet hip-width apart.",
+        "Step forward with one foot and lower your body until your front knee is at a 90-degree angle.",
+        "Push through your front heel to return to the starting position and repeat on the other side."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Push-ups",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 18,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Begin in a high plank position with your hands directly under your shoulders and feet hip-width apart.",
+        "Lower your body until your chest nearly touches the floor.",
+        "Push through your hands to return to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Calf Raises",
+        "exerciseCategory": ["Calves"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 19,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Stand upright with your feet hip-width apart.",
+        "Raise your heels off the ground by pushing through the balls of both feet.",
+        "Lower your heels back to the ground and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Bicycle Crunches",
+        "exerciseCategory": ["Abs"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 20,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Lie on your back and place your hands behind your head.",
+        "Lift both legs off the ground and extend one while bringing the opposite knee towards your chest.",
+        "Simultaneously rotate your torso so your opposite elbow moves toward the lifted knee.",
+        "Alternate sides."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Seated Cable Row",
+        "exerciseCategory": ["Back"],
+        "exerciseEquipment": "Machine",
+        "id": 21,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Sit at a cable row station with your feet on the platform and knees slightly bent.",
+        "Grasp the cable handle and pull it towards your waist while keeping your back straight.",
+        "Extend your arms to return the handle to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Plank",
+        "exerciseCategory": ["Abs"],
+        "exerciseEquipment": "Duration",
+        "id": 22,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Get into a high plank position with your hands directly under your shoulders and feet hip-width apart.",
+        "Ensure your body forms a straight line from your head to your heels.",
+        "Hold this position for the desired length of time."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
     }
+
+
+
+
+
 ]

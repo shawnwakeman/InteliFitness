@@ -1,21 +1,23 @@
 //
-//  WorkoutSetRowViewForCreator.swift
+//  WorkoutSetRowView.swift
 //  NutrimalA
 //
-//  Created by Shawn Wakeman on 5/5/23.
+//  Created by Shawn Wakeman on 4/7/23.
 //
 
 import SwiftUI
 import Combine
-struct WorkoutSetRowViewForCreator: View{
+struct WorkoutSetRowView: View{
     @ObservedObject var viewModel: WorkoutLogViewModel
     var rowObject: WorkoutLogModel.ExersiseSetRow
     var moduleID: Int
     var moduleUUID: UUID
     var previous: String
     @State private var lbsTextField: String = ""
+    @State private var repsTextField: String = ""
     @State private var familyName: String = ""
     @State private var RPEpopUpDisplayed = false
+
 
     
     var body: some View{
@@ -28,7 +30,7 @@ struct WorkoutSetRowViewForCreator: View{
             
             previousSetView(previous: previous)
             
-            lbsTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+            lbsTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, lbsTextField: $lbsTextField)
             
             Divider()
                 .frame(width: borderWeight)
@@ -37,10 +39,10 @@ struct WorkoutSetRowViewForCreator: View{
             
             HStack{
 
-                repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+                repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, repsTextField: $repsTextField)
                 if let module = viewModel.exersiseModules[safe: moduleID] {
                     if module.displayingRPE == true {
-                        repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID)
+                        repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
                     }
                    
                 }
@@ -50,7 +52,7 @@ struct WorkoutSetRowViewForCreator: View{
             }
             .frame(width: getScreenBounds().width * 0.2)
           
-
+            
             .background(Color("DDB"))
 
             Divider()
@@ -60,7 +62,7 @@ struct WorkoutSetRowViewForCreator: View{
             
                 
             
-            checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+            checkBoxView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
             
         }
         .frame(height: getScreenBounds().height * 0.045)
@@ -76,24 +78,62 @@ struct WorkoutSetRowViewForCreator: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         @ObservedObject var viewModel: WorkoutLogViewModel
         var body: some View {
-           
-            TextHelvetica(content: String(rowObject.setIndex), size: 20)
-                       .padding()
-                       .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
-                       .foregroundColor(Color("LinkBlue"))
-                       .background(.clear)
-                       .onTapGesture {
-                           withAnimation(.spring()) {
-                               UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                               HapticManager.instance.impact(style: .rigid)
-                               viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
-                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: moduleUUID) // need to change later
+            if rowObject.setType == "N" {
+                TextHelvetica(content: String(rowObject.setIndex), size: 20)
+                           .padding()
+                           .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
+                           .foregroundColor(Color("LinkBlue"))
+                           .background(.clear)
+                           .onTapGesture {
+                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: UUID())
+                             
+                               withAnimation(.spring()) {
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                   HapticManager.instance.impact(style: .rigid)
+                                   viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
+                                   
+                     
+                               }
+                              
                            }
-                          
-                       }
+            } else {
+                TextHelvetica(content: rowObject.setType, size: 20)
+                           .padding()
+                           .frame(width: getScreenBounds().width * 0.137, height: getScreenBounds().height * 0.03)
+                           .foregroundColor(getTextColor(string: rowObject.setType))
+                           .background(.clear)
+                           .onTapGesture {
+                               viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: UUID())
+                               withAnimation(.spring()) {
+                                   
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                   HapticManager.instance.impact(style: .rigid)
+                                   viewModel.setPopUpState(state: true, popUpId: "SetMenuPopUp")
+                                   viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "SetMenuPopUp", exerciseUUID: moduleUUID) // need to change later
+                               }
+                              
+                           }
+            }
+            
                    Divider()
                        .frame(width: borderWeight)
                        .overlay(Color("BorderGray"))
+        }
+        
+        func getTextColor(string: String) -> Color {
+            if string == "W" {
+                return Color(.systemYellow)
+            }else if string == "D" {
+                return Color(.systemPurple)
+            } else if string == "R" {
+                return Color(.systemOrange)
+            } else if string == "T" {
+                return Color(.systemCyan)
+            } else if string == "F" {
+                return Color(.systemRed)
+            } else {
+                return Color("DefaultColor")
+            }
         }
     }
     
@@ -129,7 +169,7 @@ struct WorkoutSetRowViewForCreator: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
-        @State private var lbsTextField: String = ""
+        @Binding var lbsTextField: String
         
         
         var body: some View {
@@ -138,7 +178,7 @@ struct WorkoutSetRowViewForCreator: View{
                 .keyboardType(.decimalPad)
                 .autocorrectionDisabled(true)
                 .font(.custom("SpaceGrotesk-Medium", size: 20))
-                .foregroundColor(Color("GrayFontTwo"))
+                .foregroundColor(Color("WhiteFontOne"))
                 .onTapGesture {
                     lbsTextField = lbsTextField
                 }
@@ -176,11 +216,9 @@ struct WorkoutSetRowViewForCreator: View{
                 }
 
 
-                .onChange(of: lbsTextField) { newValue in
-                    viewModel.setWeightValuePlaceHolder(exersiseModuleID: moduleID, RowID: rowObject.id, value: lbsTextField)
-                    viewModel.setLastModule(index: moduleID)
-                    viewModel.setLastRow(index: rowObject.id)
-                }
+              
+                   
+                
                 .onAppear {
                     if rowObject.weight != 0 {
                         lbsTextField = String(rowObject.weight.clean)
@@ -196,7 +234,7 @@ struct WorkoutSetRowViewForCreator: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
-        @State private var repsTextField: String = ""
+        @Binding var repsTextField: String
         
 
         var body: some View {
@@ -204,7 +242,7 @@ struct WorkoutSetRowViewForCreator: View{
                     .keyboardType(.numberPad)
                     .autocorrectionDisabled(true)
                     .font(.custom("SpaceGrotesk-Medium", size: 20))
-                    .foregroundColor(Color("GrayFontTwo"))
+                    .foregroundColor(Color("WhiteFontOne"))
                     .onTapGesture {
                         repsTextField = repsTextField
                     }
@@ -226,11 +264,7 @@ struct WorkoutSetRowViewForCreator: View{
                     }
                        
            
-                    .onChange(of: repsTextField) { newValue in
-                        viewModel.setRepValuePlaceHolder(exersiseModuleID: moduleID, RowID: rowObject.id, value: repsTextField)
-                        viewModel.setLastModule(index: moduleID)
-                        viewModel.setLastRow(index: rowObject.id)
-                    }
+                   
                     .onAppear {
                         if rowObject.reps != 0 {
                             repsTextField = String(rowObject.reps)
@@ -246,8 +280,11 @@ struct WorkoutSetRowViewForCreator: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         @ObservedObject var viewModel: WorkoutLogViewModel
         var moduleID: Int
+        
+        @Binding var repsTextField: String
+        @Binding var lbsTextField: String
         var body: some View {
-            if rowObject.rpeTarget != 0 {
+            if rowObject.repMetric != 0 {
                 ZStack{
                     
                     ZStack{
@@ -274,15 +311,14 @@ struct WorkoutSetRowViewForCreator: View{
                         
                     }
                     
-            
-                    TextHelvetica(content: String(rowObject.rpeTarget.clean), size: 13)
-                            .foregroundColor(Color("GrayFontOne"))
+                
                    
-                   
-                       
+             
+                    TextHelvetica(content: String(rowObject.repMetric.clean), size: 13)
+                        .foregroundColor(Color("WhiteFontOne"))
+                 
                     
                 }
-                
                 .padding(.leading, -8)
                 .padding(.trailing, 5)
                 
@@ -301,8 +337,15 @@ struct WorkoutSetRowViewForCreator: View{
                                 HapticManager.instance.impact(style: .rigid)
                                 viewModel.setPopUpState(state: true, popUpId: "popUpRPE")
                                 viewModel.setPopUpCurrentRow(exersiseModuleID: moduleID, RowID: rowObject.id, popUpId: "popUpRPE", exerciseUUID: UUID()) // wront UUID
-                                 viewModel.setLastRow(index: rowObject.id)
-                                viewModel.setLastModule(index: moduleID)
+                                
+                                if repsTextField != "" && lbsTextField != "" {
+                                    viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+                                    
+                                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+                                    
+                                    viewModel.setLastRow(index: rowObject.id)
+                                    viewModel.setLastModule(index: moduleID)
+                                }
                             }}, label: {
                                 Capsule()
                                     .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
@@ -310,9 +353,13 @@ struct WorkoutSetRowViewForCreator: View{
                                 .frame(width: getScreenBounds().width * 0.08)})
                         
                     }
-                    
-                    TextHelvetica(content: "", size: 13)
-                        .foregroundColor(Color.white)
+                    if rowObject.rpeTarget != 0 {
+                        TextHelvetica(content: rowObject.rpeTarget.clean, size: 13)
+                            .foregroundColor(Color("GrayFontOne"))
+                        TextHelvetica(content: "", size: 13)
+                            .foregroundColor(Color("GrayFontOne"))
+                    }
+                   
                     
                 }
                 .onTapGesture {
@@ -331,52 +378,105 @@ struct WorkoutSetRowViewForCreator: View{
         var rowObject: WorkoutLogModel.ExersiseSetRow
         var moduleID: Int
         @ObservedObject var viewModel: WorkoutLogViewModel
+        
+        @Binding var repsTextField: String
+        @Binding var lbsTextField: String
         var body: some View {
             ZStack {
 
-                Image(systemName: "checkmark")
-                    .resizable()
-                    .padding(9.0)
-                    .bold()
-                    .foregroundColor(rowObject.setCompleted ? Color(.systemGreen) : Color("GrayFontOne"))
-                    .aspectRatio(40/37, contentMode: .fit)
-                    .scaleEffect(rowObject.setCompleted ? 0.9 : 0.7)
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .padding(9.0)
+                                .bold()
+                                .foregroundColor(rowObject.setCompleted ? Color(.systemGreen) : Color("GrayFontOne"))
+                                .aspectRatio(40/37, contentMode: .fit)
+                                .scaleEffect(rowObject.setCompleted ? 0.9 : 0.7)
+                          
+
+                            ZStack{
+                                
+                                Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
+                                
+                                
+                            }
+                            .onTapGesture {
+                                print(rowObject)
+                                if repsTextField != "" && lbsTextField != "" {
+                                    
+                                    viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                    viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+
+
+
+                                    viewModel.setLastModule(index: moduleID)
+                                    viewModel.setLastRow(index: rowObject.id)
+                                    withAnimation(.spring()) {
+                                        viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                    }
+
+                                        if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+                                          
+                                            viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                                        }
+                                        viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                    HapticManager.instance.impact(style: .heavy)
+                                }
+                                else {
+                                    if rowObject.weightPlaceholder != "" && rowObject.repsPlaceholder != "" {
+                                        repsTextField = rowObject.repsPlaceholder
+                                        lbsTextField = rowObject.weightPlaceholder
+                                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                        viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+
+
+
+                                        viewModel.setLastModule(index: moduleID)
+                                        viewModel.setLastRow(index: rowObject.id)
+                                        withAnimation(.spring()) {
+                                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                        }
+
+                                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+                                              
+                                                viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                                            }
+                                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                        HapticManager.instance.impact(style: .heavy)
+                                    } else {
+                                        HapticManager.instance.notification(type: .error)
+                                    }
+                                  
+                                }
+                            
+                            
+
+                                
+                                
+                            }
+                            .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
+
+
+              
+                    
+
+                
               
 
-                ZStack{
-                    
-                    Rectangle().foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.01))
-                    
-                    
-                }
-                .onTapGesture {
-                    print(rowObject)
-                    if rowObject.reps != 0 && rowObject.weight != 0 {
-                        withAnimation(.spring()) {
-                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
-                        }
-                            
-                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
-                                
-                                
-                                viewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
-                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
-                            }
-                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
-                            
-                            
-                            
-                       
-                        HapticManager.instance.impact(style: .heavy)
-                    }
-                    else {
-                        HapticManager.instance.notification(type: .error)
-                    }
-
-                    
-                    
-                }
-                .frame(width: getScreenBounds().width * 0.1, height: getScreenBounds().height * 0.045)
+                
             }
 
 
@@ -384,4 +484,12 @@ struct WorkoutSetRowViewForCreator: View{
             
         }
     }
+}
+
+
+
+extension Collection where Indices.Iterator.Element == Index {
+   public subscript(safe index: Index) -> Iterator.Element? {
+     return (startIndex <= index && index < endIndex) ? self[index] : nil
+   }
 }

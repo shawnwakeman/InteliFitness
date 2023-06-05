@@ -16,7 +16,7 @@ struct WeeklyScheduleView: View {
             MainWokroutView(schedule: schedule, viewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, topEdge: topEdge, isForAddingWorkout: isForAddingWorkout)
                 
 
-                .navigationBarTitle("back")
+                .navigationBarTitle(" ")
                 .navigationBarHidden(self.isNavigationBarHidden)
                 .onAppear {
                     self.isNavigationBarHidden = true
@@ -34,11 +34,19 @@ struct WorkoutView: View {
     var HasBeenDone: Bool
     @Binding var showingScheduleView: Bool
     @Binding var currentWorkout: ScheduleWorkout
+    var workouts: [ScheduleWorkout]
+    var index: Int
+    var day: Date
+    @Binding var selectedWorkoutID: Int?
+    @Binding var selectedDay: Date?
+    @Binding var selectedRecurringID: Int?
+    @ObservedObject var schedule: HomePageViewModel
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
             HStack {
-                TextHelvetica(content: workout.name, size: 17)
+                TextHelvetica(content: workout.name, size: 15)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
             
@@ -47,19 +55,42 @@ struct WorkoutView: View {
                         showingScheduleView.toggle()
                     }
                     currentWorkout = workout
+                    HapticManager.instance.impact(style: .rigid)
                     
+                    if let recurringID = workouts[index].recurringID {
+                        selectedWorkoutID = workouts[index].id
+                        selectedRecurringID = recurringID
+                        selectedDay = day
+                        
+                        
+                    } else {
+                        selectedDay = day
+                        selectedWorkoutID = workouts[index].id
+                     
+//
+                           
+                    }
+                         
               
                     
                 } label: {
-                    Image("meatBalls")
-                        .resizable()
-                        .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                    HStack(spacing: 4) {
+                        Circle()
+                        Circle()
+                        Circle()
+                        
+                    }
+                    .scaleEffect(0.76)
+                    .foregroundColor(Color("BorderGray"))
+                    .frame(width: getScreenBounds().width * 0.09, height: getScreenBounds().height * 0.03)
+                   
                 }
                     
 
               
             }.padding(.all, 10)
-                
+           
+                .frame(height: getScreenBounds().height * 0.05)
                 .background(Color("MainGray"))
        
             
@@ -68,31 +99,27 @@ struct WorkoutView: View {
                                 
             .frame(height: borderWeight)
             .overlay(Color("BorderGray"))
+            
+           
             VStack(alignment: .leading) {
                 Rectangle()
                     .frame(height: getScreenBounds().height * 0.000)
-                TextHelvetica(content: "back squat(barbell), bench press(barbell), etc.", size: 12)
+                let exerciseNames = workout.exercises.map { $0.exersiseName }.joined(separator: ", ")
+                
+                TextHelvetica(content: exerciseNames.isEmpty ? "Empty Workout" : exerciseNames, size: 12)
                     .foregroundColor(Color("GrayFontOne"))
                     .multilineTextAlignment(.leading)
               
                 Spacer()
                 
-                HStack{
-                    TextHelvetica(content: "12 sets", size: 15)
-                        .foregroundColor(Color("GrayFontOne"))
-                    Spacer()
-                    Image(systemName: "clock")
-                        .foregroundColor(Color("LinkBlue"))
-                        .imageScale(.medium)
-                        .bold()
-                    TextHelvetica(content: "1:30", size: 15)
-                        .foregroundColor(Color("GrayFontOne"))
-                     
-                }
-            }.padding(.horizontal, 10)
-               
+                
+            }
+       
+            .padding(.horizontal, 10)
             
             Spacer()
+            
+     
 
         }
         .frame(width: getScreenBounds().width * 0.443, height: getScreenBounds().height * 0.15)
@@ -182,37 +209,27 @@ struct MainWokroutView: View {
     func workoutsSection(for day: Date) -> some View {
         Section(header: Text(" ")) {
             if var workouts = schedule.getWorkouts(for: day) { // Change this line
+                
                 ForEach(workouts.indices, id: \.self) { index in
                     HStack {
                         
+ 
                         WorkoutView(workout: Binding<ScheduleWorkout>(get: {
                             workouts[index]
                         }, set: { newValue in
                             workouts[index] = newValue
-                        }), HasBeenDone: workouts[index].HasBeenDone, showingScheduleView: $showingScheduleView, currentWorkout: $selectedWorkout)
+                        }), HasBeenDone: workouts[index].HasBeenDone, showingScheduleView: $showingScheduleView, currentWorkout: $selectedWorkout, workouts: workouts, index: index, day: day, selectedWorkoutID: $selectedWorkoutID, selectedDay: $selectedDay, selectedRecurringID: $selectedRecurringID, schedule: schedule)
                     
                         Spacer()
                         
                             
-                       
-                        Image(systemName: "trash")
-                            .foregroundColor(.red)
-                            .frame(width: 50)
-                            .onTapGesture {
-                                print("Asd")
-                                if let recurringID = workouts[index].recurringID {
-                                    selectedWorkoutID = workouts[index].id
-                                    selectedRecurringID = recurringID
-                                    selectedDay = day
-                                    showDeleteAlert = true
-                                } else {
-                                    schedule.removeWorkout(from: day, workoutID: workouts[index].id)
-                                }
-                            }
+                        
+       
                                 
                               
                            
                     }
+                    .padding(.horizontal, 10)
                 }
             } else {
                 TextHelvetica(content: "No Workouts", size: 18)
@@ -227,18 +244,39 @@ struct MainWokroutView: View {
     }
 
     func deleteWorkoutAlert() -> Alert {
-        Alert(title: Text("Delete Workout"),
-              message: Text("Do you want to delete all recurring instances of this workout or just this one?"),
-              primaryButton: .destructive(Text("All")) {
-                if let workoutID = selectedWorkoutID, let recurringID = selectedRecurringID {
-                    schedule.removeRecurringWorkouts(workoutID: workoutID, recurringID: recurringID)
+      
+
+        if let recurringID = selectedRecurringID {
+            return Alert(
+                title: Text("Delete Workout"),
+                message: Text("Do you want to delete all recurring instances of this workout or just this one? (deleting just one will not affect remiders for other repeating workouts"),
+                primaryButton: .destructive(Text("All")) {
+                    if let workoutID = selectedWorkoutID {
+                        print(workoutID)
+                        schedule.removeRecurringWorkouts(workoutID: workoutID, recurringID: recurringID)
+                    }
+                },
+                secondaryButton: .default(Text("Just this one")) {
+                    print(recurringID)
+                    if let workoutID = selectedWorkoutID, let day = selectedDay {
+                        schedule.removeWorkout(from: day, workoutID: workoutID)
+                        
+                    }
                 }
-              },
-              secondaryButton: .default(Text("Just this one")) {
-                if let workoutID = selectedWorkoutID, let day = selectedDay {
-                    schedule.removeWorkout(from: day, workoutID: workoutID)
-                }
-              })
+            )
+        } else {
+            return Alert(
+                title: Text("Delete Workout"),
+                message: Text("Do you want to delete this workout?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    if let workoutID = selectedWorkoutID, let day = selectedDay {
+                        schedule.removeWorkout(from: day, workoutID: workoutID)
+                        cancelNotificationForRemidner(id: workoutID)
+                    }
+                },
+                secondaryButton: .cancel()
+            )
+        }
     }
     
     private let dateFormatter: DateFormatter = {
@@ -269,27 +307,30 @@ struct MainWokroutView: View {
      
             ScrollView(.vertical, showsIndicators: false) {
                 
-                VStack(spacing: 15) {
-                    GeometryReader { proxy in
-                        TopBar(topEdge: topEdge, name: "Schedule", offset: $offset, maxHeight: maxHeight)
-                            .offset(y: 45)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: getHeaderHeight(), alignment: .bottom)
-                               
-                                
-                                
-                                
-                        
-                                
-
+                LazyVStack(spacing: 15) {
+                    VStack {
+                        GeometryReader { proxy in
+                            TopBar(topEdge: topEdge, name: "Schedule", offset: $offset, maxHeight: maxHeight)
+                                .offset(y: 45)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: getHeaderHeight(), alignment: .bottom)
+                                   
+                                    
+                                    
+                                    
                             
-                                .background(Color("MainGray").opacity(topBarTitleOpacity()), in: CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
-                            .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
-                        
+                                    
+
+                                
+                                    .background(Color("MainGray").opacity(topBarTitleOpacity()), in: CustomCorner(corners: [.bottomLeft, .bottomRight], radius: getCornerRadius()))
+                                .shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.7), radius: 10, x: 0, y: 0)
+                            
+                        }
+                        .frame(height: maxHeight)
+                        .offset(y: -offset)
+                        .zIndex(1)
                     }
-                    .frame(height: maxHeight)
-                    .offset(y: -offset)
-                    .zIndex(1)
+                   
         
                   
 
@@ -299,7 +340,7 @@ struct MainWokroutView: View {
                 
 
 
-           
+                        
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(weeks.indices.filter { weeksWithWorkoutsSet.contains($0) || isCurrentWeek(weeks[$0]) }, id: \.self) { weekIndex in
                                 let week = weeks[weekIndex]
@@ -312,6 +353,7 @@ struct MainWokroutView: View {
                                                 .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (14 * 0.0025)))
                                                 .foregroundColor(Color("GrayFontOne"))
                                                 .padding(.top)
+                                                .padding(.horizontal)
                                                 .padding(.bottom, 5)
                                             Spacer()
                                         }
@@ -331,12 +373,13 @@ struct MainWokroutView: View {
                                             TextHelvetica(content: dateFormatter.string(from: day), size: 18)
                                                 .font(.headline)
                                                 .foregroundColor(isCurrentDay(day) ? Color("LinkBlue"): Color("WhiteFontOne"))
-                                            
+                                                .padding(.horizontal, 10)
                                             if let workouts = schedule.getWorkouts(for: day), !workouts.isEmpty {
                                                 workoutsSection(for: day)
                                             } else if isCurrentWeek(week) {
                                                 TextHelvetica(content: "No Workouts", size: 18)
                                                     .foregroundColor(Color("GrayFontOne"))
+                                                    .padding(.horizontal, 10)
                                             }
                                         }
                                         .padding(.vertical)
@@ -386,7 +429,7 @@ struct MainWokroutView: View {
                 HStack() {
                     Button {
                         presentationMode.wrappedValue.dismiss()
-                      
+                        HapticManager.instance.impact(style: .rigid)
                     } label: {
                         HStack {
                             Image(systemName: "chevron.left")
@@ -405,13 +448,14 @@ struct MainWokroutView: View {
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                         .opacity(topBarTitleOpacity())
-                        .offset(x: getScreenBounds().width * -0.035)
+                        .offset(x: getScreenBounds().width * -0.010)
                     Spacer() // This spacer will push the text and buttons apart
 
                     Button {
                         withAnimation(.spring()) {
                             showingAddWorkout.toggle()
                         }
+                        HapticManager.instance.impact(style: .rigid)
                         
                     } label: {
                         HStack {
@@ -420,9 +464,9 @@ struct MainWokroutView: View {
                                 .font(.body.bold())
                                 .imageScale(.large)
                                 .foregroundColor(Color("LinkBlue"))
-                            
+             
                         }
-                        .offset( x: getScreenBounds().width * -0.08)
+                       
                         
                         .frame(width: 80)
                     }
@@ -430,9 +474,13 @@ struct MainWokroutView: View {
             
                 .frame(height: 60)
                 .padding(.top, topEdge)
+                .padding(.bottom, 20)
                 .padding(.horizontal)
+                .background(Color("MainGray").shadow(color: Color.black.opacity(topBarTitleOpacity() * 0.1), radius: 10, x: 0, y: 0))
+                
                 Spacer()
             }
+     
            
            
       
@@ -445,10 +493,23 @@ struct MainWokroutView: View {
                     .position(x: getScreenBounds().width/2, y: showingAddWorkout ? getScreenBounds().height * 0.5 : getScreenBounds().height * 1.5)
                 
                 let offset = schedule.ongoingWorkout ? 0 : 0.12
-                scheduleMenu(viewModel: schedule, showingScheduleView: $showingScheduleView, currentWorkout: $selectedWorkout, isNavigationBarHidden: $isNavigationBarHidden)
+                
+                Rectangle()
+                    .edgesIgnoringSafeArea(.all)
+                    .foregroundColor(.black)
+                    .opacity(showingScheduleView ? 0.4 : 0)
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            showingScheduleView = false
+                           
+                            
+                            
+                        }
+                    }
+                scheduleMenu(viewModel: schedule, showingScheduleView: $showingScheduleView, showingAlert: $showDeleteAlert, currentWorkout: $selectedWorkout, isNavigationBarHidden: $isNavigationBarHidden)
                     .shadow(radius: 10)
 
-                    .position(x: getScreenBounds().width/2, y: showingScheduleView ? getScreenBounds().height * (0.52 + offset) : getScreenBounds().height * 1.5)
+                    .position(x: getScreenBounds().width/2, y: showingScheduleView ? getScreenBounds().height * (0.49 + offset) : getScreenBounds().height * 1.5)
 
             }
 
@@ -531,7 +592,7 @@ struct AddWorkoutView: View {
                     withAnimation(.spring()) {
                         showingAddWorkout.toggle()
                     }
-                    
+                    HapticManager.instance.impact(style: .rigid)
                     
                     
                 }
@@ -544,6 +605,7 @@ struct AddWorkoutView: View {
                             .foregroundColor(Color("MainGray"))
                         Image(systemName: "xmark")
                             .bold()
+                            .foregroundColor(Color("LinkBlue"))
                     }
                     
                         
@@ -565,6 +627,7 @@ struct AddWorkoutView: View {
                         showingAddWorkout.toggle()
                     }
                     schedule.clearWorkoutQueue()
+                    HapticManager.instance.impact(style: .rigid)
                 }
                 label: {
                     TextHelvetica(content: "Save", size: 18)
@@ -582,40 +645,41 @@ struct AddWorkoutView: View {
                 Section(header: TextHelvetica(content: "Select Workout", size: 14)
                     .foregroundColor(Color("WhiteFontOne"))) {
                         if let workout = schedule.schedule.workoutQueue {
-                            WorkoutModule(title: workout.WorkoutName , description: "cum")
+                            WorkoutModule(title: workout.WorkoutName , description: "asd")
                             
                         } else {
                             HStack {
-                                Button {
-                                   
-                                } label: {
-                                    ZStack{
-                                        
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .foregroundColor(Color("BlueOverlay"))
-                                        
-                                        
-                                        
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        TextHelvetica(content: "Generate Workout", size: 17)
-                                            .foregroundColor(Color("WhiteFontOne"))
-                                            .multilineTextAlignment(.center)
-                                            .bold()
-                                            .padding()
-                                    }
-                                }
+//                                Button {
+//
+//                                } label: {
+//                                    ZStack{
+//
+//                                        RoundedRectangle(cornerRadius: 5)
+//                                            .foregroundColor(Color("BlueOverlay"))
+//
+//
+//
+//                                        RoundedRectangle(cornerRadius: 5)
+//                                            .strokeBorder(Color("LinkBlue"), lineWidth: borderWeight)
+//
+//
+//
+//
+//
+//
+//                                        TextHelvetica(content: "Generate Workout", size: 17)
+//                                            .foregroundColor(Color("WhiteFontOne"))
+//                                            .multilineTextAlignment(.center)
+//                                            .bold()
+//                                            .padding()
+//                                    }
+//                                }
                                 
                                 
                       
                                 Button {
                                     schedule.showingExercises = true
+                                    HapticManager.instance.impact(style: .rigid)
                                 } label: {
                                  
                                     ZStack{
@@ -666,26 +730,30 @@ struct AddWorkoutView: View {
                     .font(.custom("SpaceGrotesk-Medium", size: getScreenBounds().width * (15 * 0.0025)))
                    
                 }
-              
-                Section(header: TextHelvetica(content: "Recurring", size: 14)
-                    .foregroundColor(Color("WhiteFontOne"))) {
-                    Picker("Recurring", selection: $recurringOption) {
-                        ForEach(Schedule.RecurringOption.allCases) { option in
-                            Text(option.rawValue.capitalized).tag(option)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                }
                 
                 Section(header: TextHelvetica(content: "Reminder", size: 14)
-                    .foregroundColor(Color("WhiteFontOne"))) {
+                            .foregroundColor(Color("WhiteFontOne"))) {
                     Picker("Reminder", selection: $reminderOption) {
                         ForEach(Schedule.ReminderOption.allCases) { option in
                             Text(option.rawValue).tag(option)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
+       // disable the Picker when recurringOption is default
                 }
+              
+                Section(header: TextHelvetica(content: "Recurring", size: 14)
+                            .foregroundColor(Color("WhiteFontOne"))) {
+                    Picker("Recurring", selection: $recurringOption) {
+                        ForEach(Schedule.RecurringOption.allCases) { option in
+                            Text(option.rawValue.capitalized).tag(option)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+//                    .disabled(reminderOption != .none)
+                }
+                
+                
             }.scrollContentBackground(.hidden)
            
 
@@ -696,8 +764,10 @@ struct AddWorkoutView: View {
             MyWorkoutsPage(viewModel: schedule, workoutLogViewModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, isForAddingToSchedule: true)
         }
         .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.67)
+       
         .background(Color("DBblack")) // Add this line to set the background color to red
             .edgesIgnoringSafeArea(.bottom)
+        .cornerRadius(7)
         .overlay(
             RoundedRectangle(cornerRadius: 7)
                 .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
@@ -735,8 +805,45 @@ struct AddWorkoutView: View {
         combinedComponents.minute = timeComponents.minute
 
         let dateTime = calendar.date(from: combinedComponents) ?? Date()
-        let workout = ScheduleWorkout(id: Int.random(in: 1..<Int.max), name: workoutName, exercises: exercises, recurringID: recurringID, time: dateTime, HasBeenDone: false)
+        let id = Int.random(in: 1..<Int.max)
+        let workout = ScheduleWorkout(id: id , name: workoutName, exercises: exercises, recurringID: recurringID, time: dateTime, HasBeenDone: false)
         schedule.addWorkout(to: dateTime, workout: workout, recurringOption: recurringOption)
+
+        switch reminderOption {
+        case .none:
+            print("Nothing to schedule")
+
+        case .fiveMinutes:
+            switch recurringOption {
+            case .none:
+                scheduleNotificationForReminder(id: id, title: "5 Minute Warning", body: "This is your 5 minute warning!", date: dateTime, offset: 5, recurringOption: .none)
+            case .daily:
+                scheduleNotificationForReminder(id: id, title: "5 Minute Warning", body: "This is your 5 minute warning!", date: dateTime, offset: 5, recurringOption: .daily)
+            case .weekly:
+                scheduleNotificationForReminder(id: id, title: "5 Minute Warning", body: "This is your 5 minute warning!", date: dateTime, offset: 5, recurringOption: .weekly)
+            }
+                
+        case .fifteenMinutes:
+            switch recurringOption {
+            case .none:
+                scheduleNotificationForReminder(id: id, title: "15 Minute Warning", body: "This is your 15 minute warning!", date: dateTime, offset: 15, recurringOption: .none)
+            case .daily:
+                scheduleNotificationForReminder(id: id, title: "15 Minute Warning", body: "This is your 15 minute warning!", date: dateTime, offset: 15, recurringOption: .daily)
+            case .weekly:
+                scheduleNotificationForReminder(id: id, title: "15 Minute Warning", body: "This is your 15 minute warning!", date: dateTime, offset: 15, recurringOption: .weekly)
+            }
+                
+        case .thirtyMinutes:
+            switch recurringOption {
+            case .none:
+                scheduleNotificationForReminder(id: id, title: "30 Minute Warning", body: "This is your 30 minute warning!", date: dateTime, offset: 30, recurringOption: .none)
+            case .daily:
+                scheduleNotificationForReminder(id: id, title: "30 Minute Warning", body: "This is your 30 minute warning!", date: dateTime, offset: 30, recurringOption: .daily)
+            case .weekly:
+                scheduleNotificationForReminder(id: id, title: "30 Minute Warning", body: "This is your 30 minute warning!", date: dateTime, offset: 30, recurringOption: .weekly)
+            }
+        }
+   
 
 
     }
@@ -745,6 +852,7 @@ struct AddWorkoutView: View {
 struct scheduleMenu: View {
     @ObservedObject var viewModel: HomePageViewModel
     @Binding var showingScheduleView: Bool
+    @Binding var showingAlert: Bool
     @Binding var currentWorkout: ScheduleWorkout
     @Binding var isNavigationBarHidden : Bool
     @State private var isLinkActive = false
@@ -766,6 +874,7 @@ struct scheduleMenu: View {
                     Spacer()
                     Button {
                         HapticManager.instance.impact(style: .rigid)
+                        
                         withAnimation(.spring()) {
                             showingScheduleView.toggle()
                         }
@@ -780,6 +889,7 @@ struct scheduleMenu: View {
                                 .foregroundColor(Color("MainGray"))
                             Image(systemName: "xmark")
                                 .bold()
+                                .foregroundColor(Color("LinkBlue"))
                         }
                         
                             
@@ -839,7 +949,7 @@ struct scheduleMenu: View {
 //                        .padding(.horizontal)
 //                        .frame(maxHeight: 22)
 //                    }
-
+                    
                     
                     
                     HStack{
@@ -849,22 +959,29 @@ struct scheduleMenu: View {
                                 .bold()
                                 .multilineTextAlignment(.leading)
 
-                            TextHelvetica(content: "Edit Workout", size: 18)
+                            TextHelvetica(content: "Edit workout", size: 18)
                                 .foregroundColor(Color("WhiteFontOne"))
+                          
                             Spacer()
+                        
+                            TextHelvetica(content: "", size: 18)
+                                .foregroundColor(Color("LinkBlue"))
                         }
+                    .background(.red.opacity(0.0001))
                         .padding(.horizontal)
                         .frame(maxHeight: 22)
+                    
                         .background(
                             NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel, workoutLogViewModel: viewModel.newViewModel, isNavigationBarHidden: $isNavigationBarHidden, currentWorkout: currentWorkout), isActive: $isLinkActive) {
                                 EmptyView()
                             }
                         )
                         .onTapGesture {
-                            showingScheduleView = false
+                            showingScheduleView.toggle()
                             print(currentWorkout)
                             viewModel.newViewModel.setExerciseModules(exericiesModules: currentWorkout.exercises, name: currentWorkout.name)
                             isLinkActive = true
+                            HapticManager.instance.impact(style: .rigid)
                         }
                 
                     
@@ -884,7 +1001,10 @@ struct scheduleMenu: View {
                 }
                 Button {
   
-                   
+                    showingScheduleView = false
+                    HapticManager.instance.impact(style: .rigid)
+                    showingAlert.toggle()
+                  
               
                 }
                 label: {
@@ -894,8 +1014,9 @@ struct scheduleMenu: View {
                             .foregroundColor(Color("MainRed"))
                             .imageScale(.large)
                             .bold()
+                        
                     
-                        TextHelvetica(content: "Remove Exersise", size: 18)
+                        TextHelvetica(content: "Remove workout ", size: 18)
                             .foregroundColor(Color("WhiteFontOne"))
                         Spacer()
 

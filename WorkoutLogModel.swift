@@ -83,6 +83,7 @@ struct WorkoutLogModel {
         var isLast: Bool = false
         var DateCompleted: Date?
         var moduleType: moduleType
+        var notes: String = ""
 
     }
     
@@ -173,6 +174,7 @@ struct WorkoutLogModel {
     
     mutating func loadWorkout(workout: HomePageModel.Workout) {
         workoutTime.timeElapsed = 0
+        
         exersiseModules = workout.exercises
         
         
@@ -228,6 +230,7 @@ struct WorkoutLogModel {
     }
     
     mutating func setSetType(moduleId: Int, rowId: Int, setType: String) {
+ 
         exersiseModules[moduleId].setRows[rowId].setType = setType
     }
 
@@ -376,7 +379,6 @@ struct WorkoutLogModel {
 
 
     
-    
 
     
     mutating func setExerciseModule(index: Int, exerciseModule: WorkoutLogModel.ExersiseLogModule) {
@@ -407,6 +409,7 @@ struct WorkoutLogModel {
     
     mutating func removeExersiseModule(exersiseID: UUID) {
         // Stop views from accessing data by updating their state
+     
         print("Removing exersise module with ID: \(exersiseID)")
         
         print("Current exersiseModules:")
@@ -432,6 +435,8 @@ struct WorkoutLogModel {
         for (index, module) in exersiseModules.enumerated() {
             print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName) isLAst \(module.isLast)")
         }
+      
+
     }
 
     
@@ -458,6 +463,8 @@ struct WorkoutLogModel {
     mutating func setRepMetric (exersiseModuleID: Int, RowID: Int, RPE: Float) {
         exersiseModules[exersiseModuleID].setRows[RowID].repMetric = RPE
     }
+    
+
     
     mutating func setPopUpCurrentRow(exersiseModuleID: Int, RowID: Int, popUpId: String, exerciseUUID: UUID) {
         if let popUpIndex = popUps.firstIndex(where: {$0.id == popUpId}) {

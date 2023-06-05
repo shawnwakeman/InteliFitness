@@ -13,8 +13,6 @@
 		D00087D329D4F00900A8A2C5 /* SpaceGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */; };
 		D00087D429D4F00C00A8A2C5 /* SpaceGrotesk-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CD29D4EFEC00A8A2C5 /* SpaceGrotesk-Bold.ttf */; };
 		D00087E029D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */; };
-		D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */; };
-		D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */; };
 		D008F48129F1E7CD00B1C6EC /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48029F1E7CD00B1C6EC /* HomePageView.swift */; };
 		D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */; };
 		D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */; };
@@ -29,35 +27,40 @@
 		D008F4DA29F42FF900B1C6EC /* timerAtribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F4D929F42FF900B1C6EC /* timerAtribute.swift */; };
 		D008F4DB29F42FF900B1C6EC /* timerAtribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F4D929F42FF900B1C6EC /* timerAtribute.swift */; };
 		D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */; };
-		D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
 		D0476C722A10265700D9541E /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0476C712A10265700D9541E /* Charts.swift */; };
 		D0476C752A10269400D9541E /* PolynomialRegressionSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D0476C742A10269400D9541E /* PolynomialRegressionSwift */; };
 		D0476C772A10347F00D9541E /* ExerciseChartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0476C762A10347F00D9541E /* ExerciseChartDataModel.swift */; };
-		D0476C792A11BB5200D9541E /* RepsOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0476C782A11BB5200D9541E /* RepsOnly.swift */; };
 		D050B42129FC8BA400BC5442 /* exercisePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050B42029FC8BA400BC5442 /* exercisePage.swift */; };
-		D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */; };
 		D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */; };
-		D063801429F71C7500E2B0F7 /* ReorderSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D063801329F71C7500E2B0F7 /* ReorderSets.swift */; };
 		D0685BB42A06CD0B00F66C75 /* ScheduleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */; };
 		D0685BB82A084AFD00F66C75 /* CustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0685BB72A084AFD00F66C75 /* CustomHeader.swift */; };
-		D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */; };
-		D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */; };
-		D074D6542A0C83CD00BAD1C2 /* CancelPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074D6532A0C83CD00BAD1C2 /* CancelPopUp.swift */; };
-		D074D6562A0C845C00BAD1C2 /* FinishPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074D6552A0C845C00BAD1C2 /* FinishPopUp.swift */; };
-		D074D6582A0C847B00BAD1C2 /* PausePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074D6572A0C847B00BAD1C2 /* PausePopUp.swift */; };
+		D0737A242A1BF3D200C841DD /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A122A1BF3D100C841DD /* 3DotsButton.swift */; };
+		D0737A252A1BF3D200C841DD /* AddExersisesPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A132A1BF3D100C841DD /* AddExersisesPopUp.swift */; };
+		D0737A262A1BF3D200C841DD /* WorkoutLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A142A1BF3D100C841DD /* WorkoutLogView.swift */; };
+		D0737A272A1BF3D200C841DD /* RepsOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A152A1BF3D100C841DD /* RepsOnly.swift */; };
+		D0737A282A1BF3D200C841DD /* PausePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A162A1BF3D200C841DD /* PausePopUp.swift */; };
+		D0737A292A1BF3D200C841DD /* addNewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A172A1BF3D200C841DD /* addNewExercise.swift */; };
+		D0737A2A2A1BF3D200C841DD /* CancelPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A182A1BF3D200C841DD /* CancelPopUp.swift */; };
+		D0737A2B2A1BF3D200C841DD /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A192A1BF3D200C841DD /* HapticManager.swift */; };
+		D0737A2C2A1BF3D200C841DD /* TimerPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A1A2A1BF3D200C841DD /* TimerPopUp.swift */; };
+		D0737A2D2A1BF3D200C841DD /* WorkoutLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A1B2A1BF3D200C841DD /* WorkoutLogViewModel.swift */; };
+		D0737A2E2A1BF3D200C841DD /* WorkoutLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A1C2A1BF3D200C841DD /* WorkoutLogModel.swift */; };
+		D0737A2F2A1BF3D200C841DD /* TimerCompletedPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A1D2A1BF3D200C841DD /* TimerCompletedPopUp.swift */; };
+		D0737A302A1BF3D200C841DD /* WorkoutSetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A1E2A1BF3D200C841DD /* WorkoutSetRowView.swift */; };
+		D0737A312A1BF3D200C841DD /* ReorderSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A1F2A1BF3D200C841DD /* ReorderSets.swift */; };
+		D0737A322A1BF3D200C841DD /* FinishPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A202A1BF3D200C841DD /* FinishPopUp.swift */; };
+		D0737A332A1BF3D200C841DD /* DropDownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A212A1BF3D200C841DD /* DropDownMenu.swift */; };
+		D0737A342A1BF3D200C841DD /* DataMetricsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A222A1BF3D200C841DD /* DataMetricsButton.swift */; };
+		D0737A352A1BF3D200C841DD /* WorkoutSetRowViewForCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A232A1BF3D200C841DD /* WorkoutSetRowViewForCreator.swift */; };
+		D0737A382A1C067A00C841DD /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A372A1C067A00C841DD /* TimerModel.swift */; };
+		D0737A3A2A1C068600C841DD /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A392A1C068600C841DD /* TimerViewModel.swift */; };
 		D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B44229F45E5F001898BA /* HistoryPage.swift */; };
-		D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD966529E0CF75000B6711 /* HapticManager.swift */; };
-		D0B9068B29FC54FC001F5A67 /* addNewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9068A29FC54FC001F5A67 /* addNewExercise.swift */; };
-		D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */; };
-		D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */; };
-		D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */; };
 		D0C884072A0447820035D66C /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C884062A0447820035D66C /* Schedule.swift */; };
-		D0C884092A05FE780035D66C /* WorkoutSetRowViewForCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C884082A05FE780035D66C /* WorkoutSetRowViewForCreator.swift */; };
+		D0CE04702A2829BE002DE1D3 /* notification-sound-7062.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D0CE046F2A2829BE002DE1D3 /* notification-sound-7062.m4a */; };
 		D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */; };
 		D0D28F4529FEC76B00857C61 /* createWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4429FEC76B00857C61 /* createWorkout.swift */; };
-		D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */; };
 		D0FF3B0D2A154F58005CC5B9 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FF3B0C2A154F58005CC5B9 /* Profile.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,8 +95,6 @@
 		D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Medium.ttf"; sourceTree = "<group>"; };
 		D00087CD29D4EFEC00A8A2C5 /* SpaceGrotesk-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Bold.ttf"; sourceTree = "<group>"; };
 		D00087DF29D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-VariableFont_wght.ttf"; sourceTree = "<group>"; };
-		D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogModel.swift; sourceTree = "<group>"; };
-		D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
 		D008F48029F1E7CD00B1C6EC /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
 		D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomePageModel .swift"; sourceTree = "<group>"; };
@@ -109,35 +110,40 @@
 		D008F4D929F42FF900B1C6EC /* timerAtribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timerAtribute.swift; sourceTree = "<group>"; };
 		D0370E1E29CF84DD005682D8 /* NutrimalA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutrimalA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrimalAApp.swift; sourceTree = "<group>"; };
-		D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D0476C712A10265700D9541E /* Charts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
 		D0476C762A10347F00D9541E /* ExerciseChartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseChartDataModel.swift; sourceTree = "<group>"; };
-		D0476C782A11BB5200D9541E /* RepsOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsOnly.swift; sourceTree = "<group>"; };
 		D050B42029FC8BA400BC5442 /* exercisePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exercisePage.swift; sourceTree = "<group>"; };
-		D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCompletedPopUp.swift; sourceTree = "<group>"; };
 		D05AAC3E29F0E2BE001FDEF9 /* Exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exercises.json; sourceTree = "<group>"; };
-		D063801329F71C7500E2B0F7 /* ReorderSets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderSets.swift; sourceTree = "<group>"; };
 		D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleMode.swift; sourceTree = "<group>"; };
 		D0685BB72A084AFD00F66C75 /* CustomHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeader.swift; sourceTree = "<group>"; };
-		D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExersisesPopUp.swift; sourceTree = "<group>"; };
-		D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
-		D074D6532A0C83CD00BAD1C2 /* CancelPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelPopUp.swift; sourceTree = "<group>"; };
-		D074D6552A0C845C00BAD1C2 /* FinishPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishPopUp.swift; sourceTree = "<group>"; };
-		D074D6572A0C847B00BAD1C2 /* PausePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausePopUp.swift; sourceTree = "<group>"; };
+		D0737A122A1BF3D100C841DD /* 3DotsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.swift; path = 3DotsButton.swift; sourceTree = "<group>"; };
+		D0737A132A1BF3D100C841DD /* AddExersisesPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExersisesPopUp.swift; sourceTree = "<group>"; };
+		D0737A142A1BF3D100C841DD /* WorkoutLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutLogView.swift; sourceTree = "<group>"; };
+		D0737A152A1BF3D100C841DD /* RepsOnly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepsOnly.swift; sourceTree = "<group>"; };
+		D0737A162A1BF3D200C841DD /* PausePopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PausePopUp.swift; sourceTree = "<group>"; };
+		D0737A172A1BF3D200C841DD /* addNewExercise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewExercise.swift; sourceTree = "<group>"; };
+		D0737A182A1BF3D200C841DD /* CancelPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelPopUp.swift; sourceTree = "<group>"; };
+		D0737A192A1BF3D200C841DD /* HapticManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		D0737A1A2A1BF3D200C841DD /* TimerPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerPopUp.swift; sourceTree = "<group>"; };
+		D0737A1B2A1BF3D200C841DD /* WorkoutLogViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutLogViewModel.swift; sourceTree = "<group>"; };
+		D0737A1C2A1BF3D200C841DD /* WorkoutLogModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutLogModel.swift; sourceTree = "<group>"; };
+		D0737A1D2A1BF3D200C841DD /* TimerCompletedPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerCompletedPopUp.swift; sourceTree = "<group>"; };
+		D0737A1E2A1BF3D200C841DD /* WorkoutSetRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowView.swift; sourceTree = "<group>"; };
+		D0737A1F2A1BF3D200C841DD /* ReorderSets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSets.swift; sourceTree = "<group>"; };
+		D0737A202A1BF3D200C841DD /* FinishPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishPopUp.swift; sourceTree = "<group>"; };
+		D0737A212A1BF3D200C841DD /* DropDownMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownMenu.swift; sourceTree = "<group>"; };
+		D0737A222A1BF3D200C841DD /* DataMetricsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataMetricsButton.swift; sourceTree = "<group>"; };
+		D0737A232A1BF3D200C841DD /* WorkoutSetRowViewForCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowViewForCreator.swift; sourceTree = "<group>"; };
+		D0737A372A1C067A00C841DD /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
+		D0737A392A1C068600C841DD /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
 		D0A8B44229F45E5F001898BA /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
-		D0AD966529E0CF75000B6711 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
-		D0B9068A29FC54FC001F5A67 /* addNewExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addNewExercise.swift; sourceTree = "<group>"; };
-		D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowView.swift; sourceTree = "<group>"; };
-		D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DotsButton.swift; sourceTree = "<group>"; };
-		D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMetricsButton.swift; sourceTree = "<group>"; };
 		D0C884062A0447820035D66C /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
-		D0C884082A05FE780035D66C /* WorkoutSetRowViewForCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowViewForCreator.swift; sourceTree = "<group>"; };
+		D0CE046F2A2829BE002DE1D3 /* notification-sound-7062.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "notification-sound-7062.m4a"; sourceTree = "<group>"; };
 		D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkoutsPage.swift; sourceTree = "<group>"; };
 		D0D28F4429FEC76B00857C61 /* createWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createWorkout.swift; sourceTree = "<group>"; };
 		D0D6674C29D09ADB00F2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPopUp.swift; sourceTree = "<group>"; };
 		D0FF3B0C2A154F58005CC5B9 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,38 +181,11 @@
 			path = static;
 			sourceTree = "<group>";
 		};
-		D008F47D29F1E65900B1C6EC /* WokroutLog */ = {
-			isa = PBXGroup;
-			children = (
-				D0C02FB529E0EFE9003DEEB1 /* DataMetricsButton.swift */,
-				D0C02FB329E0E3E7003DEEB1 /* 3DotsButton.swift */,
-				D0370E2329CF84DD005682D8 /* WorkoutLogView.swift */,
-				D00087E129D50A5900A8A2C5 /* WorkoutLogModel.swift */,
-				D00087E329D50A7D00A8A2C5 /* WorkoutLogViewModel.swift */,
-				D0AD966529E0CF75000B6711 /* HapticManager.swift */,
-				D063801329F71C7500E2B0F7 /* ReorderSets.swift */,
-				D0C02FB129E0D0CF003DEEB1 /* WorkoutSetRowView.swift */,
-				D0C884082A05FE780035D66C /* WorkoutSetRowViewForCreator.swift */,
-				D05AAC3029ECC5BA001FDEF9 /* TimerCompletedPopUp.swift */,
-				D06A9E6629E8C85600DA00B4 /* AddExersisesPopUp.swift */,
-				D06EF5E529E4F0BC000ACFE1 /* DropDownMenu.swift */,
-				D0E4F46029FAD9A60031A023 /* TimerPopUp.swift */,
-				D0B9068A29FC54FC001F5A67 /* addNewExercise.swift */,
-				D074D6532A0C83CD00BAD1C2 /* CancelPopUp.swift */,
-				D074D6552A0C845C00BAD1C2 /* FinishPopUp.swift */,
-				D074D6572A0C847B00BAD1C2 /* PausePopUp.swift */,
-				D0476C782A11BB5200D9541E /* RepsOnly.swift */,
-			);
-			path = WokroutLog;
-			sourceTree = "<group>";
-		};
 		D008F48929F364E800B1C6EC /* DataModelMain */ = {
 			isa = PBXGroup;
 			children = (
 				D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */,
 				D008F48F29F36D9900B1C6EC /* dataController.swift */,
-				D0685BB72A084AFD00F66C75 /* CustomHeader.swift */,
-				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
 			);
 			path = DataModelMain;
 			sourceTree = "<group>";
@@ -255,8 +234,13 @@
 		D0370E2029CF84DD005682D8 /* NutrimalA */ = {
 			isa = PBXGroup;
 			children = (
+				D0CE046F2A2829BE002DE1D3 /* notification-sound-7062.m4a */,
+				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
+				D0685BB72A084AFD00F66C75 /* CustomHeader.swift */,
 				D008F48929F364E800B1C6EC /* DataModelMain */,
 				D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */,
+				D0737A372A1C067A00C841DD /* TimerModel.swift */,
+				D0737A392A1C068600C841DD /* TimerViewModel.swift */,
 				D0C884062A0447820035D66C /* Schedule.swift */,
 				D0FF3B0C2A154F58005CC5B9 /* Profile.swift */,
 				D008F48629F2304700B1C6EC /* MyExercisesPage.swift */,
@@ -269,7 +253,7 @@
 				D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */,
 				D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */,
 				D0D28F4429FEC76B00857C61 /* createWorkout.swift */,
-				D008F47D29F1E65900B1C6EC /* WokroutLog */,
+				D0737A362A1BF41500C841DD /* WorkoutLog */,
 				D0370E2529CF84DE005682D8 /* Assets.xcassets */,
 				D0370E2729CF84DE005682D8 /* Preview Content */,
 				D008F4D929F42FF900B1C6EC /* timerAtribute.swift */,
@@ -283,6 +267,32 @@
 				D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D0737A362A1BF41500C841DD /* WorkoutLog */ = {
+			isa = PBXGroup;
+			children = (
+				D0737A122A1BF3D100C841DD /* 3DotsButton.swift */,
+				D0737A132A1BF3D100C841DD /* AddExersisesPopUp.swift */,
+				D0737A172A1BF3D200C841DD /* addNewExercise.swift */,
+				D0737A182A1BF3D200C841DD /* CancelPopUp.swift */,
+				D0737A222A1BF3D200C841DD /* DataMetricsButton.swift */,
+				D0737A212A1BF3D200C841DD /* DropDownMenu.swift */,
+				D0737A202A1BF3D200C841DD /* FinishPopUp.swift */,
+				D0737A192A1BF3D200C841DD /* HapticManager.swift */,
+				D0737A162A1BF3D200C841DD /* PausePopUp.swift */,
+				D0737A1F2A1BF3D200C841DD /* ReorderSets.swift */,
+				D0737A152A1BF3D100C841DD /* RepsOnly.swift */,
+				D0737A1D2A1BF3D200C841DD /* TimerCompletedPopUp.swift */,
+				D0737A1A2A1BF3D200C841DD /* TimerPopUp.swift */,
+				D0737A1C2A1BF3D200C841DD /* WorkoutLogModel.swift */,
+				D0737A142A1BF3D100C841DD /* WorkoutLogView.swift */,
+				D0737A1B2A1BF3D200C841DD /* WorkoutLogViewModel.swift */,
+				D0737A1E2A1BF3D200C841DD /* WorkoutSetRowView.swift */,
+				D0737A232A1BF3D200C841DD /* WorkoutSetRowViewForCreator.swift */,
+			);
+			name = WorkoutLog;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -380,6 +390,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0CE04702A2829BE002DE1D3 /* notification-sound-7062.m4a in Resources */,
 				D05AAC3F29F0E2BE001FDEF9 /* Exercises.json in Resources */,
 				D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */,
 				D00087D129D4F00400A8A2C5 /* SpaceGrotesk-Regular.ttf in Resources */,
@@ -408,42 +419,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0737A2B2A1BF3D200C841DD /* HapticManager.swift in Sources */,
 				D0D28F4529FEC76B00857C61 /* createWorkout.swift in Sources */,
+				D0737A272A1BF3D200C841DD /* RepsOnly.swift in Sources */,
+				D0737A292A1BF3D200C841DD /* addNewExercise.swift in Sources */,
 				D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */,
 				D0685BB82A084AFD00F66C75 /* CustomHeader.swift in Sources */,
-				D0C02FB429E0E3E8003DEEB1 /* 3DotsButton.swift in Sources */,
 				D008F48129F1E7CD00B1C6EC /* HomePageView.swift in Sources */,
-				D00087E229D50A5900A8A2C5 /* WorkoutLogModel.swift in Sources */,
-				D00087E429D50A7D00A8A2C5 /* WorkoutLogViewModel.swift in Sources */,
 				D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */,
 				D0685BB42A06CD0B00F66C75 /* ScheduleMode.swift in Sources */,
-				D0370E2429CF84DD005682D8 /* WorkoutLogView.swift in Sources */,
-				D0C884092A05FE780035D66C /* WorkoutSetRowViewForCreator.swift in Sources */,
+				D0737A322A1BF3D200C841DD /* FinishPopUp.swift in Sources */,
+				D0737A2E2A1BF3D200C841DD /* WorkoutLogModel.swift in Sources */,
 				D050B42129FC8BA400BC5442 /* exercisePage.swift in Sources */,
+				D0737A3A2A1C068600C841DD /* TimerViewModel.swift in Sources */,
+				D0737A2A2A1BF3D200C841DD /* CancelPopUp.swift in Sources */,
+				D0737A2C2A1BF3D200C841DD /* TimerPopUp.swift in Sources */,
 				D0476C722A10265700D9541E /* Charts.swift in Sources */,
-				D063801429F71C7500E2B0F7 /* ReorderSets.swift in Sources */,
+				D0737A2D2A1BF3D200C841DD /* WorkoutLogViewModel.swift in Sources */,
 				D008F49029F36D9900B1C6EC /* dataController.swift in Sources */,
+				D0737A262A1BF3D200C841DD /* WorkoutLogView.swift in Sources */,
 				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
-				D074D6562A0C845C00BAD1C2 /* FinishPopUp.swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
+				D0737A282A1BF3D200C841DD /* PausePopUp.swift in Sources */,
+				D0737A332A1BF3D200C841DD /* DropDownMenu.swift in Sources */,
 				D008F4DA29F42FF900B1C6EC /* timerAtribute.swift in Sources */,
-				D0E4F46129FAD9A60031A023 /* TimerPopUp.swift in Sources */,
-				D0C02FB229E0D0CF003DEEB1 /* WorkoutSetRowView.swift in Sources */,
-				D0476C792A11BB5200D9541E /* RepsOnly.swift in Sources */,
-				D06EF5E629E4F0BC000ACFE1 /* DropDownMenu.swift in Sources */,
 				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,
-				D0AD966629E0CF75000B6711 /* HapticManager.swift in Sources */,
 				D0FF3B0D2A154F58005CC5B9 /* Profile.swift in Sources */,
-				D06A9E6729E8C85600DA00B4 /* AddExersisesPopUp.swift in Sources */,
 				D008F48C29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld in Sources */,
-				D074D6542A0C83CD00BAD1C2 /* CancelPopUp.swift in Sources */,
 				D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */,
-				D0C02FB629E0EFE9003DEEB1 /* DataMetricsButton.swift in Sources */,
-				D0B9068B29FC54FC001F5A67 /* addNewExercise.swift in Sources */,
 				D0476C772A10347F00D9541E /* ExerciseChartDataModel.swift in Sources */,
-				D074D6582A0C847B00BAD1C2 /* PausePopUp.swift in Sources */,
+				D0737A242A1BF3D200C841DD /* 3DotsButton.swift in Sources */,
+				D0737A252A1BF3D200C841DD /* AddExersisesPopUp.swift in Sources */,
+				D0737A2F2A1BF3D200C841DD /* TimerCompletedPopUp.swift in Sources */,
 				D0C884072A0447820035D66C /* Schedule.swift in Sources */,
-				D05AAC3129ECC5BA001FDEF9 /* TimerCompletedPopUp.swift in Sources */,
+				D0737A312A1BF3D200C841DD /* ReorderSets.swift in Sources */,
+				D0737A382A1C067A00C841DD /* TimerModel.swift in Sources */,
+				D0737A302A1BF3D200C841DD /* WorkoutSetRowView.swift in Sources */,
+				D0737A342A1BF3D200C841DD /* DataMetricsButton.swift in Sources */,
+				D0737A352A1BF3D200C841DD /* WorkoutSetRowViewForCreator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,8 +658,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -655,6 +668,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = NutrimalA.NutrimalA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -678,8 +694,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -688,6 +704,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = NutrimalA.NutrimalA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

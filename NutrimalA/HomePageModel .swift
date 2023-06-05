@@ -8,7 +8,7 @@ struct HomePageModel {
         private(set) var history: [Workout] = []
     
         private(set) var myExercises: [Workout] = []
-    
+        private(set) var myExercisesRecent: [Workout] = []
         private(set) var exerciseQueue: [Exersise] = []
     
         private(set) var workouts = [Date: [ScheduleWorkout]]()
@@ -57,7 +57,7 @@ struct HomePageModel {
     }
     
     struct Workout: Identifiable, Codable {
-        let id: UUID
+        var id: UUID
         let WorkoutName: String
         var notes: String = ""
         var exercises: [WorkoutLogModel.ExersiseLogModule]
@@ -77,10 +77,16 @@ struct HomePageModel {
         var exerciseEquipment: String
         let id: Int
         var selected: Bool = false
+        var isDeleted: Bool = false
         var restTime: Int
+        var notes: String = ""
         var instructions: [String]
         var exerciseHistory: [WorkoutLogModel.ExersiseLogModule] = []
+        
         var moduleType: WorkoutLogModel.moduleType
+      
+        
+        
     }
     
     mutating func setWorkoutLogModuleStatus(state: Bool) {
@@ -128,6 +134,27 @@ struct HomePageModel {
         myExercises.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: filterExerciseModules, category: "", competionDate: Date()))
     }
     
+
+    
+    mutating func addToMyExercisesRecent(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
+        
+
+        // needs to be cleaned
+        var filterExerciseModules =  exersiseModules.filter { !$0.isLast }
+        
+        
+        for index in filterExerciseModules.indices {
+            for rowIndex in filterExerciseModules[index].setRows.indices {
+                filterExerciseModules[index].setRows[rowIndex].reset()
+            }
+        }
+   
+   
+        
+        
+        myExercisesRecent.append(Workout(id: UUID(), WorkoutName: workoutName, exercises: filterExerciseModules, category: "", competionDate: Date()))
+    }
+    
     mutating func deleteFromHistory(workoutID: UUID) {
         if let index = history.firstIndex(where: { $0.id == workoutID }) {
             let workout = history[index]
@@ -146,6 +173,41 @@ struct HomePageModel {
         }
     }
     
+    mutating func deleteMyWorkouts(workoutID: UUID) {
+        if let index = myExercises.firstIndex(where: { $0.id == workoutID }) {
+            let workout = myExercises[index]
+            for exercise in workout.exercises {
+                let exerciseID = exercise.ExersiseID
+                let exerciseLogModuleUUID = exercise.id
+                for exerciseIteration in exercises[exerciseID].exerciseHistory {
+                    if exerciseIteration.id == exerciseLogModuleUUID {
+                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.id == exerciseIteration.id }) {
+                            exercises[exerciseID].exerciseHistory.remove(at: index)
+                        }
+                    }
+                }
+            }
+            myExercises.remove(at: index)
+        }
+    }
+    mutating func deleteMyWorkoutRecent(workoutID: UUID) {
+        if let index = myExercisesRecent.firstIndex(where: { $0.id == workoutID }) {
+            let workout = myExercisesRecent[index]
+            for exercise in workout.exercises {
+                let exerciseID = exercise.ExersiseID
+                let exerciseLogModuleUUID = exercise.id
+                for exerciseIteration in exercises[exerciseID].exerciseHistory {
+                    if exerciseIteration.id == exerciseLogModuleUUID {
+                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.id == exerciseIteration.id }) {
+                            exercises[exerciseID].exerciseHistory.remove(at: index)
+                        }
+                    }
+                }
+            }
+            myExercisesRecent.remove(at: index)
+        }
+    }
+
     func removeIncompleteSets(from exerciseLogModules: [WorkoutLogModel.ExersiseLogModule]) -> [WorkoutLogModel.ExersiseLogModule] {
         var updatedExerciseLogModules: [WorkoutLogModel.ExersiseLogModule] = []
         
@@ -166,6 +228,13 @@ struct HomePageModel {
         return updatedExerciseLogModules
     }
     
+    mutating func resetID(workoutID: UUID) {
+        if let index = myExercises.firstIndex(where: { $0.id == workoutID }) {
+            // Use the index to access or modify the workout.
+            // For example, to reset the workout you can do:
+            myExercises[index].id = UUID() // This is just an example, replace `Workout()` with your initial state for a workout.
+        }
+    }
     
     
     mutating func saveExercisesToUserDefaults(_ exercises: [Exersise]) {
@@ -229,7 +298,11 @@ struct HomePageModel {
         }
     }
     
-
+    mutating func setNotes(notes: String, moduleID: Int) {
+        if moduleID < exercises.count {
+            exercises[moduleID].notes = notes
+        }
+    }
 
     
     
@@ -248,17 +321,23 @@ struct HomePageModel {
 
     
     mutating func saveMyWorkouts() {
-   
         let defaults = UserDefaults.standard
 
+        // Limit myExercisesRecent array to 8 elements
+        while myExercisesRecent.count > 8 {
+            myExercisesRecent.removeFirst()
+        }
+
         do {
-          
             let encodedData = try JSONEncoder().encode(myExercises)
             defaults.set(encodedData, forKey: "myExercises")
+            let encodedData2 = try JSONEncoder().encode(myExercisesRecent)
+            defaults.set(encodedData2, forKey: "myExercisesRecent")
         } catch {
-            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+            print("Failed to encode exerciseModules: \(error.localizedDescription)")
         }
     }
+
     
     mutating func loadMyExercises() {
         let defaults = UserDefaults.standard
@@ -266,6 +345,13 @@ struct HomePageModel {
         if let savedData = defaults.object(forKey: "myExercises") as? Data {
             do {
                 myExercises = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
+            } catch {
+                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+            }
+        }
+        if let savedData2 = defaults.object(forKey: "myExercisesRecent") as? Data {
+            do {
+                myExercisesRecent = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData2)
             } catch {
                 print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }
@@ -345,6 +431,15 @@ struct HomePageModel {
         return workouts[dateKey]
     }
     
+    mutating func setExerciseName(exerciseID: Int, newName: String) {
+        exercises[exerciseID].exerciseName = newName
+    }
+    
+    mutating func deleteExercise(exerciseID: Int) {
+        exercises[exerciseID].isDeleted.toggle()
+    }
+    
+    
 
 }
 
@@ -370,5 +465,15 @@ extension Bundle {
         }
 
         return decodedData
+    }
+}
+
+
+extension WorkoutLogModel.ExersiseSetRow {
+    mutating func reset() {
+        self.weight = 0
+        self.reps = 0
+        self.repMetric = 0
+        self.setCompleted = false
     }
 }

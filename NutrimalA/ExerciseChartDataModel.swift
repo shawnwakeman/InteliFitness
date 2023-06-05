@@ -22,16 +22,16 @@ struct exerciseChartDataModel {
     var bestSetVolume: [SiteView] = []
     var TotalReps: [SiteView] = []
     var WeightPerRep: [SiteView] = []
-    var LastMonthFreq: [SiteView] = []
+
     
-    mutating func setData(volume: [SiteView], heaviestWeight: [SiteView], Projected1RM: [SiteView], bestSetVolume: [SiteView], TotalReps: [SiteView], WeightPerRep: [SiteView], LastMonthFreq: [SiteView]) {
+    mutating func setData(volume: [SiteView], heaviestWeight: [SiteView], Projected1RM: [SiteView], bestSetVolume: [SiteView], TotalReps: [SiteView], WeightPerRep: [SiteView]) {
         self.volume = volume
         self.heaviestWeight = heaviestWeight
         self.Projected1RM = Projected1RM
         self.bestSetVolume = bestSetVolume
         self.TotalReps = TotalReps
         self.WeightPerRep = WeightPerRep
-        self.LastMonthFreq = LastMonthFreq
+
     }
     
     mutating func clearData() {
@@ -41,7 +41,7 @@ struct exerciseChartDataModel {
         self.bestSetVolume = []
         self.TotalReps = []
         self.WeightPerRep = []
-        self.LastMonthFreq = []
+
     }
 }
 

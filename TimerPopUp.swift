@@ -15,7 +15,7 @@ struct TimerPopUp: View {
 
     func RPEexplain() -> Alert {
         Alert(title: Text("Auto Rest Timer"),
-              message: Text("Do you want to delete all recurring instances of this workout or just this one?"))
+              message: Text("This is a timer that will go off after you check a set for the first time, this timer is to get you enough time to recover."))
               
              
     }

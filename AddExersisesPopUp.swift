@@ -471,10 +471,14 @@ struct AddExersisesPopUp: View {
                                    
                                     Button(action: {
                                         HapticManager.instance.impact(style: .rigid)
+                                        
+                                      
+                                        
+                                        
                                         if viewModel.replacingExercise.replacing {
                                        
                                             let oldModule = viewModel.exersiseModules[viewModel.replacingExercise.indexToReplace!]
-                                            let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime, moduleType: oldModule.moduleType)
+                                            let module = WorkoutLogModel.ExersiseLogModule(exersiseName: exercise.exerciseName, setRows: oldModule.setRows, id: oldModule.id, ExersiseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime, moduleType: exercise.moduleType)
                                             viewModel.setExerciseModule(index: viewModel.replacingExercise.indexToReplace!, exerciseModule: module)
                                             withAnimation(.spring()) {
                                                 viewModel.setPopUpState(state: false, popUpId: "ExersisesPopUp")

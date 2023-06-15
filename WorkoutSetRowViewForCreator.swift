@@ -431,10 +431,16 @@ struct WorkoutSetRowViewForCreatorRepsOnly: View{
                 .frame(width: borderWeight)
                 .overlay(Color("BorderGray"))
                 .zIndex(1)
-            
-            HStack{
+            ZStack {
+                HStack{
 
-                repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+                    repTextFieldView(rowObject: rowObject, moduleID: moduleID, viewModel: viewModel)
+                    
+                
+                    
+                    
+                }
+                
                 if let module = viewModel.exersiseModules[safe: moduleID] {
                     if module.displayingRPE == true {
                         HStack {
@@ -445,10 +451,8 @@ struct WorkoutSetRowViewForCreatorRepsOnly: View{
                     }
                    
                 }
-            
-                
-                
             }
+           
             .frame(width: getScreenBounds().width * 0.38)
           
 

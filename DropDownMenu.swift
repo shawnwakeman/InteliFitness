@@ -14,6 +14,7 @@ struct DropDownMenuView: View {
     @ObservedObject var homePageViewModel: HomePageViewModel
     @State private var isToggled = false
     @State private var exersiseNotes: String = ""
+    @State private var showingIncompleteWorkoutAlert = false
     var body: some View {
         // Add a blur effect to the background
    
@@ -104,35 +105,65 @@ struct DropDownMenuView: View {
                         Button {
                             
                             HapticManager.instance.impact(style: .rigid)
-                            
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                            homePageViewModel.addToHistory(workoutName: viewModel.workoutName, exersiseModules: viewModel.exersiseModules, workoutTime: timerViewModel.workoutTime.timeElapsed, workoutNotes: viewModel.workoutNotes)
-                            homePageViewModel.addToMyWorkoutsRecent(workoutName: viewModel.workoutName, exersiseModules: viewModel.exersiseModules)
-                            if homePageViewModel.workoutLogModuleStatus == true {
-                                withAnimation(.spring()) {
-                                    viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
-                                }
+                            let hasIncomplete = homePageViewModel.hasIncompleteWorkout(exerciseModules: viewModel.exersiseModules)
+                            if hasIncomplete {
+                                showingIncompleteWorkoutAlert = true
                             } else {
-                                withAnimation(.spring()) {
-                                    homePageViewModel.setWorkoutLogModuleStatus(state: true)
-                                    viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
+                                homePageViewModel.addToHistory(workoutName: viewModel.workoutName, exersiseModules: viewModel.exersiseModules, workoutTime: timerViewModel.workoutTime.timeElapsed, workoutNotes: viewModel.workoutNotes)
+                                homePageViewModel.addToMyWorkoutsRecent(workoutName: viewModel.workoutName, exersiseModules: viewModel.exersiseModules)
+                                if homePageViewModel.workoutLogModuleStatus == true {
+                                    withAnimation(.spring()) {
+                                        viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
+                                    }
+                                } else {
+                                    withAnimation(.spring()) {
+                                        homePageViewModel.setWorkoutLogModuleStatus(state: true)
+                                        viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
+                                    }
                                 }
+                                timerViewModel.setRestTime(time: 0)
                             }
-                            timerViewModel.setRestTime(time: 0)
+                            
+                         
+                       
                          
                             
                          
                            
                         }
                     label: {
+                       
                         TextHelvetica(content: "Finish", size: 19)
                              .foregroundColor(Color("WhiteFontOne"))
                     }
+                    .alert(isPresented: $showingIncompleteWorkoutAlert) {
+                        Alert(title: Text("Incomplete Workout"),
+                              message: Text("You have incomplete sets in your workout. Are you sure you want to finish?"),
+                              primaryButton: .default(Text("Yes"), action: {
+                                    homePageViewModel.addToHistory(workoutName: viewModel.workoutName, exersiseModules: viewModel.exersiseModules, workoutTime: timerViewModel.workoutTime.timeElapsed, workoutNotes: viewModel.workoutNotes)
+                                    homePageViewModel.addToMyWorkoutsRecent(workoutName: viewModel.workoutName, exersiseModules: viewModel.exersiseModules)
+                                    if homePageViewModel.workoutLogModuleStatus == true {
+                                        withAnimation(.spring()) {
+                                            viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
+                                        }
+                                    } else {
+                                        withAnimation(.spring()) {
+                                            homePageViewModel.setWorkoutLogModuleStatus(state: true)
+                                            viewModel.setPopUpState(state: true, popUpId: "FinishPopUp")
+                                        }
+                                    }
+                                    timerViewModel.setRestTime(time: 0)
+                              }),
+                              secondaryButton: .cancel())
+                    }
+           
                         
                     
                         
                         
                     }
+                   
                     .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.048)
                     .offset(x: getScreenBounds().width * -0.055, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
                     .aspectRatio(2.5, contentMode: .fit)

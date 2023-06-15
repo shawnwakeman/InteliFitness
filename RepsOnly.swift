@@ -110,6 +110,13 @@ struct WorkoutSetRowViewRepsOnly: View{
                             Spacer()
                             repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
                         }.padding(.horizontal, 5)
+                
+                    } else {
+                        HStack {
+                            Spacer()
+                            repMetricView(rowObject: rowObject, viewModel: viewModel, moduleID: moduleID, repsTextField: $repsTextField, lbsTextField: $lbsTextField)
+                        }.padding(.horizontal, 5)
+                            .opacity(0)
                         
                     }
                    
@@ -399,6 +406,7 @@ struct WorkoutSetRowViewRepsOnly: View{
                                     viewModel.setLastRow(index: rowObject.id)
                                     viewModel.setLastModule(index: moduleID)
                                 }
+                                
                             }}, label: {
                                 Capsule()
                                     .strokeBorder(Color("BorderGray"), lineWidth: borderWeight)
@@ -451,7 +459,7 @@ struct WorkoutSetRowViewRepsOnly: View{
                             }
                             .onTapGesture {
                                 print(rowObject)
-                                if repsTextField != ""{
+                                if repsTextField != "" {
 
                                     viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
@@ -479,7 +487,36 @@ struct WorkoutSetRowViewRepsOnly: View{
                                     HapticManager.instance.impact(style: .heavy)
                                 }
                                 else {
-                                    HapticManager.instance.notification(type: .error)
+                                    if rowObject.repsPlaceholder != "" {
+                                        repsTextField = rowObject.repsPlaceholder
+                                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                        viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+
+
+
+                                        viewModel.setLastModule(index: moduleID)
+                                        viewModel.setLastRow(index: rowObject.id)
+                                        withAnimation(.spring()) {
+                                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                        }
+
+                                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+
+                                                timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
+                                            }
+                                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                        HapticManager.instance.impact(style: .heavy)
+                                    } else {
+                                        HapticManager.instance.notification(type: .error)
+                                    }
+                                    
                                 }
                             
                             
@@ -915,7 +952,7 @@ struct WorkoutSetRowViewCardio: View{
                             .onTapGesture {
                                 print(rowObject)
                                 if repsTextField != "" && lbsTextField != "" {
-
+                                    print("2121")
                                     viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
                                     viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
@@ -930,9 +967,9 @@ struct WorkoutSetRowViewCardio: View{
 
                                         if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
 
-                                            
+                                          
                                             timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
-//                                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
                                         }
                                         viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
 
@@ -942,7 +979,100 @@ struct WorkoutSetRowViewCardio: View{
                                     HapticManager.instance.impact(style: .heavy)
                                 }
                                 else {
-                                    HapticManager.instance.notification(type: .error)
+                                    if rowObject.weightPlaceholder != "" && repsTextField != "" && lbsTextField == ""{
+                                        print("21")
+                                        lbsTextField = rowObject.weightPlaceholder
+                                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                        viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+//                                        let repMetric = rowObject.rpeTarget
+//                                        if repMetric != 0 {
+//                                            viewModel.setRepMetric(exersiseModuleID: moduleID, RowID: rowObject.id, RPE: repMetric)
+//                                        }
+
+                                        viewModel.setLastModule(index: moduleID)
+                                        viewModel.setLastRow(index: rowObject.id)
+                                        withAnimation(.spring()) {
+                                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                        }
+
+                                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+                                              
+                                                timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
+                                            }
+                                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                        HapticManager.instance.impact(style: .heavy)
+                                    }
+                                    else if rowObject.repsPlaceholder != "" && lbsTextField != "" && repsTextField == ""{
+                                        print("1")
+                                        repsTextField = rowObject.repsPlaceholder
+                                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                        viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+//                                        let repMetric = rowObject.rpeTarget
+//                                        if repMetric != 0 {
+//                                            viewModel.setRepMetric(exersiseModuleID: moduleID, RowID: rowObject.id, RPE: repMetric)
+//                                        }
+
+                                        viewModel.setLastModule(index: moduleID)
+                                        viewModel.setLastRow(index: rowObject.id)
+                                        withAnimation(.spring()) {
+                                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                        }
+
+                                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+                                              
+                                                timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
+                                            }
+                                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                        HapticManager.instance.impact(style: .heavy)
+                                    }
+                                    else if rowObject.weightPlaceholder != "" && rowObject.repsPlaceholder != "" {
+                                        print("123")
+                                        repsTextField = rowObject.repsPlaceholder
+                                        lbsTextField = rowObject.weightPlaceholder
+                                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                        viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+//                                        let repMetric = rowObject.rpeTarget
+//                                        if repMetric != 0 {
+//                                            viewModel.setRepMetric(exersiseModuleID: moduleID, RowID: rowObject.id, RPE: repMetric)
+//                                        }
+
+                                        viewModel.setLastModule(index: moduleID)
+                                        viewModel.setLastRow(index: rowObject.id)
+                                        withAnimation(.spring()) {
+                                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                        }
+
+                                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+                                              
+                                                timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
+                                            }
+                                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                        HapticManager.instance.impact(style: .heavy)
+                                    } else {
+                                        HapticManager.instance.notification(type: .error)
+                                    }
+                                  
                                 }
                             
                             
@@ -1395,7 +1525,7 @@ struct WorkoutSetRowViewDuration: View{
                             }
                             .onTapGesture {
                                 print(rowObject)
-                                if repsTextField != ""{
+                                if repsTextField != "" {
 
                                     viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
@@ -1411,9 +1541,9 @@ struct WorkoutSetRowViewDuration: View{
 
                                         if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
 
-                                          
+
                                             timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
-//                                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(viewModel.restTime.timePreset))
+                                            scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
                                         }
                                         viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
 
@@ -1423,7 +1553,36 @@ struct WorkoutSetRowViewDuration: View{
                                     HapticManager.instance.impact(style: .heavy)
                                 }
                                 else {
-                                    HapticManager.instance.notification(type: .error)
+                                    if rowObject.repsPlaceholder != "" {
+                                        repsTextField = rowObject.repsPlaceholder
+                                        viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
+
+                                        viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
+
+
+
+                                        viewModel.setLastModule(index: moduleID)
+                                        viewModel.setLastRow(index: rowObject.id)
+                                        withAnimation(.spring()) {
+                                            viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
+                                        }
+
+                                            if viewModel.exersiseModules[moduleID].setRows[rowObject.id].prevouslyChecked == false {
+
+
+                                                timeViewModel.restAddToTime(step: 1, time: viewModel.exersiseModules[moduleID].restTime)
+                                                scheduleNotification(title: "Rest time is up", body: "insert next exersise", interval: TimeInterval(timeViewModel.restTime.timePreset))
+                                            }
+                                            viewModel.setPrevouslyChecked(exersiseModuleID: moduleID, RowID: rowObject.id, state: true)
+
+
+
+
+                                        HapticManager.instance.impact(style: .heavy)
+                                    } else {
+                                        HapticManager.instance.notification(type: .error)
+                                    }
+                                    
                                 }
                             
                             

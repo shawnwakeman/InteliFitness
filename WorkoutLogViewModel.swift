@@ -304,7 +304,14 @@ class WorkoutLogViewModel: ObservableObject {
                 }
             } else if (mostRecent.moduleType == WorkoutLogModel.moduleType.assistedReps) {
                 if prevRow.weight != 0 {
-                    return "-\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
+                    if prevRow.repMetric != 0 {
+                        return "-\(prevRow.weight.clean) x \(prevRow.reps) @ \(prevRow.repMetric.clean)"
+                    } else {
+                        return "-\(prevRow.weight.clean) x \(prevRow.reps)"
+                    }
+             
+                    
+               
                 } else {
                     if prevRow.repMetric != 0 {
                         return "\(prevRow.reps) reps @ \(prevRow.repMetric.clean)"
@@ -356,7 +363,7 @@ class WorkoutLogViewModel: ObservableObject {
  
         if row.id < mostRecent.setRows.count {
             let rowData = mostRecent.setRows[row.id]
-            
+            setSetType(moduleId: moduleId, rowId: row.id, setType: rowData.setType)
             if exersiseModules[moduleId].setRows[row.id].weightPlaceholder == "" {
                 workoutLogModel.setWeightValuePlaceHolder(exersiseModuleID: moduleId , RowID: row.id, value: rowData.weight.clean)
             }

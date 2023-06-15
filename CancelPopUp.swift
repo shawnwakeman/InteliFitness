@@ -13,6 +13,7 @@ struct CancelPopUp: View {
     
     @ObservedObject var viewModel: WorkoutLogViewModel
     @ObservedObject var homePageViewModel: HomePageViewModel
+    @ObservedObject var timeViewModel: TimeViewModel
    
     var body: some View {
         VStack {
@@ -47,7 +48,7 @@ struct CancelPopUp: View {
                     viewModel.setPopUpState(state: false, popUpId: "CancelPopUp")
                 }
 
-//                viewModel.setWorkoutTime(time: 0)
+            
                 
                 withAnimation(.spring()) {
                     viewModel.setPopUpState(state: false, popUpId: "CancelPopUp")
@@ -91,7 +92,7 @@ struct CancelPopUp: View {
                     viewModel.setPopUpState(state: false, popUpId: "CancelPopUp")
                 }
 
-//                viewModel.setWorkoutTime(time: 0)
+                timeViewModel.setRestTime(time: 0)
                 
                 withAnimation(.spring()) {
                     homePageViewModel.setOngoingState(state: false)

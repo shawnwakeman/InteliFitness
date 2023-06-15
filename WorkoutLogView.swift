@@ -259,7 +259,7 @@ struct WorkoutLogView: View {
                 
                 SetMenu( viewModel: workoutLogViewModel)
                     .frame(width: getScreenBounds().width * 0.95, height: getScreenBounds().height * 0.1)
-                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.68 : getScreenBounds().height * 1.3)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "SetMenuPopUp").RPEpopUpState ? getScreenBounds().height * 0.65 : getScreenBounds().height * 1.3)
                 
                 restTimeSet(viewModel: workoutLogViewModel, timerViewModel: timeViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "SetTimeSubMenu").RPEpopUpState ? 1 : 0)
@@ -334,7 +334,8 @@ struct WorkoutLogView: View {
                     .edgesIgnoringSafeArea(.all)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "CancelPopUp").RPEpopUpState ? 1 : 0)
                     .scaleEffect(1.3)
-                CancelPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel)
+
+                CancelPopUp(viewModel: workoutLogViewModel, homePageViewModel: homePageVeiwModel, timeViewModel: timeViewModel)
                     .opacity(workoutLogViewModel.getPopUp(popUpId: "CancelPopUp").RPEpopUpState ? 1 : 0)
 
                     .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "CancelPopUp").RPEpopUpState ? 1 : 0.5, anchor: .top)
@@ -444,6 +445,7 @@ struct WorkoutLogView: View {
                     timeViewModel.loadTimers()
                     enteredBackground = false
                 }
+               
                 homePageVeiwModel.loadHistory()
                 workoutLogViewModel.loadExersiseModules()
                 homePageVeiwModel.loadSchedule()
@@ -527,7 +529,7 @@ struct NamePopUP: View {
             HStack {
 
 
-                TextHelvetica(content: "Exersise Metrics", size: 27)
+                TextHelvetica(content: "Workout Options", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 
                 Spacer()
@@ -557,12 +559,14 @@ struct NamePopUP: View {
             .padding(.horizontal)
             .padding(.vertical, 10)
             
-            Divider()
-            
-                .frame(height: borderWeight)
-                .overlay(Color("BorderGray"))
+         
             
             VStack {
+                
+                Divider()
+                
+                    .frame(height: borderWeight)
+                    .overlay(Color("BorderGray"))
                 
                 Button {
                     withAnimation(.spring(response: 0.4, dampingFraction: 0.70, blendDuration: 0)) {
@@ -598,7 +602,8 @@ struct NamePopUP: View {
                     }
                     .padding(.horizontal)
                     .offset(x: -5)
-                    .frame(maxHeight: 22)
+                    .frame(maxHeight: 30)
+                  
                 }
                    
                 
@@ -632,6 +637,11 @@ struct NamePopUP: View {
                             TextHelvetica(content: "Pause Workout", size: 18)
                                 .foregroundColor(Color("WhiteFontOne"))
                             Spacer()
+                            Image("sidwaysArrow")
+                                .resizable()
+                                .foregroundColor(Color(.systemYellow))
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
 
                             
                         }
@@ -664,7 +674,11 @@ struct NamePopUP: View {
                             TextHelvetica(content: "Cancel Workout", size: 18)
                                 .foregroundColor(Color("WhiteFontOne"))
                             Spacer()
-
+                            Image("sidwaysArrow")
+                                .resizable()
+                                .foregroundColor(Color("MainRed"))
+                                .aspectRatio(24/48, contentMode: .fit)
+                                .frame(maxHeight: 22)
                             
                         }
                         .offset(x: -3)
@@ -674,6 +688,9 @@ struct NamePopUP: View {
                         Divider()
                             .frame(height: borderWeight)
                             .overlay(Color(.clear))
+                } else {
+                    Rectangle()
+                        .foregroundColor(.clear)
                 }
                 
                 
@@ -943,6 +960,8 @@ struct SetMenu: View {
                         .overlay(Color("BorderGray"))
                     Button {
                         viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "F")
+                        let data = viewModel.getPopUp(popUpId: "SetMenuPopUp")
+                        viewModel.setRepMetric(exersiseModuleID: data.popUpExersiseModuleIndex, RowID: data.popUpRowIndex, RPE: 10)
                         withAnimation(.spring()){
                        
                             viewModel.setPopUpState(state: false, popUpId: "SetMenuPopUp")
@@ -1340,14 +1359,15 @@ struct LogModuleHeader: View{
 
                 
                 Button {HapticManager.instance.impact(style: .rigid)
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    HapticManager.instance.impact(style: .rigid)
                     let exercise = homePageViewModel.exersises[viewModel.exersiseModules[parentModuleID].ExersiseID]
                     if isForCreator {
                         homePageViewModel.setCurrentExercise(exercise: exercise)
                         withAnimation(.spring()) {
                             viewModel.displayingExerciseViewForCreator.toggle()
                         }
-                        print(viewModel.displayingExerciseViewForCreator)
-                        print(homePageViewModel.homePageModel.currentExervice)
+
                     } else {
                         homePageViewModel.setCurrentExercise(exercise: exercise)
                         withAnimation(.spring()) {
@@ -1629,8 +1649,8 @@ struct PopupView: View {
                         if viewModel.lastRowUsed != 100 {
                             let workoutModule = viewModel.exersiseModules[viewModel.lastModuleUsed]
                             let _ = print(viewModel.lastModuleUsed, viewModel.lastRowUsed)
-                            var reps = workoutModule.setRows[viewModel.lastRowUsed].reps
-                            var weight = workoutModule.setRows[viewModel.lastRowUsed].weight//
+                            let reps = workoutModule.setRows[viewModel.lastRowUsed].reps
+                            let weight = workoutModule.setRows[viewModel.lastRowUsed].weight//
 
                     
                             if reps != 0 && weight != 0 {
@@ -1887,7 +1907,7 @@ struct PopupView: View {
     
     func RPEexplain() -> Alert {
         Alert(title: Text("RPE"),
-              message: Text("Do you want to delete all recurring instances of this workout or just this one?"))
+              message: Text("RPE(Rating of perceived exertion) is used used to measure of perceived exertion during a set."))
               
              
     }
@@ -2187,7 +2207,7 @@ func scheduleNotification(title: String, body: String, interval: TimeInterval) {
     let content = UNMutableNotificationContent()
     content.title = title
     content.body = body
-    if let soundURL = Bundle.main.url(forResource: "notification-sound-7062", withExtension: "m4a") {
+        if Bundle.main.url(forResource: "notification-sound-7062", withExtension: "m4a") != nil {
         let soundName = UNNotificationSoundName(rawValue: "notification-sound-7062.m4a")
         content.sound = UNNotificationSound(named: soundName)
     } else {

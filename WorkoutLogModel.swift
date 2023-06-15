@@ -73,8 +73,8 @@ struct WorkoutLogModel {
     struct ExersiseLogModule: Identifiable, Codable, Equatable {
         var exersiseName: String
         var setRows: [ExersiseSetRow]
-        let id: UUID
-        var displayingRPE: Bool = true
+        var id: UUID
+        var displayingRPE: Bool = false
         var displayingNotes: Bool = false
         var ExersiseID: Int
         var ExersiseCatagory: String = ""
@@ -176,6 +176,7 @@ struct WorkoutLogModel {
         workoutTime.timeElapsed = 0
         
         exersiseModules = workout.exercises
+   
         
         
     }

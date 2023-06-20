@@ -55,7 +55,7 @@ struct ProfileMain: View {
               
                 VStack(spacing: 15) {
                     GeometryReader { proxy in
-                        TopBar(topEdge: topEdge, name: "Profile", offset: $offset, maxHeight: maxHeight)
+                        TopBar(topEdge: topEdge, name: "Stats", offset: $offset, maxHeight: maxHeight)
                             
                                 .frame(maxWidth: .infinity)
                                 .frame(height: getHeaderHeight(), alignment: .bottom)
@@ -108,7 +108,7 @@ struct ProfileMain: View {
                             }
                             .alert(isPresented: $showingAlert) {
                                 Alert(title: Text("Muscle Split"),
-                                      message: Text("This is a representation of how you spen your time in the gym(calculated using total sets for each category)"),
+                                      message: Text("This represents how you spend your time in the gym, calculated using the total sets for each category."),
                                       dismissButton: .default(Text("Got it!")))
                             }
                             Spacer()
@@ -361,7 +361,7 @@ struct ProfileMain: View {
                      
                     }
                     Spacer()
-                    TextHelvetica(content: "Profile", size: 20)
+                    TextHelvetica(content: "Stats", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                         .opacity(topBarTitleOpacity())
@@ -747,9 +747,9 @@ struct RadarChartView: View {
                 
                 Text(self.dimensions[i].rayCase.rawValue)
                     
-                    .font(.system(size: 10))
+                    .font(.custom("SpaceGrotesk-Medium", size: 12))
                     .foregroundColor(self.SubtleColor)
-                    .frame(width:self.labelWidth, height:10)
+                    .frame(width:self.labelWidth, height:12)
                     .rotationEffect(.degrees(
                         (degAngle_fromFraction(numerator: i, denominator: self.dimensions.count) > 90 && degAngle_fromFraction(numerator: i, denominator: self.dimensions.count) < 270) ? 180 : 0
                         ))

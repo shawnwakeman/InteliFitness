@@ -325,7 +325,7 @@ class WorkoutLogViewModel: ObservableObject {
 
                 
             } else if (mostRecent.moduleType == WorkoutLogModel.moduleType.duration) {
-              
+                print(prevRow.reps)
                 return "\(formatTime(minutesSeconds: prevRow.reps))"
                 
      

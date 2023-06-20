@@ -25,7 +25,6 @@ struct DropDownMenuView: View {
            
                 Rectangle()
                     .foregroundColor(Color("MainGray"))
-                .aspectRatio(3.3, contentMode: .fit)
                 
                 HStack {
                     Button {
@@ -75,13 +74,13 @@ struct DropDownMenuView: View {
                     
                 }.frame(width: getScreenBounds().width * 0.25, height: getScreenBounds().height * 0.05)
                         .offset(y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
-                        .aspectRatio(2.5, contentMode: .fit)
+        
                         .padding(.leading, 25)
                         .background(Color.clear.frame(width: getScreenBounds().width * 0.25 * 1.5, height: getScreenBounds().height * 0.05 * 1.5)) // Increase the hitbox size
                    
                     ZStack {
                         Rectangle()
-                            .aspectRatio(1, contentMode: .fit)
+                   
                             .foregroundColor(.clear)
                             .padding(.horizontal, 50)
 
@@ -166,7 +165,7 @@ struct DropDownMenuView: View {
                    
                     .frame(width: getScreenBounds().width * 0.25,height: getScreenBounds().height * 0.048)
                     .offset(x: getScreenBounds().width * -0.055, y: homePageViewModel.workoutLogModuleStatus ? getScreenBounds().height * 0.03 : getScreenBounds().height * -0.01)
-                    .aspectRatio(2.5, contentMode: .fit)
+                   
                     .padding(.leading, 25)
                  
 
@@ -191,8 +190,8 @@ struct DropDownMenuView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
-
-        .position(x: UIScreen.main.bounds.width/2, y:200)
+        .frame(height: getScreenBounds().height * 0.15)
+        .position(x: UIScreen.main.bounds.width/2, y: getScreenBounds().height * 0.23)
 //        .position(x: UIScreen.main.bounds.width/2, y:-80)
         
             

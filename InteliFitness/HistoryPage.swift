@@ -624,7 +624,7 @@ struct historyMenu: View {
                                 .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
                      
                         .padding(.top, 25)
-                        .padding(.bottom, 25)
+             
                    
 //                        .onChange(of: isTextFieldFocused) { newValue in
 //                            if newValue == false {
@@ -637,28 +637,39 @@ struct historyMenu: View {
 //                            }
                         }
                 
-                
-                        HStack {
-                                Picker("Hours", selection: $hours) {
-                                    ForEach(hourOptions, id: \.self) { hour in
-                                        Text("\(hour) h")
-                                    }
+               
+                  
+                    TextHelvetica(content: "Edit Workout Time:", size: 19)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .padding(.vertical, 10)
+                       
+                        
+                 
+                 
+                   
+                    HStack {
+                            Picker("Hours", selection: $hours) {
+                                ForEach(hourOptions, id: \.self) { hour in
+                                    Text("\(hour) h")
                                 }
-                                .pickerStyle(WheelPickerStyle())
-                                .frame(width: 100)
-                                .clipped()
-                                .labelsHidden()
-                                
-                                Picker("Minutes", selection: $minutes) {
-                                    ForEach(minuteOptions, id: \.self) { minute in
-                                        Text("\(minute) m")
-                                    }
-                                }
-                                .pickerStyle(WheelPickerStyle())
-                                .frame(width: 100)
-                                .clipped()
-                                .labelsHidden()
                             }
+                            .pickerStyle(WheelPickerStyle())
+                            .frame(width: 100)
+                            .clipped()
+                            .labelsHidden()
+                            
+                            Picker("Minutes", selection: $minutes) {
+                                ForEach(minuteOptions, id: \.self) { minute in
+                                    Text("\(minute) m")
+                                }
+                            }
+                            .pickerStyle(WheelPickerStyle())
+                            .frame(width: 100)
+                            .clipped()
+                            .labelsHidden()
+                        }
+               
+                        
                     
                     
                     Button {
@@ -687,6 +698,10 @@ struct historyMenu: View {
                                         message: Text("Are you sure you want to delete this workout?"),
                                         primaryButton: .destructive(Text("Delete")) {
                                             showingAlert.toggle()
+                                            withAnimation(.spring()) {
+                                                showingHistoryMenu.toggle()
+                                            }
+                                       
                                             viewModel.deleteExerciseHistory(workoutID: workout.id)
                                             viewModel.saveExersiseHistory()
                                         },
@@ -694,7 +709,7 @@ struct historyMenu: View {
                                     )
                                 }
                         }
-                        .frame(width: getScreenBounds().width * 0.9, height: getScreenBounds().height * 0.08)
+                        .frame(width: getScreenBounds().width * 0.9, height: getScreenBounds().height * 0.12)
                     }
                     
                 }

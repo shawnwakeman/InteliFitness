@@ -157,7 +157,7 @@ struct MyExercisesPageMain: View {
                                 .foregroundColor(Color("MainGray"))
                                 VStack(alignment: .leading, spacing: 15) {
                                     HStack {
-                                        TextHelvetica(content: "My Exercises", size: 40)
+                                        TextHelvetica(content: "Exercises", size: 40)
                                             .foregroundColor(Color("WhiteFontOne"))
                                             .bold()
                                             .offset(y: 30)
@@ -394,110 +394,112 @@ struct MyExercisesPageMain: View {
                       
                             
                         
-                     
-                        VStack(alignment: .leading) {
-                            if filteredExercises.isEmpty {
-                                VStack {
-                                     
-                                                            
-                                      TextHelvetica(content: "No exercises found", size: 25)
-                                          .foregroundColor(Color("WhiteFontOne"))
-                                          .padding(.top, 40)
-                                     
+                        VStack {
+                            LazyVStack(alignment: .leading) {
+                                if filteredExercises.isEmpty {
+                                    VStack {
                                          
-                                       
-                                      TextHelvetica(content: "Add a new exercise", size: 20)
-                                          .foregroundColor(Color("GrayFontOne"))
-                                          .padding(.top, 3)
-                                    
-                                    
-                                    Button {
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                                                
+                                          TextHelvetica(content: "No exercises found", size: 25)
+                                              .foregroundColor(Color("WhiteFontOne"))
+                                              .padding(.top, 40)
+                                         
+                                             
+                                           
+                                          TextHelvetica(content: "Add a new exercise", size: 20)
+                                              .foregroundColor(Color("GrayFontOne"))
+                                              .padding(.top, 3)
                                         
-                                        withAnimation(.spring()) {
-                                            showingNew = true
-                                    
+                                        
+                                        Button {
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                            
+                                            withAnimation(.spring()) {
+                                                showingNew = true
+                                        
+                                                
+                                            }
                                             
                                         }
-                                        
-                                    }
-                                    label: {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 4)
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 4)
-                                                        .stroke(Color("BorderGray"), lineWidth: borderWeight))
-                                                .foregroundColor(Color("MainGray"))
-                                            
-                                            Image(systemName: "plus")
-                                                .resizable()
-                                                .bold()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 17, height: 17)
-                                                .foregroundColor(Color("LinkBlue"))
+                                        label: {
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 4)
+                                                    .overlay(
+                                                        RoundedRectangle(cornerRadius: 4)
+                                                            .stroke(Color("BorderGray"), lineWidth: borderWeight))
+                                                    .foregroundColor(Color("MainGray"))
+                                                
+                                                Image(systemName: "plus")
+                                                    .resizable()
+                                                    .bold()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 17, height: 17)
+                                                    .foregroundColor(Color("LinkBlue"))
 
+                                                
+                                            }
                                             
-                                        }
+                                        }.frame(width: 40, height: 36)
                                         
-                                    }.frame(width: 40, height: 36)
-                                    
-                                    Spacer()
-                                }
-                                .frame(maxWidth: .infinity)
-                                .background(Color("DBblack"))
-                            } else {
-                                if searchText.isEmpty {
-                                    ForEach(sectionedExercises.keys.sorted(), id: \.self) { key in
-                                        TextHelvetica(content: key, size: 22)
+                                        Spacer()
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color("DBblack"))
+                                } else {
+                                    if searchText.isEmpty {
+                                        ForEach(sectionedExercises.keys.sorted(), id: \.self) { key in
+                                            TextHelvetica(content: key, size: 22)
+                                                .foregroundColor(Color("WhiteFontOne"))
+                                                .padding(.leading)
+
+                                            VStack(spacing: 0) {
+                                                ForEach(Array(sectionedExercises[key]!.indices), id: \.self) { index in
+                                                    let exercise = sectionedExercises[key]![index]
+                                                    
+                                                    exerciseRow(viewModel: viewModel, exercise: exercise, displayingExerciseView: $displayingExerciseView)
+
+                                                    if index < sectionedExercises[key]!.count - 1 {
+                                                        Divider()
+                                                            .padding(.leading, 30)
+                                                    }
+                                                }
+                                            }
+                                            .background(Color("MainGray"))
+                                            .cornerRadius(10)
+                                            .padding([.horizontal, .bottom])
+                                        }
+                                    } else {
+                                        TextHelvetica(content: "Search Results", size: 16)
                                             .foregroundColor(Color("WhiteFontOne"))
                                             .padding(.leading)
 
-                                        VStack(spacing: 0) {
-                                            ForEach(Array(sectionedExercises[key]!.indices), id: \.self) { index in
-                                                let exercise = sectionedExercises[key]![index]
-                                                
+                                        VStack {
+                                            ForEach(Array(filteredExercises.indices), id: \.self) { index in
+                                                let exercise = filteredExercises[index]
                                                 exerciseRow(viewModel: viewModel, exercise: exercise, displayingExerciseView: $displayingExerciseView)
 
-                                                if index < sectionedExercises[key]!.count - 1 {
+                                                if index < filteredExercises.count - 1 {
                                                     Divider()
                                                         .padding(.leading, 30)
                                                 }
                                             }
                                         }
+                                        .listStyle(GroupedListStyle())
                                         .background(Color("MainGray"))
                                         .cornerRadius(10)
                                         .padding([.horizontal, .bottom])
+                                   
                                     }
-                                } else {
-                                    TextHelvetica(content: "Search Results", size: 16)
-                                        .foregroundColor(Color("WhiteFontOne"))
-                                        .padding(.leading)
-
-                                    VStack {
-                                        ForEach(Array(filteredExercises.indices), id: \.self) { index in
-                                            let exercise = filteredExercises[index]
-                                            exerciseRow(viewModel: viewModel, exercise: exercise, displayingExerciseView: $displayingExerciseView)
-
-                                            if index < filteredExercises.count - 1 {
-                                                Divider()
-                                                    .padding(.leading, 30)
-                                            }
-                                        }
-                                    }
-                                    .listStyle(GroupedListStyle())
-                                    .background(Color("MainGray"))
-                                    .cornerRadius(10)
-                                    .padding([.horizontal, .bottom])
-                               
                                 }
+                              
                             }
-                          
-                        }
-                        .padding(.top, 100)
-                        .padding(.bottom)
-             
-                    
-                        .zIndex(0)
+                            .padding(.top, 100)
+                            .padding(.bottom)
+                 
+                        
+                        
+                        }    .zIndex(0)
+                       
                       
                         
                         
@@ -533,7 +535,7 @@ struct MyExercisesPageMain: View {
 
                     Spacer() // This spacer will push the text and buttons apart
 
-                    TextHelvetica(content: "My Exercises", size: 20)
+                    TextHelvetica(content: "Exercises", size: 20)
                         .foregroundColor(Color("WhiteFontOne"))
                         .bold()
                         .opacity(topBarTitleOpacity())

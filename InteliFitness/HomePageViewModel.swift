@@ -115,6 +115,13 @@ class HomePageViewModel: ObservableObject {
     func setSelectionState(ExersiseID: Int) {
         homePageModel.setSelectionState(ExersiseID: ExersiseID)
     }
+    
+    func clearSelectionState(ExersiseID: Int) {
+        homePageModel.clearSelectionState(ExersiseID: ExersiseID)
+    }
+    
+    
+    
     func saveExersiseHistory() {
         homePageModel.saveExersiseHistory()
         

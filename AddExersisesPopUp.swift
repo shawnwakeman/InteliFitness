@@ -552,6 +552,21 @@ struct AddExersisesPopUp: View {
         .onChange(of: selectedColor) { newVaule in
             searchText = ""
         }
+        .onChange(of: viewModel.getPopUp(popUpId: "ExersisesPopUp").RPEpopUpState) { newValue in
+            if newValue == true {
+              
+                searchText = ""
+                selectedType = nil
+                selectedColor = nil
+                
+                for index in homePageViewModel.exersises.indices {
+                   
+                    homePageViewModel.clearSelectionState(ExersiseID: homePageViewModel.exersises[index].id)
+                    
+                }
+            }
+            
+        }
            
             
 //            HStack {

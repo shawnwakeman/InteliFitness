@@ -61,7 +61,7 @@ struct MyWorkoutsPageMain: View {
                     
                     VStack(spacing: 15) {
                         GeometryReader { proxy in
-                            TopBar(topEdge: topEdge, name: isForAddingToSchedule ? "Add Workout" : "My Workouts", offset: $offset, maxHeight: maxHeight)
+                            TopBar(topEdge: topEdge, name: isForAddingToSchedule ? "Add Workout" : "Workouts", offset: $offset, maxHeight: maxHeight)
                                 
                                     .frame(maxWidth: .infinity)
                                     .frame(height: getHeaderHeight(), alignment: .bottom)
@@ -157,7 +157,7 @@ struct MyWorkoutsPageMain: View {
                                         
                                         HStack {
                                 
-                                TextHelvetica(content: "Templates", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
+                                TextHelvetica(content: "Created Workouts", size: 28).bold().foregroundColor(Color("WhiteFontOne"))
                                 Spacer()
                                 NavigationLink(destination: createWorkout(homePageVeiwModel: viewModel, isNavigationBarHidden: $isNavigationBarHidden, currentWorkout: ScheduleWorkout(id: 0, name: "1", exercises: [], time: Date(), HasBeenDone: false))) {
                                     ZStack {
@@ -286,7 +286,7 @@ struct MyWorkoutsPageMain: View {
                             
                         }
                         Spacer()
-                        TextHelvetica(content: isForAddingToSchedule ? "Add Workout" : "My Workouts", size: 20)
+                        TextHelvetica(content: isForAddingToSchedule ? "Add Workout" : "Workouts", size: 20)
                             .foregroundColor(Color("WhiteFontOne"))
                             .bold()
                             .opacity(topBarTitleOpacity())
@@ -594,15 +594,7 @@ struct workoutLauncher: View {
                         Spacer()
                         
                     }
-                    
-                    HStack {
-                        TextHelvetica(content: "lower Body", size: 24)
-                 
-                            .foregroundColor(Color("GrayFontOne"))
-                        
-                        Spacer()
-                    }
-                    
+              
                     Spacer ()
                     
                 
@@ -613,7 +605,8 @@ struct workoutLauncher: View {
                                 .foregroundColor(Color("BlueOverlay"))
                                 .padding(.vertical)
                                
-                                .aspectRatio(5.5/1, contentMode: .fill)
+                                
+                                .frame(width: getScreenBounds().width * 0.85)
                         }
                         
                         if isForAddingToSchedule {
@@ -639,7 +632,8 @@ struct workoutLauncher: View {
 
                                                 .padding(.vertical)
                                                 
-                                                .aspectRatio(5.5/1, contentMode: .fill)
+                                              
+                                                .frame(width: getScreenBounds().width * 0.85)
                                             
                                         }
 
@@ -687,7 +681,8 @@ struct workoutLauncher: View {
 
                                             .padding(.vertical)
                                             
-                                            .aspectRatio(5.5/1, contentMode: .fill)
+                         
+                                            .frame(width: getScreenBounds().width * 0.85)
                                         
                                     }
 

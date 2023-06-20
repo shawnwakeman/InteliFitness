@@ -28,7 +28,8 @@ struct FinishPopUp: View {
                 Button {
 
                 
-         
+                    HapticManager.instance.impact(style: .rigid)
+
                     timeViewModel.setWorkoutTime(time: 0)
 
                     withAnimation(.spring()) {

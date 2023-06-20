@@ -67,12 +67,23 @@ struct HomePageView: View {
               
                     
                     let offset = homePageViewModel.ongoingWorkout ? 0: 0.5
-                    PurchaseView(onPurchaseCompleted: {
-                        withAnimation {
-                            showPurchaseModal = false
-                        }
-                    })
-                    .position(x: getScreenBounds().width/2, y: showPurchaseModal ? getScreenBounds().height * 0.47 : getScreenBounds().height * (1.49 + offset))
+                    if viewModel.timeRemaining > 0 {
+                        PurchaseView(onPurchaseCompleted: {
+                            withAnimation {
+                                showPurchaseModal = false
+                            }
+                        }, timesUp: false)
+                        .position(x: getScreenBounds().width/2, y: showPurchaseModal ? getScreenBounds().height * 0.47 : getScreenBounds().height * (1.49 + offset))
+                    } else {
+                        PurchaseView(onPurchaseCompleted: {
+                            withAnimation {
+                                showPurchaseModal = false
+                            }
+                        }, timesUp: true)
+                        .position(x: getScreenBounds().width/2, y: showPurchaseModal ? getScreenBounds().height * 0.47 : getScreenBounds().height * (1.49 + offset))
+                    }
+                    
+                    
                        
                     
                                 
@@ -113,12 +124,13 @@ struct HomePageView: View {
 struct PurchaseView: View {
     let onPurchaseCompleted: () -> Void
     @State private var selectedType: Int = 2
+    var timesUp: Bool
     var body: some View {
         VStack {
             
             VStack(alignment: .center) {
                 HStack {
-                    TextHelvetica(content: "restore", size: 18)
+                    TextHelvetica(content: "restore purchases", size: 17)
                         .bold()
                         .foregroundColor(Color("LinkBlue"))
                     Spacer()
@@ -146,11 +158,22 @@ struct PurchaseView: View {
                     .bold()
                     .multilineTextAlignment(.center)
                     .padding()
-                TextHelvetica(content: "Your 7-day free trial has ended. Choose a plan and continue to benefit from unlimited tracking and fitness insights.", size: 18)
-                    .foregroundColor(Color("GrayFontOne"))
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .padding(.bottom, 60)
+                if timesUp {
+                    TextHelvetica(content: "Your 7-day free trial has ended. Choose a plan and continue to benefit from unlimited tracking and fitness insights.", size: 18)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .padding(.bottom, 60)
+                    
+                    
+                } else {
+                    TextHelvetica(content: "Your 7-day free trial is still active! Don't wait for the trial to end, upgrade your experience and continue tracking your progress without any limits.", size: 18)
+                        .foregroundColor(Color("GrayFontOne"))
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .padding(.bottom, 60)
+                }
+                
                 
                 HStack {
                     Button {
@@ -341,8 +364,12 @@ struct P1View: View {
                             let minutes = (viewModel.timeRemaining / 60) - (hours * 60)
                             let seconds = viewModel.timeRemaining % 60
 
-                        
-                            if hours < 1 {
+                            if hours > 24 {
+                                TextHelvetica(content: "\(hours / 24) days", size: 18)
+                                    .foregroundColor(Color("WhiteFontOne"))
+                                    .fontWeight(.bold)
+                            }
+                            else if hours < 1 {
                                 TextHelvetica(content: "\(minutes):\(String(format: "%02d", seconds))", size: 18)
                                     .foregroundColor(Color("WhiteFontOne"))
                                     .fontWeight(.bold)
@@ -431,7 +458,7 @@ struct P1View: View {
                             HStack {
                                 if let workout = homePageViewModel.upcomingWorkout() {
                                     VStack(alignment: .leading) {
-                                        TextHelvetica(content: "Up Next", size: 28)
+                                        TextHelvetica(content: "Up Next, Today", size: 28)
                                             .foregroundColor(Color("GrayFontOne"))
                                         
                                         TextHelvetica(content: workout.name, size: 43)
@@ -440,10 +467,10 @@ struct P1View: View {
                                     }
                                 } else {
                                     VStack(alignment: .leading) {
-                                        TextHelvetica(content: "Up Next", size: 28)
+                                        TextHelvetica(content: "Quick Start", size: 28)
                                             .foregroundColor(Color("GrayFontOne"))
                                         
-                                        TextHelvetica(content: "New Workout", size: 43)
+                                        TextHelvetica(content: "Blank Workout", size: 43)
                                             .foregroundColor(Color("WhiteFontOne"))
                                             .bold()
                                     }
@@ -548,7 +575,7 @@ struct P1View: View {
                             
                                 .frame(width: borderWeight)
                                 .overlay(Color("BorderGray"))
-                            TextHelvetica(content: "My Workouts", size: 27)
+                            TextHelvetica(content: "Workouts", size: 27)
                                 .foregroundColor(Color("WhiteFontOne"))
                                 .padding(.horizontal, 15)
                             
@@ -621,10 +648,10 @@ struct P1View: View {
                                 .foregroundColor(Color("MainGray"))
                             VStack(alignment: .leading) {
                                 Spacer()
-                                TextHelvetica(content: "Profile", size: 20)
+                                TextHelvetica(content: "Stats", size: 20)
                   
                                     .padding(.vertical, 5)
-                                    .padding(.leading, -40)
+                                    .padding(.leading, -50)
                                     .foregroundColor(Color("WhiteFontOne"))
                             }
                         }
@@ -637,19 +664,24 @@ struct P1View: View {
                             self.selectedDestination = AnyView(Profile(viewModel: homePageViewModel, isNavigationBarHidden: $isNavigationBarHidden, profileData: data))
                         }
                     }
-                    .frame(height: getScreenBounds().width/3.4)
-                    .padding(.bottom, 14)
+                    .frame(maxHeight: getScreenBounds().height * 0.14)
+                    
                 }
 
                 if homePageViewModel.ongoingWorkout {
                     Rectangle()
-                        .frame(height: getScreenBounds().height * 0.0725)
+                        .frame(height: getFrameHeight())
                         .foregroundColor(.clear)
                 }
              
                 
             } .padding(.all)
                 .background(Color("DBblack"))
+        }
+        
+        .onAppear {
+            let screenHeight = UIScreen.main.bounds.height
+            print(screenHeight)
         }
 
         
@@ -668,6 +700,18 @@ struct P1View: View {
         }
    
          
+    }
+}
+
+func getFrameHeight() -> CGFloat {
+    let screenHeight = UIScreen.main.bounds.height
+
+
+    // These screen height values are approximate and could be adjusted to fit your needs
+    if screenHeight <= 700 { // For smaller devices like iPhone SE
+        return screenHeight * 0.12
+    } else {
+        return screenHeight * 0.085
     }
 }
 
@@ -694,7 +738,7 @@ struct P1View: View {
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePageView()
-            .previewDevice("iPhone 13 mini")
+            .previewDevice("iPhone 13 Mini")
         HomePageView()
             .previewDevice("iPad Pro (11-inch)")
     }
@@ -722,12 +766,12 @@ struct OnboardingView: View {
                     endPoint: .bottom
                 )
         TabView {
-            OnboardingViewPage1(image: "1.circle", title: "Welcome", description: "To help you stick to your workouts and optimize rest periods, make sure you have notifications enabled.", description2: "Thank you for installing InteliFitness! Please start by telling us your first name below.")
+            OnboardingViewPage1(image: "1.circle", title: "Welcome", description: "To help you stick to your workouts and optimize rest periods, make sure you have notifications enabled.", description2: "Thank you for installing InteliFitness! Please start by telling us your first name above.")
                                
 
             OnboardingViewPage2(image: "2.circle", title: "Your Personalized Fitness Tracker!", description: "InteliFitness is designed to help you keep track of your workouts, offering rich insights into your performance data. InteliFitness' goal is to empower you with information that will help you improve, one workout at a time.")
             VStack {
-                OnboardingViewPage3(image: "3.circle", title: "Plan, Track, Improve!", description: "To get the most out of InteliFitness, use the schedule to plan out your perfect workout, the tracker to make the most of your workout, improving every time, and the charts to see your progress.")
+                OnboardingViewPage3(image: "3.circle", title: "Plan, Track, Improve!", description: "To maximize the benefits of InteliFitness, utilize the scheduler to plan your ideal workouts, leverage the tracker to optimize your exercise sessions, and use the progress charts to visualize your improvements over time.")
                 Button(action: {
                     dismiss()
                     hasOnboarded = true
@@ -745,6 +789,7 @@ struct OnboardingView: View {
         .background(curGradient)
         .tabViewStyle(PageTabViewStyle())
         .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+        .ignoresSafeArea(.keyboard)
     }
 }
 
@@ -772,6 +817,26 @@ struct OnboardingViewPage1: View {
                 .foregroundColor(Color("WhiteFontOne"))
                 .multilineTextAlignment(.center)
             
+            if title == "Welcome" {
+                
+  
+                
+                
+                TextField("Enter your name", text: $name, onCommit: {
+                    savedName = name
+                })
+                .font(.subheadline)
+                .background(Color("DBblack"))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color("BorderGray"), lineWidth: borderWeight))
+                   .padding(.horizontal, 50)
+                   .padding(.top, 20)
+                   .textFieldStyle(RoundedBorderTextFieldStyle())
+                   .keyboardType(.default)
+                   .submitLabel(.done)
+            }
+            
             TextHelvetica(content: description2, size: 15)
                 .foregroundColor(Color("GrayFontOne"))
                 .multilineTextAlignment(.center)
@@ -779,23 +844,15 @@ struct OnboardingViewPage1: View {
                 .padding(.top, 20)
   
             
-            if title == "Welcome" {
-                TextField("Enter your name", text: $name, onCommit: {
-                    savedName = name
-                })
-                .font(.subheadline)
-                .padding(.horizontal, 50)
-                .padding(.top, 20)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            }
+            
 
-            TextHelvetica(content: description, size: 15)
+            TextHelvetica(content: description, size: 13)
                 .foregroundColor(Color("GrayFontOne"))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 50)
                 .padding(.top, 20)
         }
-        .ignoresSafeArea(.keyboard)
+
     }
 }
 

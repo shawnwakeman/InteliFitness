@@ -84,6 +84,7 @@ struct WorkoutLogModel {
         var DateCompleted: Date?
         var moduleType: moduleType
         var notes: String = ""
+        var oldWorkoutId: UUID = UUID()
 
     }
     
@@ -268,9 +269,7 @@ struct WorkoutLogModel {
         exersiseModules[exerciseID].restTime = time
     }
     
-    mutating func setWorkoutTime(time: Int) {
-        workoutTime.timeElapsed = time
-    }
+
     mutating func restAddToTime(step: Int) {
   
         restTime.timeElapsed += step

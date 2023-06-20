@@ -66,6 +66,7 @@ struct HomePageModel {
         var category: String
         var competionDate: Date
         var workoutTime: Int = 0
+        
     }
     
     
@@ -115,16 +116,17 @@ struct HomePageModel {
         // needs to be cleaned
         let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
         let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)
-        
+        let oldID = UUID()
         for exercise in removedBlankRows {
             let exerciseID = exercise.ExersiseID
             var updatedExercise = exercise
             updatedExercise.DateCompleted = Date()
-          
+            updatedExercise.id = UUID()
+            updatedExercise.oldWorkoutId = oldID
             exercises[exerciseID].exerciseHistory.append(updatedExercise)
         }
         if !removedBlankRows.isEmpty {
-            history.append(Workout(id: UUID(), WorkoutName: workoutName, notes: workoutNotes, exercises: removedBlankRows, category: "", competionDate: Date(), workoutTime: workoutTime))
+            history.append(Workout(id: oldID, WorkoutName: workoutName, notes: workoutNotes, exercises: removedBlankRows, category: "", competionDate: Date(), workoutTime: workoutTime))
         }
         
     }
@@ -134,6 +136,11 @@ struct HomePageModel {
 
         // needs to be cleaned
         let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
+        
+        
+        if myExercisesRecent.count >= 15 {
+            myExercisesRecent.removeFirst()
+        }
    
         
         
@@ -158,8 +165,11 @@ struct HomePageModel {
     mutating func addToMyExercisesRecent(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule]) {
         // needs to be cleaned
         var filterExerciseModules =  exersiseModules.filter { !$0.isLast }
+        let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)
+        
 
-        for index in filterExerciseModules.indices {
+
+        for index in removedBlankRows.indices {
             for rowIndex in filterExerciseModules[index].setRows.indices {
                 filterExerciseModules[index].setRows[rowIndex].reset()
             }
@@ -176,13 +186,16 @@ struct HomePageModel {
     mutating func deleteFromHistory(workoutID: UUID) {
         if let index = history.firstIndex(where: { $0.id == workoutID }) {
             let workout = history[index]
+            
             print(workout)
             for exercise in workout.exercises {
                 let exerciseID = exercise.ExersiseID
-                let exerciseLogModuleUUID = exercise.id
+                let exerciseLogModuleUUID = exercise.DateCompleted // bad
                 for exerciseIteration in exercises[exerciseID].exerciseHistory {
-                    if exerciseIteration.id == exerciseLogModuleUUID {
-                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.id == exerciseIteration.id }) {
+                    if exerciseIteration.oldWorkoutId == workout.id {
+                        
+                        
+                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.oldWorkoutId == workout.id }) {
                             print("module to be deleted")
                             print(exercises[exerciseID].exerciseHistory[index])
                             
@@ -192,9 +205,9 @@ struct HomePageModel {
                             print("did not save")
                         }
                     } else {
-                        print(exerciseIteration.id)
-                        print("did not save 2.0")
-                        print(exerciseLogModuleUUID)
+                        
+                        print("save 2.0")
+                        
                     }
                 }
             }
@@ -204,35 +217,14 @@ struct HomePageModel {
     
     mutating func deleteMyWorkouts(workoutID: UUID) {
         if let index = myExercises.firstIndex(where: { $0.id == workoutID }) {
-            let workout = myExercises[index]
-            for exercise in workout.exercises {
-                let exerciseID = exercise.ExersiseID
-                let exerciseLogModuleUUID = exercise.id
-                for exerciseIteration in exercises[exerciseID].exerciseHistory {
-                    if exerciseIteration.id == exerciseLogModuleUUID {
-                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.id == exerciseIteration.id }) {
-                            exercises[exerciseID].exerciseHistory.remove(at: index)
-                        }
-                    }
-                }
-            }
+            
+            
             myExercises.remove(at: index)
         }
     }
     mutating func deleteMyWorkoutRecent(workoutID: UUID) {
         if let index = myExercisesRecent.firstIndex(where: { $0.id == workoutID }) {
-            let workout = myExercisesRecent[index]
-            for exercise in workout.exercises {
-                let exerciseID = exercise.ExersiseID
-                let exerciseLogModuleUUID = exercise.id
-                for exerciseIteration in exercises[exerciseID].exerciseHistory {
-                    if exerciseIteration.id == exerciseLogModuleUUID {
-                        if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.id == exerciseIteration.id }) {
-                            exercises[exerciseID].exerciseHistory.remove(at: index)
-                        }
-                    }
-                }
-            }
+            
             myExercisesRecent.remove(at: index)
         }
     }
@@ -297,6 +289,10 @@ struct HomePageModel {
 
     mutating func setSelectionState(ExersiseID: Int) {
         exercises[ExersiseID].selected.toggle()
+    }
+
+    mutating func clearSelectionState(ExersiseID: Int) {
+        exercises[ExersiseID].selected = false
     }
 
     

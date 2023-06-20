@@ -85,7 +85,7 @@ struct ExercisePage: View {
                     if newValue == true {
                         print(exercise.id)
                         exerciseName = exercise.exerciseName
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                             if exercise.exerciseHistory.count > 1 {
                                 if let volume = viewModel.getVolumeData(exerciseHistory: exercise.exerciseHistory) {
                                     if let heaviestWeight = viewModel.getHeaviestWeightPerDay(exerciseHistory: exercise.exerciseHistory) {
@@ -587,7 +587,7 @@ struct Page3View: View {
             
             } else {
                 VStack {
-                    TextHelvetica(content: "charts currently only support normal exercises", size: 18)
+                    TextHelvetica(content: "charts only support regular exercises", size: 18)
                         .foregroundColor(Color("GrayFontOne"))
                         .padding()
                         .multilineTextAlignment(.center)

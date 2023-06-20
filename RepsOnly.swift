@@ -1613,16 +1613,14 @@ struct WorkoutSetRowViewDuration: View{
 func getTextColor(string: String) -> Color {
     if string == "W" {
         return Color(.systemYellow)
-    }else if string == "W" {
-        return Color(.systemPurple)
-    } else if string == "D" {
+    }else if string == "D" {
         return Color(.systemPurple)
     } else if string == "R" {
-        return Color(.systemPurple)
+        return Color(.systemOrange)
     } else if string == "T" {
-        return Color(.systemPurple)
+        return Color(.systemCyan)
     } else if string == "F" {
-        return Color(.systemPurple)
+        return Color(.systemRed)
     } else {
         return Color("DefaultColor")
     }

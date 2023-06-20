@@ -71,7 +71,7 @@ struct PolynomialRegressionGraph: View {
                     Spacer()
                         
 //
-//                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
+                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
                 }
                 
                 if let maxViews = sampleAnalytics.map({ $0.views }).max() {
@@ -107,18 +107,46 @@ struct PolynomialRegressionGraph: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding()
         .navigationTitle("cume")
-//        .onChange(of: selectedTab) { newValue in
-//
-//            if newValue != .page1 {
-//                for (index,_) in sampleAnalytics.enumerated() {
-//                    print(sampleAnalytics[index].views)
-//                    sampleAnalytics[index].views = .random(in: 1500...10000)
-//                }
-//            }
-//
-//            animatePlot(fromChange: true)
-//        }
-//
+        .onChange(of: selectedTab) { newValue in
+            let calendar = Calendar.current
+            var comparisonDate: Date?
+            
+            for (index, _) in sampleAnalytics.enumerated() {
+
+
+
+            
+                   
+                
+                sampleAnalytics[index].animate = false
+                lineOfBestFitDataFormatted[index].animate = false
+       
+            }
+            
+          
+            
+            if newValue == .page1 {
+                comparisonDate = calendar.date(byAdding: .month, value: -3, to: Date()) // Last 3 months
+            } else if newValue == .page2 {
+                comparisonDate = calendar.date(byAdding: .year, value: -1, to: Date()) // Last year
+            }
+            
+            let filteredAnalytics = sampleAnalytics.filter { data in
+                   guard let comparisonDate = comparisonDate else {
+                       // If there is no comparison date (selectedTab == 2), include all data
+                       return true
+                   }
+
+                   // Only include the data if its date is more recent than the comparison date
+                   return data.day >= comparisonDate
+               }
+               
+               // Replace sampleAnalytics with the filtered version
+               sampleAnalytics = filteredAnalytics
+
+               animatePlot(fromChange: true)
+        }
+
             
 
             
@@ -312,16 +340,27 @@ struct PolynomialRegressionGraph: View {
     
     func animatePlot(fromChange: Bool = false) {
         let animationDuration = fromChange ? 0.3 : 0.5 // Ad
-        
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            withAnimation(.easeInOut(duration: animationDuration)) {
-                for (index, _) in sampleAnalytics.enumerated() {
-                    sampleAnalytics[index].animate = true
-                    lineOfBestFitDataFormatted[index].animate = true
+        if sampleAnalytics.count <= 20 {
+            for (index,_) in sampleAnalytics.enumerated() {
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.02) {
+                    withAnimation(fromChange ? .easeInOut(duration: 0.56) : .easeInOut(duration: 0.8)) {
+                        sampleAnalytics[index].animate = true
+                        lineOfBestFitDataFormatted[index].animate = true
+                    }
+                }
+               
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                withAnimation(.easeInOut(duration: animationDuration)) {
+                    for (index, _) in sampleAnalytics.enumerated() {
+                        sampleAnalytics[index].animate = true
+                        lineOfBestFitDataFormatted[index].animate = true
+                        
+                    }
                 }
             }
         }
-        
 
     }
 }
@@ -422,7 +461,7 @@ struct Graph: View {
                     
                         
                     Spacer()
-//                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
+                    CustomSegmentedPickerChart(selection: customBinding, labels: ["3 Months", "1 Year", "All Time"])
                 }
                 
                 switch currentChart {
@@ -535,20 +574,44 @@ struct Graph: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding()
         .navigationTitle("cume")
-//        .onChange(of: selectedTab) { newValue in
-//
-//            if newValue != .page1 {
-//                for (index,_) in sampleAnalytics.enumerated() {
-//                    print(sampleAnalytics[index].views)
-//                    sampleAnalytics[index].views = .random(in: 1500...10000)
-//                }
-//                animateGraph(fromChange: true)
-//            }
-//
-//
-//        }
-//
+        .onChange(of: selectedTab) { newValue in
+            let calendar = Calendar.current
+            var comparisonDate: Date?
+            
+            for (index, _) in sampleAnalytics.enumerated() {
 
+
+
+            
+                   
+                
+                sampleAnalytics[index].animate = false
+       
+            }
+            
+            animateGraph(fromChange: true)
+            
+            if newValue == .page1 {
+                comparisonDate = calendar.date(byAdding: .month, value: -3, to: Date()) // Last 3 months
+            } else if newValue == .page2 {
+                comparisonDate = calendar.date(byAdding: .year, value: -1, to: Date()) // Last year
+            }
+            
+            let filteredAnalytics = sampleAnalytics.filter { data in
+                   guard let comparisonDate = comparisonDate else {
+                       // If there is no comparison date (selectedTab == 2), include all data
+                       return true
+                   }
+
+                   // Only include the data if its date is more recent than the comparison date
+                   return data.day >= comparisonDate
+               }
+               
+               // Replace sampleAnalytics with the filtered version
+               sampleAnalytics = filteredAnalytics
+
+               animateGraph(fromChange: true)
+        }
             
           
         

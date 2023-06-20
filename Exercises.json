@@ -55,7 +55,7 @@
     },
 {
         "exerciseName": "Pull-up",
-        "exerciseCategory": ["Back"],
+        "exerciseCategory": ["Upper Back"],
         "exerciseEquipment": "Bodyweight",
         "id": 3,
         "selected": false,
@@ -90,7 +90,7 @@
     },
     {
         "exerciseName": "Lat Pulldown",
-        "exerciseCategory": ["Back"],
+        "exerciseCategory": ["Upper Back"],
         "exerciseEquipment": "Machine",
         "id": 5,
         "selected": false,
@@ -125,7 +125,7 @@
         "moduleType": 0
     },
     {
-        "exerciseName": "Cable Curls",
+        "exerciseName": "Cable Curls with Bar",
         "exerciseCategory": ["Biceps"],
         "exerciseEquipment": "Machine",
         "id": 7,
@@ -135,7 +135,7 @@
         "notes": "",
         "instructions": [
         "Stand facing the cable machine with your feet shoulder-width apart.",
-        "Grip the handle with your palms facing up and arms fully extended.",
+        "Grip the bar with your palms facing up and arms fully extended.",
         "Curl the handle toward your chest by bending your elbows.",
         "Slowly return to the starting position."
         ],
@@ -144,7 +144,7 @@
     },
     {
         "exerciseName": "Barbell Rows",
-        "exerciseCategory": ["Back"],
+        "exerciseCategory": ["Upper Back"],
         "exerciseEquipment": "Barbell",
         "id": 8,
         "selected": false,
@@ -216,7 +216,7 @@
     {
         "exerciseName": "Incline Press",
         "exerciseCategory": ["Chest"],
-        "exerciseEquipment": "Dumbbell",
+        "exerciseEquipment": "Dumbell",
         "id": 12,
         "selected": false,
         "isDeleted" : false,
@@ -356,7 +356,7 @@
     {
         "exerciseName": "Bicycle Crunches",
         "exerciseCategory": ["Abs"],
-        "exerciseEquipment": "Bodyweight",
+        "exerciseEquipment": "Duration",
         "id": 20,
         "selected": false,
         "isDeleted" : false,
@@ -369,7 +369,7 @@
         "Alternate sides."
         ],
         "exerciseHistory": [],
-        "moduleType": 1
+        "moduleType": 4
     },
     {
         "exerciseName": "Seated Cable Row",
@@ -404,10 +404,1451 @@
         ],
         "exerciseHistory": [],
         "moduleType": 4
+    },
+    {
+        "exerciseName": "Chest Fly",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Machine",
+        "id": 23,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on a flat bench holding two dumbbells directly above your chest with your palms facing each other.",
+            "With a slight bend at your elbows, lower the weights to the side of your body in a wide arc.",
+            "Stop when your elbows are in line with your shoulders.",
+            "Use your chest to reverse the action and bring the weights back up to the start position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Floor Press",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Dumbell",
+        "id": 24,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on your back on the floor with a barbell above your chest and your hands gripping the bar wider than shoulder-width apart.",
+            "Keep your feet flat on the floor and your knees bent to 90 degrees.",
+            "Lower the bar towards your chest until your upper arms touch the floor.",
+            "Pause, then push the bar back to the starting position, fully extending your arms."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Close-Grip Bench Press",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Barbell",
+        "id": 25,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on a bench and hold a barbell with your hands shoulder-width apart.",
+            "Lower the bar to your chest, keeping your elbows close to your body.",
+            "Press the bar back to the starting position.",
+            "Repeat the process."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Decline Bench Press",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Barbell",
+        "id": 26,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie down on a decline bench and grip the bar slightly wider than shoulder-width apart.",
+            "Lower the bar to your chest, keeping your elbows at 45 degrees.",
+            "Press the bar back up to the starting position.",
+            "Repeat the process."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Chest Fly",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Dumbell",
+        "id": 27,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on a flat bench holding two dumbbells directly above your chest with your palms facing each other.",
+            "With a slight bend at your elbows, lower the weights to the side of your body in a wide arc.",
+            "Stop when your elbows are in line with your shoulders.",
+            "Use your chest to reverse the action and bring the weights back up to the start position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Floor Press",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Barbell",
+        "id": 28,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on your back on the floor with a barbell above your chest and your hands gripping the bar wider than shoulder-width apart.",
+            "Keep your feet flat on the floor and your knees bent to 90 degrees.",
+            "Lower the bar towards your chest until your upper arms touch the floor.",
+            "Pause, then push the bar back to the starting position, fully extending your arms."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Smith Machine Bench Press",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Machine",
+        "id": 29,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie down on the bench underneath the Smith machine.",
+            "Position the bar in line with your chest.",
+            "Unrack the bar, lower it to your chest, keeping your elbows at 45 degrees.",
+            "Press the bar back up to the starting position.",
+            "Repeat the process."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Chest Press",
+        "exerciseCategory": ["Chest"],
+        "exerciseEquipment": "Machine",
+        "id": 30,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on the chest press machine with your back flat against the pad.",
+            "Grip the handles with your palms facing down and elbows at 90 degrees.",
+            "Push the handles away from you, fully extending your arms.",
+            "Return the handles back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Front Raise",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 31,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand tall with a dumbbell in each hand, palms facing towards your body.",
+            "Keeping your arms straight, raise the dumbbells in front of you until they are at shoulder height.",
+            "Pause briefly, then lower the weights back to your sides."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Upright Row",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Barbell",
+        "id": 32,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet shoulder-width apart and hold a barbell in front of your body with an overhand grip.",
+            "Pull the barbell straight up towards your chin, leading with your elbows.",
+            "Lower the bar back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Lateral Raise",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 33,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand upright with a dumbbell in each hand at your sides, palms facing in.",
+            "Keeping your back straight, lift the dumbbells out to your sides until they reach shoulder level, while keeping a slight bend in your elbows.",
+            "Lower the dumbbells back down to your sides."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Lateral Raise",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Machine",
+        "id": 34,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand upright with a dumbbell in each hand at your sides, palms facing in.",
+            "Keeping your back straight, lift the dumbbells out to your sides until they reach shoulder level, while keeping a slight bend in your elbows.",
+            "Lower the dumbbells back down to your sides."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Rear Delt Fly",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 35,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Bend forward at the waist while keeping your back flat.",
+            "Hold a dumbbell in each hand with palms facing in.",
+            "Raise your arms out to the sides until they are in line with your shoulders.",
+            "Lower the dumbbells back down and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Rear Delt Row",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 36,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Bend forward at the waist while keeping your back flat.",
+            "Hold a dumbbell in each hand with palms facing in.",
+            "Pull the dumbbells up towards your chest, keeping your elbows close to your body.",
+            "Lower the dumbbells back down and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Shoulder Press",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Barbell",
+        "id": 37,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet shoulder-width apart and hold a barbell at shoulder level, palms facing forward.",
+            "Press the barbell straight up until your arms are fully extended.",
+            "Lower the barbell back to shoulder level and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Face Pull",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Machine",
+        "id": 38,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Attach a rope to a cable machine and adjust it to your eye level.",
+            "Grab the ends of the rope with each hand and step back to create tension.",
+            "Pull the rope towards your face, spreading it apart and squeezing your shoulder blades together.",
+            "Return to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Shoulder Press",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 39,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet shoulder-width apart and hold a barbell at shoulder level, palms facing forward.",
+            "Press the barbell straight up until your arms are fully extended.",
+            "Lower the barbell back to shoulder level and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Front Hold",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 40,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand straight holding a dumbbell in front of your chest with both hands.",
+            "Keeping your arms straight, raise the weight to eye level and hold for a few seconds.",
+            "Lower the weight slowly back to your chest and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Power Jerk",
+        "exerciseCategory": ["Shoulders", "Full Body"],
+        "exerciseEquipment": "Barbell",
+        "id": 41,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Start with your feet shoulder-width apart, and hold a barbell in front of your shoulders with an overhand grip.",
+            "Dip your body by bending your knees, then explosively push up with your legs as you press the barbell over your head.",
+            "Under the barbell quickly and catch it with arms fully extended.",
+            "Lower the barbell back to your shoulders and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Reverse Flyes",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 42,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with a dumbbell in each hand, feet shoulder-width apart.",
+            "Bend forward at the waist, keeping your back flat.",
+            "Raise the dumbbells out to the sides, squeezing your shoulder blades together.",
+            "Lower the dumbbells back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Seated Shoulder Press",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Dumbell",
+        "id": 43,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on a bench with back support, holding a dumbbell in each hand at shoulder level.",
+            "Push the dumbbells up until your arms are fully extended.",
+            "Slowly lower the dumbbells back to shoulder level and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Seated Shoulder Press",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Barbell",
+        "id": 44,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on a bench with back support, holding a dumbbell in each hand at shoulder level.",
+            "Push the dumbbells up until your arms are fully extended.",
+            "Slowly lower the dumbbells back to shoulder level and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Seated Shoulder Press",
+        "exerciseCategory": ["Shoulders"],
+        "exerciseEquipment": "Machine",
+        "id": 45,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on a bench with back support, holding a dumbbell in each hand at shoulder level.",
+            "Push the dumbbells up until your arms are fully extended.",
+            "Slowly lower the dumbbells back to shoulder level and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Reverse Flyes",
+        "exerciseCategory": ["Shoulders", "Upper Back"],
+        "exerciseEquipment": "Machine",
+        "id": 46,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with a dumbbell in each hand, feet shoulder-width apart.",
+            "Bend forward at the waist, keeping your back flat.",
+            "Raise the dumbbells out to the sides, squeezing your shoulder blades together.",
+            "Lower the dumbbells back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Hammer Curl",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Dumbell",
+        "id": 47,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand up straight with a dumbbell in each hand, arms fully extended, and palms facing your torso.",
+            "Keep your elbows close to your torso and curl the weights while keeping the palms facing each other.",
+            "Continue to raise the weight until your biceps are fully contracted and the dumbbells are at shoulder level.",
+            "Lower the dumbbells back down to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Preacher Curl",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 48,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on a preacher bench and place your arms on the support pad.",
+            "Grip the barbell with an underhand grip and fully extend your arms.",
+            "Curl the weight up, keeping your arms on the pad, until your biceps are fully contracted.",
+            "Lower the weight back to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Cable Curl With Rope",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Machine",
+        "id": 49,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand up straight, holding a cable rope attached to the low pulley, palms facing up.",
+            "Curl your hands towards your biceps, keeping your palms up and elbows close to your body.",
+            "Slowly return to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Concentration Curl",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Dumbell",
+        "id": 50,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on a flat bench with your feet firmly on the floor. Hold a dumbbell in your right hand, palm facing upward.",
+            "Lean forward, resting your right elbow against the inside of your right knee, letting the weight hang down between your legs.",
+            "Curl the weight up, keeping your elbow against your knee.",
+            "Lower the weight back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Machine Bicep Curl",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Machine",
+        "id": 51,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Adjust the seat of the machine so that your upper arms rest comfortably on the pad.",
+            "Grab the handles with palms facing upwards.",
+            "Curl your arms, lifting the weight as you squeeze your biceps at the top of the movement.",
+            "Slowly return to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Spider Curl",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 52,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Position yourself facing down on an incline bench with your chest and stomach press against the incline pad.",
+            "Hold the barbell with an underhand grip and let your arms hang straight down.",
+            "Curl the weight up, squeezing your biceps at the top.",
+            "Lower the weight back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Standing Triceps Extension",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 53,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand up straight holding a dumbbell with both hands, and lift it over your head until both arms are fully extended.",
+            "Keep your elbows in while slowly lowering the weight behind your head as you bend your elbows.",
+            "Lift the weight back up by extending your arms and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Lying Triceps Extension",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 54,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on a flat bench holding a barbell with an overhand grip, hands shoulder-width apart, and press it vertically upward.",
+            "Keeping your upper arms still, lower the bar by bending your elbows until it almost touches your forehead.",
+            "Extend your arms back to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Bench Dip",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 55,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Place your hands shoulder-width apart on a bench or step behind you.",
+            "Extend your legs out in front of you.",
+            "Lower your body by bending at the elbows until you're at about a 90-degree angle.",
+            "Push back up to the start position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Overhead Cable Triceps Extension",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Machine",
+        "id": 56,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand facing away from a high pulley with a rope attached.",
+            "Reach up and grab the rope with both hands, and bend at the hips until your torso is about a 45-degree angle to the floor.",
+            "Keeping your upper arms close to your head, extend your elbows to straighten your arms.",
+            "Slowly return to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Hack Squat",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 57,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet shoulder-width apart and a barbell held behind your legs.",
+            "Bend your knees and lower your body into a squat, keeping your back straight.",
+            "Push through your heels to return to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Lunge",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 58,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand upright with your hands at your hips.",
+            "Take a step forward with one foot and lower your body until your front knee is at a 90-degree angle and your back knee is hovering above the floor.",
+            "Push back up to the starting position and repeat with the other leg."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Walking Lunge",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 59,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand upright with your hands at your hips.",
+            "Take a step forward with one foot and lower your body until your front knee is at a 90-degree angle and your back knee is hovering above the floor.",
+            "Push off your front foot to bring your back foot forward, stepping into a lunge on the other side."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Box Squat",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 60,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Position a barbell on your shoulders and stand in front of a box or bench.",
+            "Push your hips back and bend your knees to lower your body until your glutes touch the box.",
+            "Pause for a moment and then push your body back to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Bulgarian Split Squat",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 61,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand facing away from a bench, grab a pair of dumbbells and hold them at arm's length at your sides.",
+            "Place the toes of your left foot on the bench behind you.",
+            "Lower your body until your front knee is bent at least 90 degrees.",
+            "Pause, then push your body back to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Lunge",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Dumbell",
+        "id": 62,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand upright with your hands at your hips.",
+            "Take a step forward with one foot and lower your body until your front knee is at a 90-degree angle and your back knee is hovering above the floor.",
+            "Push back up to the starting position and repeat with the other leg."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Goblet Squat",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Dumbell",
+        "id": 63,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand holding a dumbbell close to your chest.",
+            "Squat down, keeping your chest up and your knees over your toes.",
+            "Push back up to the start position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Front Squat",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 64,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with a barbell resting on your shoulders, your hands just wider than shoulder-width apart.",
+            "Squat down, keeping your chest up and your knees over your toes.",
+            "Push back up to the start position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Hip Adduction Machine",
+        "exerciseCategory": ["Other"],
+        "exerciseEquipment": "Machine",
+        "id": 65,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on the machine with your back flat against the backrest.",
+            "Place your legs on the padded levers and hold onto the handles.",
+            "Squeeze your legs together against the resistance and then slowly return to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Landmine Squat",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Barbell",
+        "id": 66,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand in front of a barbell secured in a landmine attachment, with the other end of the bar in both hands.",
+            "Position the bar at chest level with elbows bent.",
+            "Perform a squat, keeping your back straight and chest up.",
+            "Return to the start position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Back Extension",
+        "exerciseCategory": ["Lower Back"],
+        "exerciseEquipment": "Barbell",
+        "id": 67,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Position yourself on a back extension station and hook your feet under the leg anchors.",
+            "Lower your upper body, bending at the hips, until your body is fully bent.",
+            "Raise your body by extending at the hips until your body forms a straight line.",
+            "Repeat the movement."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Shrug",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Dumbell",
+        "id": 68,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand holding a dumbbell in each hand with your feet hip-width apart.",
+            "Keep your arms straight and lift your shoulders as high as you can.",
+            "Pause, then slowly lower the weight back to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Snatch",
+        "exerciseCategory": ["Full Body"],
+        "exerciseEquipment": "Barbell",
+        "id": 69,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Begin with a wide grip on the barbell, feet hip-width apart.",
+            "In a smooth motion, lift the barbell from the ground and up to overhead in one movement.",
+            "End with the barbell securely overhead with arms fully extended.",
+            "Return to the starting position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Chin-Up",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 70,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Grasp the pull-up bar with a underhand grip, hands shoulder-width apart.",
+            "Pull your body up until your chin is level with the bar, then slowly lower back to the start position.",
+            "Repeat the movement."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Good Morning",
+        "exerciseCategory": ["Lower Back", "Hamstrings"],
+        "exerciseEquipment": "Barbell",
+        "id": 71,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Place a barbell on the back of your shoulders and stand with your feet hip-width apart.",
+            "Bend at your hips and lower your torso until it is parallel to the floor.",
+            "Return to the starting position by extending your hips and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Inverted Row",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 72,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Set a bar at hip height and position yourself underneath it.",
+            "Grab the bar with an overhand grip and hang underneath it with your body straight.",
+            "Pull yourself up to the bar, then lower yourself back down and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Kettlebell Swing",
+        "exerciseCategory": ["Full Body"],
+        "exerciseEquipment": "Other",
+        "id": 73,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet hip-width apart and hold a kettlebell in front of you with both hands at arm length.",
+            "Bend at your hips and knees and lower your torso until it forms a 45-degree angle to the floor.",
+            "Swing the kettlebell between your legs and then forward to the height of your shoulders and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Pendlay Row",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Barbell",
+        "id": 74,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with feet hip-width apart and bend at the hips, keeping your back nearly parallel to the floor.",
+            "Grab the barbell with an overhand grip, hands just beyond shoulder width.",
+            "Pull the bar to your upper abdomen and then lower it back to the floor in a controlled manner."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Rack Pull",
+        "exerciseCategory": ["Lower Back"],
+        "exerciseEquipment": "Barbell",
+        "id": 75,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand in a power rack with the barbell at knee level.",
+            "Bend at your hips and knees and grab the bar with an overhand grip.",
+            "Without allowing your lower back to round, stand up with the barbell and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Seal Row",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Barbell",
+        "id": 76,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie face down on a bench that is elevated off the ground.",
+            "Hold a barbell with a pronated grip and let it hang underneath you.",
+            "Pull the barbell up to your lower chest and squeeze your shoulder blades together at the top of the movement."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Sumo Deadlift",
+        "exerciseCategory": ["Lower Back", "Hamstrings"],
+        "exerciseEquipment": "Barbell",
+        "id": 77,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet wider than shoulder-width apart, toes pointing out.",
+            "Bend at your hips and knees and grab the bar with an overhand grip.",
+            "Without allowing your lower back to round, pull your torso back and up, thrust your hips forward, and stand up with the barbell."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "T-Bar Row",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Barbell",
+        "id": 78,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Load one side of a barbell and secure the other end in a corner.",
+            "Stand over the bar with one foot on each side, bend at the hips and knees, and grasp the bar near the weighted end.",
+            "Pull the bar to your upper abs."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Clean and Jerk",
+        "exerciseCategory": ["Full Body"],
+        "exerciseEquipment": "Barbell",
+        "id": 79,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Begin with the barbell on the ground and stand with your feet hip-width apart.",
+            "In one motion, clean the barbell to your shoulders.",
+            "Dip at the knees, then explosively push up with your legs as you press the barbell over your head.",
+            "Return the barbell to the ground safely and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Deficit Deadlift",
+        "exerciseCategory": ["Lower Back", "Hamstrings"],
+        "exerciseEquipment": "Barbell",
+        "id": 80,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand on an elevated platform and grab a barbell with an overhand grip.",
+            "Bend at your hips and knees, and pull the barbell up, keeping your chest up and your back straight.",
+            "Return the barbell back to the ground and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Hip Thrust",
+        "exerciseCategory": ["Glutes"],
+        "exerciseEquipment": "Barbell",
+        "id": 81,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on the ground with a bench behind you and a loaded barbell over your hips.",
+            "Lean back against the bench and drive your hips up by pressing your feet into the ground.",
+            "Lower your hips back to the ground and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Crunch",
+        "exerciseCategory": ["Abs"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 82,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie on your back with your knees bent and feet flat on the floor, hip-width apart.",
+            "Place your hands behind your head so your thumbs are behind your ears.",
+            "Curl up and forward so that your head, neck, and shoulder blades lift off the floor."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Mountain Climbers",
+        "exerciseCategory": ["Abs", "Full Body"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 83,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Get into a plank position, hands planted directly under your shoulders, butt down, and your body a straight line from head to heels.",
+            "Pull your right knee into your chest as far as you can.",
+            "Switch legs, pulling one knee out and bringing the other knee in."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Stationary Bike",
+        "exerciseCategory": ["Cardio"],
+        "exerciseEquipment": "Cardio",
+        "id": 84,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Adjust the seat and handles of the bike to fit your height.",
+            "Start pedaling at a steady pace.",
+            "Keep your back straight and hold the handles lightly."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Ab Wheel Roll-Out",
+        "exerciseCategory": ["Abs"],
+        "exerciseEquipment": "Other",
+        "id": 85,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Kneel on the floor and hold an Ab Wheel with both hands.",
+            "Roll the wheel forward, keeping your back straight, until you feel your abs stretch.",
+            "Roll the wheel back toward your knees to return to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "One-Handed Lat Pulldown",
+        "exerciseCategory": ["Upper Back"],
+        "exerciseEquipment": "Machine",
+        "id": 86,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit at a lat pulldown station and grab the bar with one hand, palm facing forward.",
+            "Pull the bar down to your chest, keeping your elbow close to your body.",
+            "Slowly return the bar to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Hip Thrust",
+        "exerciseCategory": ["Glutes"],
+        "exerciseEquipment": "Machine",
+        "id": 87,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on the ground with a bench behind you and a loaded barbell over your hips.",
+            "Lean back against the bench and drive your hips up by pressing your feet into the ground.",
+            "Lower your hips back to the ground and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Seated Machine Cable Curls",
+        "exerciseCategory": ["Biceps"],
+        "exerciseEquipment": "Machine",
+        "id": 88,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Sit on the machine with your feet firmly on the ground.",
+            "Grasp the cable handles with an underhand grip.",
+            "Curl the handles toward your shoulders, keeping your elbows still.",
+            "Slowly return the handles to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Jogging",
+        "exerciseCategory": ["Cardio"],
+        "exerciseEquipment": "Cardio",
+        "id": 89,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand tall with your feet hip-width apart.",
+            "Start to jog slowly, landing softly on the balls of your feet.",
+            "Gradually increase your pace, swinging your arms in rhythm with your steps."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 5
+    },
+    {
+        "exerciseName": "V Ups",
+        "exerciseCategory": ["Abs"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 90,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Lie down flat on the ground, arms fully extended above your head.",
+            "Engage your core to lift your upper body and legs off the ground at the same time, reaching for your toes.",
+            "Lower yourself back down with control."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Diamond Push Ups",
+        "exerciseCategory": ["Chest", "Triceps"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 91,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Get into a high plank position. Place your hands close together, with your thumbs and index fingers touching to form a diamond shape.",
+            "Lower your body towards the floor while keeping your back flat and your hips in line with your shoulders.",
+            "Push back up to the start position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Stationary Bike",
+        "exerciseCategory": ["Cardio"],
+        "exerciseEquipment": "Cardio",
+        "id": 92,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Adjust the seat and handles of the bike to fit your height.",
+            "Start pedaling at a steady pace.",
+            "Keep your back straight and hold the handles lightly."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 5
+    },
+    {
+        "exerciseName": "Clean",
+        "exerciseCategory": ["Full Body"],
+        "exerciseEquipment": "Barbell",
+        "id": 93,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet hip-width apart. Place a barbell on the floor close to your shins.",
+            "Bend your knees and hips to take hold of the bar with an overhand grip.",
+            "In one swift movement, lift the barbell to your shoulders by extending your hips and knees.",
+            "Quickly bend your knees and hips to get under the bar as it rises, then stand up straight."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
+    },
+    {
+        "exerciseName": "Spinal Twist Stretch",
+        "exerciseCategory": ["Other"],
+        "exerciseEquipment": "Duration",
+        "id": 94,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Lie on your back with your arms extended out to the sides, forming a T shape.",
+            "Bend your knees and drop them to one side, keeping your shoulders on the ground.",
+            "Hold this position for a few seconds, then switch sides."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Hamstring Stretch",
+        "exerciseCategory": ["Hamstrings"],
+        "exerciseEquipment": "Duration",
+        "id": 95,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Sit on the ground with one leg extended straight in front of you and the other leg bent.",
+            "Reach forward and try to touch your toes on the extended leg.",
+            "Hold this position for a few seconds, then switch legs."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Quad Stretch",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Duration",
+        "id": 96,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Stand upright and grab your ankle or foot with one hand.",
+            "Pull your heel toward your glutes until you feel a stretch in the front of your thigh.",
+            "Hold this position for a few seconds, then switch legs."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Overhead Triceps Stretch",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Duration",
+        "id": 97,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Stand or sit upright and raise one arm overhead.",
+            "Bend the raised arm at the elbow so that your hand reaches towards the opposite shoulder blade.",
+            "Use your other hand to gently pull the elbow of the raised arm towards your head, feeling a stretch in your triceps.",
+            "Hold this position for a few seconds, then switch arms."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Hip Flexors Stretch",
+        "exerciseCategory": ["Other"],
+        "exerciseEquipment": "Duration",
+        "id": 98,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Start in a lunge position with one knee on the ground and the other leg forward, knee bent at a 90-degree angle.",
+            "Keep your upper body upright and push your hips forward until you feel a stretch in the front of your hip.",
+            "Hold this position for a few seconds, then switch legs."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Wall Calf Stretch",
+        "exerciseCategory": ["Calves"],
+        "exerciseEquipment": "Duration",
+        "id": 99,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Stand facing a wall and place your hands on the wall at shoulder height.",
+            "Step one foot back and keep it straight, pressing the heel into the ground.",
+            "Bend your front knee and lean forward, feeling a stretch in your calf.",
+            "Hold this position for a few seconds, then switch legs."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Russian Twists",
+        "exerciseCategory": ["Abs", "Obliques"],
+        "exerciseEquipment": "Duration",
+        "id": 100,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Sit on the ground with your knees bent and feet elevated slightly off the ground.",
+            "Lean back slightly to engage your core and twist your torso from side to side, touching the ground on each side with your hands.",
+            "Continue alternating sides in a controlled manner."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Squat Jumps",
+        "exerciseCategory": ["Quadriceps"],
+        "exerciseEquipment": "Duration",
+        "id": 101,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet shoulder-width apart and toes pointing slightly outward.",
+            "Lower into a squat position by bending your knees and pushing your hips back.",
+            "Explosively jump up, reaching your arms overhead.",
+            "Land softly back into the squat position and repeat."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 4
+    },
+    {
+        "exerciseName": "Dips",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Weighted Bodyweight",
+        "id": 102,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Grip the parallel dip bars with your palms facing inward and arms straight.",
+        "Lower your body by bending your elbows until your upper arms are parallel to the ground.",
+        "Push through your palms to return to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 2
+    },
+    {
+        "exerciseName": "Dips",
+        "exerciseCategory": ["Triceps"],
+        "exerciseEquipment": "Assisted Bodyweight",
+        "id": 103,
+        "selected": false,
+        "isDeleted" : false,
+        "restTime": 120,
+        "notes": "",
+        "instructions": [
+        "Grip the parallel dip bars with your palms facing inward and arms straight.",
+        "Lower your body by bending your elbows until your upper arms are parallel to the ground.",
+        "Push through your palms to return to the starting position."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 3
+    },
+    {
+        "exerciseName": "Burpees",
+        "exerciseCategory": ["Full Body"],
+        "exerciseEquipment": "Bodyweight",
+        "id": 104,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Start in a standing position with your feet shoulder-width apart.",
+            "Bend your knees and place your hands on the floor in front of you.",
+            "Kick your feet back into a plank position, perform a push-up, and then jump your feet back up towards your hands.",
+            "Explosively jump into the air, reaching your arms overhead.",
+            "Land softly and repeat the movement."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 1
+    },
+    {
+        "exerciseName": "Medicine Ball Slam",
+        "exerciseCategory": ["Full Body"],
+        "exerciseEquipment": "Other",
+        "id": 105,
+        "selected": false,
+        "isDeleted": false,
+        "restTime": 60,
+        "notes": "",
+        "instructions": [
+            "Stand with your feet shoulder-width apart, holding a medicine ball in both hands at chest level.",
+            "Raise the ball overhead, then forcefully slam it onto the ground in front of you.",
+            "Squat down to pick up the ball and repeat the movement."
+        ],
+        "exerciseHistory": [],
+        "moduleType": 0
     }
-
-
-
-
 
 ]

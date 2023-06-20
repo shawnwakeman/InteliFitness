@@ -12,6 +12,7 @@ struct PausePopUp: View {
     @State private var isToggled = false
     @ObservedObject var viewModel: WorkoutLogViewModel
     @ObservedObject var timeViewModel: TimeViewModel
+    
     var body: some View {
         VStack {
          

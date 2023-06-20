@@ -21,7 +21,7 @@ struct TimerCompletedPopUp: View {
             HStack {
 
 
-                TextHelvetica(content: "Rest Time Up", size: 27)
+                TextHelvetica(content: "Rest Time Is Up", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 
                

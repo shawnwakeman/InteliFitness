@@ -26,7 +26,81 @@ struct WeeklyScheduleView: View {
     }
 }
 
+struct WorkoutViewSimple: View {
+    var workout: ScheduleWorkout
+    
 
+ 
+
+
+    @ObservedObject var schedule: HomePageViewModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            
+            HStack {
+                TextHelvetica(content: workout.name, size: 15)
+                    .foregroundColor(Color("WhiteFontOne"))
+                Spacer()
+            
+             
+                    
+
+              
+            }.padding(.all, 10)
+           
+                .frame(height: getScreenBounds().height * 0.05)
+                .background(Color("MainGray"))
+       
+            
+            
+            Divider()
+                                
+            .frame(height: borderWeight)
+            .overlay(Color("BorderGray"))
+            
+           
+            VStack(alignment: .leading) {
+                Rectangle()
+                    .frame(height: getScreenBounds().height * 0.000)
+                let exerciseNames = workout.exercises.map { $0.exersiseName }.joined(separator: ", ")
+                
+                TextHelvetica(content: exerciseNames.isEmpty ? "Empty Workout" : exerciseNames, size: 12)
+                    .foregroundColor(Color("GrayFontOne"))
+                    .multilineTextAlignment(.leading)
+              
+                Spacer()
+                
+                
+            }
+       
+            .padding(.horizontal, 10)
+            
+            Spacer()
+            
+     
+
+        }
+        .frame(width: getScreenBounds().width * 0.443, height: getScreenBounds().height * 0.15)
+        .background(Color("DBblack")) // Use a different color when `HasBeenDone` is true
+        .cornerRadius(10)
+        .overlay(
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("BorderGray"), lineWidth: borderWeight)
+                
+               
+                
+            })
+            
+        .padding(.vertical)
+        .padding(.horizontal, 2)
+      
+
+    }
+    
+
+}
 
 // Workout View
 struct WorkoutView: View {
@@ -197,7 +271,7 @@ struct MainWokroutView: View {
         self.isForAddingWorkout = isForAddingWorkout
         let calendar = Calendar.current
         let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
-        self.weeks = (0..<4).map { weekOffset in
+        self.weeks = (0..<9).map { weekOffset in
             (0..<7).compactMap { dayOffset in
                 calendar.date(byAdding: .day, value: dayOffset + weekOffset * 7, to: startOfWeek)
             }
@@ -402,6 +476,8 @@ struct MainWokroutView: View {
                                     
                                 }
                             }
+                            
+                            
                         }
                         .padding(.horizontal)
                         .background(Color("DBblack").edgesIgnoringSafeArea(.all))
@@ -644,11 +720,23 @@ struct AddWorkoutView: View {
             .padding(.vertical, 10)
             Form {
                 
-
-                Section(header: TextHelvetica(content: "Select Workout", size: 14)
-                    .foregroundColor(Color("WhiteFontOne"))) {
+                Section(header:
+                    HStack {
+                        TextHelvetica(content: "Select Workout", size: 14)
+                            .foregroundColor(Color("WhiteFontOne"))
+                        Spacer() // This will push the button to the other side
+                        Button(action: {
+                            schedule.clearWorkoutQueue()
+                        }) {
+                            TextHelvetica(content: "Clear", size: 13)
+                                .foregroundColor(Color("LinkBlue")) // Customize as needed
+                        }
+                    }
+                ) {
                         if let workout = schedule.schedule.workoutQueue {
-                            WorkoutModule(title: workout.WorkoutName , description: "asd")
+                            let scheduleWorkout = ScheduleWorkout(id: 1000000000, name: workout.WorkoutName, exercises: workout.exercises, time: Date(), HasBeenDone: false)
+                            WorkoutViewSimple(workout: scheduleWorkout, schedule: schedule)
+                            
                             
                         } else {
                             HStack {

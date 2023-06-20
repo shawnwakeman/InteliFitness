@@ -226,7 +226,7 @@ struct DotsMenuView: View {
                         Spacer()
                         
                             TextHelvetica(content: showingRPE ? "Disable" : "Enable ", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
+                          .foregroundColor(Color("LinkBlue"))
                                 
                    
                         
@@ -273,8 +273,8 @@ struct DotsMenuView: View {
                         Spacer()
                         
                             TextHelvetica(content: showingNotes ? "Disable" : "Enable ", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
-                              
+              
+                                .foregroundColor(Color("LinkBlue"))
                     
                       
                         Image("sidwaysArrow")

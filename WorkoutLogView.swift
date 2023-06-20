@@ -215,7 +215,7 @@ struct WorkoutLogView: View {
             Group {
                 
                 TimerCompletedPopUp(viewModel: workoutLogViewModel)
-                    .scaleEffect(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState ? 1 : 0)
+                    .position(x: getScreenBounds().width/2, y: workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState ? getScreenBounds().height * 0.81: getScreenBounds().height * 1.2)
                     .allowsHitTesting(workoutLogViewModel.getPopUp(popUpId: "TimerCompletedPopUP").RPEpopUpState)
              
                 PopupView(viewModel: workoutLogViewModel, timeViewModel: timeViewModel, isLive: true)
@@ -290,7 +290,7 @@ struct WorkoutLogView: View {
               
                 DropDownMenuView(viewModel: workoutLogViewModel, timerViewModel: timeViewModel, homePageViewModel: homePageVeiwModel)
        
-                    .position(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height * 0.235)
+                    .position(x: UIScreen.main.bounds.width/2, y: getScreenBounds().height * 0.23)
                    
                     .onTapGesture {
                         HapticManager.instance.impact(style: .rigid)
@@ -417,8 +417,12 @@ struct WorkoutLogView: View {
             } else {
                 workoutLogViewModel.workoutName = workoutLogViewModel.workoutName
             }
-
-            timeViewModel.setWorkoutTime(time: 0)
+            
+             // aosidjoaisjdopasijfpoasdijfpoasdijfpoasdij
+        }
+        .onChange(of: homePageVeiwModel.workoutLogModuleStatus) { newValue in
+            
+            workoutLogViewModel.displayingExerciseViewOnWorkout = false
         }
         .background(
             LinearGradient(
@@ -433,7 +437,7 @@ struct WorkoutLogView: View {
             
         ))
         
-       
+        
         .onChange(of: scenePhase) { newScenePhase in
             switch newScenePhase {
             case .active:
@@ -442,10 +446,12 @@ struct WorkoutLogView: View {
                 }
                 homePageVeiwModel.loadMyExercises()
                 if enteredBackground {
+                    
                     timeViewModel.loadTimers()
                     enteredBackground = false
                 }
-               
+              
+                
                 homePageVeiwModel.loadHistory()
                 workoutLogViewModel.loadExersiseModules()
                 homePageVeiwModel.loadSchedule()
@@ -476,7 +482,8 @@ struct WorkoutLogView: View {
             }
         }
         .onAppear {
-
+            print("fuck")
+            timeViewModel.loadTimers()
             workoutLogViewModel.workoutName = "Workout Name"
 
             requestNotificationPermission()
@@ -815,8 +822,7 @@ struct SetMenu: View {
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()
-                        TextHelvetica(content: "?", size: 17)
-                            .foregroundColor(Color("GrayFontOne"))
+                       
                    
                     }
                     .padding(.horizontal)
@@ -848,8 +854,7 @@ struct SetMenu: View {
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()
-                        TextHelvetica(content: "?", size: 17)
-                            .foregroundColor(Color("GrayFontOne"))
+                        
                    
                     }
                     .padding(.horizontal)
@@ -881,8 +886,7 @@ struct SetMenu: View {
                             .foregroundColor(Color("WhiteFontOne"))
                         
                         Spacer()
-                        TextHelvetica(content: "?", size: 17)
-                            .foregroundColor(Color("GrayFontOne"))
+                        
                         
                     }
                     .padding(.horizontal)
@@ -914,8 +918,7 @@ struct SetMenu: View {
                                 .foregroundColor(Color("WhiteFontOne"))
                             
                             Spacer()
-                            TextHelvetica(content: "?", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
+               
                             
                         }
                         .padding(.horizontal)
@@ -946,8 +949,7 @@ struct SetMenu: View {
                                 .foregroundColor(Color("WhiteFontOne"))
                             
                             Spacer()
-                            TextHelvetica(content: "?", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
+         
                             
                         }
                         .padding(.horizontal)
@@ -980,8 +982,7 @@ struct SetMenu: View {
                                 .foregroundColor(Color("WhiteFontOne"))
                             
                             Spacer()
-                            TextHelvetica(content: "?", size: 17)
-                                .foregroundColor(Color("GrayFontOne"))
+                  
                             
                         }
                         .padding(.horizontal)

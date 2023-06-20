@@ -62,6 +62,7 @@ class TimeViewModel: ObservableObject {
         timeViewModel.toggleTime()
     }
     func addToTime(step: Int){
+
         timeViewModel.addToTime(step: step)
     }
     
@@ -76,10 +77,14 @@ class TimeViewModel: ObservableObject {
 
     func saveTimers() {
         timeViewModel.saveTimers()
+
     }
     
     func loadTimers() {
-        timeViewModel.loadTimers()
+        if timeViewModel.workoutTime.timeStep > 0 {
+            timeViewModel.loadTimers()
+        }
+      
     }
     
 

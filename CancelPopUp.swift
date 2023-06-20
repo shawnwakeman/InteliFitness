@@ -99,7 +99,7 @@ struct CancelPopUp: View {
                     homePageViewModel.setWorkoutLogModuleStatus(state: false)
            
                 }
-                
+                timeViewModel.setWorkoutTime(time: 0)
 
                 cancelNotifications()
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

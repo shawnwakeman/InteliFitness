@@ -19,8 +19,12 @@ In-depth progress charts
 Stunning user interface
 Whether you’re a gym enthusiast or just starting your fitness journey, InteliFitness is the perfect companion to help you achieve your fitness goals. Download InteliFitness today and take the first step towards a healthier, stronger you!
 
-![2x2778bb](https://github.com/shawnwakeman/NutrimalA/assets/107377600/aeeb68cd-a63d-4bc3-8358-2d39b8b39bff)
-![1284x2778bb](https://github.com/shawnwakeman/NutrimalA/assets/107377600/1197ae10-a133-4603-a5f3-7fe8582d97ee)
-![1284x2778bb](https://github.com/shawnwakeman/NutrimalA/assets/107377600/4e14a767-4466-482e-a581-4387d6f205b6)
-![1284x2778bb](https://github.com/shawnwakeman/NutrimalA/assets/107377600/cffe68ef-a61d-4111-b87c-38cf8678bcbc)
-![1284x2778bb](https://github.com/shawnwakeman/NutrimalA/assets/107377600/b4bc878d-ab46-402d-9c8a-94424d5c7861)
+
+![imageedit_2_8322867402](https://github.com/shawnwakeman/NutrimalA/assets/107377600/54659368-bcc5-4afe-a574-5158c98d0165)
+![imageedit_4_9408423860](https://github.com/shawnwakeman/NutrimalA/assets/107377600/28455d1d-c2e9-4d9f-8d00-738e3790f834)
+![imageedit_6_9082311345](https://github.com/shawnwakeman/NutrimalA/assets/107377600/37521c46-a3d7-4332-84f9-d0f82513ded1)
+![imageedit_8_7850461175](https://github.com/shawnwakeman/NutrimalA/assets/107377600/9b5e2ae3-df0a-4788-9cc7-ac8037f35e8e)
+![imageedit_10_4699709378](https://github.com/shawnwakeman/NutrimalA/assets/107377600/c9c03d65-24eb-4cc1-978f-78bb536c511e)
+
+
+

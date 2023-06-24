@@ -320,7 +320,7 @@ struct DotsMenuView: View {
   
                     HapticManager.instance.impact(style: .rigid)
                     let index = viewModel.getPopUp(popUpId: "popUpDotsMenu").popUPUUID
-                    print("removing")
+//                    print("removing")
                     viewModel.removeExersiseModule(exersiseID: index)
                     withAnimation(.spring()) {
                         viewModel.setPopUpState(state: false, popUpId: "popUpDotsMenu")
@@ -409,8 +409,7 @@ struct restTimeSet: View {
             HStack {
 
                 
-                
-                TextHelvetica(content: "Exersise Rest Time", size: 27)
+                TextHelvetica(content: "Exercise Rest Time", size: 27)
                     .foregroundColor(Color("WhiteFontOne"))
                 Spacer()
                 Button {
@@ -476,7 +475,7 @@ struct restTimeSet: View {
            
                        
            HStack(spacing: 0) {
-               TextHelvetica(content: "Exersise Rest Timer", size: 18)
+               TextHelvetica(content: "Exercise Rest Timer", size: 18)
                    .foregroundColor(Color("GrayFontOne"))
                    .padding(.trailing, 9)
 

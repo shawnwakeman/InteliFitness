@@ -405,7 +405,7 @@ struct WorkoutSetRowView: View{
                             .onTapGesture {
                                 print(rowObject)
                                 if repsTextField != "" && lbsTextField != "" {
-                                    print("2121")
+           
                                     viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
                                     viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
@@ -433,7 +433,7 @@ struct WorkoutSetRowView: View{
                                 }
                                 else {
                                     if rowObject.weightPlaceholder != "" && repsTextField != "" && lbsTextField == ""{
-                                        print("21")
+
                                         lbsTextField = rowObject.weightPlaceholder
                                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
@@ -463,7 +463,7 @@ struct WorkoutSetRowView: View{
                                         HapticManager.instance.impact(style: .heavy)
                                     }
                                     else if rowObject.repsPlaceholder != "" && lbsTextField != "" && repsTextField == ""{
-                                        print("1")
+                          
                                         repsTextField = rowObject.repsPlaceholder
                                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
@@ -493,7 +493,7 @@ struct WorkoutSetRowView: View{
                                         HapticManager.instance.impact(style: .heavy)
                                     }
                                     else if rowObject.weightPlaceholder != "" && rowObject.repsPlaceholder != "" {
-                                        print("123")
+                                  
                                         repsTextField = rowObject.repsPlaceholder
                                         lbsTextField = rowObject.weightPlaceholder
                                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)

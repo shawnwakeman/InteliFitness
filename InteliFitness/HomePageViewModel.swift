@@ -107,7 +107,6 @@ class HomePageViewModel: ObservableObject {
     func addToExersiseQueue(ExersiseID: Int) {
         homePageModel.addToExersiseQueue(exersiseID: ExersiseID)
     }
-    
     func removeExersiseFromQueue(ExersiseID: Int) {
         homePageModel.removeExersiseFromQueue(exersiseID: ExersiseID)
     }

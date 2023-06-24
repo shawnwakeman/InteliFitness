@@ -107,7 +107,7 @@ struct MyExercisesPageMain: View {
             
             
             Button(action: {
-                print(exercise.exerciseHistory)
+//                print(exercise.exerciseHistory)
                 HapticManager.instance.impact(style: .rigid)
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 viewModel.setCurrentExercise(exercise: exercise)
@@ -123,7 +123,6 @@ struct MyExercisesPageMain: View {
         }
         .background(Color("MainGray"))
     }
-
 
     func getOpacity2() -> CGFloat {
         let progress = -offset / 70

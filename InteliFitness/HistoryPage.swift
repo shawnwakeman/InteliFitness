@@ -669,11 +669,9 @@ struct historyMenu: View {
                             .labelsHidden()
                         }
                
-                        
-                    
                     
                     Button {
-             
+                        HapticManager.instance.impact(style: .rigid)
                         showingAlert.toggle()
                     } label: {
                         ZStack {
@@ -721,7 +719,7 @@ struct historyMenu: View {
                         .stroke(Color("BorderGray"), lineWidth: borderWeight))
                 .padding()
                 .onChange(of: showingHistoryMenu) { newValue in
-                    print(workout.workoutTime)
+//                    print(workout.workoutTime)
                     exerciseName = workout.WorkoutName
                     hours = workout.workoutTime / 3600
                     minutes = (workout.workoutTime / 60) % 60

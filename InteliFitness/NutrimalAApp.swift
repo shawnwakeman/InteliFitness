@@ -9,7 +9,6 @@ import SwiftUI
 import ActivityKit
 
 
-
 @main
 struct NutrimalAApp: App {
     @AppStorage("hasOnboarded") var hasOnboarded = false

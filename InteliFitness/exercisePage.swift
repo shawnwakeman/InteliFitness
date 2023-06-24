@@ -83,7 +83,7 @@ struct ExercisePage: View {
                 }
                 .onChange(of: showingExrcisePage) { newValue in
                     if newValue == true {
-                        print(exercise.id)
+//                        print(exercise.id)
                         exerciseName = exercise.exerciseName
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                             if exercise.exerciseHistory.count > 1 {
@@ -102,7 +102,7 @@ struct ExercisePage: View {
                                         }
                                     }
                                 } else {
-                                    let _ = print("could not set volume")
+//                                    let _ = print("could not set volume")
                                 }
                             }
                         }
@@ -177,7 +177,6 @@ struct CustomSegmentedPickerChart: View {
     @Binding var selection: chartTab
     var labels: [String]
     private let slidingBarHeight: CGFloat = 2
-
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -525,7 +524,7 @@ struct Page3View: View {
 
     var body: some View {
         ScrollView {
-            let _ = print(exercise.moduleType)
+//            let _ = print(exercise.moduleType)
             if exercise.moduleType == WorkoutLogModel.moduleType.weightReps {
                 if viewModel.chartData.volume.count > 0 {
                 VStack {
@@ -624,6 +623,7 @@ struct Page4View: View {
     @FocusState private var isTextFieldFocused: Bool
     @Binding var exerciseName: String
     @Binding var showingExrcisePage: Bool
+    @State var oldState = ""
     var body: some View {
         VStack {
            
@@ -645,7 +645,7 @@ struct Page4View: View {
                 .onChange(of: isTextFieldFocused) { newValue in
                     if newValue == false {
                         // TextField has lost focus
-                        if !exerciseName.isEmpty {
+                        if exerciseName != oldState {
                             viewModel.setExerciseName(exerciseID: exercise.id, newName: exerciseName)
                         }
                         
@@ -682,6 +682,9 @@ struct Page4View: View {
                 .frame(width: getScreenBounds().width * 0.9, height: getScreenBounds().height * 0.1)
             }
             
+        }
+        .onChange(of: showingExrcisePage) {newValue in
+            oldState = exerciseName
         }
 
         

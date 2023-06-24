@@ -50,7 +50,6 @@ struct ProfileMain: View {
     var body: some View {
         ZStack {
             
-            
             ScrollView(.vertical, showsIndicators: false) {
               
                 VStack(spacing: 15) {
@@ -93,7 +92,7 @@ struct ProfileMain: View {
 
 
                     VStack{
-                        let _ = print(profileData)
+//                        let _ = print(profileData)
                         HStack {
                             TextHelvetica(content: "Muscle Split", size: 25)
                                 .foregroundColor(Color("WhiteFontOne"))
@@ -792,9 +791,9 @@ struct RadarChartView: View {
                         
                         let x = size * cos(angle)
                         let y = size * sin(angle)
-                        print(size)
-                        print((self.width - (50 + self.labelWidth)))
-                        print("\(x) -- \(y)")
+//                        print(size)
+//                        print((self.width - (50 + self.labelWidth)))
+//                        print("\(x) -- \(y)")
                         if i == 0 {
                             path.move(to: CGPoint(x: self.center.x + x, y: self.center.y + y))
                         } else {
@@ -833,9 +832,9 @@ struct RadarChartView: View {
                         
                         let x = size * cos(angle)
                         let y = size * sin(angle)
-                        print(size)
-                        print((self.width - (50 + self.labelWidth)))
-                        print("\(x) -- \(y)")
+//                        print(size)
+//                        print((self.width - (50 + self.labelWidth)))
+//                        print("\(x) -- \(y)")
                         if i == 0 {
                             path.move(to: CGPoint(x: self.center.x + x, y: self.center.y + y))
                         } else {

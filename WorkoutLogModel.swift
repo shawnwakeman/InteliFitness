@@ -119,27 +119,6 @@ struct WorkoutLogModel {
     }
 
     
-//    func encodeExercises(_ exercises: [Exersise]) -> Data? {
-//        let encoder = JSONEncoder()
-//        do {
-//            let data = try encoder.encode(exercises)
-//            return data
-//        } catch {
-//            print("Error encoding exercises: \(error)")
-//            return nil
-//        }
-//    }
-//    func saveExercises(_ data: Data) {
-//        let fileManager = FileManager.default
-//        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-//        let fileURL = documentsURL.appendingPathComponent("Exercises.json")
-//
-//        do {
-//            try data.write(to: fileURL, options: .atomic)
-//        } catch {
-//            print("Error saving exercises: \(error)")
-//        }
-//    }
 
     
     
@@ -267,6 +246,7 @@ struct WorkoutLogModel {
     
 
         exersiseModules[exerciseID].restTime = time
+        
     }
     
 
@@ -294,7 +274,7 @@ struct WorkoutLogModel {
         
 
         } catch {
-            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+//            print("Failed to encode exersiseModules: \(error.localizedDescription)")
         }
     }
     
@@ -309,73 +289,14 @@ struct WorkoutLogModel {
                 exersiseModules = try JSONDecoder().decode([ExersiseLogModule].self, from: savedData)
                 
             } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+//                print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }
         }
 
     }
 
     
-    mutating func saveTimers() {
-        let defaults = UserDefaults.standard
-        do {
-            let time = try JSONEncoder().encode(Date())
-            defaults.set(time, forKey: "workoutTime")
-            
-            let elapsedTime = try JSONEncoder().encode(workoutTime.timeElapsed)
-            defaults.set(elapsedTime, forKey: "elapsedTime")
-            
-
-            defaults.set(elapsedTime, forKey: "elapsedRestTime")
-            
-            
-            let restTime = try JSONEncoder().encode(Date())
-            defaults.set(restTime, forKey: "restTime")
-        } catch {
-            print("Failed to encode time ")
-        }
-
-        
-    }
     
-    mutating func loadTimers() {
-        
-        let defaults = UserDefaults.standard
-        
-        if let savedData = defaults.object(forKey: "workoutTime") as? Data {
-            if let elapsedTime = defaults.object(forKey: "elapsedTime") as? Data {
-                do {
-                    let oldTime = try JSONDecoder().decode(Date.self, from: savedData)
-                    let timeDifference = Date().timeIntervalSince(oldTime)
-                    let elaptime = try JSONDecoder().decode(Int.self, from: elapsedTime)
-                    workoutTime.timeElapsed = Int(timeDifference) + elaptime
-           
-                    print("loaded data")
-                    
-                } catch {
-                    print("Failed to decode workoutTime : \(error.localizedDescription)")
-                }
-            }
-
-        }
-        
-        if let savedData = defaults.object(forKey: "restTime") as? Data {
-    
-            do {
-                let oldTime = try JSONDecoder().decode(Date.self, from: savedData)
-                let timeDifference = Date().timeIntervalSince(oldTime)
-
-                restTime.timeElapsed -= Int(timeDifference)
-                
-                print("loaded data")
-                
-            } catch {
-                print("Failed to decode rest time: \(error.localizedDescription)")
-            }
-         
-        }
-        
-    }
 
 
     
@@ -410,11 +331,11 @@ struct WorkoutLogModel {
     mutating func removeExersiseModule(exersiseID: UUID) {
         // Stop views from accessing data by updating their state
      
-        print("Removing exersise module with ID: \(exersiseID)")
+//        print("Removing exersise module with ID: \(exersiseID)")
         
-        print("Current exersiseModules:")
+//        print("Current exersiseModules:")
         for (index, module) in exersiseModules.enumerated() {
-            print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName)")
+//            print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName)")
         }
         
         if let index = exersiseModules.firstIndex(where: { $0.id == exersiseID }) {
@@ -426,14 +347,14 @@ struct WorkoutLogModel {
             }
           
         } else {
-            print("Exersise module with ID: \(exersiseID) not found")
+//            print("Exersise module with ID: \(exersiseID) not found")
         }
         
 
         
-        print("Updated exersiseModules:")
+//        print("Updated exersiseModules:")
         for (index, module) in exersiseModules.enumerated() {
-            print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName) isLAst \(module.isLast)")
+//            print("Index: \(index), ID: \(module.id), Name: \(module.exersiseName) isLAst \(module.isLast)")
         }
       
 

@@ -124,7 +124,7 @@ struct ReorderSets: View {
     }
     
     func relocate(from source: IndexSet, to destination: Int) {
-        let _ = print(source, destination)
+//        let _ = print(source, destination)
         viewModel.relocate(from: source, to: destination)
     }
     

@@ -80,9 +80,9 @@ class TimeViewModel: ObservableObject {
 
     }
     
-    func loadTimers() {
+    func loadTimers(isInitialViewLoad: Bool) {
         if timeViewModel.workoutTime.timeStep > 0 {
-            timeViewModel.loadTimers()
+            timeViewModel.loadTimers(isInitialViewLoad: isInitialViewLoad)
         }
       
     }

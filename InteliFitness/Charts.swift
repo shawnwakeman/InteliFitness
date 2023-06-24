@@ -208,7 +208,7 @@ struct PolynomialRegressionGraph: View {
                         .symbolSize(30)
                         
                         if let currentActiveItem,currentActiveItem.id == item.id {
-                            let _ = print(sampleAnalytics.count)
+//                            let _ = print(sampleAnalytics.count)
                             
 
                             PointMark(
@@ -699,7 +699,7 @@ struct Graph: View {
     //                        }
 
                         if let currentActiveItem,currentActiveItem.id == item.id {
-                            let _ = print(sampleAnalytics.count)
+//                            let _ = print(sampleAnalytics.count)
                            
                             PointMark(
                                 x: .value("Hour", item.day, unit: .day),
@@ -707,8 +707,6 @@ struct Graph: View {
                             )
 
                             .foregroundStyle(Color("LinkBlue"))
-
-
 
                         }
                     }

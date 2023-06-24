@@ -373,7 +373,7 @@ struct WorkoutSetRowViewForCreator: View {
                     
                 }
                 .onTapGesture {
-                    print(rowObject)
+//                    print(rowObject)
                     if rowObject.reps != 0 && rowObject.weight != 0 {
                         withAnimation(.spring()) {
                             viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
@@ -780,7 +780,7 @@ struct WorkoutSetRowViewForCreatorRepsOnly: View{
                     
                 }
                 .onTapGesture {
-                    print(rowObject)
+//                    print(rowObject)
                     if rowObject.reps != 0 && rowObject.weight != 0 {
                         withAnimation(.spring()) {
                             viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
@@ -1203,7 +1203,7 @@ struct WorkoutSetRowViewForCreatorDuration: View{
                     
                 }
                 .onTapGesture {
-                    print(rowObject)
+//                    print(rowObject)
                     if rowObject.reps != 0 && rowObject.weight != 0 {
                         withAnimation(.spring()) {
                             viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)
@@ -1632,7 +1632,7 @@ struct WorkoutSetRowViewForCreatorCardio: View{
                     
                 }
                 .onTapGesture {
-                    print(rowObject)
+//                    print(rowObject)
                     if rowObject.reps != 0 && rowObject.weight != 0 {
                         withAnimation(.spring()) {
                             viewModel.toggleCompletedSet(ExersiseModuleID: moduleID, RowID: rowObject.id)

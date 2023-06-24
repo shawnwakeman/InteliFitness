@@ -327,12 +327,12 @@ struct MainWokroutView: View {
                 message: Text("Do you want to delete all recurring instances of this workout or just this one? (deleting just one will not affect remiders for other repeating workouts"),
                 primaryButton: .destructive(Text("All")) {
                     if let workoutID = selectedWorkoutID {
-                        print(workoutID)
+//                        print(workoutID)
                         schedule.removeRecurringWorkouts(workoutID: workoutID, recurringID: recurringID)
                     }
                 },
                 secondaryButton: .default(Text("Just this one")) {
-                    print(recurringID)
+//                    print(recurringID)
                     if let workoutID = selectedWorkoutID, let day = selectedDay {
                         schedule.removeWorkout(from: day, workoutID: workoutID)
                         
@@ -596,7 +596,7 @@ struct MainWokroutView: View {
         }
         .onAppear {
             if self.isForAddingWorkout {
-                print("did the deed")
+//                print("did the deed")
                 showingAddWorkout = true
             }
         }
@@ -894,7 +894,6 @@ struct AddWorkoutView: View {
         combinedComponents.day = dateComponents.day
         combinedComponents.hour = timeComponents.hour
         combinedComponents.minute = timeComponents.minute
-
         let dateTime = calendar.date(from: combinedComponents) ?? Date()
         let id = Int.random(in: 1..<Int.max)
         let workout = ScheduleWorkout(id: id , name: workoutName, exercises: exercises, recurringID: recurringID, time: dateTime, HasBeenDone: false)
@@ -1069,7 +1068,7 @@ struct scheduleMenu: View {
                         )
                         .onTapGesture {
                             showingScheduleView.toggle()
-                            print(currentWorkout)
+//                            print(currentWorkout)
                             viewModel.newViewModel.setExerciseModules(exericiesModules: currentWorkout.exercises, name: currentWorkout.name)
                             isLinkActive = true
                             HapticManager.instance.impact(style: .rigid)

@@ -134,7 +134,7 @@ struct Schedule {
             let encodedData = try JSONEncoder().encode(workouts)
             defaults.set(encodedData, forKey: "schedule")
         } catch {
-            print("Failed to encode schedule: \(error.localizedDescription)")
+//            print("Failed to encode schedule: \(error.localizedDescription)")
         }
     }
     
@@ -151,7 +151,7 @@ struct Schedule {
             do {
                 workouts = try JSONDecoder().decode([Date: [ScheduleWorkout]].self, from: savedData)
             } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+//                print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }
         }
     }

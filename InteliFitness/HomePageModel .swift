@@ -36,7 +36,7 @@ struct HomePageModel {
                         let exercises = try decoder.decode([Exersise].self, from: loadedExercises)
                         return exercises
                     } catch {
-                        print("Error decoding exercises: \(error)")
+//                        print("Error decoding exercises: \(error)")
                     }
                 }
                 return defaultExercises
@@ -102,9 +102,9 @@ struct HomePageModel {
     mutating func removeExersiseFromQueue(exersiseID: Int) {
         if let index = exerciseQueue.firstIndex(where: { $0.id == exersiseID }) {
             exerciseQueue.remove(at: index)
-            print("Removed item")
+//            print("Removed item")
         } else {
-            print("No matching item found")
+//            print("No matching item found")
         }
 
     }
@@ -112,7 +112,6 @@ struct HomePageModel {
 
     mutating func addToHistory(workoutName: String, exersiseModules: [WorkoutLogModel.ExersiseLogModule], workoutTime: Int, workoutNotes: String) {
         
-
         // needs to be cleaned
         let filterExerciseModules =  exersiseModules.filter { !$0.isLast }
         let removedBlankRows = removeIncompleteSets(from: filterExerciseModules)
@@ -123,6 +122,7 @@ struct HomePageModel {
             updatedExercise.DateCompleted = Date()
             updatedExercise.id = UUID()
             updatedExercise.oldWorkoutId = oldID
+            exercises[exerciseID].restTime = exercise.restTime
             exercises[exerciseID].exerciseHistory.append(updatedExercise)
         }
         if !removedBlankRows.isEmpty {
@@ -187,7 +187,7 @@ struct HomePageModel {
         if let index = history.firstIndex(where: { $0.id == workoutID }) {
             let workout = history[index]
             
-            print(workout)
+//            print(workout)
             for exercise in workout.exercises {
                 let exerciseID = exercise.ExersiseID
                 let exerciseLogModuleUUID = exercise.DateCompleted // bad
@@ -196,17 +196,17 @@ struct HomePageModel {
                         
                         
                         if let index = exercises[exerciseID].exerciseHistory.firstIndex(where: { $0.oldWorkoutId == workout.id }) {
-                            print("module to be deleted")
-                            print(exercises[exerciseID].exerciseHistory[index])
+//                            print("module to be deleted")
+//                            print(exercises[exerciseID].exerciseHistory[index])
                             
                             exercises[exerciseID].exerciseHistory.remove(at: index)
                           
                         } else {
-                            print("did not save")
+//                            print("did not save")
                         }
                     } else {
                         
-                        print("save 2.0")
+//                        print("save 2.0")
                         
                     }
                 }
@@ -232,7 +232,7 @@ struct HomePageModel {
     func removeIncompleteSets(from exerciseLogModules: [WorkoutLogModel.ExersiseLogModule]) -> [WorkoutLogModel.ExersiseLogModule] {
         var updatedExerciseLogModules: [WorkoutLogModel.ExersiseLogModule] = []
         
-        print(exerciseLogModules)
+//        print(exerciseLogModules)
         
         for exerciseLogModule in exerciseLogModules {
             var updatedExerciseLogModule = exerciseLogModule
@@ -244,7 +244,7 @@ struct HomePageModel {
             }
         }
         
-        print(updatedExerciseLogModules)
+//        print(updatedExerciseLogModules)
         
         return updatedExerciseLogModules
     }
@@ -265,7 +265,7 @@ struct HomePageModel {
             let data = try encoder.encode(exercises)
             UserDefaults.standard.set(data, forKey: "Exercises")
         } catch {
-            print("Error encoding exercises: \(error)")
+//            print("Error encoding exercises: \(error)")
         }
     }
     
@@ -279,7 +279,7 @@ struct HomePageModel {
                 let exercises = try decoder.decode([Exersise].self, from: data)
                 return exercises
             } catch {
-                print("Error decoding exercises: \(error)")
+//                print("Error decoding exercises: \(error)")
                 return nil
             }
         }
@@ -319,7 +319,7 @@ struct HomePageModel {
             let encodedData = try JSONEncoder().encode(history)
             defaults.set(encodedData, forKey: "history")
         } catch {
-            print("Failed to encode exersiseModules: \(error.localizedDescription)")
+//            print("Failed to encode exersiseModules: \(error.localizedDescription)")
         }
     }
     
@@ -338,7 +338,7 @@ struct HomePageModel {
             do {
                 history = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
             } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+//                print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }
         }
     }
@@ -366,7 +366,7 @@ struct HomePageModel {
             let encodedData2 = try JSONEncoder().encode(myExercisesRecent)
             defaults.set(encodedData2, forKey: "myExercisesRecent")
         } catch {
-            print("Failed to encode exerciseModules: \(error.localizedDescription)")
+//            print("Failed to encode exerciseModules: \(error.localizedDescription)")
         }
     }
 
@@ -378,14 +378,14 @@ struct HomePageModel {
             do {
                 myExercises = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData)
             } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+//                print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }
         }
         if let savedData2 = defaults.object(forKey: "myExercisesRecent") as? Data {
             do {
                 myExercisesRecent = try JSONDecoder().decode([HomePageModel.Workout].self, from: savedData2)
             } catch {
-                print("Failed to decode exersiseModules: \(error.localizedDescription)")
+//                print("Failed to decode exersiseModules: \(error.localizedDescription)")
             }
         }
     }
@@ -516,89 +516,56 @@ extension WorkoutLogModel.ExersiseSetRow {
 
 
 import StoreKit
-class AppTimer: NSObject, ObservableObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+class AppTimer: NSObject, ObservableObject{
     @Published var timeRemaining: Int
-     let productID: String
-     var cancellable: AnyCancellable?
+    let productID: String
+    var cancellable: AnyCancellable?
 
-     override init() {
-         let lastSavedTime = UserDefaults.standard.double(forKey: "lastSavedTime")
-         let elapsedTime = lastSavedTime > 0 ? Int(Date().timeIntervalSince1970 - lastSavedTime) : 0
-         self.timeRemaining = UserDefaults.standard.integer(forKey: "timeRemaining") > elapsedTime ? UserDefaults.standard.integer(forKey: "timeRemaining") - elapsedTime : 3600 * 168
-
-         self.productID = "your_product_id" // Set your product id here
-         super.init()
-         SKPaymentQueue.default().add(self)
-
-         NotificationCenter.default.addObserver(self, selector: #selector(saveState), name: UIApplication.didEnterBackgroundNotification, object: nil)
-         NotificationCenter.default.addObserver(self, selector: #selector(loadState), name: UIApplication.willEnterForegroundNotification, object: nil)
-
-         startTimer()
-     }
-
-     func startTimer() {
-         cancellable = Timer.publish(every: 1, on: .main, in: .common)
-             .autoconnect()
-             .sink { [weak self] _ in
-                 self?.decreaseTimer()
-             }
-     }
-
-     @objc private func saveState() {
-         UserDefaults.standard.setValue(timeRemaining, forKey: "timeRemaining")
-         UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "lastSavedTime")
-     }
-
-     @objc private func loadState() {
-         let lastSavedTime = UserDefaults.standard.double(forKey: "lastSavedTime")
-         let elapsedTime = lastSavedTime > 0 ? Int(Date().timeIntervalSince1970 - lastSavedTime) : 0
-         timeRemaining -= elapsedTime
-     }
-
-     func decreaseTimer() {
-         if timeRemaining > 0 {
-             timeRemaining -= 1
-             saveState()
-         } else {
-             // Timer is up, initiate purchase
-             promptForPurchase()
-         }
-     }
-
-    func promptForPurchase() {
-        // Check if can make payments
-        if SKPaymentQueue.canMakePayments() {
-            let paymentRequest = SKProductsRequest(productIdentifiers: [productID])
-            paymentRequest.delegate = self
-            paymentRequest.start()
+    override init() {
+        let lastSavedTime = UserDefaults.standard.double(forKey: "lastSavedTime")
+        let elapsedTime = lastSavedTime > 0 ? Int(Date().timeIntervalSince1970 - lastSavedTime) : 0
+        let savedTimeRemaining = UserDefaults.standard.integer(forKey: "timeRemaining")
+        
+        self.timeRemaining = savedTimeRemaining > elapsedTime ? savedTimeRemaining - elapsedTime : 3600 * 169
+        // If time ran out previously, we should not reset it back to 12.
+        if UserDefaults.standard.bool(forKey: "timerHasFinished") {
+            self.timeRemaining = 0
         }
+        self.productID = "your_product_id" // Set your product id here
+        super.init()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(saveState), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadState), name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        startTimer()
     }
 
-    func purchaseProduct(_ product: SKProduct) {
-        let payment = SKPayment(product: product)
-        SKPaymentQueue.default().add(payment)
-    }
-    
-    // MARK: - SKProductsRequestDelegate
-
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        if let product = response.products.first {
-            // We have the product, proceed to purchase
-            purchaseProduct(product)
-        }
-    }
-    
-    // MARK: - SKPaymentTransactionObserver
-
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            if transaction.transactionState == .purchased || transaction.transactionState == .restored {
-                // Handle successful purchase or restore
-                SKPaymentQueue.default().finishTransaction(transaction)
-            } else if transaction.transactionState == .failed {
-                // Handle failed transaction
-                SKPaymentQueue.default().finishTransaction(transaction)
+    func startTimer() {
+        cancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.decreaseTimer()
             }
+    }
+
+    @objc private func saveState() {
+        UserDefaults.standard.setValue(timeRemaining, forKey: "timeRemaining")
+        UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "lastSavedTime")
+        UserDefaults.standard.setValue(timeRemaining <= 0, forKey: "timerHasFinished") // Save if timer has finished
+    }
+
+    @objc private func loadState() {
+        let lastSavedTime = UserDefaults.standard.double(forKey: "lastSavedTime")
+        let elapsedTime = lastSavedTime > 0 ? Int(Date().timeIntervalSince1970 - lastSavedTime) : 0
+        timeRemaining = max(0, timeRemaining - elapsedTime) // Ensure timeRemaining never goes negative
+    }
+
+    func decreaseTimer() {
+        if timeRemaining > 0 {
+            timeRemaining -= 1
+        } else {
+            // Timer is up, initiate purchase
         }
+        saveState()
     }
 }

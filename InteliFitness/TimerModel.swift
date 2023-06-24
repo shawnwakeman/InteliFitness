@@ -84,28 +84,33 @@ struct TimerModel {
             let restTime = try JSONEncoder().encode(Date())
             defaults.set(restTime, forKey: "restTime")
         } catch {
-            print("Failed to encode time ")
+//            print("Failed to encode time ")
         }
 
         
     }
-    
-    mutating func loadTimers() {
+    mutating func loadTimers(isInitialViewLoad: Bool) {
         
         let defaults = UserDefaults.standard
         
         if let savedData = defaults.object(forKey: "workoutTime") as? Data {
             if let elapsedTime = defaults.object(forKey: "elapsedTime") as? Data {
                 do {
+                    
                     let oldTime = try JSONDecoder().decode(Date.self, from: savedData)
                     let timeDifference = Date().timeIntervalSince(oldTime)
                     let elaptime = try JSONDecoder().decode(Int.self, from: elapsedTime)
-                    workoutTime.timeElapsed = Int(timeDifference) + elaptime
-           
-                    print("loaded data")
+                    if !isInitialViewLoad {
+                        workoutTime.timeElapsed = 0
+                    } else {
+                        workoutTime.timeElapsed = Int(timeDifference) + elaptime
+               
+                    }
+                    
+//                    print("loaded data")
                     
                 } catch {
-                    print("Failed to decode workoutTime : \(error.localizedDescription)")
+//                    print("Failed to decode workoutTime : \(error.localizedDescription)")
                 }
             }
 
@@ -114,15 +119,18 @@ struct TimerModel {
         if let savedData = defaults.object(forKey: "restTime") as? Data {
     
             do {
+                
                 let oldTime = try JSONDecoder().decode(Date.self, from: savedData)
                 let timeDifference = Date().timeIntervalSince(oldTime)
+                
+                
 
                 restTime.timeElapsed -= Int(timeDifference)
                 
-                print("loaded data")
+//                print("loaded data")
                 
             } catch {
-                print("Failed to decode rest time: \(error.localizedDescription)")
+//                print("Failed to decode rest time: \(error.localizedDescription)")
             }
          
         }

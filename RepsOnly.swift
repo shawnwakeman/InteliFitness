@@ -458,7 +458,7 @@ struct WorkoutSetRowViewRepsOnly: View{
                                 
                             }
                             .onTapGesture {
-                                print(rowObject)
+//                                print(rowObject)
                                 if repsTextField != "" {
 
                                     viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
@@ -950,9 +950,9 @@ struct WorkoutSetRowViewCardio: View{
                                 
                             }
                             .onTapGesture {
-                                print(rowObject)
+//                                print(rowObject)
                                 if repsTextField != "" && lbsTextField != "" {
-                                    print("2121")
+
                                     viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
                                     viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
@@ -980,15 +980,12 @@ struct WorkoutSetRowViewCardio: View{
                                 }
                                 else {
                                     if rowObject.weightPlaceholder != "" && repsTextField != "" && lbsTextField == ""{
-                                        print("21")
+
                                         lbsTextField = rowObject.weightPlaceholder
                                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
                                         viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
-//                                        let repMetric = rowObject.rpeTarget
-//                                        if repMetric != 0 {
-//                                            viewModel.setRepMetric(exersiseModuleID: moduleID, RowID: rowObject.id, RPE: repMetric)
-//                                        }
+
 
                                         viewModel.setLastModule(index: moduleID)
                                         viewModel.setLastRow(index: rowObject.id)
@@ -1010,15 +1007,12 @@ struct WorkoutSetRowViewCardio: View{
                                         HapticManager.instance.impact(style: .heavy)
                                     }
                                     else if rowObject.repsPlaceholder != "" && lbsTextField != "" && repsTextField == ""{
-                                        print("1")
+                                    
                                         repsTextField = rowObject.repsPlaceholder
                                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
                                         viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
-//                                        let repMetric = rowObject.rpeTarget
-//                                        if repMetric != 0 {
-//                                            viewModel.setRepMetric(exersiseModuleID: moduleID, RowID: rowObject.id, RPE: repMetric)
-//                                        }
+
 
                                         viewModel.setLastModule(index: moduleID)
                                         viewModel.setLastRow(index: rowObject.id)
@@ -1040,16 +1034,13 @@ struct WorkoutSetRowViewCardio: View{
                                         HapticManager.instance.impact(style: .heavy)
                                     }
                                     else if rowObject.weightPlaceholder != "" && rowObject.repsPlaceholder != "" {
-                                        print("123")
+                                       
                                         repsTextField = rowObject.repsPlaceholder
                                         lbsTextField = rowObject.weightPlaceholder
                                         viewModel.setRepValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Int(repsTextField) ?? 0)
 
                                         viewModel.setWeightValue(exersiseModuleID: moduleID, RowID: rowObject.id, value: Float(lbsTextField) ?? 0)
-//                                        let repMetric = rowObject.rpeTarget
-//                                        if repMetric != 0 {
-//                                            viewModel.setRepMetric(exersiseModuleID: moduleID, RowID: rowObject.id, RPE: repMetric)
-//                                        }
+
 
                                         viewModel.setLastModule(index: moduleID)
                                         viewModel.setLastRow(index: rowObject.id)

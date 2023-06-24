@@ -94,12 +94,12 @@ class WorkoutLogViewModel: ObservableObject {
     }
     
     func setLastModule(index: Int) {
-        print(index)
+        
         workoutLogModel.setLastModule(index: index)
     }
     
     func setLastRow(index: Int) {
-        print(index)
+       
         workoutLogModel.setLastRow(index: index)
     }
     
@@ -111,7 +111,7 @@ class WorkoutLogViewModel: ObservableObject {
             return workoutLogModel.popUps[popUpIndex]
         }
         else {
-            print("did not find pop up\(popUpId)")
+//            print("did not find pop up\(popUpId)")
             return workoutLogModel.popUps[0] // needs to be fixed
         }
 
@@ -176,7 +176,7 @@ class WorkoutLogViewModel: ObservableObject {
                return index
            }
            else {
-               print("get UUID index error")
+//               print("get UUID index error")
                return 0
            }
        }
@@ -257,7 +257,7 @@ class WorkoutLogViewModel: ObservableObject {
     
     func addExercisesFromQueue(exercises: [HomePageModel.Exersise]) {
         exercises.forEach { exercise in
-            print(exercise.moduleType)
+//            print(exercise.moduleType)
             addEmptyWorkoutModule(exerciseName: exercise.exerciseName, exerciseID: exercise.id, ExersiseEquipment: exercise.exerciseEquipment, restTime: exercise.restTime, moduleType: exercise.moduleType)
         }
 
@@ -325,7 +325,7 @@ class WorkoutLogViewModel: ObservableObject {
 
                 
             } else if (mostRecent.moduleType == WorkoutLogModel.moduleType.duration) {
-                print(prevRow.reps)
+//                print(prevRow.reps)
                 return "\(formatTime(minutesSeconds: prevRow.reps))"
                 
      
@@ -379,7 +379,6 @@ class WorkoutLogViewModel: ObservableObject {
            
         } else if (row.id - 1) >= 0 {
             let module = exersiseModules[moduleId]
-            print("2")
             let oldRow = module.setRows[row.id - 1]
             if oldRow.reps != 0 {
                 workoutLogModel.setRepValuePlaceHolder(exersiseModuleID: moduleId, RowID:  row.id, value: String(oldRow.reps))

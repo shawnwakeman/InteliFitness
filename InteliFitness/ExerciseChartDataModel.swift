@@ -14,7 +14,6 @@ struct SiteView: Identifiable {
     var animate: Bool = false
 }
 
-
 struct exerciseChartDataModel {
     var volume: [SiteView] = []
     var heaviestWeight: [SiteView] = []

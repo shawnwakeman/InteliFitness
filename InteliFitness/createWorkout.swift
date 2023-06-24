@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct createWorkout: View {
 
         @ObservedObject var homePageVeiwModel: HomePageViewModel
@@ -522,14 +523,14 @@ struct createWorkout: View {
         func requestNotificationPermission() {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
                 if let error = error {
-                    print("Error requesting notification permission: \(error)")
+//                    print("Error requesting notification permission: \(error)")
                     return
                 }
 
                 if granted {
-                    print("Notification permission granted")
+//                    print("Notification permission granted")
                 } else {
-                    print("Notification permission denied")
+//                    print("Notification permission denied")
                 }
             }
         }

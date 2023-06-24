@@ -26,6 +26,8 @@ struct WorkoutLogView: View {
     @State private var isFocused: Bool = false
 
     @State private var enteredBackground = false
+    @State private var isInitialViewLoad = true
+    
  
 
     @Environment(\.scenePhase) private var scenePhase
@@ -417,6 +419,17 @@ struct WorkoutLogView: View {
             } else {
                 workoutLogViewModel.workoutName = workoutLogViewModel.workoutName
             }
+
+            if !isInitialViewLoad {
+                timeViewModel.setWorkoutTime(time: 0)
+            }
+            
+            
+            
+            // After first view update, set the variable to true
+            isInitialViewLoad = false
+
+            
             
              // aosidjoaisjdopasijfpoasdijfpoasdijfpoasdij
         }
@@ -447,7 +460,7 @@ struct WorkoutLogView: View {
                 homePageVeiwModel.loadMyExercises()
                 if enteredBackground {
                     
-                    timeViewModel.loadTimers()
+                    timeViewModel.loadTimers(isInitialViewLoad: enteredBackground)
                     enteredBackground = false
                 }
               
@@ -457,12 +470,12 @@ struct WorkoutLogView: View {
                 homePageVeiwModel.loadSchedule()
                 cancelSpecificNotification()
 
-                print("for")
+//                print("active")
             case .inactive:
                 workoutLogViewModel.saveExersiseModules()
                 homePageVeiwModel.saveOngoingWorkoutStatus(status: homePageVeiwModel.ongoingWorkout)
 
-                print("in")
+//                print("inactive")
             case .background:
                 homePageVeiwModel.saveSchedule()
                 timeViewModel.saveTimers()
@@ -476,14 +489,14 @@ struct WorkoutLogView: View {
                 }
                 enteredBackground = true
 
-                print("back")
+//                print("background")
             @unknown default:
                 fatalError("Unknown scene phase")
             }
         }
         .onAppear {
-            print("fuck")
-            timeViewModel.loadTimers()
+            
+            timeViewModel.loadTimers(isInitialViewLoad: isInitialViewLoad)
             workoutLogViewModel.workoutName = "Workout Name"
 
             requestNotificationPermission()
@@ -493,14 +506,14 @@ struct WorkoutLogView: View {
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
-                print("Error requesting notification permission: \(error)")
+//                print("Error requesting notification permission: \(error)")
                 return
             }
 
             if granted {
-                print("Notification permission granted")
+//                print("Notification permission granted")
             } else {
-                print("Notification permission denied")
+//                print("Notification permission denied")
             }
         }
     }
@@ -834,7 +847,7 @@ struct SetMenu: View {
                     .frame(height: borderWeight)
                     .overlay(Color("BorderGray"))
                 Button {
-                    print(popUpData)
+//                    print(popUpData)
                     viewModel.setSetType(moduleId: popUpData.popUpExersiseModuleIndex, rowId: popUpData.popUpRowIndex, setType: "W")
                     withAnimation(.spring()){
                    
@@ -1481,7 +1494,7 @@ struct NotesModule: View{
                 .onChange(of: isTextFieldFocused) { newValue in
                     if newValue == false {  // TextField has lost focus
                         if let val = viewModel.exerciseModule(at: parentModuleID) {
-                            print(val.ExersiseID)
+//                            print(val.ExersiseID)
                             homePageModelViewModel.setNotes(notes: notes, moduleID: val.ExersiseID)
                         }
                         homePageModelViewModel.saveExercisesToUserDefaults(homePageModelViewModel.exersises)
@@ -1489,11 +1502,11 @@ struct NotesModule: View{
                     }
                 }
                 .onAppear {
-                    print("calledg")
+           
                     let data = viewModel.exersiseModules[parentModuleID]
-                    print(data)
+//                    print(data)
                    
-                    print(homePageModelViewModel.exersises[data.ExersiseID].notes)
+//                    print(homePageModelViewModel.exersises[data.ExersiseID].notes)
                     notes = homePageModelViewModel.exersises[data.ExersiseID].notes
                  
                    
@@ -1649,7 +1662,7 @@ struct PopupView: View {
                     if selectedRPE != 0 {
                         if viewModel.lastRowUsed != 100 {
                             let workoutModule = viewModel.exersiseModules[viewModel.lastModuleUsed]
-                            let _ = print(viewModel.lastModuleUsed, viewModel.lastRowUsed)
+//                            let _ = print(viewModel.lastModuleUsed, viewModel.lastRowUsed)
                             let reps = workoutModule.setRows[viewModel.lastRowUsed].reps
                             let weight = workoutModule.setRows[viewModel.lastRowUsed].weight//
 
@@ -2163,7 +2176,7 @@ func scheduleNotificationForReminder(id: Int, title: String, body: String, date:
 
     // Check if the time interval is greater than 0
     guard timeInterval > 0 else {
-        print("Invalid time interval for scheduling notification.")
+//        print("Invalid time interval for scheduling notification.")
         return
     }
 
@@ -2185,15 +2198,15 @@ func scheduleNotificationForReminder(id: Int, title: String, body: String, date:
     // Add the request to the notification center
     notificationCenter.add(request) { error in
         if let error = error {
-            print("Error scheduling notification: \(error)")
+//            print("Error scheduling notification: \(error)")
         } else {
-            print("Notification scheduled with identifier: \(requestIdentifier)")
+//            print("Notification scheduled with identifier: \(requestIdentifier)")
         }
     }
 }
 
 func cancelNotificationForRemidner(id: Int) {
-    print(id)
+//    print(id)
     let notificationCenter = UNUserNotificationCenter.current()
     let identifierToCancel = "yourAppName.reminder.notification.\(id)"
     notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifierToCancel])
@@ -2227,9 +2240,9 @@ func scheduleNotification(title: String, body: String, interval: TimeInterval) {
         // Add the request to the notification center
         notificationCenter.add(request) { error in
             if let error = error {
-                print("Error scheduling notification: \(error)")
+//                print("Error scheduling notification: \(error)")
             } else {
-                print("Notification scheduled with identifier: \(requestIdentifier)")
+//                print("Notification scheduled with identifier: \(requestIdentifier)")
             }
         }
     }
@@ -2255,9 +2268,9 @@ func scheduleSpecificNotification(title: String, body: String, interval: TimeInt
     // Add the request to the notification center
     notificationCenter.add(request) { error in
         if let error = error {
-            print("Error scheduling specific notification: \(error)")
+//            print("Error scheduling specific notification: \(error)")
         } else {
-            print("Specific notification scheduled with identifier: \(specificRequestIdentifier)")
+//            print("Specific notification scheduled with identifier: \(specificRequestIdentifier)")
         }
     }
 }

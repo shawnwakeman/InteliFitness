@@ -1,0 +1,35 @@
+{
+  "identifier" : "FC974ADE",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "24.99",
+      "familyShareable" : false,
+      "internalID" : "6450485537",
+      "localizations" : [
+        {
+          "description" : "Permanent access to all of Intelifitness.",
+          "displayName" : "Continued Access",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "shawnwakeman_intelifitness_ot",
+      "referenceName" : "OneTime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6450390320",
+    "_developerTeamID" : "BX5MBDUY2N",
+    "_lastSynchronizedDate" : 709174663.15906703
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

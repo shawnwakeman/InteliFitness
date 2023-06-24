@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D00087D029D4F00200A8A2C5 /* SpaceGrotesk-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */; };
 		D00087D129D4F00400A8A2C5 /* SpaceGrotesk-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CA29D4EFEC00A8A2C5 /* SpaceGrotesk-Regular.ttf */; };
 		D00087D229D4F00600A8A2C5 /* SpaceGrotesk-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CB29D4EFEC00A8A2C5 /* SpaceGrotesk-SemiBold.ttf */; };
 		D00087D329D4F00900A8A2C5 /* SpaceGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */; };
@@ -17,8 +16,6 @@
 		D008F48329F1E7E600B1C6EC /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */; };
 		D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */; };
 		D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48629F2304700B1C6EC /* MyExercisesPage.swift */; };
-		D008F48C29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */; };
-		D008F49029F36D9900B1C6EC /* dataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D008F48F29F36D9900B1C6EC /* dataController.swift */; };
 		D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */; };
 		D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2529CF84DE005682D8 /* Assets.xcassets */; };
 		D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0370E2829CF84DE005682D8 /* Preview Assets.xcassets */; };
@@ -51,6 +48,8 @@
 		D0737A3A2A1C068600C841DD /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0737A392A1C068600C841DD /* TimerViewModel.swift */; };
 		D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B44229F45E5F001898BA /* HistoryPage.swift */; };
 		D0B15CAD2A3E55E700F76956 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B15CAC2A3E55E700F76956 /* StoreKit.framework */; };
+		D0B15CB12A4255CA00F76956 /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0B15CB02A4255CA00F76956 /* Property List.plist */; };
+		D0B15CB32A42565200F76956 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B15CB22A42565200F76956 /* StoreKitManager.swift */; };
 		D0C884072A0447820035D66C /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C884062A0447820035D66C /* Schedule.swift */; };
 		D0CE04702A2829BE002DE1D3 /* notification-sound-7062.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D0CE046F2A2829BE002DE1D3 /* notification-sound-7062.m4a */; };
 		D0D28F4329FE114E00857C61 /* MyWorkoutsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */; };
@@ -72,7 +71,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Light.ttf"; sourceTree = "<group>"; };
 		D00087CA29D4EFEC00A8A2C5 /* SpaceGrotesk-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Regular.ttf"; sourceTree = "<group>"; };
 		D00087CB29D4EFEC00A8A2C5 /* SpaceGrotesk-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-SemiBold.ttf"; sourceTree = "<group>"; };
 		D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Medium.ttf"; sourceTree = "<group>"; };
@@ -82,8 +80,6 @@
 		D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
 		D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomePageModel .swift"; sourceTree = "<group>"; };
 		D008F48629F2304700B1C6EC /* MyExercisesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExercisesPage.swift; sourceTree = "<group>"; };
-		D008F48B29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WokoutLogDataModel.xcdatamodel; sourceTree = "<group>"; };
-		D008F48F29F36D9900B1C6EC /* dataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataController.swift; sourceTree = "<group>"; };
 		D0370E1E29CF84DD005682D8 /* InteliFitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InteliFitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrimalAApp.swift; sourceTree = "<group>"; };
 		D0370E2529CF84DE005682D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,8 +110,11 @@
 		D0737A232A1BF3D200C841DD /* WorkoutSetRowViewForCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutSetRowViewForCreator.swift; sourceTree = "<group>"; };
 		D0737A372A1C067A00C841DD /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
 		D0737A392A1C068600C841DD /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
+		D07A26772A45258500ACC627 /* IntelifitnessIAPconfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = IntelifitnessIAPconfig.storekit; sourceTree = "<group>"; };
 		D0A8B44229F45E5F001898BA /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		D0B15CAC2A3E55E700F76956 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		D0B15CB02A4255CA00F76956 /* Property List.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
+		D0B15CB22A42565200F76956 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		D0C884062A0447820035D66C /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		D0CE046F2A2829BE002DE1D3 /* notification-sound-7062.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "notification-sound-7062.m4a"; sourceTree = "<group>"; };
 		D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkoutsPage.swift; sourceTree = "<group>"; };
@@ -139,7 +138,6 @@
 		D00087C829D4EFEC00A8A2C5 /* static */ = {
 			isa = PBXGroup;
 			children = (
-				D00087C929D4EFEC00A8A2C5 /* SpaceGrotesk-Light.ttf */,
 				D00087CA29D4EFEC00A8A2C5 /* SpaceGrotesk-Regular.ttf */,
 				D00087CB29D4EFEC00A8A2C5 /* SpaceGrotesk-SemiBold.ttf */,
 				D00087CC29D4EFEC00A8A2C5 /* SpaceGrotesk-Medium.ttf */,
@@ -147,15 +145,6 @@
 				D00087CD29D4EFEC00A8A2C5 /* SpaceGrotesk-Bold.ttf */,
 			);
 			path = static;
-			sourceTree = "<group>";
-		};
-		D008F48929F364E800B1C6EC /* DataModelMain */ = {
-			isa = PBXGroup;
-			children = (
-				D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */,
-				D008F48F29F36D9900B1C6EC /* dataController.swift */,
-			);
-			path = DataModelMain;
 			sourceTree = "<group>";
 		};
 		D0370E1529CF84DD005682D8 = {
@@ -183,7 +172,6 @@
 				D0CE046F2A2829BE002DE1D3 /* notification-sound-7062.m4a */,
 				D0370E2129CF84DD005682D8 /* NutrimalAApp.swift */,
 				D0685BB72A084AFD00F66C75 /* CustomHeader.swift */,
-				D008F48929F364E800B1C6EC /* DataModelMain */,
 				D0D28F4229FE114E00857C61 /* MyWorkoutsPage.swift */,
 				D0737A372A1C067A00C841DD /* TimerModel.swift */,
 				D0737A392A1C068600C841DD /* TimerViewModel.swift */,
@@ -196,6 +184,9 @@
 				D0A8B44229F45E5F001898BA /* HistoryPage.swift */,
 				D008F48029F1E7CD00B1C6EC /* HomePageView.swift */,
 				D008F48429F1E7FE00B1C6EC /* HomePageModel .swift */,
+				D07A26772A45258500ACC627 /* IntelifitnessIAPconfig.storekit */,
+				D0B15CB02A4255CA00F76956 /* Property List.plist */,
+				D0B15CB22A42565200F76956 /* StoreKitManager.swift */,
 				D0685BB32A06CD0B00F66C75 /* ScheduleMode.swift */,
 				D008F48229F1E7E600B1C6EC /* HomePageViewModel.swift */,
 				D0D28F4429FEC76B00857C61 /* createWorkout.swift */,
@@ -318,10 +309,10 @@
 				D0370E2929CF84DE005682D8 /* Preview Assets.xcassets in Resources */,
 				D00087D129D4F00400A8A2C5 /* SpaceGrotesk-Regular.ttf in Resources */,
 				D00087D429D4F00C00A8A2C5 /* SpaceGrotesk-Bold.ttf in Resources */,
-				D00087D029D4F00200A8A2C5 /* SpaceGrotesk-Light.ttf in Resources */,
 				D00087E029D4F15D00A8A2C5 /* SpaceGrotesk-VariableFont_wght.ttf in Resources */,
 				D00087D329D4F00900A8A2C5 /* SpaceGrotesk-Medium.ttf in Resources */,
 				D0370E2629CF84DE005682D8 /* Assets.xcassets in Resources */,
+				D0B15CB12A4255CA00F76956 /* Property List.plist in Resources */,
 				D00087D229D4F00600A8A2C5 /* SpaceGrotesk-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,12 +336,12 @@
 				D0737A322A1BF3D200C841DD /* FinishPopUp.swift in Sources */,
 				D0737A2E2A1BF3D200C841DD /* WorkoutLogModel.swift in Sources */,
 				D050B42129FC8BA400BC5442 /* exercisePage.swift in Sources */,
+				D0B15CB32A42565200F76956 /* StoreKitManager.swift in Sources */,
 				D0737A3A2A1C068600C841DD /* TimerViewModel.swift in Sources */,
 				D0737A2A2A1BF3D200C841DD /* CancelPopUp.swift in Sources */,
 				D0737A2C2A1BF3D200C841DD /* TimerPopUp.swift in Sources */,
 				D0476C722A10265700D9541E /* Charts.swift in Sources */,
 				D0737A2D2A1BF3D200C841DD /* WorkoutLogViewModel.swift in Sources */,
-				D008F49029F36D9900B1C6EC /* dataController.swift in Sources */,
 				D0737A262A1BF3D200C841DD /* WorkoutLogView.swift in Sources */,
 				D008F48529F1E7FE00B1C6EC /* HomePageModel .swift in Sources */,
 				D0370E2229CF84DD005682D8 /* NutrimalAApp.swift in Sources */,
@@ -358,7 +349,6 @@
 				D0737A332A1BF3D200C841DD /* DropDownMenu.swift in Sources */,
 				D008F48729F2304700B1C6EC /* MyExercisesPage.swift in Sources */,
 				D0FF3B0D2A154F58005CC5B9 /* Profile.swift in Sources */,
-				D008F48C29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld in Sources */,
 				D0A8B44329F45E5F001898BA /* HistoryPage.swift in Sources */,
 				D0476C772A10347F00D9541E /* ExerciseChartDataModel.swift in Sources */,
 				D0737A242A1BF3D200C841DD /* 3DotsButton.swift in Sources */,
@@ -504,7 +494,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"InteliFitness/Preview Content\"";
 				DEVELOPMENT_TEAM = BX5MBDUY2N;
 				ENABLE_PREVIEWS = YES;
@@ -523,7 +513,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shawnwakeman.intelifitness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -544,7 +534,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"InteliFitness/Preview Content\"";
 				DEVELOPMENT_TEAM = BX5MBDUY2N;
 				ENABLE_PREVIEWS = YES;
@@ -563,7 +553,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shawnwakeman.intelifitness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -617,19 +607,6 @@
 			productName = PolynomialRegressionSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		D008F48A29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				D008F48B29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodel */,
-			);
-			currentVersion = D008F48B29F3651900B1C6EC /* WokoutLogDataModel.xcdatamodel */;
-			path = WokoutLogDataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = D0370E1629CF84DD005682D8 /* Project object */;
 }

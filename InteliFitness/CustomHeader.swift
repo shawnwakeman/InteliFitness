@@ -8,7 +8,6 @@
 import SwiftUI
 
 
-
 struct OffsetModifier: ViewModifier {
     let modifierID: String
     @Binding var offset: CGFloat

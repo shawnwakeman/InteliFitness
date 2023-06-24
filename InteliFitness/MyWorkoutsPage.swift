@@ -650,14 +650,13 @@ struct workoutLauncher: View {
                         } else {
                             Button {
                                 
-                                    
-                                   
+                                
                                 workoutLogViewModel.resetWorkoutModel()
                                 
                                 
                        
                                 workoutLogViewModel.loadWorkout(workout: workout)
-                               
+                                viewModel.setOngoingState(state: false)
                                 workoutLogViewModel.workoutName = workout.WorkoutName
                                 withAnimation(.spring()) {
                                    
@@ -665,6 +664,7 @@ struct workoutLauncher: View {
                                     viewModel.setWorkoutLogModuleStatus(state: true)
                            
                                 }
+                                
                                 presentationMode.wrappedValue.dismiss()
                                 
                                 HapticManager.instance.impact(style: .rigid)

@@ -1,4 +1,8 @@
-# NutrimalA
+# InteliFitness
+
+[App Store Link](https://apps.apple.com/us/app/intelifitness/id6450390320?ign-itscg=30200&ign-itsct=apps_box_promote_link)
+
+
 Welcome to InteliFitness - your new personal fitness planner and gym companion that makes it easy for you to plan, track, and achieve your fitness goals. Unleash the power of a well-designed workout tracker that goes beyond just logging exercise.
 
 Created single-handedly by a passionate fitness enthusiast, InteliFitness is not just an app, it’s a revolutionary tool that makes tracking your fitness journey as easy as a tap on your screen. With a stunning user interface, we've made it super easy for you to navigate through your workout schedules, plans, and progress charts.
@@ -20,11 +24,7 @@ Stunning user interface
 Whether you’re a gym enthusiast or just starting your fitness journey, InteliFitness is the perfect companion to help you achieve your fitness goals. Download InteliFitness today and take the first step towards a healthier, stronger you!
 
 
-![imageedit_2_8322867402](https://github.com/shawnwakeman/NutrimalA/assets/107377600/54659368-bcc5-4afe-a574-5158c98d0165)
-![imageedit_4_9408423860](https://github.com/shawnwakeman/NutrimalA/assets/107377600/28455d1d-c2e9-4d9f-8d00-738e3790f834)
-![imageedit_6_9082311345](https://github.com/shawnwakeman/NutrimalA/assets/107377600/37521c46-a3d7-4332-84f9-d0f82513ded1)
-![imageedit_8_7850461175](https://github.com/shawnwakeman/NutrimalA/assets/107377600/9b5e2ae3-df0a-4788-9cc7-ac8037f35e8e)
-![imageedit_10_4699709378](https://github.com/shawnwakeman/NutrimalA/assets/107377600/c9c03d65-24eb-4cc1-978f-78bb536c511e)
+
 
 
 

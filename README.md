@@ -1,7 +1,5 @@
 # InteliFitness
 
-[App Store Link](https://apps.apple.com/us/app/intelifitness/id6450390320?ign-itscg=30200&ign-itsct=apps_box_promote_link)
-
 
 Welcome to InteliFitness - your new personal fitness planner and gym companion that makes it easy for you to plan, track, and achieve your fitness goals. Unleash the power of a well-designed workout tracker that goes beyond just logging exercise.
 
